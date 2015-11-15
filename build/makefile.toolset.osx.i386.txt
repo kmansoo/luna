@@ -1,0 +1,58 @@
+SHELL = /bin/sh
+
+#----------------------------------------------------------
+# gcc tools - uses default values test
+#----------------------------------------------------------
+CROSS_COMPILE   =  
+CC              = $(CROSS_COMPILE)g++
+CXX             = $(CROSS_COMPILE)g++
+LD              = $(CROSS_COMPILE)g++
+LIB_ARCHIVE     = $(CROSS_COMPILE)ar
+NM              = $(CROSS_COMPILE)nm
+STRIP           = $(CROSS_COMPILE)strip
+OBJCOPY         = $(CROSS_COMPILE)objcopy
+RANLIB          = $(CROSS_COMPILE)ranlib
+OBJDUMP         = $(CROSS_COMPILE)objdump
+
+LIB_ARCHIVE_FLAGS = -r
+
+SOLUCTION_INC_EX_DIR := $(SOLUCTION_DIR)includeEx
+
+#----------------------------------------------------------
+# gcc C compiler flags
+#----------------------------------------------------------
+
+DEFINES = -DLUNA_PLATFORM_LINUX -DLUNA_PLATFORM_LINUX_I386 -DLUNA_PLATFORM_OSX -DLUNA_CPU_I386 $(PRJ_DEFINES)
+
+ifeq ($(BUILD), debug)
+CFLAGS  = -g -DDEBUG -D_DEBUG -O1
+else
+CFLAGS  = -Os
+endif
+
+CFLAGS  += -c -std=c++11 -Wall $(DEFINES) -fpermissive -Wc++11-extensions
+
+#----------------------------------------------------------
+# gcc linker flags
+#----------------------------------------------------------
+TOOLSET_LIBS = -ldl -lpthread -lstdc++ $(PRJ_LIB_OPTION) -g
+
+#----------------------------------------------------------
+# e-cofigure compiler options to meet target system environment
+#----------------------------------------------------------
+ifeq ($(CPU), i386)
+    CFLAGS_EX    := -c
+    CPPFLAGS_EX  := -c
+    
+ifeq ($(TARGET_TYPE), shared_lib)
+    TOOLSET_LIBS += -shared
+    CFLAGS_EX    += -fPIC -Wall
+    CXX           = g++
+    
+ifeq ($(BUILD), debug)
+    CFLAGS_EX    += -g
+endif    
+endif
+    
+endif
+
