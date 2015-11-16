@@ -3,30 +3,50 @@ Very tiny SW Platform for Web API using C++ and mongoose web server.
 
 For building TestWebServer...
 
-[Linux]
-$ cd Luna/Library/ccCoreAPI/build
-$ make -f makefile.linux.i386.debug.txt all
+## Linux
+### ccCoreAPI
+  $ cd Luna/Library/ccCoreAPI/build
 
-$ cd Luna/Library/ccWebServerAPI/build
-$ make -f makefile.linux.i386.debug.txt all
+  $ make -f makefile.linux.i386.debug.txt all
 
-$ cd Luna/ThirdPartyLibrary/ccMongooseServerAPI/build
-$ make -f makefile.linux.i386.debug.txt all
+### ccWebServerAPI
+  $ cd Luna/Library/ccWebServerAPI/build
+  
+  $ make -f makefile.linux.i386.debug.txt all
 
-$ cd Luna/TestAPPs/WebServerTest/build
-$ make -f makefile.linux.i386.debug.txt all
-$ ./linux.i386.debug/WebServerTest
+### ccMongooseServerAPI
+  $ cd Luna/ThirdPartyLibrary/ccMongooseServerAPI/build
+  
+  $ make -f makefile.linux.i386.debug.txt all
 
-[OS X]
-$ cd Luna/Library/ccCoreAPI/build
-$ make -f makefile.osx.i386.debug.txt all
+### WebServerTest
+  $ cd Luna/TestAPPs/WebServerTest/build
+  
+  $ make -f makefile.linux.i386.debug.txt all
 
-$ cd Luna/Library/ccWebServerAPI/build
-$ make -f makefile.osx.i386.debug.txt all
+### Run
+  $ ./linux.i386.debug/WebServerTest
 
-$ cd Luna/ThirdPartyLibrary/ccMongooseServerAPI/build
-$ make -f makefile.osx.i386.debug.txt all
+## OS X
+### ccCoreAPI
+  $ cd Luna/Library/ccCoreAPI/build
+  
+  $ make -f makefile.osx.i386.debug.txt all
 
-$ cd Luna/TestAPPs/WebServerTest/build
-$ make -f makefile.osx.i386.debug.txt all
-$ ./osx-i386-all-debug/WebServerTest
+### ccWebServerAPI
+  $ cd Luna/Library/ccWebServerAPI/build
+  
+  $ make -f makefile.osx.i386.debug.txt all
+
+### ccMongooseServerAPI
+  $ cd Luna/ThirdPartyLibrary/ccMongooseServerAPI/build
+  
+  $ make -f makefile.osx.i386.debug.txt all
+
+### WebServerTest
+  $ cd Luna/TestAPPs/WebServerTest/build
+  
+  $ make -f makefile.osx.i386.debug.txt all
+  
+### Run
+  $ ./osx-i386-all-debug/WebServerTest
