@@ -1,2 +1,11 @@
 build/Luna.sdf
 build/Luna.opensdf
+Library/ccCoreAPI/build/Debug/ccCoreAPI.idb
+Library/ccCoreAPI/build/Debug/ccCoreAPI.tlog/CL.command.1.tlog
+Library/ccCoreAPI/build/Debug/ccCoreAPI.tlog/CL.read.1.tlog
+Library/ccCoreAPI/build/Debug/ccCoreAPI.tlog/CL.write.1.tlog
+Library/ccCoreAPI/build/Debug/ccCoreAPI.tlog/Lib-link.read.1.tlog
+Library/ccCoreAPI/build/Debug/ccCoreAPI.tlog/Lib-link.write.1.tlog
+Library/ccCoreAPI/build/Debug/ccCoreAPI.tlog/ccCoreAPI.lastbuildstate
+Library/ccCoreAPI/build/Debug/ccCoreAPI.tlog/lib.command.1.tlog
+Debug/

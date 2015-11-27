@@ -1,11 +1,12 @@
 
-#include "boost/bind.hpp"
-#include "ccBoostWebServer.h"
-#include "ccBoostWebServerSession.h"
+#include <functional>
 
-#include "ccBoostWebServerRequest.h"
-#include "ccBoostWebServerResponse.h"
-#include "ccBoostWebServerHandler.h"
+#include "ccBoostWebServer.h"
+//#include "ccBoostWebServerSession.h"
+//
+//#include "ccBoostWebServerRequest.h"
+//#include "ccBoostWebServerResponse.h"
+//#include "ccBoostWebServerHandler.h"
 
 ccBoostWebServer::ccBoostWebServer(const char* name, const char* ports) :
         ccWebServer(name, ports), m_acceptor(m_io_service)
@@ -33,20 +34,19 @@ bool ccBoostWebServer::Stop()
 
 bool ccBoostWebServer::Start()
 {
-	DWORD dwResult = NO_ERROR;
-	m_work.reset(new boost::asio::io_service::work(m_io_service));
+    DWORD dwResult = NO_ERROR;
+    m_work.reset(new boost::asio::io_service::work(m_io_service));
 
-	// THREAD_COUNT 개 까지 동시접속 가능
-	for (size_t i = 0; i < THREAD_COUNT; ++i)
-	{
-		m_thread_group.push_back(new std::thread(boost::bind(&boost::asio::io_service::run, &m_io_service)));
-	}
-	dwResult = Listen();
-	if (dwResult == NO_ERROR) {
-		Accept();
-	}
+    // THREAD_COUNT 개 까지 동시접속 가능
+    for (size_t i = 0; i < THREAD_COUNT; ++i)
+        m_thread_group.push_back(new std::thread(std::bind(&boost::asio::io_service::run, &m_io_service)));
 
-	return dwResult;
+    dwResult = Listen();
+
+    if (dwResult == NO_ERROR)
+        Accept();
+ 
+    return dwResult;
 }
 
 DWORD ccBoostWebServer::Listen()
