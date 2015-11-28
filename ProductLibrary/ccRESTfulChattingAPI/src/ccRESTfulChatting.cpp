@@ -8,6 +8,9 @@
 #include <iostream>
 #include <functional>
 
+#include "ccJsonParserAPI/json/value.h"
+#include "ccJsonParserAPI/json/writer.h"
+
 #include "../ccRESTfulChatting.h"
 
 ccRESTfulChatting::ccRESTfulChatting()
@@ -31,7 +34,31 @@ bool ccRESTfulChatting::list(std::shared_ptr<ccWebServerRequest> pRequest, std::
     switch (pRequest->GetMethod())
     {
     case ccWebServerRequest::HttpMethod_Get:
-        pResponse->Status(200, string("OK)"));
+        {
+            pResponse->Status(200, string("OK)"));
+
+            Json::Value oResponseRPC;
+            Json::Value oUserList;
+            Json::StyledWriter oWriter;
+            
+            oResponseRPC["jsonrpc"] = "2.0";
+            oResponseRPC["id"]      = 1;
+
+            oUserList["count"] = 2;
+            oUserList["info"][0]["id"] = "Neo";
+            oUserList["info"][0]["Name"] = "Kim Mansoo";
+            oUserList["info"][1]["id"] = "AppleHJ";
+            oUserList["info"][1]["Name"] = "Kim Hyunjun";
+
+            oResponseRPC["user_list"] = oUserList;
+
+            std::string strJsonRPC2 = oWriter.write(oResponseRPC);
+
+            pResponse->ContentType("application/javascript", strJsonRPC2.length());
+            pResponse->Write(strJsonRPC2);
+
+            return true;
+        }
 
         break;
 
