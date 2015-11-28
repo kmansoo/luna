@@ -89,7 +89,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>LUNA_PLATFORM_WIN32;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..;../build;../../../Library;../../../ThirdPartyLibrary</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;../build;../../../Library;../../../ThirdPartyLibrary;../../../ProductLibrary</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -150,14 +150,17 @@
     <ClCompile Include="..\src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\FossLibrary\ccJsonParserAPI\build\ccJsonParserAPI.vcxproj">
+      <Project>{e7bfc6a3-98b0-4103-a3ba-de08105f2db3}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Library\ccCoreAPI\build\ccCoreAPI.vcxproj">
       <Project>{b3b6750e-2acd-4362-845a-2a79ab52fbd1}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Library\ccWebServerAPI\build\ccWebServerAPI.vcxproj">
       <Project>{4b237a6f-f4d9-4bbf-9d63-6460ddf8b984}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\ThirdPartyLibrary\ccBoostServerAPI\build\ccBoostServerAPI.vcxproj">
-      <Project>{49748ad8-23d0-4a71-88d5-c35c8f76fad1}</Project>
+    <ProjectReference Include="..\..\..\ProductLibrary\ccRESTfulChattingAPI\build\ccRESTfulChattingAPI.vcxproj">
+      <Project>{cec6dc46-192c-4a85-8fc9-b745c87a0c95}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\ThirdPartyLibrary\ccMongooseServerAPI\build\ccMongooseServerAPI.vcxproj">
       <Project>{e3fcc667-3505-4635-a78b-ea15e73d4755}</Project>
