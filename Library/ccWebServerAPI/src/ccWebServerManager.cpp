@@ -64,8 +64,53 @@ void ccWebServerManager::Stop()
     }
 }
 
-bool ccWebServerManager::OnWebServerRequest(ccWebServerRequest* request, ccWebServerResponse* response)
+bool ccWebServerManager::AddRESTfulApi(shared_ptr<ccRESTfulApi> pNewAPI)
 {
+    for (const auto& api : _aWebAPIs)
+    {
+        if (api == pNewAPI)
+            return false;
+    }
+
+    _aWebAPIs.push_back(pNewAPI);
+
+    return true;
+}
+
+bool ccWebServerManager::RemoveRESTfulApi(shared_ptr<ccRESTfulApi> pNewAPI)
+{
+    //for (const auto& api : _aWebAPIs)
+    //{
+    //    if (api == pNewAPI)
+    //    {
+    //        _aWebAPIs.erase(api);
+
+    //        return true;
+    //    }
+    //}
+
+    return false;
+}
+
+bool ccWebServerManager::RemoveAllRESTfulApi()
+{
+    _aWebAPIs.clear();
+
+    return true;
+}
+
+bool ccWebServerManager::OnWebServerRequest(std::shared_ptr<ccWebServerRequest> request, std::shared_ptr<ccWebServerResponse> response)
+{
+    request->GetURI();
+    request->GetPath();
+    request->GetQueryString();
+
+
+    for (const auto& api : _aWebAPIs)
+    {
+        if (api->HasAPI(request->GetURI()) == true)
+            return api->ExecuteAPI(request, response);
+    }
 
     return false;
 }

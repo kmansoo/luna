@@ -95,6 +95,7 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ccRESTfulApi.h" />
     <ClInclude Include="..\ccWebServer.h" />
     <ClInclude Include="..\ccWebServerEventListener.h" />
     <ClInclude Include="..\ccWebServerManager.h" />
@@ -105,6 +106,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\ccRESTfulApi.cpp" />
     <ClCompile Include="..\src\ccWebServer.cpp" />
     <ClCompile Include="..\src\ccWebServerManager.cpp" />
     <ClCompile Include="..\src\ccWebServerRequest.cpp" />

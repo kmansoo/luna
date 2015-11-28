@@ -14,9 +14,7 @@
 class ccWebServerEventListener
 {
 public:
-    virtual bool OnWebServerRequest(ccWebServerRequest* request, ccWebServerResponse* response) = 0;
+    virtual bool OnWebServerRequest(std::shared_ptr<ccWebServerRequest> request, std::shared_ptr<ccWebServerResponse> response) = 0;
 };
-
-
 
 #endif /* CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVEREVENTLISTENERH_ */

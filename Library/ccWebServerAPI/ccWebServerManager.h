@@ -13,6 +13,7 @@
 #include "ccWebServer.h"
 #include "ccWebServerObjectFactory.h"
 #include "ccWebServerEventListener.h"
+#include "ccRESTfulApi.h"
 
 class ccWebServerManager : public ccWebServerEventListener
 {
@@ -29,12 +30,17 @@ public:
     void    Start();
     void    Stop();
 
+    bool    AddRESTfulApi(shared_ptr<ccRESTfulApi> pNewAPI);
+    bool    RemoveRESTfulApi(shared_ptr<ccRESTfulApi> pNewAPI);
+    bool    RemoveAllRESTfulApi();
+
 protected:
-    virtual bool    OnWebServerRequest(ccWebServerRequest* request, ccWebServerResponse* response);
+    virtual bool    OnWebServerRequest(std::shared_ptr<ccWebServerRequest> request, std::shared_ptr<ccWebServerResponse> response);
 
 private:
     std::shared_ptr<ccWebServerObjectFactory>   _pObjFactory;
     vector< shared_ptr<ccWebServer> >           _aWebServers;
+    vector< shared_ptr<ccRESTfulApi> >          _aWebAPIs;
 };
 
 #endif /* CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVERMANAGER_H_ */
