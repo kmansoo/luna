@@ -21,13 +21,9 @@ public:
     virtual ~ccMongooseWebServerRequest();
 
 public:
-    virtual HttpMethod  GetMethod() const;
-    virtual string      GetMethod_c() const;
-
-    virtual string      GetURI() const;
-    virtual string      GetQueryString() const;
-    virtual string      GetPath() const;
-    virtual string      GetResource() const;
+    virtual const string&   GetQueryString() const;
+    virtual string          GetPath() const;
+    virtual string          GetResource() const;
 
     virtual bool        HasVar(const string& name) const;
     virtual string      GetVar(const string& name) const;

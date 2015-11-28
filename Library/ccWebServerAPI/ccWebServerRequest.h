@@ -36,13 +36,13 @@ public:
 
 
 public:
-    virtual HttpMethod  GetMethod() const;
-    virtual string      GetMethod_c() const;
+    virtual HttpMethod      GetMethod() const;
+    virtual const string&   GetMethod_c() const;
 
-    virtual string      GetURI() const;
-    virtual string      GetQueryString() const;
-    virtual string      GetPath() const;
-    virtual string      GetResource() const;
+    virtual const string&   GetURI() const;
+    virtual const string&   GetQueryString() const;
+    virtual string          GetPath() const;
+    virtual string          GetResource() const;
 
     virtual bool        HasVar(const string& name) const;
     virtual string      GetVar(const string& name) const;
@@ -57,10 +57,13 @@ public:
     virtual unsigned short  GetServerPort() const;
     virtual long            GetRemoteIp() const;
 
-    virtual const char* GetPostData(unsigned long* size = NULL) const;
+    virtual const char*     GetPostData(unsigned long* size = NULL) const;
 
 protected:
     string  _strNullData;
+
+    std::string _strMethod;
+    std::string _strUri;
 };
 
 #endif /* CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVERREQUEST_H_ */

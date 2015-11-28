@@ -108,10 +108,14 @@ void ccMongooseWebServer::ev_handler(struct mg_connection *nc, int ev, void *p)
             std::shared_ptr<ccMongooseWebServerResponse> pResponse(new ccMongooseWebServerResponse(nc));
 
             bIsBuiltinProcess = !pServer->_pEventListener->OnWebServerRequest(pRequest, pResponse);
+
+            //if (!bIsBuiltinProcess)
+            //    pResponse->
         }
         
         if (bIsBuiltinProcess)
             mg_serve_http(nc, (struct http_message *)p, s_http_server_opts);
+
         break;
 
     case MG_EV_HTTP_REPLY:      /* struct http_message * */

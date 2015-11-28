@@ -18,23 +18,30 @@ ccWebServerRequest::~ccWebServerRequest()
     // TODO Auto-generated destructor stub
 }
 
-
 ccWebServerRequest::HttpMethod  ccWebServerRequest::GetMethod() const
 {
+    if (_strMethod == "GET")        return HttpMethod_Get;
+    if (_strMethod == "HEAD")       return HttpMethod_Head;
+    if (_strMethod == "POST")       return HttpMethod_Post;
+    if (_strMethod == "PUT")        return HttpMethod_Put;
+    if (_strMethod == "DELETE")     return HttpMethod_Delete;
+    if (_strMethod == "TRACE")      return HttpMethod_Trace;
+    if (_strMethod == "CONNECT")    return HttpMethod_Connect;
+
     return HttpMethod_Unknown;
 }
 
-string ccWebServerRequest::GetMethod_c() const
+const string& ccWebServerRequest::GetMethod_c() const
 {
-    return _strNullData;
+    return _strMethod;
 }
 
-string ccWebServerRequest::GetURI() const
+const string& ccWebServerRequest::GetURI() const
 {
-    return _strNullData;
+    return _strUri;
 }
 
-string ccWebServerRequest::GetQueryString() const
+const string& ccWebServerRequest::GetQueryString() const
 {
     return _strNullData;
 }
