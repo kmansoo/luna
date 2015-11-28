@@ -1,0 +1,13 @@
+SHELL = /bin/sh
+
+TARGET      = ccRESTfulChattingAPI
+TARGET_TYPE = lib
+
+PLATFORM    = osx
+CPU         = i386
+PRODUCT     = all
+BUILD       = debug
+
+SRCDIRS     = ../src
+
+include ../../../build/makefile.common.txt
