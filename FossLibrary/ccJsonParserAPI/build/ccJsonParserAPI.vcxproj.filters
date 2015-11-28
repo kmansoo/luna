@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{0fbe46bb-315d-4bf1-b355-340a46ed4d59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="API">
+      <UniqueIdentifier>{99a109bc-cce0-4571-9395-7299c7a90688}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="API\json">
+      <UniqueIdentifier>{11114c46-2fe3-4ce1-951f-c910fc6302e2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+    <None Include="..\src\lib_json\json_valueiterator.inl">
+      <Filter>src</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lib_json\json_tool.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\json\assertions.h">
+      <Filter>API\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\json\autolink.h">
+      <Filter>API\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\json\config.h">
+      <Filter>API\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\json\features.h">
+      <Filter>API\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\json\forwards.h">
+      <Filter>API\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\json\json.h">
+      <Filter>API\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\json\reader.h">
+      <Filter>API\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\json\value.h">
+      <Filter>API\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\json\version.h">
+      <Filter>API\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\json\writer.h">
+      <Filter>API\json</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lib_json\json_writer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lib_json\json_reader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lib_json\json_value.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
