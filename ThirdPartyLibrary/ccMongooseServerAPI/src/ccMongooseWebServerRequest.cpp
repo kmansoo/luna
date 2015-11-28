@@ -9,7 +9,9 @@
 
 ccMongooseWebServerRequest::ccMongooseWebServerRequest(struct mg_connection* con, struct http_message* http_msg)
     : _pMgConnection(con),
-      _pMgHttpMessage(http_msg)
+      _pMgHttpMessage(http_msg),
+      _pPathPos(NULL),
+      _pathEnd(NULL)
 {
     // TODO Auto-generated constructor stub
 
@@ -50,7 +52,9 @@ string ccMongooseWebServerRequest::GetURI() const
     if (_pMgHttpMessage == NULL)
         return _strNullData;
 
-    return _pMgHttpMessage->uri.p;
+    std::string strUri(_pMgHttpMessage->uri.p, _pMgHttpMessage->uri.len);
+
+    return strUri;
 }
 
 string ccMongooseWebServerRequest::GetQueryString() const
@@ -58,7 +62,9 @@ string ccMongooseWebServerRequest::GetQueryString() const
     if (_pMgHttpMessage == NULL)
         return _strNullData;
 
-    return _pMgHttpMessage->query_string.p;
+    std::string strQuery(_pMgHttpMessage->query_string.p, _pMgHttpMessage->query_string.len);
+
+    return strQuery;
 }
 
 string ccMongooseWebServerRequest::GetPath() const
@@ -68,7 +74,12 @@ string ccMongooseWebServerRequest::GetPath() const
 
     DoSplitePathPos();
 
-    return string(_pMgHttpMessage->uri.p, _pPathPos);
+    std::string strPath = GetURI();
+
+    if (_pPathPos != NULL)
+        strPath += _pPathPos;
+
+    return strPath;
 }
 
 string ccMongooseWebServerRequest::GetResource() const
@@ -142,22 +153,22 @@ const char* ccMongooseWebServerRequest::GetPostData(unsigned long* size) const
 //  private method
 void ccMongooseWebServerRequest::DoSplitePathPos() const
 {
-    if (_pPathPos || _pMgHttpMessage == NULL)
-        return;
+    //if (_pPathPos || _pMgHttpMessage == NULL)
+    //    return;
 
-    char const * slash = 0;
-    char const * it = _pMgHttpMessage->uri.p;
+    //char const * slash = 0;
+    //char const * it = _pMgHttpMessage->uri.p;
 
-    while (*it)
-    {
-        if (*it == '/')
-            slash = it;
+    //for (int nIndex = 0; nIndex < _pMgHttpMessage->uri.len; nIndex++)
+    //{
+    //    if (*it == '/')
+    //        slash = it;
 
-        ++it;
-    }
+    //    ++it;
+    //}
 
-    _pathEnd    = it;
-    _pPathPos   = slash == 0 ? _pathEnd : slash + 1;
+    //_pathEnd    = it;
+    //_pPathPos   = slash == 0 ? _pathEnd : slash + 1;
 }
 
 bool ccMongooseWebServerRequest::DoHasVarInConnection(const string& name) const
