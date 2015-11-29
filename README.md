@@ -5,22 +5,22 @@ For building TestWebServer...
 
 ## Linux
 ### ccCoreAPI
-  $ cd Luna/Library/ccCoreAPI/build
+  $ cd Luna/src/Library/ccCoreAPI/build
 
   $ make -f makefile.linux.i386.debug.txt all
 
 ### ccWebServerAPI
-  $ cd Luna/Library/ccWebServerAPI/build
+  $ cd Luna/src/Library/ccWebServerAPI/build
   
   $ make -f makefile.linux.i386.debug.txt all
 
 ### ccMongooseServerAPI
-  $ cd Luna/ThirdPartyLibrary/ccMongooseServerAPI/build
+  $ cd Luna/src/ThirdPartyLibrary/ccMongooseServerAPI/build
   
   $ make -f makefile.linux.i386.debug.txt all
 
 ### WebServerTest
-  $ cd Luna/TestAPPs/WebServerTest/build
+  $ cd Luna/src/TestAPPs/WebServerTest/build
   
   $ make -f makefile.linux.i386.debug.txt all
 
@@ -29,22 +29,22 @@ For building TestWebServer...
 
 ## OS X
 ### ccCoreAPI
-  $ cd Luna/Library/ccCoreAPI/build
+  $ cd Luna/src/Library/ccCoreAPI/build
   
   $ make -f makefile.osx.i386.debug.txt all
 
 ### ccWebServerAPI
-  $ cd Luna/Library/ccWebServerAPI/build
+  $ cd Luna/src/Library/ccWebServerAPI/build
   
   $ make -f makefile.osx.i386.debug.txt all
 
 ### ccMongooseServerAPI
-  $ cd Luna/ThirdPartyLibrary/ccMongooseServerAPI/build
+  $ cd Luna/src/ThirdPartyLibrary/ccMongooseServerAPI/build
   
   $ make -f makefile.osx.i386.debug.txt all
 
 ### WebServerTest
-  $ cd Luna/TestAPPs/WebServerTest/build
+  $ cd Luna/src/TestAPPs/WebServerTest/build
   
   $ make -f makefile.osx.i386.debug.txt all
   
