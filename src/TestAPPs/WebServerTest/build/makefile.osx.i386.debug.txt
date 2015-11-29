@@ -13,6 +13,8 @@ SRCDIRS     = ../src
 PRJ_STRIP_DEBUG_INFO = TRUE
 
 LIBS = \
+        libccRESTfulChattingAPI.a \
+        libccJsonParserAPI.a \
         libccMongooseServerAPI.a \
         libccWebServerAPI.a \
         libccCoreAPI.a

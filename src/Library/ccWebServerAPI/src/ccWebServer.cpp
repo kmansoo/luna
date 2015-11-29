@@ -8,9 +8,9 @@
 #include "../ccWebServer.h"
 
 ccWebServer::ccWebServer(const char* name, const char* ports) :
-    _pEventListener(NULL),
     _strName(name),
-    _strHttpPorts(ports)
+    _strHttpPorts(ports),
+    _pEventListener(NULL)
 {
     // TODO Auto-generated constructor stub
 
