@@ -101,11 +101,6 @@ bool ccWebServerManager::RemoveAllRESTfulApi()
 
 bool ccWebServerManager::OnWebServerRequest(std::shared_ptr<ccWebServerRequest> request, std::shared_ptr<ccWebServerResponse> response)
 {
-    request->GetURI();
-    request->GetPath();
-    request->GetQueryString();
-
-
     for (const auto& api : _aWebAPIs)
     {
         if (api->HasAPI(request->GetURI()) == true)
