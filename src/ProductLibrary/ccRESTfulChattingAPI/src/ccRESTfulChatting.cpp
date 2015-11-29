@@ -29,7 +29,7 @@ ccRESTfulChatting::~ccRESTfulChatting()
 
 bool ccRESTfulChatting::list(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)
 {
-    std::cout << "enter ccRESTfulChatting::list, query_string=" << pRequest->GetQueryString() << endl;
+    //std::cout << "enter ccRESTfulChatting::list, query_string=" << pRequest->GetQueryString() << endl;
 
     switch (pRequest->GetMethod())
     {
@@ -71,21 +71,52 @@ bool ccRESTfulChatting::list(std::shared_ptr<ccWebServerRequest> pRequest, std::
 
 bool ccRESTfulChatting::session(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)
 {
-    std::cout << "enter ccRESTfulChatting::session, query_string=" << pRequest->GetQueryString() << endl;
+    switch (pRequest->GetMethod())
+    {
+    case ccWebServerRequest::HttpMethod_Get:
+    {
+        std::cout << "enter ccRESTfulChatting::session" << std::endl;
+
+        pResponse->Status(200, string("OK)"));
+
+        Json::Value oResponseRPC;
+        Json::Value oSessionList;
+        Json::StyledWriter oWriter;
+
+        oResponseRPC["jsonrpc"] = "2.0";
+        oResponseRPC["id"] = 1;
+
+        oSessionList["count"] = 3;
+        oSessionList["info"][0]["name"] = "session1";
+        oSessionList["info"][0]["member_count"] = 4;
+        oSessionList["info"][1]["name"] = "session #2";
+        oSessionList["info"][1]["member_count"] = 2;
+        oSessionList["info"][2]["name"] = "session ####4";
+        oSessionList["info"][2]["member_count"] = 10;
+
+        oResponseRPC["session_list"] = oSessionList;
+
+        std::string strJsonRPC2 = oWriter.write(oResponseRPC);
+
+        pResponse->ContentType("application/javascript", strJsonRPC2.length());
+        pResponse->Write(strJsonRPC2);
+
+        break;
+    }
+           
+    }
 
     return false;
 }
 
 bool ccRESTfulChatting::session_member(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)
 {
-    std::cout << "enter ccRESTfulChatting::session_member, query_string=" << pRequest->GetQueryString() << endl;
 
     return false;
 }
 
 bool ccRESTfulChatting::session_message(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)
 {
-    std::cout << "enter ccRESTfulChatting::session_message, query_string=" << pRequest->GetQueryString() << endl;
 
     return false;
 }
