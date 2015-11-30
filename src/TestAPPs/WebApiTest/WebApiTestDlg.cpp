@@ -8,7 +8,8 @@
 #include "afxdialogex.h"
 
 #include <afxinet.h>  
-#include "HSWin32API/HSWin32RgWebApiHelper.h"
+
+#include "ccWin32API/ccWin32WebApiHelper.h"
 
 
 #ifdef _DEBUG
@@ -54,14 +55,12 @@ END_MESSAGE_MAP()
 
 CWebApiTestDlg::CWebApiTestDlg(CWnd* pParent /*=NULL*/)
     : CDialogEx(CWebApiTestDlg::IDD, pParent)
-    , _strSendData(_T(""))
-    , _strReceiveData(_T(""))
-    , _strPassword(_T(""))
-    , _strRgBoxIP(_T(""))
-    , _uRgBoxPort(0)
-    , _strRgBoxID(_T(""))
-    , _strRgBoxPassword(_T(""))
-    , _strRgMethod(_T(""))
+    , _strRequestData(_T(""))
+    , _strResponseData(_T(""))
+    , _strServerIP(_T(""))
+    , _uServerPort(0)
+    , _strWebAPI(_T(""))
+    , _strMethod(_T(""))
 {
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -69,25 +68,22 @@ CWebApiTestDlg::CWebApiTestDlg(CWnd* pParent /*=NULL*/)
 void CWebApiTestDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialogEx::DoDataExchange(pDX);
-    DDX_Text(pDX, IDC_SEND_DATA, _strSendData);
-    DDX_Text(pDX, IDC_RECEIVE_DATA, _strReceiveData);
+    DDX_Text(pDX, IDC_REQUEST_DATA, _strRequestData);
+    DDX_Text(pDX, IDC_RESPONSE_DATA, _strResponseData);
 
-    DDX_Text(pDX, IDC_PASSWORD, _strPassword);
-    DDX_Text(pDX, IDC_RG_BOX_IP, _strRgBoxIP);
-    DDX_Text(pDX, IDC_RG_BOX_PORT, _uRgBoxPort);
-    DDX_Text(pDX, IDC_RG_BOX_ID, _strRgBoxID);
-    DDX_Text(pDX, IDC_RG_BOX_PASSWORD, _strRgBoxPassword);
-    DDX_Text(pDX, IDC_MATHOD, _strRgMethod);
-
+    DDX_Text(pDX, IDC_SERVER_IP, _strServerIP);
+    DDX_Text(pDX, IDC_SERVER_PORT, _uServerPort);
+    DDX_Text(pDX, IDC_WEB_API, _strWebAPI);
+    DDX_CBString(pDX, IDC_METHOD, _strMethod);
 }
 
 BEGIN_MESSAGE_MAP(CWebApiTestDlg, CDialogEx)
     ON_WM_SYSCOMMAND()
     ON_WM_PAINT()
     ON_WM_QUERYDRAGICON()
-    ON_BN_CLICKED(IDC_PERFORM_TEST, &CWebApiTestDlg::OnBnClickedPerformTest)
-    ON_BN_CLICKED(IDC_VERIFY, &CWebApiTestDlg::OnBnClickedVerify)
-    ON_EN_CHANGE(IDC_SEND_DATA, &CWebApiTestDlg::OnEnChangeSendData)
+    ON_BN_CLICKED(IDC_REQUEST_API, &CWebApiTestDlg::OnBnClickedRequestAPI)
+    //  ON_BN_CLICKED(IDC_VERIFY, &CWebApiTestDlg::OnBnClickedVerify)
+    ON_EN_CHANGE(IDC_REQUEST_DATA, &CWebApiTestDlg::OnEnChangeRequestData)
 END_MESSAGE_MAP()
 
 
@@ -95,6 +91,12 @@ END_MESSAGE_MAP()
 
 BOOL CWebApiTestDlg::OnInitDialog()
 {
+    _strServerIP    =   AfxGetApp()->GetProfileString(_T("Config"), _T("ServerIP"), _T("localhost"));
+    _uServerPort    =   AfxGetApp()->GetProfileInt(_T("Config"), _T("ServerPort"), 8000);
+
+    _strRequestData =   AfxGetApp()->GetProfileString(_T("Config"), _T("RequestData"), _T(""));
+    _strMethod      =   AfxGetApp()->GetProfileString(_T("Config"), _T("Method"), _T("GET"));
+    _strWebAPI      = AfxGetApp()->GetProfileString(_T("Config"), _T("WebAPI"), _T(""));
 
     CDialogEx::OnInitDialog();
 
@@ -181,54 +183,17 @@ void CWebApiTestDlg::DoUpdateConfiguration()
 {
     UpdateData();
 
-    AfxGetApp()->WriteProfileString(_T("Config"), _T("RgBoxIP"), _strRgBoxIP);
-    AfxGetApp()->WriteProfileInt(_T("Config"), _T("RgBoxPort"), _uRgBoxPort);
+    AfxGetApp()->WriteProfileString(_T("Config"), _T("ServerIP"), _strServerIP);
+    AfxGetApp()->WriteProfileInt(_T("Config"), _T("ServerPort"), _uServerPort);
 
-    AfxGetApp()->WriteProfileString(_T("Config"), _T("RgBoxID"), _strRgBoxID);
-    AfxGetApp()->WriteProfileString(_T("Config"), _T("RgBoxPassword"), _strRgBoxPassword);
+    AfxGetApp()->WriteProfileString(_T("Config"), _T("RequestData"),   _strRequestData);
+    AfxGetApp()->WriteProfileString(_T("Config"), _T("Method"),   _strMethod);
+    AfxGetApp()->WriteProfileString(_T("Config"), _T("WebAPI"),  _strWebAPI);
 
-    AfxGetApp()->WriteProfileString(_T("Config"), _T("SendData"),   _strSendData);
-    AfxGetApp()->WriteProfileString(_T("Config"), _T("RgMethod"),   _strRgMethod);
-
-    HSWin32RgWebApiHelper::getInstance()->SetConnectionInfo(_strRgBoxIP, _uRgBoxPort);
+    ccWin32WebApiHelper::getInstance()->SetConnectionInfo((LPCTSTR)_strServerIP, _uServerPort);
 }
 
-BOOL CWebApiTestDlg::DoRequestLogin()
-{
-    CString     strResponse;
-    Json::Value oParams;
-
-    oParams["id"]           = (LPCTSTR)_strRgBoxID;
-    oParams["password"]     = (LPCTSTR)_strRgBoxPassword;
-
-    _strRgOpenAPIToken = "";
-
-    if (HSWin32RgWebApiHelper::getInstance()->RequestAPI("login", oParams, strResponse))
-    {
-        Json::Value     oValue;
-        Json::Reader    oReader;
-
-        std::string strData = strResponse;
-
-        if (oReader.parse(strData, oValue) == true)
-        {
-            HSWin32RgWebApiHelper::getValueString(oValue, "token", _strRgOpenAPIToken, _T(""));
-            HSWin32RgWebApiHelper::getInstance()->SetToken(_strRgOpenAPIToken);
-
-            return TRUE;
-        }
-
-        MessageBox("It's invalid ID or Password!. Please check the login info.", "Warring", MB_ICONWARNING);
-    }
-    else
-    {
-        MessageBox("Could not connect to HUMAX RG Box!", "Warring", MB_ICONWARNING);
-    }
-
-    return FALSE;
-}
-
-void CWebApiTestDlg::OnTransactionRecveResponse(const CString& strResponse)
+void CWebApiTestDlg::OnTransactionRecveResponse(const std::string& strResponse)
 {
     if (!IsWindow(m_hWnd))
         return;
@@ -251,91 +216,71 @@ void CWebApiTestDlg::OnTransactionRequestTimeout()
 BOOL CWebApiTestDlg::DoRequestAPI()
 {
     UpdateData();
-    CString     strResponse;
-    Json::Value     oParams;
-    Json::Reader    oRequestReader;
-    _strReceiveData = "";
 
-    if (oRequestReader.parse((const char *)_strSendData, oParams) == false)
-    {
-        MessageBox("JCON Parser Error!", "Warring", MB_ICONWARNING);
-        UpdateData(FALSE);
-        return FALSE;
-    }
+    _strResponseData = "";
 
-    if (HSWin32RgWebApiHelper::getInstance()->RequestAPI(_strRgMethod, oParams, strResponse))
+    std::string     strResponse;
+
+    ccWebServerRequest::HttpMethod eMethod;
+
+    if (_strMethod == "GET")
+        eMethod = ccWebServerRequest::HttpMethod_Get;
+
+    if (_strMethod == "POST")
+        eMethod = ccWebServerRequest::HttpMethod_Post;
+
+    if (_strMethod == "PUT")
+        eMethod = ccWebServerRequest::HttpMethod_Put;
+
+    if (_strMethod == "DELETE")
+        eMethod = ccWebServerRequest::HttpMethod_Delete;
+
+
+    if (_strResponseData.GetLength())
     {
-        _strReceiveData = strResponse;
-        _strReceiveData.Replace("\n", "\r\n");
+        Json::Value     oParams;
+        Json::Reader    oRequestReader;
+
+        if (oRequestReader.parse((const char *)_strRequestData, oParams) == false)
+        {
+            MessageBox("JCON Parser Error!", "Warring", MB_ICONWARNING);
+            UpdateData(FALSE);
+            return FALSE;
+        }
+
+        if (ccWin32WebApiHelper::getInstance()->RequestAPI(eMethod, (LPCTSTR)_strWebAPI, oParams, strResponse))
+        {
+            _strResponseData = strResponse.c_str();
+            _strResponseData.Replace("\n", "\r\n");
+        }
+        else
+            MessageBox("Could not connect to Web API Server!", "Warring", MB_ICONWARNING);
     }
     else
-        MessageBox("Could not connect to HUMAX RG Box!", "Warring", MB_ICONWARNING);
+    {
+        if (ccWin32WebApiHelper::getInstance()->RequestAPI(eMethod, (LPCTSTR)_strWebAPI, strResponse))
+        {
+            _strResponseData = strResponse.c_str();
+            _strResponseData.Replace("\n", "\r\n");
+        }
+        else
+            MessageBox("Could not connect to Web API Server!", "Warring", MB_ICONWARNING);
+    }
 
     UpdateData(FALSE);
 
     return TRUE;
 }
 
-void CWebApiTestDlg::OnBnClickedPerformTest()
+void CWebApiTestDlg::OnBnClickedRequestAPI()
 {
     DoUpdateConfiguration();
-
-    if (_strRgOpenAPIToken == "")
-    {
-        if (DoRequestLogin() == FALSE)
-            return;
-    }
 
     DoRequestAPI();
 }
 
 
-void CWebApiTestDlg::OnBnClickedVerify()
-{
-    // TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-
-    const char pAuthorizedPassword[] = {
-        '@', '!', 'R', 'G', 'D', 'e', 'v', 'c', 'h', 'l', 'r', 'h', '!', '!', NULL};
-
-    UpdateData();
-
-    if (_strPassword == pAuthorizedPassword)
-    {
-        GetDlgItem(IDC_PASSWORD)->EnableWindow(FALSE);
-        GetDlgItem(IDC_VERIFY)->EnableWindow(FALSE);
-
-        GetDlgItem(IDC_RG_BOX_IP)->EnableWindow(TRUE);
-        GetDlgItem(IDC_RG_BOX_PORT)->EnableWindow(TRUE);
-
-        GetDlgItem(IDC_RG_BOX_ID)->EnableWindow(TRUE);
-        GetDlgItem(IDC_RG_BOX_PASSWORD)->EnableWindow(TRUE);
-
-        GetDlgItem(IDC_MATHOD)->EnableWindow(TRUE);
-
-        GetDlgItem(IDC_PERFORM_TEST)->EnableWindow(TRUE);
-        GetDlgItem(IDC_SEND_DATA)->EnableWindow(TRUE);
-        GetDlgItem(IDC_RECEIVE_DATA)->EnableWindow(TRUE);
-
-        _strRgBoxIP = AfxGetApp()->GetProfileString("Config", "RgBoxIP", "192.168.0.1");
-        _uRgBoxPort = AfxGetApp()->GetProfileInt("Config", "RgBoxPort", 80);
-
-        _strRgBoxID         = AfxGetApp()->GetProfileString("Config", "RgBoxID", "root");
-        _strRgBoxPassword   = AfxGetApp()->GetProfileString("Config", "RgBoxPassword", "humax");
-
-        _strSendData    = AfxGetApp()->GetProfileString(_T("Config"), _T("SendData"),   _T(""));
-        _strRgMethod    = AfxGetApp()->GetProfileString(_T("Config"), _T("RgMethod"),   _T("Device.setDBInfo"));
-    }
-    else
-        GetDlgItem(IDC_PASSWORD)->SetFocus();
-
-
-    _strPassword = _T("");
-
-    UpdateData(FALSE);
-}
-
-
-void CWebApiTestDlg::OnEnChangeSendData()
+void CWebApiTestDlg::OnEnChangeRequestData()
 {
     // TODO:  RICHEDIT 컨트롤인 경우, 이 컨트롤은
     // __super::OnInitDialog() 함수를 재지정 

@@ -53,7 +53,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>HS_PLATFORM_WIN32;WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../../include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../Library;../../ThirdPartyLibrary;../../ProductLibrary;../../FossLibrary</AdditionalIncludeDirectories>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
@@ -123,11 +123,20 @@
     <ResourceCompile Include="WebApiTest.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\FossLibrary\ccJsonParserAPI\build\ccJsonParserAPI.vcxproj">
+      <Project>{e7bfc6a3-98b0-4103-a3ba-de08105f2db3}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\ccCoreAPI\build\ccCoreAPI.vcxproj">
+      <Project>{b3b6750e-2acd-4362-845a-2a79ab52fbd1}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\Library\CoreLibrary\HSCoreAPI\HSCoreAPI.vcxproj">
       <Project>{b3b6750e-2acd-4362-845a-2a79ab52fbd1}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\Library\ToolkitLibrary\HSJsonAPI\HSJsonAPI.vcxproj">
       <Project>{2e8b24a6-8074-49d6-b349-820f69547d6c}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ThirdPartyLibrary\ccWin32API\build\ccWin32API.vcxproj">
+      <Project>{5f76776d-8695-43d9-b134-d0e24fa685c8}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
@@ -135,7 +144,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties RESOURCE_FILE="HSPWebAPITest.rc" />
+      <UserProperties RESOURCE_FILE="" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

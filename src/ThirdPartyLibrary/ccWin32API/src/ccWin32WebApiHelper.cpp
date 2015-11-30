@@ -1,94 +1,109 @@
 #include "stdafx.h"
 
 #include "afxinet.h"
-
 #include "ccWin32WebApiHelper.h"
 
-ccWin32WebApiHelper::ccWin32WebApiHelper(void) : 
-    HSTimerThread("BBRgWebApiManager"),
-    _strDestIP(_T("192.168.0.1")), 
-    _uDestPort(80)
+ccWin32WebApiHelper::ccWin32WebApiHelper(void) :
+    _strDestIP(_T("192.168.0.1")),
+    _uDestPort(80),
+    _bIsStopThread(false),
+    _pPollThread(NULL)
 {
-    SetTimer(TID_CHECK_TRANSACTION, 1);
+    _bIsStopThread = false;
+
+    _pPollThread = new std::thread(std::bind(&ccWin32WebApiHelper::DoRunThread, this));
 }
 
 ccWin32WebApiHelper::~ccWin32WebApiHelper(void)
 {
+    if (_pPollThread)
+    {
+        _bIsStopThread = true;
+
+        _pPollThread->join();
+
+        delete _pPollThread;
+
+        _pPollThread = NULL;
+    }
 }
 
-void ccWin32WebApiHelper::SetConnectionInfo(const CString strIP, UINT uPort)
+std::shared_ptr<ccWin32WebApiHelper> ccWin32WebApiHelper::getInstance()
+{
+    static std::shared_ptr<ccWin32WebApiHelper>  s_singleInstance;
+
+    if (s_singleInstance == NULL)
+    {
+        std::shared_ptr<ccWin32WebApiHelper> newInstance(new ccWin32WebApiHelper);
+
+        s_singleInstance = newInstance;
+    }
+
+    return s_singleInstance;
+}
+
+void ccWin32WebApiHelper::SetConnectionInfo(const std::string& strIP, UINT uPort)
 {
     _strDestIP  =   strIP;
     _uDestPort  =   uPort;
 }
 
-void ccWin32WebApiHelper::SetToken(const CString strToken)
+bool ccWin32WebApiHelper::RequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, std::string& strResponse)
 {
-    _strToken  =   strToken;
+    return DoSendRequestAPI(eMethod, strWebAPI, "", strResponse);
 }
 
-BOOL ccWin32WebApiHelper::RequestAPI(const CString& strFunction, CString& strResponse)
+bool ccWin32WebApiHelper::RequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, Json::Value& oParams, std::string& strResponse)
 {
-    CString     strAPI;
-    Json::Value oParams;
+    Json::StyledWriter writer;
 
-    if (DoMakeRequestAPI(strAPI, strFunction, oParams) == FALSE)
-        return FALSE;
-
-    return DoSendRequestAPI(strAPI, strResponse);
+    return DoSendRequestAPI(eMethod, strWebAPI, writer.write(oParams), strResponse);
 }
 
-BOOL ccWin32WebApiHelper::RequestAPI(const CString& strFunction, Json::Value& oParams, CString& strResponse)
-{
-    CString     strAPI;
-
-    if (DoMakeRequestAPI(strAPI, strFunction, oParams) == FALSE)
-        return FALSE;
-
-    return DoSendRequestAPI(strAPI, strResponse);
-}
-
-BOOL ccWin32WebApiHelper::AsyncRequestAPI(const CString& strFunction, IHSWin32RgWebApiTransactionNotifier *pNotifier)
+bool ccWin32WebApiHelper::AsyncRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, ccWin32RgWebApiTransactionNotifier *pNotifier)
 {
     Json::Value oParams;
 
-    return AsyncRequestAPI(strFunction, oParams, pNotifier);
+    return AsyncRequestAPI(eMethod, strWebAPI, oParams, pNotifier);
 }
 
-BOOL ccWin32WebApiHelper::AsyncRequestAPI(const CString& strFunction, Json::Value& oParams, IHSWin32RgWebApiTransactionNotifier *pNotifier)
+bool ccWin32WebApiHelper::AsyncRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, Json::Value& oParams, ccWin32RgWebApiTransactionNotifier *pNotifier)
 {
     if (pNotifier == NULL)
-        return FALSE;
+        return false;
 
-    sp<XTransactionInfo>    pNewTransaction(new XTransactionInfo, true);
+    std::shared_ptr<XTransactionInfo> pNewTransaction(std::make_shared<XTransactionInfo>());
 
+    pNewTransaction->_eMethod   = eMethod;
     pNewTransaction->_pNotifier = pNotifier;
 
-    if (DoMakeRequestAPI(pNewTransaction->_strAPI, strFunction, oParams) == FALSE)
-        return FALSE;
+    pNewTransaction->_strWebAPI         = strWebAPI;
 
-    _mtx.Lock();
+    Json::StyledWriter writer;
+    pNewTransaction->_strRequestData = writer.write(oParams);
 
-    BOOL bExist = FALSE;
+    _mutex.lock();
 
-    for (int nIndex = 0; nIndex < _aTransactionInfos.Size(); nIndex++)
+    bool bExist = false;
+
+    for (auto tr : _aTransactionInfos)
     {
-        if (_aTransactionInfos[nIndex]->_pNotifier == pNotifier)
+        if (tr->_pNotifier == pNotifier)
         {
-            bExist = TRUE;
+            bExist = true;
             break;
         }
     }
 
     if (!bExist)
-        _aTransactionInfos.Add(pNewTransaction);
+        _aTransactionInfos.push_back(pNewTransaction);
 
-    _mtx.Unlock();
+    _mutex.unlock();
 
-    return TRUE;
+    return true;
 }
 
-BOOL ccWin32WebApiHelper::DoSendRequestAPI(const CString& strAPI, CString& strResponse)
+bool ccWin32WebApiHelper::DoSendRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, const std::string& strRequestData, std::string& strResponse)
 {
     USES_CONVERSION;  
 
@@ -97,20 +112,22 @@ BOOL ccWin32WebApiHelper::DoSendRequestAPI(const CString& strAPI, CString& strRe
     CHttpFile*          pHttpFile   = NULL;  
     CHttpConnection*    pHttpConn   = NULL;  
 
-    BOOL                bRetValue   = FALSE;
-    CString             sURL        = _T("");  
+    bool                bRetValue   = false;
+    CString             sURL        = _T("");
     DWORD               dwSvcType   = 0;  
     DWORD               dwFlags     = INTERNET_FLAG_EXISTING_CONNECT;
 
-    sURL.Format(__T("http://%s:%d/api"), _strDestIP, _uDestPort);
+    sURL.Format(__T("http://%s:%d%s"), _strDestIP.c_str(), _uDestPort, strWebAPI.c_str());
 
     CString             strSendData;
-    CString             sServer, sObject;
-    CString             sReqHdr;  
+    CString             sServer;
+    CString             sObject;
+    CString             sReqHdr;
+    CString             strResultString;
 
     INTERNET_PORT       nPort = 0;  
 
-    if (AfxParseURL(sURL, dwSvcType, sServer, sObject, nPort) == FALSE)
+    if (AfxParseURL(sURL, dwSvcType, sServer, sObject, nPort) == false)
         return bRetValue;
 
     try {
@@ -120,7 +137,24 @@ BOOL ccWin32WebApiHelper::DoSendRequestAPI(const CString& strAPI, CString& strRe
         if (pHttpConn == NULL)
             goto clearVariabls;
 
-        pHttpFile = pHttpConn->OpenRequest(CHttpConnection::HTTP_VERB_POST, sObject, NULL, 1, NULL, NULL, dwFlags);
+        switch (eMethod)
+        {
+        case ccWebServerRequest::HttpMethod_Get:
+            pHttpFile = pHttpConn->OpenRequest(CHttpConnection::HTTP_VERB_GET, sObject, NULL, 1, NULL, NULL, dwFlags);
+            break;
+
+        case ccWebServerRequest::HttpMethod_Post:
+            pHttpFile = pHttpConn->OpenRequest(CHttpConnection::HTTP_VERB_POST, sObject, NULL, 1, NULL, NULL, dwFlags);
+            break;
+        
+        case ccWebServerRequest::HttpMethod_Put:
+            pHttpFile = pHttpConn->OpenRequest(CHttpConnection::HTTP_VERB_PUT, sObject, NULL, 1, NULL, NULL, dwFlags);
+            break;
+        
+        case ccWebServerRequest::HttpMethod_Delete:
+            pHttpFile = pHttpConn->OpenRequest(CHttpConnection::HTTP_VERB_DELETE, sObject, NULL, 1, NULL, NULL, dwFlags);
+            break;
+        }
 
         if (pHttpFile == NULL)
             goto clearVariabls;
@@ -141,16 +175,16 @@ BOOL ccWin32WebApiHelper::DoSendRequestAPI(const CString& strAPI, CString& strRe
     pHttpFile->AddRequestHeaders(sReqHdr);  
 
     //  Request
-    strResponse = _T("");
+    strResultString = _T("");
 
-    BOOL bRet = FALSE;
+    BOOL bRet = false;
     char szResponse[5000];  
 
     try {
 
-        bRet = pHttpFile->SendRequestEx(strAPI.GetLength(), HSR_ASYNC | HSR_INITIATE);  
+        bRet = pHttpFile->SendRequestEx(strWebAPI.length(), HSR_ASYNC | HSR_INITIATE);  
 
-        pHttpFile->Write(CT2A(strAPI), strAPI.GetLength());   
+        pHttpFile->Write(CT2A(strWebAPI.c_str()), strWebAPI.length());
 
         bRet = pHttpFile->EndRequest(HSR_ASYNC);  
 
@@ -162,7 +196,7 @@ BOOL ccWin32WebApiHelper::DoSendRequestAPI(const CString& strAPI, CString& strRe
 
             szResponse[nRead] = 0;
 
-            strResponse += szResponse;
+            strResultString += szResponse;
 
             dwResponseLength = pHttpFile->GetLength();
         }
@@ -179,9 +213,11 @@ BOOL ccWin32WebApiHelper::DoSendRequestAPI(const CString& strAPI, CString& strRe
         goto clearVariabls;
     }
 
-    strResponse.Replace(_T("\n"), _T("\r\n"));
+    strResultString.Replace(_T("\n"), _T("\r\n"));
 
-    bRetValue = TRUE;
+    strResponse = strResultString;
+
+    bRetValue = true;
 
     //  TRACE(_T("strResponse = '%s'\n"), strResponse);
 
@@ -192,64 +228,89 @@ clearVariabls:
     if (pHttpConn)
         pHttpConn->Close();
 
-    HSP_SAFE_DELETE(pHttpFile);
-    HSP_SAFE_DELETE(pHttpConn);
+    if (pHttpFile)
+        delete pHttpFile;
+
+    if (pHttpConn)
+        delete pHttpConn;
 
     oSession.Close();
 
     return bRetValue;
 }
 
-BOOL ccWin32WebApiHelper::DoMakeRequestAPI(CString& strAPI, const CString& strFunction, Json::Value& oParams)
+//bool ccWin32WebApiHelper::DoMakeRequestAPI(std::string& strAPI, const std::string& strFunction, Json::Value& oParams)
+//{
+//    Json::Value oAPI;
+//
+//    oAPI["jsonrpc"]   = "2.0";
+//    oAPI["id"]        = 1;
+//
+//    oAPI["params"]    = oParams;
+//
+//    Json::StyledWriter write;
+//    strAPI = write.write(oAPI).c_str();
+//
+//    return true;
+//}
+
+void ccWin32WebApiHelper::DoRunThread()
 {
-    Json::Value oAPI;
-
-    oAPI["method"]    = (char*)CT2A(strFunction);
-    oAPI["jsonrpc"]   = "2.0";
-    oAPI["id"]        = 1;
-
-    if (_strToken.GetLength() > 0)
-        oAPI["token"] = (LPCTSTR)_strToken;
-
-    oParams["need_key_type"] = false;
-
-    oAPI["params"]    = oParams;
-
-    Json::StyledWriter write;
-    strAPI = write.write(oAPI).c_str();
-
-    return TRUE;
-}
-
-void ccWin32WebApiHelper::OnHSTimer(EtDWORD uIDEvent)
-{
-    switch (uIDEvent)
+    while (_bIsStopThread == false)
     {
-    case TID_CHECK_TRANSACTION:
-        if (_aTransactionInfos.Size() > 0)
+        if (_aTransactionInfos.size() > 0)
         {
-            CString                 strResponse;
-            sp<XTransactionInfo>    pWorkTransction;
+            std::string                         strResponse;
+            std::shared_ptr<XTransactionInfo>   pWorkTransction;
 
-            _mtx.Lock();
+            _mutex.lock();
             pWorkTransction = _aTransactionInfos[0];
-            _aTransactionInfos.RemoveAt(0);
-            _mtx.Unlock();
+            _aTransactionInfos.erase(_aTransactionInfos.begin());
+            _mutex.unlock();
 
             if (pWorkTransction->_pNotifier)
             {
-                if (DoSendRequestAPI(pWorkTransction->_strAPI, strResponse))
+                if (DoSendRequestAPI(pWorkTransction->_eMethod, pWorkTransction->_strWebAPI, pWorkTransction->_strRequestData, strResponse))
                     pWorkTransction->_pNotifier->OnTransactionRecveResponse(strResponse);
                 else
                     pWorkTransction->_pNotifier->OnTransactionRequestTimeout();
             }
         }
-        break;
+
+        Sleep(100);
     }
 }
 
 
-BOOL ccWin32WebApiHelper::getValueString(Json::Value& oValue, const char* strName, CString& strValue, CString strDefaultValue)
+//void ccWin32WebApiHelper::OnHSTimer(EtDWORD uIDEvent)
+//{
+//    switch (uIDEvent)
+//    {
+//    case TID_CHECK_TRANSACTION:
+//        if (_aTransactionInfos.size() > 0)
+//        {
+//            std::string                         strResponse;
+//            std::shared_ptr<XTransactionInfo>   pWorkTransction;
+//
+//            _mutex.lock();
+//            pWorkTransction = _aTransactionInfos[0];
+//            _aTransactionInfos.erase(_aTransactionInfos.begin());
+//            _mutex.unlock();
+//
+//            if (pWorkTransction->_pNotifier)
+//            {
+//                if (DoSendRequestAPI(pWorkTransction->_strAPI, strResponse))
+//                    pWorkTransction->_pNotifier->OnTransactionRecveResponse(strResponse);
+//                else
+//                    pWorkTransction->_pNotifier->OnTransactionRequestTimeout();
+//            }
+//        }
+//        break;
+//    }
+//}
+
+
+bool ccWin32WebApiHelper::getValueString(Json::Value& oValue, const std::string& strName, std::string& strValue, std::string strDefaultValue)
 {
     strValue = strDefaultValue;
 
@@ -259,14 +320,14 @@ BOOL ccWin32WebApiHelper::getValueString(Json::Value& oValue, const char* strNam
         {
             strValue = oValue[strName].asCString();
 
-            return TRUE;
+            return true;
         }
     }
 
-    return NULL;
+    return false;
 }
 
-int ccWin32WebApiHelper::getValueInt(Json::Value& oValue, const char* strName, int& nValue, int nDefaultValue)
+bool ccWin32WebApiHelper::getValueInt(Json::Value& oValue, const std::string& strName, int& nValue, int nDefaultValue)
 {
     nValue = nDefaultValue;
 
@@ -276,22 +337,10 @@ int ccWin32WebApiHelper::getValueInt(Json::Value& oValue, const char* strName, i
         {
             nValue = oValue[strName].asInt();
 
-            return TRUE;
+            return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
-/* ====================================================================
- *  File: ccWin32WebApiHelper.cpp
- *
- *  Desc:
- *      Win32±â¹Ý Multimedia Timer
- *
- *  Author:
- *      ±è¸¸¼ö(kmansoo@humaxdigital.com)
- *
- *  Date:
- *      2014.11.29
- */

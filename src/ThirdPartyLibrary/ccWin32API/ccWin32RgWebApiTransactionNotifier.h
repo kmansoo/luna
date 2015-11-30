@@ -1,23 +1,11 @@
 #pragma once
 
-#include "HSCoreAPI/HSObject.h"
+#include <string>
 
-class IHSWin32RgWebApiTransactionNotifier 
+class ccWin32RgWebApiTransactionNotifier
 {
 public:
-    virtual void    OnTransactionRecveResponse(const CString& strResponse) = 0;
+    virtual void    OnTransactionRecveResponse(const std::string& strResponse) = 0;
     virtual void    OnTransactionRequestTimeout() = 0;
 };
 
-/* ====================================================================
- *  File: IHSWin32RgWebApiTransactionNotifier.h
- *
- *  Desc:
- *      Win32±â¹Ý Multimedia Timer
- *
- *  Author:
- *      ±è¸¸¼ö(kmansoo@humaxdigital.com)
- *
- *  Date:
- *      2014.11.29
- */
