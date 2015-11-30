@@ -48,12 +48,12 @@ void ccWin32WebApiHelper::SetConnectionInfo(const std::string& strIP, UINT uPort
     _uDestPort  =   uPort;
 }
 
-bool ccWin32WebApiHelper::RequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, std::string& strResponse)
+std::uint16_t ccWin32WebApiHelper::RequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, std::string& strResponse)
 {
     return DoSendRequestAPI(eMethod, strWebAPI, "", strResponse);
 }
 
-bool ccWin32WebApiHelper::RequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, Json::Value& oParams, std::string& strResponse)
+std::uint16_t ccWin32WebApiHelper::RequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, Json::Value& oParams, std::string& strResponse)
 {
     Json::StyledWriter writer;
 
@@ -103,16 +103,16 @@ bool ccWin32WebApiHelper::AsyncRequestAPI(ccWebServerRequest::HttpMethod eMethod
     return true;
 }
 
-bool ccWin32WebApiHelper::DoSendRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, const std::string& strRequestData, std::string& strResponse)
+std::uint16_t ccWin32WebApiHelper::DoSendRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, const std::string& strRequestData, std::string& strResponse)
 {
     USES_CONVERSION;  
+
+    std::uint16_t       uStatusCode = 0;
 
     CInternetSession    oSession(_T("MySession"));  
 
     CHttpFile*          pHttpFile   = NULL;  
     CHttpConnection*    pHttpConn   = NULL;  
-
-    bool                bRetValue   = false;
     CString             sURL        = _T("");
     DWORD               dwSvcType   = 0;  
     DWORD               dwFlags     = INTERNET_FLAG_EXISTING_CONNECT;
@@ -128,7 +128,7 @@ bool ccWin32WebApiHelper::DoSendRequestAPI(ccWebServerRequest::HttpMethod eMetho
     INTERNET_PORT       nPort = 0;  
 
     if (AfxParseURL(sURL, dwSvcType, sServer, sObject, nPort) == false)
-        return bRetValue;
+        return uStatusCode;
 
     try {
         oSession.SetOption(INTERNET_OPTION_CONNECT_TIMEOUT, 5000);
@@ -171,7 +171,7 @@ bool ccWin32WebApiHelper::DoSendRequestAPI(ccWebServerRequest::HttpMethod eMetho
         goto clearVariabls;
     }
 
-    sReqHdr.Format(_T("Content-Type: application/x-www-form-urlencoded"));  
+    sReqHdr.Format(_T("Content-Type: application/javascript"));  
     pHttpFile->AddRequestHeaders(sReqHdr);  
 
     //  Request
@@ -182,11 +182,16 @@ bool ccWin32WebApiHelper::DoSendRequestAPI(ccWebServerRequest::HttpMethod eMetho
 
     try {
 
-        bRet = pHttpFile->SendRequestEx(strWebAPI.length(), HSR_ASYNC | HSR_INITIATE);  
+        bRet = pHttpFile->SendRequestEx(strRequestData.length(), HSR_ASYNC | HSR_INITIATE);
 
-        pHttpFile->Write(CT2A(strWebAPI.c_str()), strWebAPI.length());
+        pHttpFile->Write(CT2A(strRequestData.c_str()), strRequestData.length());
 
         bRet = pHttpFile->EndRequest(HSR_ASYNC);  
+
+        DWORD dwRet;
+        pHttpFile->QueryInfoStatusCode(dwRet);
+
+        uStatusCode = (std::uint16_t)dwRet;
 
         ULONGLONG dwResponseLength = pHttpFile->GetLength();  
 
@@ -217,8 +222,6 @@ bool ccWin32WebApiHelper::DoSendRequestAPI(ccWebServerRequest::HttpMethod eMetho
 
     strResponse = strResultString;
 
-    bRetValue = true;
-
     //  TRACE(_T("strResponse = '%s'\n"), strResponse);
 
 clearVariabls:
@@ -236,7 +239,7 @@ clearVariabls:
 
     oSession.Close();
 
-    return bRetValue;
+    return uStatusCode;
 }
 
 //bool ccWin32WebApiHelper::DoMakeRequestAPI(std::string& strAPI, const std::string& strFunction, Json::Value& oParams)
@@ -270,8 +273,10 @@ void ccWin32WebApiHelper::DoRunThread()
 
             if (pWorkTransction->_pNotifier)
             {
-                if (DoSendRequestAPI(pWorkTransction->_eMethod, pWorkTransction->_strWebAPI, pWorkTransction->_strRequestData, strResponse))
-                    pWorkTransction->_pNotifier->OnTransactionRecveResponse(strResponse);
+                std::uint16_t uStatusCode = DoSendRequestAPI(pWorkTransction->_eMethod, pWorkTransction->_strWebAPI, pWorkTransction->_strRequestData, strResponse);
+
+                if (uStatusCode == 0)
+                    pWorkTransction->_pNotifier->OnTransactionRecveResponse(uStatusCode, strResponse);
                 else
                     pWorkTransction->_pNotifier->OnTransactionRequestTimeout();
             }

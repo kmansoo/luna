@@ -136,12 +136,26 @@ long ccMongooseWebServerRequest::GetRemoteIp() const
     return 0;
 }
 
-const char* ccMongooseWebServerRequest::GetPostData(unsigned long* size) const
+long ccMongooseWebServerRequest::GetContentBody(std::string& strBody)
 {
-    if (size != 0)  // 0 means NULL
-       *size = 0;
+    if (_pMgHttpMessage == NULL)
+        return 0;
 
-    return _strNullData.c_str();
+    strBody.append(_pMgHttpMessage->body.p, _pMgHttpMessage->body.len);
+
+    return _pMgHttpMessage->body.len;
+}
+
+long ccMongooseWebServerRequest::GetContentBody(char* pBuf, std::size_t size)
+{
+    if (_pMgHttpMessage == NULL || pBuf == NULL)
+        return 0;
+
+    std::size_t copy_size = (size > _pMgHttpMessage->body.len) ? _pMgHttpMessage->body.len : size;
+
+    memcpy(pBuf, _pMgHttpMessage->body.p, copy_size);
+
+    return copy_size;
 }
 
 //  private method

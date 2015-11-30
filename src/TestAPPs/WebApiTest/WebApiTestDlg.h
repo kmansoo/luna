@@ -37,7 +37,7 @@ public:
     afx_msg void OnEnChangeRequestData();
 
 protected:
-    virtual void    OnTransactionRecveResponse(const std::string& strResponse);
+    virtual void    OnTransactionRecveResponse(std::uint16_t uStatusCode, const std::string& strResponse);
     virtual void    OnTransactionRequestTimeout();
 
 protected:
@@ -52,4 +52,5 @@ protected:
     CString     _strWebAPI;
 public:
     CString _strMethod;
+    UINT _uStatusCode;
 };

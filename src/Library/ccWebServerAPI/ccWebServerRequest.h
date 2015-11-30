@@ -52,12 +52,13 @@ public:
     virtual string          GetContentType() const;
     virtual unsigned long   GetContentLength() const;
 
+    virtual long            GetContentBody(std::string& strBody);
+    virtual long            GetContentBody(char* pBuf, std::size_t size);
+
     // Retrieve info for the server interface that was connected with the remote device.
     virtual long            GetServerIp() const;
     virtual unsigned short  GetServerPort() const;
     virtual long            GetRemoteIp() const;
-
-    virtual const char*     GetPostData(unsigned long* size = NULL) const;
 
 protected:
     string  _strNullData;

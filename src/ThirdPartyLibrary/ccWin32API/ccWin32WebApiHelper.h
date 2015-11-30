@@ -24,8 +24,8 @@ public:
 public:
     void    SetConnectionInfo(const std::string& strIP, UINT uPort);
 
-    bool    RequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, std::string& strResponse);
-    bool    RequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, Json::Value& oParams, std::string& strResponse);
+    std::uint16_t   RequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, std::string& strResponse);
+    std::uint16_t   RequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, Json::Value& oParams, std::string& strResponse);
 
     bool    AsyncRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, ccWin32RgWebApiTransactionNotifier *pNotifier = NULL);
     bool    AsyncRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, Json::Value& oParams, ccWin32RgWebApiTransactionNotifier *pNotifier = NULL);
@@ -35,7 +35,7 @@ public:
     static bool getValueInt(Json::Value& oValue, const std::string& strName, int& nValue, int nDefaultValue = 0);
 
 private:
-    bool    DoSendRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, const std::string& strRequestData, std::string& strResponse);
+    std::uint16_t   DoSendRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, const std::string& strRequestData, std::string& strResponse);
 
 private:
     void    DoRunThread();

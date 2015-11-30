@@ -61,6 +61,7 @@ CWebApiTestDlg::CWebApiTestDlg(CWnd* pParent /*=NULL*/)
     , _uServerPort(0)
     , _strWebAPI(_T(""))
     , _strMethod(_T(""))
+    , _uStatusCode(0)
 {
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -75,6 +76,7 @@ void CWebApiTestDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_SERVER_PORT, _uServerPort);
     DDX_Text(pDX, IDC_WEB_API, _strWebAPI);
     DDX_CBString(pDX, IDC_METHOD, _strMethod);
+    DDX_Text(pDX, IDC_STATUS_CODE, _uStatusCode);
 }
 
 BEGIN_MESSAGE_MAP(CWebApiTestDlg, CDialogEx)
@@ -193,7 +195,7 @@ void CWebApiTestDlg::DoUpdateConfiguration()
     ccWin32WebApiHelper::getInstance()->SetConnectionInfo((LPCTSTR)_strServerIP, _uServerPort);
 }
 
-void CWebApiTestDlg::OnTransactionRecveResponse(const std::string& strResponse)
+void CWebApiTestDlg::OnTransactionRecveResponse(std::uint16_t uStatusCode, const std::string& strResponse)
 {
     if (!IsWindow(m_hWnd))
         return;
@@ -248,7 +250,7 @@ BOOL CWebApiTestDlg::DoRequestAPI()
             return FALSE;
         }
 
-        if (ccWin32WebApiHelper::getInstance()->RequestAPI(eMethod, (LPCTSTR)_strWebAPI, oParams, strResponse))
+        if ((_uStatusCode = ccWin32WebApiHelper::getInstance()->RequestAPI(eMethod, (LPCTSTR)_strWebAPI, oParams, strResponse)))
         {
             _strResponseData = strResponse.c_str();
             _strResponseData.Replace("\n", "\r\n");
@@ -258,7 +260,7 @@ BOOL CWebApiTestDlg::DoRequestAPI()
     }
     else
     {
-        if (ccWin32WebApiHelper::getInstance()->RequestAPI(eMethod, (LPCTSTR)_strWebAPI, strResponse))
+        if ((_uStatusCode = ccWin32WebApiHelper::getInstance()->RequestAPI(eMethod, (LPCTSTR)_strWebAPI, strResponse)))
         {
             _strResponseData = strResponse.c_str();
             _strResponseData.Replace("\n", "\r\n");

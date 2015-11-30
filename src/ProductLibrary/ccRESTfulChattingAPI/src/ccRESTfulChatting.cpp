@@ -17,6 +17,7 @@
 
 #include "ccJsonParserAPI/json/value.h"
 #include "ccJsonParserAPI/json/writer.h"
+#include "ccJsonParserAPI/json/reader.h"
 
 #include "../ccRESTfulChatting.h"
 
@@ -83,7 +84,10 @@ bool ccRESTfulChattingSessionManager::CreateID(const std::string& strID, const s
     for (auto userInfo : _aUserInfos)
     {
         if (userInfo->_strID == strID)
+        {
+            std::cout << "[ccRESTfulChattingSessionManager::CreateID] '" << strID << "' is a registered ID!" << std::endl;
             return false;
+        }
     }
 
     std::shared_ptr<ccRESTfulChattingUserInfo> pNewUser(new ccRESTfulChattingUserInfo);
@@ -92,6 +96,8 @@ bool ccRESTfulChattingSessionManager::CreateID(const std::string& strID, const s
     pNewUser->_strName = strName;
 
     _aUserInfos.push_back(pNewUser);
+
+    std::cout << "[ccRESTfulChattingSessionManager::CreateID] '" << strID << "'/'" << strName << "'." << std::endl;
 
     return true;
 }
@@ -213,20 +219,53 @@ bool ccRESTfulChatting::user(std::shared_ptr<ccWebServerRequest> pRequest, std::
     {
     case ccWebServerRequest::HttpMethod_Post:   //  Create
         {
-            static int nAutoCount = 0;
+            Json::Reader    oReader;
+            Json::Value     oRootValue;
 
-            ccString    strNewID;
-            ccString    strNewName;
+            std::string     strJsonRPC;
 
-            ccString::format(strNewID, "ID=%03d", nAutoCount);
-            ccString::format(strNewName, "Name=%03d", nAutoCount);
+            strJsonRPC.reserve(1024);
 
-            nAutoCount++;
+            pRequest->GetContentBody(strJsonRPC);
 
-            if (_oSessionManager.CreateID(strNewID, strNewName) == true)
+            if (!oReader.parse(strJsonRPC, oRootValue))
+            {
+                pResponse->Status(500, string("Server Error!"));
+                return false;
+            }
+
+            if (oRootValue["jsonrpc"] != "2.0")
+            {
+                pResponse->Status(500, string("Server Error!"));
+                return false;
+            }
+
+            if (oRootValue["user_info"].isObject() == false)
+            {
+                pResponse->Status(500, string("Server Error!"));
+                return false;
+            }
+
+            //  Json::Value oUserInfp = oRootValue["user_info"];
+            if (_oSessionManager.CreateID(oRootValue["user_info"]["ID"].asString(), oRootValue["user_info"]["Name"].asString()) == true)
                 pResponse->Status(200, string("OK)"));
             else
                 pResponse->Status(500, string("Server Error!"));
+
+            //static int nAutoCount = 0;
+
+            //ccString    strNewID;
+            //ccString    strNewName;
+
+            //ccString::format(strNewID, "ID=%03d", nAutoCount);
+            //ccString::format(strNewName, "Name=%03d", nAutoCount);
+
+            //nAutoCount++;
+
+            //if (_oSessionManager.CreateID(strNewID, strNewName) == true)
+            //    pResponse->Status(200, string("OK)"));
+            //else
+            //    pResponse->Status(500, string("Server Error!"));
         }
         break;
 

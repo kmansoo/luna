@@ -99,10 +99,12 @@ long ccWebServerRequest::GetRemoteIp() const
     return 0;
 }
 
-const char* ccWebServerRequest::GetPostData(unsigned long* size) const
+long ccWebServerRequest::GetContentBody(std::string& strBody)
 {
-    if (size != 0)  // 0 means NULL
-       *size = 0;
+    return 0;
+}
 
-    return _strNullData.c_str();
+long ccWebServerRequest::GetContentBody(char* pBuf, std::size_t size)
+{
+    return 0;
 }
