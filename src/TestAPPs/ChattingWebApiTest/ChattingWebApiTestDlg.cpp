@@ -11,6 +11,7 @@
 #define new DEBUG_NEW
 #endif
 
+#include "ccCoreAPI/ccString.h"
 #include "ccWin32API/ccWin32WebApiHelper.h"
 
 // CAboutDlg dialog used for App About
@@ -60,6 +61,15 @@ CChattingWebApiTestDlg::CChattingWebApiTestDlg(CWnd* pParent /*=NULL*/)
     , _strServerPort(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+
+
+    _strServerIP    =   AfxGetApp()->GetProfileString("Config", "IP", "localhost");
+    _strServerPort  =   AfxGetApp()->GetProfileString("Config", "Port", "8000");
+
+    _strUserID = AfxGetApp()->GetProfileString("Config", "UserID", "");
+    _strUserName = AfxGetApp()->GetProfileString("Config", "UserName", "");
+
+    _strSessionName = AfxGetApp()->GetProfileString("Config", "SessionName", "");
 }
 
 void CChattingWebApiTestDlg::DoDataExchange(CDataExchange* pDX)
@@ -90,6 +100,8 @@ BEGIN_MESSAGE_MAP(CChattingWebApiTestDlg, CDialogEx)
     ON_BN_CLICKED(IDC_SESSION_LIST_UPDATE, &CChattingWebApiTestDlg::OnBnClickedSessionListUpdate)
     ON_BN_CLICKED(IDC_SESSION_JOIN, &CChattingWebApiTestDlg::OnBnClickedSessionJoin)
     ON_BN_CLICKED(IDC_SERVER_INFO_UPDATE, &CChattingWebApiTestDlg::OnBnClickedServerInfoUpdate)
+    ON_BN_CLICKED(IDC_SESSION_DELETE, &CChattingWebApiTestDlg::OnBnClickedSessionDelete)
+    ON_LBN_DBLCLK(IDC_SESSION_LIST, &CChattingWebApiTestDlg::OnLbnDblclkSessionList)
 END_MESSAGE_MAP()
 
 
@@ -124,7 +136,8 @@ BOOL CChattingWebApiTestDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// Set big icon
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
-	// TODO: Add extra initialization here
+    //  
+    ccWin32WebApiHelper::getInstance()->SetConnectionInfo((LPCTSTR)_strServerIP, atoi(_strServerPort));
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -189,7 +202,194 @@ void CChattingWebApiTestDlg::OnBnClickedServerInfoUpdate()
 {
     UpdateData();
 
+    AfxGetApp()->WriteProfileString("Config", "IP", _strServerIP);
+    AfxGetApp()->WriteProfileString("Config", "Port", _strServerPort);
+
     ccWin32WebApiHelper::getInstance()->SetConnectionInfo((LPCTSTR)_strServerIP, atoi(_strServerPort));
+}
+
+void CChattingWebApiTestDlg::OnBnClickedLogin()
+{
+    UpdateData();
+
+    AfxGetApp()->WriteProfileString("Config", "UserID", _strUserID);
+    AfxGetApp()->WriteProfileString("Config", "UserName", _strUserName);
+
+    std::string strResponse;
+
+    Json::Value oRequestJsonData;
+    Json::Value oExtInfo;
+    Json::StyledWriter oWriter;
+
+    oExtInfo["ID"] = (LPCTSTR)_strUserID;
+    oExtInfo["Name"] = (LPCTSTR)_strUserName;
+
+    oRequestJsonData["user_info"] = oExtInfo;
+
+    ccWin32WebApiHelper::getInstance()->RequestAPI(ccWebServerRequest::HttpMethod_Post, "/user", oRequestJsonData, strResponse);
+}
+
+
+void CChattingWebApiTestDlg::OnBnClickedLogout()
+{
+    UpdateData();
+
+    std::string strResponse;
+    std::string strQueryString;
+
+    ccString::format(strQueryString, "/user?ID=%s", _strUserID);
+
+    ccWin32WebApiHelper::getInstance()->RequestAPI(ccWebServerRequest::HttpMethod_Delete, strQueryString,strResponse);
+}
+
+
+void CChattingWebApiTestDlg::OnBnClickedSessionCreate()
+{
+    UpdateData();
+
+    AfxGetApp()->WriteProfileString("Config", "SessionName", _strSessionName);
+
+    std::string strResponse;
+
+    Json::Value oRequestJsonData;
+    Json::Value oExtInfo;
+    Json::StyledWriter oWriter;
+
+    oExtInfo["Name"] = (LPCTSTR)_strSessionName;
+    oExtInfo["OwnerID"] = (LPCTSTR)_strUserID;
+
+    oRequestJsonData["session_info"] = oExtInfo;
+
+    if (ccWin32WebApiHelper::getInstance()->RequestAPI(ccWebServerRequest::HttpMethod_Post, "/session", oRequestJsonData, strResponse) == 201)
+        DoSessionListUpdate();
+}
+
+void CChattingWebApiTestDlg::OnBnClickedSessionDelete()
+{
+    UpdateData();
+
+    std::string strResponse;
+
+    Json::Value oRequestJsonData;
+    Json::Value oExtInfo;
+    Json::StyledWriter oWriter;
+
+    oExtInfo["Name"] = (LPCTSTR)_strSessionName;
+    oExtInfo["OwnerID"] = (LPCTSTR)_strUserID;
+
+    oRequestJsonData["session_info"] = oExtInfo;
+
+    if (ccWin32WebApiHelper::getInstance()->RequestAPI(ccWebServerRequest::HttpMethod_Delete, "/session", oRequestJsonData, strResponse) == 202)
+        DoSessionListUpdate();
+}
+
+void CChattingWebApiTestDlg::DoSessionListUpdate()
+{
+    std::string strResponse;
+
+    _ctlSessionList.ResetContent();
+
+    if (ccWin32WebApiHelper::getInstance()->RequestAPI(ccWebServerRequest::HttpMethod_Get, "/session", strResponse) == 200)
+    {
+        Json::Reader    oReader;
+        Json::Value     oRootValue;
+
+        if (!oReader.parse(strResponse, oRootValue))
+            return;
+
+        if (oRootValue["session_list"].isObject() == false)
+            return;
+
+        for (size_t nIndex = 0; nIndex < oRootValue["session_list"]["count"].asInt(); nIndex++)
+        {
+            Json::Value oInfoValue = oRootValue["session_list"]["info"][nIndex];
+
+            _ctlSessionList.AddString(oInfoValue["Name"].asString().c_str());
+        }
+    }
+}
+
+void CChattingWebApiTestDlg::DoSessionMemberListUpdate()
+{
+    _ctlSessionMemberList.ResetContent();
+
+    std::string strResponse;
+    std::string strQueryString;
+
+    ccString::format(strQueryString, "/session/member?Name=%s&UserID=%s", _strJoinedSessionName, _strUserID);
+
+    if (ccWin32WebApiHelper::getInstance()->RequestAPI(ccWebServerRequest::HttpMethod_Get, strQueryString, strResponse) == 200)
+    {
+        Json::Reader    oReader;
+        Json::Value     oRootValue;
+        Json::Value     oMemberListValue;
+
+        if (!oReader.parse(strResponse, oRootValue))
+            return;
+
+        oMemberListValue = oRootValue["session_member_list"];
+
+        if (oMemberListValue.isObject() == false)
+            return;
+
+        for (size_t nIndex = 0; nIndex < oMemberListValue["count"].asInt(); nIndex++)
+        {
+            Json::Value oInfoValue = oMemberListValue["info"][nIndex];
+
+            _ctlSessionMemberList.AddString(oInfoValue["ID"].asString().c_str());
+        }
+    }
+}
+
+void CChattingWebApiTestDlg::OnBnClickedSessionListUpdate()
+{
+    DoSessionListUpdate();
+}
+
+
+void CChattingWebApiTestDlg::OnBnClickedSessionJoin()
+{
+    UpdateData();
+
+    std::string strResponse;
+    std::string strQueryString;
+
+    ccString::format(strQueryString, "/session/member?Name=%s&UserID=%s", _strSessionName, _strUserID);
+
+    if (ccWin32WebApiHelper::getInstance()->RequestAPI(ccWebServerRequest::HttpMethod_Put, strQueryString, strResponse) == 200)
+    {
+        _strJoinedSessionName = _strSessionName;
+
+        UpdateData(false);
+
+        DoSessionMemberListUpdate();
+    }
+}
+
+void CChattingWebApiTestDlg::OnBnClickedSessionLeave()
+{
+    UpdateData();
+
+    std::string strResponse;
+    std::string strQueryString;
+
+    ccString::format(strQueryString, "/session/member?Name=%s&UserID=%s", _strSessionName, _strUserID);
+
+    if (ccWin32WebApiHelper::getInstance()->RequestAPI(ccWebServerRequest::HttpMethod_Delete, strQueryString, strResponse) == 200)
+    {
+
+    }
+
+    _strJoinedSessionName = "";
+    UpdateData(false);
+
+    _ctlMessageList.ResetContent();
+}
+
+
+void CChattingWebApiTestDlg::OnBnClickedSessionMemberUpdate()
+{
+    DoSessionMemberListUpdate();
 }
 
 void CChattingWebApiTestDlg::OnBnClickedMessageSend()
@@ -198,62 +398,13 @@ void CChattingWebApiTestDlg::OnBnClickedMessageSend()
 }
 
 
-void CChattingWebApiTestDlg::OnBnClickedSessionLeave()
-{
-    // TODO: Add your control notification handler code here
-}
-
-
-void CChattingWebApiTestDlg::OnBnClickedSessionMemberUpdate()
-{
-    // TODO: Add your control notification handler code here
-}
-
-
-void CChattingWebApiTestDlg::OnBnClickedLogin()
+void CChattingWebApiTestDlg::OnLbnDblclkSessionList()
 {
     UpdateData();
 
-    std::string strResponse;
+    _ctlSessionList.GetText(_ctlSessionList.GetCurSel(), _strSessionName);
 
-    Json::Value oRequestRPC;
-    Json::Value oUserInfo;
-    Json::StyledWriter oWriter;
+    AfxGetApp()->WriteProfileString("Config", "SessionName", _strSessionName);
 
-    oRequestRPC["jsonrpc"] = "2.0";
-    oRequestRPC["id"] = 1;
-
-    oUserInfo["ID"] = (LPCTSTR)_strUserID;
-    oUserInfo["Name"] = (LPCTSTR)_strUserName;
-
-    oRequestRPC["user_info"] = oUserInfo;
-
-    ccWin32WebApiHelper::getInstance()->RequestAPI(ccWebServerRequest::HttpMethod_Post, "/user", oRequestRPC, strResponse);
+    UpdateData(false);
 }
-
-
-void CChattingWebApiTestDlg::OnBnClickedLogout()
-{
-    UpdateData();
-
-    // TODO: Add your control notification handler code here
-}
-
-
-void CChattingWebApiTestDlg::OnBnClickedSessionCreate()
-{
-    // TODO: Add your control notification handler code here
-}
-
-
-void CChattingWebApiTestDlg::OnBnClickedSessionListUpdate()
-{
-    // TODO: Add your control notification handler code here
-}
-
-
-void CChattingWebApiTestDlg::OnBnClickedSessionJoin()
-{
-    // TODO: Add your control notification handler code here
-}
-

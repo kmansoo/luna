@@ -25,30 +25,6 @@ ccMongooseWebServerRequest::~ccMongooseWebServerRequest()
     // TODO Auto-generated destructor stub
 }
 
-//ccMongooseWebServerRequest::HttpMethod  ccMongooseWebServerRequest::GetMethod() const
-//{
-//    if (_pMgHttpMessage == NULL)
-//        return HttpMethod_Unknown;
-//
-//    //if (mg_vcmp(&_pMgHttpMessage->method, "GET") == 0)return HttpMethod_Get;
-//    //if (mg_vcmp(&_pMgHttpMessage->method, "HEAD") == 0)return HttpMethod_Head;
-//    //if (mg_vcmp(&_pMgHttpMessage->method, "POST") == 0)return HttpMethod_Post;
-//    //if (mg_vcmp(&_pMgHttpMessage->method, "PUT") == 0)return HttpMethod_Put;
-//    //if (mg_vcmp(&_pMgHttpMessage->method, "DELETE") == 0)return HttpMethod_Delete;
-//    //if (mg_vcmp(&_pMgHttpMessage->method, "TRACE") == 0)return HttpMethod_Trace;
-//    //if (mg_vcmp(&_pMgHttpMessage->method, "CONNECT") == 0)return HttpMethod_Connect;
-//
-//    if (_strMethod == "GET")        return HttpMethod_Get;
-//    if (_strMethod == "HEAD")       return HttpMethod_Head;
-//    if (_strMethod == "POST")       return HttpMethod_Post;
-//    if (_strMethod == "PUT")        return HttpMethod_Put;
-//    if (_strMethod == "DELETE")     return HttpMethod_Delete;
-//    if (_strMethod == "TRACE")      return HttpMethod_Trace;
-//    if (_strMethod == "CONNECT")    return HttpMethod_Connect;
-//
-//    return HttpMethod_Unknown;
-//}
-
 const string& ccMongooseWebServerRequest::GetQueryString() const
 {
     if (_pMgHttpMessage == NULL)
@@ -198,7 +174,7 @@ string ccMongooseWebServerRequest::DoGetVarInConnection(const string& name) cons
     int sz = -1;
     
     if (_pMgHttpMessage != NULL)
-        mg_get_http_var(&_pMgHttpMessage->body, name.c_str(), &strGetData[0], strGetData.size());
+        sz = mg_get_http_var(&_pMgHttpMessage->query_string, name.c_str(), &strGetData[0], strGetData.size());
 
     if (sz == -1)
         return _strNullData;

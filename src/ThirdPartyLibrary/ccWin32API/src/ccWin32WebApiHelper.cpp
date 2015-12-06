@@ -171,8 +171,6 @@ std::uint16_t ccWin32WebApiHelper::DoSendRequestAPI(ccWebServerRequest::HttpMeth
         goto clearVariabls;
     }
 
-    sReqHdr.Format(_T("Content-Type: application/javascript"));  
-    pHttpFile->AddRequestHeaders(sReqHdr);  
 
     //  Request
     strResultString = _T("");
@@ -181,12 +179,22 @@ std::uint16_t ccWin32WebApiHelper::DoSendRequestAPI(ccWebServerRequest::HttpMeth
     char szResponse[5000];  
 
     try {
+        if (strRequestData.size() > 0)
+        {
+            sReqHdr.Format(_T("Content-Type: application/javascript"));
+            pHttpFile->AddRequestHeaders(sReqHdr);
 
-        bRet = pHttpFile->SendRequestEx(strRequestData.length(), HSR_ASYNC | HSR_INITIATE);
+            bRet = pHttpFile->SendRequestEx(strRequestData.length(), HSR_ASYNC | HSR_INITIATE);
 
-        pHttpFile->Write(CT2A(strRequestData.c_str()), strRequestData.length());
+            pHttpFile->Write(CT2A(strRequestData.c_str()), strRequestData.length());
 
-        bRet = pHttpFile->EndRequest(HSR_ASYNC);  
+            bRet = pHttpFile->EndRequest(HSR_ASYNC);
+        }
+        else
+        {
+            CString strHeaders = _T("Content-Type: application/x-www-form-urlencoded");
+            bRet = pHttpFile->SendRequest(strHeaders);
+        }
 
         DWORD dwRet;
         pHttpFile->QueryInfoStatusCode(dwRet);
@@ -241,21 +249,6 @@ clearVariabls:
 
     return uStatusCode;
 }
-
-//bool ccWin32WebApiHelper::DoMakeRequestAPI(std::string& strAPI, const std::string& strFunction, Json::Value& oParams)
-//{
-//    Json::Value oAPI;
-//
-//    oAPI["jsonrpc"]   = "2.0";
-//    oAPI["id"]        = 1;
-//
-//    oAPI["params"]    = oParams;
-//
-//    Json::StyledWriter write;
-//    strAPI = write.write(oAPI).c_str();
-//
-//    return true;
-//}
 
 void ccWin32WebApiHelper::DoRunThread()
 {

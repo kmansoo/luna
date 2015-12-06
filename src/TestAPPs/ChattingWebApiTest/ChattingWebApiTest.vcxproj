@@ -92,7 +92,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>LUNA_PLATFORM_WIN32;WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../Library;../../ThirdPartyLibrary;../../ProductLibrary;../../FossLibrary</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../Library/;../../ThirdPartyLibrary/;../../ProductLibrary/;../../FossLibrary/</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

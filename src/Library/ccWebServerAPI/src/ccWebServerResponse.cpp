@@ -283,5 +283,6 @@ size_t ccWebServerResponse::DoPrintf(const char *fmt, ...)
 
     va_end(ap);
 
+
     return result;
 }

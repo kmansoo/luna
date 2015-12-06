@@ -21,7 +21,6 @@ int main(int argc, char* argv[])
     std::shared_ptr<ccRESTfulChatting>  pChattingApi(new ccRESTfulChatting);
 
     oManager.CreateWebServer("WebServer #1", "8000");
-    oManager.CreateWebServer("WebServer #2", "8020");
     oManager.AddRESTfulApi(pChattingApi);
 
     oManager.Start();

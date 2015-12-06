@@ -36,6 +36,8 @@ public:
 public:
     bool    Join(const std::string& strUserID);
     bool    Leave(const std::string& strUserID);
+    bool    GetMemberList(std::vector<std::string>& aUserIDs);
+
     bool    NewMessage(const std::string& strUserID, const std::string& strMessage);
 
 public:
@@ -55,6 +57,7 @@ public:
 public:
     bool    CreateID(const std::string& strID, const std::string& strName);
     bool    DeleteID(const std::string& strID);
+    bool    GetUserList(std::vector<std::string>& aUserIDs);
 
     bool    CreateSession(const std::string& strName, const std::string& strOwnerID);
     bool    DeleteSession(const std::string& strName, const std::string& strRequestID);
@@ -62,8 +65,7 @@ public:
     bool    JoinSession(const std::string& strSessionName, const std::string& strUserID);
     bool    LeaveSession(const std::string& strSessionName, const std::string& strUserID);
 
-    bool    GetUserList(std::vector<std::string>& aUserIDs);
-    bool    GetSessionList(std::vector<std::string>& aSessionNames);
+    bool    GetSessionList(std::vector<std::string>& aSessionNames, std::vector<std::string>& aOwnerIDs);
     bool    GetSessionInfo(const std::string& strSessionName, std::vector<std::string>& aMembers);
 
     bool    BroadcastMessage(const std::string& strSessionName, const std::string& strUserID, const std::string& strMessage);

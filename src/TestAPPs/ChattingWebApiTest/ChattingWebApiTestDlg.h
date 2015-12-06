@@ -42,14 +42,25 @@ public:
     afx_msg void OnBnClickedSessionCreate();
     afx_msg void OnBnClickedSessionListUpdate();
     afx_msg void OnBnClickedSessionJoin();
+    afx_msg void OnBnClickedServerInfoUpdate();
+    afx_msg void OnBnClickedSessionDelete();
+
+private:
+    void    DoSessionListUpdate();
+    void    DoSessionMemberListUpdate();
+
+private:
     CString _strUserID;
     CString _strUserName;
     CString _strSessionName;
-    CListBox _ctlSessionList;
     CString _strJoinedSessionName;
-    CListBox _ctlSessionMemberList;
-    CListBox _ctlMessageList;
     CString _strServerIP;
     CString _strServerPort;
-    afx_msg void OnBnClickedServerInfoUpdate();
+
+    CListBox _ctlSessionList;
+    CListBox _ctlSessionMemberList;
+    CListBox _ctlMessageList;
+
+public:
+    afx_msg void OnLbnDblclkSessionList();
 };
