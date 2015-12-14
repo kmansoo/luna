@@ -47,6 +47,15 @@
     <ClInclude Include="..\ccRESTfulApi.h">
       <Filter>API</Filter>
     </ClInclude>
+    <ClInclude Include="..\ccWebsocket.h">
+      <Filter>API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccWebsocketGroup.h">
+      <Filter>API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccWebsocketGroupManager.h">
+      <Filter>API</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -65,6 +74,15 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ccRESTfulApi.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccWebsocket.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccWebsocketGroup.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccWebsocketGroupManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
