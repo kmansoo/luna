@@ -26,6 +26,10 @@ public:
     bool    Remove(std::shared_ptr<ccWebsocket> pNewWS);
     bool    RemoveAll();
 
+    bool    GetWebsocket(std::int32_t nInstance, std::shared_ptr<ccWebsocket>& pSocket);
+    bool    GetWebsocket(const std::string& strUri, std::int32_t nInstance, std::shared_ptr<ccWebsocket>& pSocket);
+    bool    GetGroup(const std::string& strUri, std::shared_ptr<ccWebsocketGroup>& pGroup);
+
 private:
     std::mutex      _mtx;
 

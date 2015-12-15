@@ -12,6 +12,7 @@
 
 #include "ccMongooseWebServerRequest.h"
 #include "ccMongooseWebServerResponse.h"
+#include "ccMongooseWebsocket.h"
 
 static struct mg_serve_http_opts s_http_server_opts;
 
@@ -128,9 +129,25 @@ void ccMongooseWebServer::ev_handler(struct mg_connection *nc, int ev, void *p)
         break;
 
     case MG_EV_WEBSOCKET_HANDSHAKE_REQUEST: /* NULL */
+        {
+            struct http_message *hm = (struct http_message *)p;
+
+            std::shared_ptr<ccWebsocket> pNewWS(new ccMongooseWebsocket(hm->uri.p, hm->uri.len, nc));
+
+            if (pServer->_pEventListener->OnNewWebsocketRequest(pNewWS) == true)
+                pServer->_oWSGM.Add(pNewWS);
+            else
+                nc->flags |= MG_F_CLOSE_IMMEDIATELY;
+        }
         break;
 
     case MG_EV_WEBSOCKET_HANDSHAKE_DONE:    /* NULL */
+        {
+            std::shared_ptr<ccWebsocket> pWS;
+
+            if (pServer->_oWSGM.GetWebsocket(nc->sock, pWS))
+                pServer->_pEventListener->OnWebsocketConnected(pWS);
+        }
         break;
 
     case MG_EV_WEBSOCKET_FRAME:             /* struct websocket_message * */
@@ -138,6 +155,21 @@ void ccMongooseWebServer::ev_handler(struct mg_connection *nc, int ev, void *p)
 
     case MG_EV_WEBSOCKET_CONTROL_FRAME:     /* struct websocket_message * */
         break;
+
+    case MG_EV_CLOSE:
+        //  is websocket ?
+        if (nc->flags & MG_F_IS_WEBSOCKET) 
+        {
+            std::shared_ptr<ccWebsocket> pWS;
+
+            if (pServer->_oWSGM.GetWebsocket(nc->sock, pWS))
+            {
+                pServer->_pEventListener->OnWebsocketClosed(pWS);
+                pServer->_oWSGM.Remove(pWS);
+            }
+        }
+        break;
+
     }
 }
 

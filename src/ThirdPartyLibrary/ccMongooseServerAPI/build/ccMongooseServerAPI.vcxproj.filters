@@ -38,6 +38,9 @@
     <ClInclude Include="..\src\mongoose6.0\mongoose.h">
       <Filter>src\mongoose6.0</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\ccMongooseWebsocket.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\ccMongooseWebServer.cpp">
@@ -54,6 +57,9 @@
     </ClCompile>
     <ClCompile Include="..\src\mongoose6.0\mongoose.c">
       <Filter>src\mongoose6.0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccMongooseWebsocket.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
