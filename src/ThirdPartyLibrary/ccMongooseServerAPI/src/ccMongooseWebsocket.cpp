@@ -33,7 +33,7 @@ std::int32_t ccMongooseWebsocket::GetInstance()  // It may be a Socket ID.
     if (_pMgConnection == NULL)
         return -1;
 
-    _pMgConnection->sock;
+    return _pMgConnection->sock;
 }
 
 bool ccMongooseWebsocket::Send(const char* strMessage, std::size_t size)
@@ -45,4 +45,3 @@ bool ccMongooseWebsocket::Send(const char* strMessage, std::size_t size)
 
     return true;
 }
-

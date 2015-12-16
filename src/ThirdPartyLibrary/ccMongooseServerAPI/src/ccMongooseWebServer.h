@@ -10,10 +10,9 @@
 
 #include <thread>
 
-#include "mongoose6.0/mongoose.h"
+#include "mongoose/mongoose.h"
 
 #include "ccWebServerAPI/ccWebServer.h"
-#include "ccWebServerAPI/ccWebsocketGroupManager.h"
 
 class ccMongooseWebServer : public ccWebServer
 {
@@ -36,9 +35,7 @@ private:
 
     std::thread*            _pPollThread;
     struct mg_mgr*          _mgr;
-    struct mg_connection*   _nc;
-
-    ccWebsocketGroupManager _oWSGM;
+    struct mg_connection*   _con;
 };
 
 #endif /* THIRDPARTYLIBRARY_CCMONGOOSESERVERAPI_CCMONGOOSEWEBSERVER_H_ */

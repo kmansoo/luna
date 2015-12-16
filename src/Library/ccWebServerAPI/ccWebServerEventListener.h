@@ -19,10 +19,11 @@ public:
     //  return value
     //      true    :   accept
     //      false   :   reject
-    virtual bool OnNewWebsocketRequest(std::shared_ptr<ccWebsocket> newWebsocket) { return false; }
-    virtual void OnWebsocketConnected(std::shared_ptr<ccWebsocket> newWebsocket) {}
-    virtual void OnWebsocketData(std::shared_ptr<ccWebsocket> newWebsocket) {}
-    virtual void OnWebsocketClosed(std::shared_ptr<ccWebsocket> newWebsocket) {}
+    virtual bool OnNewWebsocketRequest(const std::string& strWebsocketUri) { return false; }
+    virtual void OnWebsocketCreated(std::shared_ptr<ccWebsocket> newWebsocket) {};
+    virtual void OnWebsocketConnected(std::int32_t socketID) {}
+    virtual void OnWebsocketData(std::int32_t socketID, const char* pData, std::size_t size) {}
+    virtual void OnWebsocketClosed(std::int32_t socketID) {}
 };
 
 #endif /* CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVEREVENTLISTENERH_ */

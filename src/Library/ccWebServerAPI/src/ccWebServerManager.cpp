@@ -37,7 +37,7 @@ bool ccWebServerManager::CreateWebServer(const char* name, const char* ports)
 
 shared_ptr<ccWebServer> ccWebServerManager::GetWebServer(const char* strName)
 {
-    for (const auto& server : _aWebServers)
+    for (auto server : _aWebServers)
     {
         if (server->GetName().compare(strName) == 0)
             return server;
@@ -48,7 +48,7 @@ shared_ptr<ccWebServer> ccWebServerManager::GetWebServer(const char* strName)
 
 void ccWebServerManager::Start()
 {
-    for (const auto& server : _aWebServers)
+    for (auto server : _aWebServers)
     {
         server->SetListener(this);
         server->Start();
@@ -57,7 +57,7 @@ void ccWebServerManager::Start()
 
 void ccWebServerManager::Stop()
 {
-    for (const auto& server : _aWebServers)
+    for (const auto server : _aWebServers)
     {
         server->SetListener(NULL);
         server->Stop();
@@ -66,9 +66,9 @@ void ccWebServerManager::Stop()
 
 bool ccWebServerManager::AddRESTfulApi(shared_ptr<ccRESTfulApi> pNewAPI)
 {
-    for (const auto& api : _aWebAPIs)
+    for (auto item : _aWebAPIs)
     {
-        if (api == pNewAPI)
+        if (item == pNewAPI)
             return false;
     }
 
@@ -79,15 +79,14 @@ bool ccWebServerManager::AddRESTfulApi(shared_ptr<ccRESTfulApi> pNewAPI)
 
 bool ccWebServerManager::RemoveRESTfulApi(shared_ptr<ccRESTfulApi> pNewAPI)
 {
-    //for (const auto& api : _aWebAPIs)
-    //{
-    //    if (api == pNewAPI)
-    //    {
-    //        _aWebAPIs.erase(api);
+    auto it = std::find(std::begin(_aWebAPIs), std::end(_aWebAPIs), pNewAPI);
 
-    //        return true;
-    //    }
-    //}
+    if (it != std::end(_aWebAPIs))
+    {
+        _aWebAPIs.erase(it);
+
+        return true;
+    }
 
     return false;
 }
@@ -95,6 +94,41 @@ bool ccWebServerManager::RemoveRESTfulApi(shared_ptr<ccRESTfulApi> pNewAPI)
 bool ccWebServerManager::RemoveAllRESTfulApi()
 {
     _aWebAPIs.clear();
+
+    return true;
+}
+
+bool ccWebServerManager::AddWebsocketManager(shared_ptr<ccWebsocketManager> pNewWSGM)
+{
+    for (const auto& item : _aWSMs)
+    {
+        if (item == pNewWSGM)
+            return false;
+    }
+
+    _aWSMs.push_back(pNewWSGM);
+
+    return true;
+}
+
+
+bool ccWebServerManager::RemoveWebsocketManager(shared_ptr<ccWebsocketManager> pNewWSGM)
+{
+    auto it = std::find(std::begin(_aWSMs), std::end(_aWSMs), pNewWSGM);
+
+    if (it != std::end(_aWSMs))
+    {
+        _aWSMs.erase(it);
+
+        return true;
+    }
+
+    return false;
+}
+
+bool ccWebServerManager::RemoveAllWebsocketManager()
+{
+    _aWSMs.clear();
 
     return true;
 }
@@ -108,4 +142,61 @@ bool ccWebServerManager::OnWebServerRequest(std::shared_ptr<ccWebServerRequest> 
     }
 
     return false;
+}
+
+bool ccWebServerManager::OnNewWebsocketRequest(const std::string& strWebsocketUri)
+{
+    if (_aWSMs.size() == 0)
+        return false;
+
+    for (const auto& item : _aWSMs)
+    {
+        if (item->HasUri(strWebsocketUri))
+            return true;
+    }
+
+    return false;
+}
+
+void ccWebServerManager::OnWebsocketCreated(std::shared_ptr<ccWebsocket> newWebsocket)
+{
+    for (const auto& item : _aWSMs)
+    {
+        if (item->HasUri(newWebsocket->GetUri()))
+        {
+            item->AddWebsocket(newWebsocket);
+            return;
+        }
+    }
+}
+
+void ccWebServerManager::OnWebsocketConnected(std::int32_t socketID)
+{
+    DoPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent_Connected, socketID);
+}
+
+void ccWebServerManager::OnWebsocketClosed(std::int32_t socketID)
+{
+    DoPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent_Close, socketID);
+}
+
+void ccWebServerManager::OnWebsocketData(std::int32_t socketID, const char* pData, std::size_t size)
+{
+    DoPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent_Data, socketID, pData, size);
+}
+
+void ccWebServerManager::DoPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent eEvent, std::int32_t socketID, const char* pData, std::size_t size)
+{
+    std::shared_ptr<ccWebsocket> newWebsocket;
+
+    for (const auto& item : _aWSMs)
+    {
+        if (item->GetWebsocket(socketID, newWebsocket))
+        {
+            if (newWebsocket != NULL)
+                item->ExecuteWebsocket(eEvent, newWebsocket, pData, size);
+
+            return;
+        }
+    }
 }

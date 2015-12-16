@@ -53,7 +53,7 @@
     <ClInclude Include="..\ccWebsocketGroup.h">
       <Filter>API</Filter>
     </ClInclude>
-    <ClInclude Include="..\ccWebsocketGroupManager.h">
+    <ClInclude Include="..\ccWebsocketManager.h">
       <Filter>API</Filter>
     </ClInclude>
   </ItemGroup>
@@ -82,7 +82,7 @@
     <ClCompile Include="..\src\ccWebsocketGroup.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ccWebsocketGroupManager.cpp">
+    <ClCompile Include="..\src\ccWebsocketManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

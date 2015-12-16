@@ -20,7 +20,7 @@ ccMongooseWebServer::ccMongooseWebServer(const char* name, const char* ports) :
         ccWebServer(name, ports),
         _bIsStopThread(false),
         _mgr(NULL),
-        _nc(NULL)
+        _con(NULL)
 {
 }
 
@@ -32,7 +32,7 @@ ccMongooseWebServer::~ccMongooseWebServer()
         delete _mgr;
 
     _mgr = NULL;
-    _nc  = NULL;
+    _con  = NULL;
 }
 
 
@@ -46,10 +46,10 @@ bool ccMongooseWebServer::Start()
     mg_mgr_init(_mgr, NULL);
 
     _mgr->user_data = this;
-    _nc = mg_bind(_mgr, _strHttpPorts.c_str(), ev_handler);
+    _con = mg_bind(_mgr, _strHttpPorts.c_str(), ev_handler);
 
     // Set up HTTP server parameters
-    mg_set_protocol_http_websocket(_nc);
+    mg_set_protocol_http_websocket(_con);
 
     s_http_server_opts.document_root = ".";  // Serve current directory
     s_http_server_opts.enable_directory_listing = "yes";
@@ -82,7 +82,7 @@ bool ccMongooseWebServer::Stop()
     delete _mgr;
 
     _mgr    = NULL;
-    _nc     = NULL;
+    _con     = NULL;
 
     return true;
 }
@@ -90,7 +90,7 @@ bool ccMongooseWebServer::Stop()
 void ccMongooseWebServer::DoRunThread()
 {
     while (_bIsStopThread == false)
-        mg_mgr_poll(_mgr, 1000);
+        mg_mgr_poll(_mgr, 200);
 }
 
 void ccMongooseWebServer::ev_handler(struct mg_connection *nc, int ev, void *p)
@@ -132,25 +132,29 @@ void ccMongooseWebServer::ev_handler(struct mg_connection *nc, int ev, void *p)
         {
             struct http_message *hm = (struct http_message *)p;
 
-            std::shared_ptr<ccWebsocket> pNewWS(new ccMongooseWebsocket(hm->uri.p, hm->uri.len, nc));
+            std::string strRequestUri(hm->uri.p, hm->uri.len);
 
-            if (pServer->_pEventListener->OnNewWebsocketRequest(pNewWS) == true)
-                pServer->_oWSGM.Add(pNewWS);
+            if (pServer->_pEventListener->OnNewWebsocketRequest(strRequestUri) == true)
+            {
+                std::shared_ptr<ccWebsocket> pNewWS(new ccMongooseWebsocket(strRequestUri, nc));
+
+                pServer->_pEventListener->OnWebsocketCreated(pNewWS);
+            }
             else
                 nc->flags |= MG_F_CLOSE_IMMEDIATELY;
         }
         break;
 
     case MG_EV_WEBSOCKET_HANDSHAKE_DONE:    /* NULL */
-        {
-            std::shared_ptr<ccWebsocket> pWS;
-
-            if (pServer->_oWSGM.GetWebsocket(nc->sock, pWS))
-                pServer->_pEventListener->OnWebsocketConnected(pWS);
-        }
+        pServer->_pEventListener->OnWebsocketConnected(nc->sock);
         break;
 
     case MG_EV_WEBSOCKET_FRAME:             /* struct websocket_message * */
+        {
+            struct websocket_message *wm = (struct websocket_message *) p;
+
+            pServer->_pEventListener->OnWebsocketData(nc->sock, (const char*)wm->data, wm->size);
+        }
         break;
 
     case MG_EV_WEBSOCKET_CONTROL_FRAME:     /* struct websocket_message * */
@@ -158,18 +162,10 @@ void ccMongooseWebServer::ev_handler(struct mg_connection *nc, int ev, void *p)
 
     case MG_EV_CLOSE:
         //  is websocket ?
-        if (nc->flags & MG_F_IS_WEBSOCKET) 
-        {
-            std::shared_ptr<ccWebsocket> pWS;
+        if (nc->flags & MG_F_IS_WEBSOCKET)
+            pServer->_pEventListener->OnWebsocketClosed(nc->sock);
 
-            if (pServer->_oWSGM.GetWebsocket(nc->sock, pWS))
-            {
-                pServer->_pEventListener->OnWebsocketClosed(pWS);
-                pServer->_oWSGM.Remove(pWS);
-            }
-        }
         break;
-
     }
 }
 

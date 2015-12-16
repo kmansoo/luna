@@ -15,7 +15,7 @@
     <Filter Include="API">
       <UniqueIdentifier>{99a109bc-cce0-4571-9395-7299c7a90688}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\mongoose6.0">
+    <Filter Include="src\mongoose6.1">
       <UniqueIdentifier>{32845a9e-1927-46a9-a617-f45c37b89b79}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -35,11 +35,11 @@
     <ClInclude Include="..\src\ccMongooseWebServerResponse.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\mongoose6.0\mongoose.h">
-      <Filter>src\mongoose6.0</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\ccMongooseWebsocket.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mongoose\mongoose.h">
+      <Filter>src\mongoose6.1</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -55,11 +55,11 @@
     <ClCompile Include="..\src\ccMongooseWebServerResponse.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\mongoose6.0\mongoose.c">
-      <Filter>src\mongoose6.0</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\ccMongooseWebsocket.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mongoose\mongoose.c">
+      <Filter>src\mongoose6.1</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

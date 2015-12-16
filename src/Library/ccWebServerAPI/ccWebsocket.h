@@ -10,6 +10,8 @@
 
 #include <string>
 
+class ccWebsocketGroup;
+
 class ccWebsocket
 {
 public:
@@ -18,7 +20,16 @@ public:
     virtual ~ccWebsocket();
 
 public:
-    const std::string   GetUri();
+    enum ccWebSocketEvent {
+        ccWebSocketEvent_Connected,
+        ccWebSocketEvent_Data,
+        ccWebSocketEvent_Close,
+    };
+
+public:
+    const std::string       GetUri();
+    void                    SetGroup(ccWebsocketGroup* pGroup);
+    ccWebsocketGroup*       GetGroup();
 
 public:
     virtual std::int32_t    GetInstance() = 0;  // It may be a Socket ID. 
@@ -26,7 +37,8 @@ public:
     virtual bool            Send(const std::string& strMessage);
 
 protected:
-    std::string _strUri;
+    std::string         _strUri;
+    ccWebsocketGroup*   _pMyGroup;
 };
 
 #endif

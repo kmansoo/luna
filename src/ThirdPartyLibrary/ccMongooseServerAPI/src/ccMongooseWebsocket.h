@@ -10,7 +10,7 @@
 
 #include "ccWebServerAPI/ccWebsocket.h"
 
-#include "mongoose6.0/mongoose.h"
+#include "mongoose/mongoose.h"
 
 class ccMongooseWebsocket : public ccWebsocket
 {

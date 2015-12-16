@@ -35,14 +35,9 @@ bool ccWebsocketGroup::Add(std::shared_ptr<ccWebsocket> pNewWS)
 
     std::lock_guard<std::mutex> lock(_mtx);
 
-    std::map< std::int32_t, std::shared_ptr<ccWebsocket> >::iterator it;
-
-    it = _aWSList.find(pNewWS->GetInstance());
-
-    if (it != _aWSList.end())
-        _aWSList.erase(it);
-
     _aWSList[pNewWS->GetInstance()] = pNewWS;
+
+    pNewWS->SetGroup(this);
 
     return true;
 }
@@ -51,12 +46,12 @@ bool ccWebsocketGroup::Remove(std::shared_ptr<ccWebsocket> pNewWS)
 {
     std::lock_guard<std::mutex> lock(_mtx);
 
-    std::map< std::int32_t, std::shared_ptr<ccWebsocket> >::iterator it;
-
-    it = _aWSList.find(pNewWS->GetInstance());
+    auto it = _aWSList.find(pNewWS->GetInstance());
 
     if (it == _aWSList.end())
         return false;
+
+    it->second->SetGroup(NULL);
 
     _aWSList.erase(it);
 
@@ -76,14 +71,12 @@ bool ccWebsocketGroup::GetWebsocket(std::int32_t nInstance, std::shared_ptr<ccWe
 {
     std::lock_guard<std::mutex> lock(_mtx);
 
-    std::map< std::int32_t, std::shared_ptr<ccWebsocket> >::iterator it;
+    auto item = _aWSList.find(nInstance);
 
-    it = _aWSList.find(nInstance);
-
-    if (it == _aWSList.end())
+    if (item == _aWSList.end())
         return false;
 
-    pSocket = it->second;
+    pSocket = item->second;
 
     return true;
 }
@@ -92,13 +85,27 @@ void  ccWebsocketGroup::Broadcast(const char* strMessage, std::size_t size)
 {
     std::lock_guard<std::mutex> lock(_mtx);
 
-    std::map< std::int32_t, std::shared_ptr<ccWebsocket> >::iterator it;
-
     for (auto item : _aWSList)
         item.second->Send(strMessage, size);
 }
 
-void  ccWebsocketGroup::Broadcast(const std::string strMessage)
+void  ccWebsocketGroup::Broadcast(const std::string& strMessage)
 {
     Broadcast(strMessage.c_str(), strMessage.length());
+}
+
+void ccWebsocketGroup::BroadcastEx(const char* strMessage, std::size_t size, std::shared_ptr<ccWebsocket>& pExceptSocket)
+{
+    std::lock_guard<std::mutex> lock(_mtx);
+
+    for (auto item : _aWSList)
+    {
+        if (item.second != pExceptSocket)
+            item.second->Send(strMessage, size);
+    }
+}
+
+void ccWebsocketGroup::BroadcastEx(const std::string& strMessage, std::shared_ptr<ccWebsocket>& pExceptSocket)
+{
+    BroadcastEx(strMessage.c_str(), strMessage.length(), pExceptSocket);
 }
