@@ -138,7 +138,7 @@ bool ccWebServerManager::OnWebServerRequest(std::shared_ptr<ccWebServerRequest> 
     for (const auto& api : _aWebAPIs)
     {
         if (api->HasAPI(request->GetURI()) == true)
-            return api->ExecuteAPI(request, response);
+            return api->PerformAPI(request, response);
     }
 
     return false;
@@ -194,7 +194,7 @@ void ccWebServerManager::DoPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent e
         if (item->GetWebsocket(socketID, newWebsocket))
         {
             if (newWebsocket != NULL)
-                item->ExecuteWebsocket(eEvent, newWebsocket, pData, size);
+                item->PerformWebsocketEvent(eEvent, newWebsocket, pData, size);
 
             return;
         }
