@@ -100,14 +100,16 @@
     <ClInclude Include="..\src\ccMongooseWebServer.h" />
     <ClInclude Include="..\src\ccMongooseWebServerRequest.h" />
     <ClInclude Include="..\src\ccMongooseWebServerResponse.h" />
-    <ClInclude Include="..\src\mongoose6.0\mongoose.h" />
+    <ClInclude Include="..\src\ccMongooseWebsocket.h" />
+    <ClInclude Include="..\src\mongoose\mongoose.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\ccMongooseWebServer.cpp" />
     <ClCompile Include="..\src\ccMongooseWebServerObjectFactory.cpp" />
     <ClCompile Include="..\src\ccMongooseWebServerRequest.cpp" />
     <ClCompile Include="..\src\ccMongooseWebServerResponse.cpp" />
-    <ClCompile Include="..\src\mongoose6.0\mongoose.c" />
+    <ClCompile Include="..\src\ccMongooseWebsocket.cpp" />
+    <ClCompile Include="..\src\mongoose\mongoose.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -10,7 +10,7 @@
 
 #include "ccWebServerAPI/ccWebServerResponse.h"
 
-#include "mongoose6.0/mongoose.h"
+#include "mongoose/mongoose.h"
 
 class ccMongooseWebServerResponse : public ccWebServerResponse
 {

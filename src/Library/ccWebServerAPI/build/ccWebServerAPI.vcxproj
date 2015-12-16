@@ -102,6 +102,9 @@
     <ClInclude Include="..\ccWebServerObjectFactory.h" />
     <ClInclude Include="..\ccWebServerRequest.h" />
     <ClInclude Include="..\ccWebServerResponse.h" />
+    <ClInclude Include="..\ccWebsocket.h" />
+    <ClInclude Include="..\ccWebsocketGroup.h" />
+    <ClInclude Include="..\ccWebsocketManager.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -111,6 +114,9 @@
     <ClCompile Include="..\src\ccWebServerManager.cpp" />
     <ClCompile Include="..\src\ccWebServerRequest.cpp" />
     <ClCompile Include="..\src\ccWebServerResponse.cpp" />
+    <ClCompile Include="..\src\ccWebsocket.cpp" />
+    <ClCompile Include="..\src\ccWebsocketGroup.cpp" />
+    <ClCompile Include="..\src\ccWebsocketManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

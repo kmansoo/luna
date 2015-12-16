@@ -21,5 +21,7 @@ ccMongooseWebServerResponse::~ccMongooseWebServerResponse()
 
 size_t ccMongooseWebServerResponse::DoWriteContentToConnector(const char* strBuf, size_t size)
 {
-    return (size_t)mg_send(_pMgConnection, strBuf, size);
+    mg_send(_pMgConnection, strBuf, size);
+
+    return size;
 }

@@ -44,9 +44,7 @@ bool ccRESTfulChattingSessionInfo::Join(const std::string& strUserID)
 
 bool ccRESTfulChattingSessionInfo::Leave(const std::string& strUserID)
 {
-    std::vector<std::string>::iterator  it;
-
-    for (it = _aMembers.begin(); it != _aMembers.end(); it++)
+    for (auto it = _aMembers.begin(); it != _aMembers.end(); it++)
     {
         if (*it == strUserID)
         {
@@ -112,9 +110,7 @@ bool ccRESTfulChattingSessionManager::CreateID(const std::string& strID, const s
 
 bool ccRESTfulChattingSessionManager::DeleteID(const std::string& strID)
 {
-    std::vector<std::shared_ptr<ccRESTfulChattingUserInfo>>::iterator  it;
-
-    for (it = _aUserInfos.begin(); it != _aUserInfos.end(); it++)
+    for (auto it = _aUserInfos.begin(); it != _aUserInfos.end(); it++)
     {
         if ((*it)->_strID == strID)
         {
@@ -147,9 +143,7 @@ bool ccRESTfulChattingSessionManager::CreateSession(const std::string& strName, 
 
 bool ccRESTfulChattingSessionManager::DeleteSession(const std::string& strName, const std::string& strOwnerID)
 {
-    std::vector<std::shared_ptr<ccRESTfulChattingSessionInfo>>::iterator  it;
-
-    for (it = _aSessionInfos.begin(); it != _aSessionInfos.end(); it++)
+    for (auto it = _aSessionInfos.begin(); it != _aSessionInfos.end(); it++)
     {
         if ((*it)->_strName == strName && (*it)->_strOwnerID == strOwnerID)
         {

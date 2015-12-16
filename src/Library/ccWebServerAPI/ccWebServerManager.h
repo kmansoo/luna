@@ -13,7 +13,9 @@
 #include "ccWebServer.h"
 #include "ccWebServerObjectFactory.h"
 #include "ccWebServerEventListener.h"
+
 #include "ccRESTfulApi.h"
+#include "ccWebsocketManager.h"
 
 class ccWebServerManager : public ccWebServerEventListener
 {
@@ -34,13 +36,28 @@ public:
     bool    RemoveRESTfulApi(shared_ptr<ccRESTfulApi> pNewAPI);
     bool    RemoveAllRESTfulApi();
 
+    bool    AddWebsocketManager(shared_ptr<ccWebsocketManager> pNewWSGM);
+    bool    RemoveWebsocketManager(shared_ptr<ccWebsocketManager> pNewWSGM);
+    bool    RemoveAllWebsocketManager();
+
 protected:
     virtual bool    OnWebServerRequest(std::shared_ptr<ccWebServerRequest> request, std::shared_ptr<ccWebServerResponse> response);
+
+    virtual bool    OnNewWebsocketRequest(const std::string& strWebsocketUri);
+    virtual void    OnWebsocketCreated(std::shared_ptr<ccWebsocket> newWebsocket);
+    virtual void    OnWebsocketConnected(std::int32_t socketID);
+    virtual void    OnWebsocketData(std::int32_t socketID, const char* pData, std::size_t size);
+    virtual void    OnWebsocketClosed(std::int32_t socketID);
+
+protected:
+    void    DoPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent eEvent, std::int32_t socketID, const char* pData = NULL, std::size_t size = 0);
 
 private:
     std::shared_ptr<ccWebServerObjectFactory>   _pObjFactory;
     vector< shared_ptr<ccWebServer> >           _aWebServers;
-    vector< shared_ptr<ccRESTfulApi> >          _aWebAPIs;
+
+    vector< shared_ptr<ccRESTfulApi> >         _aWebAPIs;
+    vector< shared_ptr<ccWebsocketManager> >   _aWSMs;
 };
 
 #endif /* CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVERMANAGER_H_ */

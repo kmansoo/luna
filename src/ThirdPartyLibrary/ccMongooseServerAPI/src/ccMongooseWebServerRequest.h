@@ -10,7 +10,7 @@
 
 #include "CCWebServerAPI/ccWebServerRequest.h"
 
-#include "mongoose6.0/mongoose.h"
+#include "mongoose/mongoose.h"
 
 #include <vector>
 
