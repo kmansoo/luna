@@ -115,7 +115,7 @@ bool ccWebsocketManager::AddFunction(const std::string& strUri, std::function<bo
     return true;
 }
 
-bool ccWebsocketManager::ExecuteWebsocket(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const char* strData, std::size_t size)
+bool ccWebsocketManager::PerformWebsocketEvent(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const char* strData, std::size_t size)
 {
     auto it = _aFunctions.find(pWS->GetUri());
 

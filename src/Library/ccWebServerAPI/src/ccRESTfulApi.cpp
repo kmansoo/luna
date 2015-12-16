@@ -27,7 +27,7 @@ bool ccRESTfulApi::HasAPI(const std::string& strUri)
     return true;
 }
 
-bool ccRESTfulApi::ExecuteAPI(shared_ptr<ccWebServerRequest> pRequest, shared_ptr<ccWebServerResponse> pResponse)
+bool ccRESTfulApi::PerformAPI(shared_ptr<ccWebServerRequest> pRequest, shared_ptr<ccWebServerResponse> pResponse)
 {
     std::string strUri = pRequest->GetURI();
 

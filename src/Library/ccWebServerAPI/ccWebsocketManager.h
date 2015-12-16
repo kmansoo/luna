@@ -34,7 +34,7 @@ public:
 public:
     virtual bool    HasUri(const std::string& strUri);
     virtual bool    AddFunction(const std::string& strUri, std::function<bool(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const char* strData, std::size_t size)> f);
-    virtual bool    ExecuteWebsocket(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const char* strData, std::size_t size);
+    virtual bool    PerformWebsocketEvent(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const char* strData, std::size_t size);
 
 protected:
     std::mutex      _mtx;
