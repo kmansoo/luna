@@ -34,10 +34,12 @@ public:
 public:
     virtual bool    HasUri(const std::string& strUri);
     virtual bool    AddFunction(const std::string& strUri, std::function<bool(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const char* strData, std::size_t size)> f);
+    virtual bool    RemoveFunction(const std::string& strUri);
     virtual bool    PerformWebsocketEvent(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const char* strData, std::size_t size);
 
 protected:
     std::mutex      _mtx;
+    std::mutex      _mtxFunction;
 
     std::map<std::string, std::shared_ptr<ccWebsocketGroup>>    _aWSGList;
     std::map<std::string, std::function<bool(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const char* strData, std::size_t size)>> _aFunctions;

@@ -17,7 +17,7 @@ public:
     virtual ~ccMongooseWebServerObjectFactory();
 
 public:
-    virtual  std::shared_ptr<ccWebServer> CreateWebServer(const char* name, const char* ports);
+    virtual  std::shared_ptr<ccWebServer>       CreateWebServer(const char* name, const char* ports);
 };
 
 #endif /* THIRDPARTYLIBRARY_CCMONGOOSESERVERAPI_CCMONGOOSEWEBSERVEROBJECTFACTORY_H_ */

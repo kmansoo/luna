@@ -75,7 +75,10 @@ int main(int argc, char* argv[])
     std::shared_ptr<ccWebsocketManager>     pChattingWSM(new ccChattingWSManager);
 
     oManager.CreateWebServer("WebServer #1", "8000");
+
     oManager.AddRESTfulApi(pChattingApi);
+    oManager.AddWebsocketManager(pChattingApi);
+
     oManager.AddWebsocketManager(pChattingWSM);
 
     oManager.Start();

@@ -11,13 +11,11 @@
 #include <memory>
 
 #include "ccWebServer.h"
-#include "ccWebServerRequest.h"
-#include "ccWebServerResponse.h"
 
 class ccWebServerObjectFactory
 {
 public:
-    virtual std::shared_ptr<ccWebServer> CreateWebServer(const char* name, const char* ports) = 0;
+    virtual std::shared_ptr<ccWebServer>        CreateWebServer(const char* name, const char* ports) = 0;
 };
 
 #endif /* CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVEROBJECTFACTORY_H_ */

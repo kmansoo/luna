@@ -5,6 +5,8 @@
 #pragma once
 #include "afxwin.h"
 
+#include <memory>
+#include "ccWebsocketClientAPI/easywsclient/easywsclient.hpp"
 
 // CChattingWebApiTestDlg dialog
 class CChattingWebApiTestDlg : public CDialogEx
@@ -50,6 +52,9 @@ private:
     void    DoSessionMemberListUpdate();
 
 private:
+    void    DoWebsocketCleintHandleMessage(const std::string & message);
+
+private:
     CString _strUserID;
     CString _strUserName;
     CString _strSessionName;
@@ -60,7 +65,11 @@ private:
     CListBox _ctlSessionList;
     CListBox _ctlSessionMemberList;
     CListBox _ctlMessageList;
+    CString _strSendMessage;
+
+    std::unique_ptr<easywsclient::WebSocket> _pWSClient;
 
 public:
     afx_msg void OnLbnDblclkSessionList();
+    afx_msg void OnTimer(UINT_PTR nIDEvent);
 };

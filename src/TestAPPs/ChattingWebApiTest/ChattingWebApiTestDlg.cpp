@@ -59,6 +59,7 @@ CChattingWebApiTestDlg::CChattingWebApiTestDlg(CWnd* pParent /*=NULL*/)
     , _strJoinedSessionName(_T(""))
     , _strServerIP(_T(""))
     , _strServerPort(_T(""))
+    , _strSendMessage(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 
@@ -84,6 +85,7 @@ void CChattingWebApiTestDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_MESSAGE_LIST, _ctlMessageList);
     DDX_Text(pDX, IDC_SERVER_IP, _strServerIP);
     DDX_Text(pDX, IDC_SERVER_PORT, _strServerPort);
+    DDX_Text(pDX, IDC_MESSAGE, _strSendMessage);
 }
 
 BEGIN_MESSAGE_MAP(CChattingWebApiTestDlg, CDialogEx)
@@ -102,6 +104,7 @@ BEGIN_MESSAGE_MAP(CChattingWebApiTestDlg, CDialogEx)
     ON_BN_CLICKED(IDC_SERVER_INFO_UPDATE, &CChattingWebApiTestDlg::OnBnClickedServerInfoUpdate)
     ON_BN_CLICKED(IDC_SESSION_DELETE, &CChattingWebApiTestDlg::OnBnClickedSessionDelete)
     ON_LBN_DBLCLK(IDC_SESSION_LIST, &CChattingWebApiTestDlg::OnLbnDblclkSessionList)
+    ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -227,6 +230,8 @@ void CChattingWebApiTestDlg::OnBnClickedLogin()
     oRequestJsonData["user_info"] = oExtInfo;
 
     ccWin32WebApiHelper::getInstance()->RequestAPI(ccWebServerRequest::HttpMethod_Post, "/user", oRequestJsonData, strResponse);
+
+    DoSessionListUpdate();
 }
 
 
@@ -240,6 +245,10 @@ void CChattingWebApiTestDlg::OnBnClickedLogout()
     ccString::format(strQueryString, "/user?ID=%s", _strUserID);
 
     ccWin32WebApiHelper::getInstance()->RequestAPI(ccWebServerRequest::HttpMethod_Delete, strQueryString,strResponse);
+
+    _ctlSessionList.ResetContent();
+    _ctlSessionMemberList.ResetContent();
+    _ctlMessageList.ResetContent();
 }
 
 
@@ -363,11 +372,25 @@ void CChattingWebApiTestDlg::OnBnClickedSessionJoin()
         UpdateData(false);
 
         DoSessionMemberListUpdate();
+
+        ccString strSessionUri;
+
+        ccString::format(strSessionUri, "ws://%s:%d/session/chat/%s", _strServerIP, atoi(_strServerPort), _strSessionName);
+
+        _pWSClient.reset(easywsclient::WebSocket::from_url(strSessionUri));
+
+        SetTimer(0x100, 50, NULL);
     }
 }
 
 void CChattingWebApiTestDlg::OnBnClickedSessionLeave()
 {
+    if (_pWSClient)
+    {
+        _pWSClient->close();
+        _pWSClient = NULL;
+    }
+
     UpdateData();
 
     std::string strResponse;
@@ -383,6 +406,7 @@ void CChattingWebApiTestDlg::OnBnClickedSessionLeave()
     _strJoinedSessionName = "";
     UpdateData(false);
 
+    _ctlSessionMemberList.ResetContent();
     _ctlMessageList.ResetContent();
 }
 
@@ -394,9 +418,18 @@ void CChattingWebApiTestDlg::OnBnClickedSessionMemberUpdate()
 
 void CChattingWebApiTestDlg::OnBnClickedMessageSend()
 {
-    // TODO: Add your control notification handler code here
-}
+    //  UpdateData();
+    GetDlgItem(IDC_MESSAGE)->GetWindowText(_strSendMessage);
 
+    std::string strSendString;
+    ccString::format(strSendString, "%s: %s", _strUserID, _strSendMessage);
+
+    if (_pWSClient)
+        _pWSClient->send(strSendString);
+
+    GetDlgItem(IDC_MESSAGE)->SetWindowText(CString(""));
+    GetDlgItem(IDC_MESSAGE)->SetFocus();
+}
 
 void CChattingWebApiTestDlg::OnLbnDblclkSessionList()
 {
@@ -407,4 +440,29 @@ void CChattingWebApiTestDlg::OnLbnDblclkSessionList()
     AfxGetApp()->WriteProfileString("Config", "SessionName", _strSessionName);
 
     UpdateData(false);
+}
+
+void CChattingWebApiTestDlg::DoWebsocketCleintHandleMessage(const std::string & message)
+{
+    _ctlMessageList.AddString(message.c_str());
+    _ctlMessageList.SetTopIndex(_ctlMessageList.GetCount() - 1);
+}
+
+void CChattingWebApiTestDlg::OnTimer(UINT_PTR nIDEvent)
+{
+    switch (nIDEvent)
+    {
+    case 0x100:
+        if (_pWSClient)
+        {
+            if (_pWSClient->getReadyState() != easywsclient::WebSocket::CLOSED)
+            {
+                _pWSClient->poll(1);
+                _pWSClient->dispatch(std::bind(&CChattingWebApiTestDlg::DoWebsocketCleintHandleMessage, this, std::placeholders::_1));
+            }
+        }
+        break;
+    }
+
+    CDialogEx::OnTimer(nIDEvent);
 }

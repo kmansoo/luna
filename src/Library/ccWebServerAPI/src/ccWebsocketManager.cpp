@@ -115,17 +115,31 @@ bool ccWebsocketManager::AddFunction(const std::string& strUri, std::function<bo
     return true;
 }
 
-bool ccWebsocketManager::PerformWebsocketEvent(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const char* strData, std::size_t size)
+bool ccWebsocketManager::RemoveFunction(const std::string& strUri)
 {
-    auto it = _aFunctions.find(pWS->GetUri());
+    std::lock_guard<std::mutex> lock(_mtxFunction);
+
+    auto it = _aFunctions.find(strUri);
 
     if (it == _aFunctions.end())
         return false;
 
-    bool bRetVal = it->second(eEvent, pWS, strData, size);
+    _aFunctions.erase(it);
+
+    return true;
+}
+
+bool ccWebsocketManager::PerformWebsocketEvent(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const char* strData, std::size_t size)
+{
+    std::lock_guard<std::mutex> lock(_mtxFunction);
+
+    if (HasUri(pWS->GetUri()) == false)
+        return false;
+
+    _aFunctions[pWS->GetUri()](eEvent, pWS, strData, size);
 
     if (eEvent == ccWebsocket::ccWebSocketEvent_Close)
         RemoveWebsocket(pWS);
 
-    return bRetVal;
+    return true;
 }

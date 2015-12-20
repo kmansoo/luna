@@ -11,6 +11,7 @@
 #include <vector>
 
 #include "ccWebServerAPI/ccRESTfulApi.h"
+#include "ccWebServerAPI/ccWebsocketManager.h"
 
 using namespace std;
 
@@ -80,7 +81,9 @@ private:
     std::vector< std::shared_ptr<ccRESTfulChattingSessionInfo>> _aSessionInfos;
 };
 
-class ccRESTfulChatting : public ccRESTfulApi
+class ccRESTfulChatting : 
+    public ccRESTfulApi,
+    public ccWebsocketManager
 {
 public:
     ccRESTfulChatting();
@@ -92,8 +95,11 @@ protected:
     bool    session_member(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse);
     bool    session_message(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse);
 
+protected:
+    bool    ws_chat(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const char* strData, std::size_t size);
+
 private:
-    ccRESTfulChattingSessionManager   _oSessionManager;
+    ccRESTfulChattingSessionManager     _oSessionManager;    
 };
 
 

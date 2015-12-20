@@ -6,6 +6,7 @@
  */
 
 #include "ccMongooseWebServer.h"
+#include "ccMongooseWebsocketClient.h"
 
 #include "../ccMongooseWebServerObjectFactory.h"
 

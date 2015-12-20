@@ -27,6 +27,7 @@ ccRESTfulChattingSessionInfo::ccRESTfulChattingSessionInfo(const std::string& st
     _strOwnerID(strOwnerID)
 {
     _aMembers.push_back(strOwnerID);
+ 
 }
 
 bool ccRESTfulChattingSessionInfo::Join(const std::string& strUserID)
@@ -226,7 +227,7 @@ ccRESTfulChatting::ccRESTfulChatting()
     AddAPI(std::string("/user"), std::bind(&ccRESTfulChatting::user, this, std::placeholders::_1, std::placeholders::_2));
     AddAPI(std::string("/session"), std::bind(&ccRESTfulChatting::session, this, std::placeholders::_1, std::placeholders::_2));
     AddAPI(std::string("/session/member"), std::bind(&ccRESTfulChatting::session_member, this, std::placeholders::_1, std::placeholders::_2));
-    AddAPI(std::string("/session/message"), std::bind(&ccRESTfulChatting::session_message, this, std::placeholders::_1, std::placeholders::_2));
+    //  AddAPI(std::string("/session/message"), std::bind(&ccRESTfulChatting::session_message, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 ccRESTfulChatting::~ccRESTfulChatting()
@@ -385,7 +386,15 @@ bool ccRESTfulChatting::session(std::shared_ptr<ccWebServerRequest> pRequest, st
             std::string strOwnerID = oRootValue["session_info"]["OwnerID"].asString();
 
             if (_oSessionManager.CreateSession(strSessionName, strOwnerID) == true)
+            {
                 pResponse->Status(201, string("Created"));
+
+                std::string strWSUrl;
+
+                ccString::format(strWSUrl, "/session/chat/%s", strSessionName.c_str());
+                
+                AddFunction(strWSUrl, std::bind(&ccRESTfulChatting::ws_chat, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+            }
             else
                 pResponse->Status(500, string("Server Error!"));
     
@@ -420,7 +429,15 @@ bool ccRESTfulChatting::session(std::shared_ptr<ccWebServerRequest> pRequest, st
             std::string strOwnerID = oRootValue["session_info"]["OwnerID"].asString();
 
             if (_oSessionManager.DeleteSession(strSessionName, strOwnerID) == true)
+            {
                 pResponse->Status(202, string("OK"));
+
+                std::string strWSUrl;
+
+                ccString::format(strWSUrl, "/session/chat/%s", strSessionName.c_str());
+                
+                RemoveFunction(strWSUrl);
+            }
             else
                 pResponse->Status(500, string("Server Error!"));
 
@@ -507,11 +524,50 @@ bool ccRESTfulChatting::session_member(std::shared_ptr<ccWebServerRequest> pRequ
     return true;
 }
 
-bool ccRESTfulChatting::session_message(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)
+//  
+bool ccRESTfulChatting::ws_chat(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const char* strData, std::size_t size)
 {
+    switch ((int)eEvent)
+    {
+    case ccWebsocket::ccWebSocketEvent_Connected:
+    {
+        std::string strMessage;
 
-    pResponse->Status(500, string("Server Error!"));
-    pResponse->ContentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
+        ccString::format(strMessage, "%08x: Join", pWS->GetInstance());
 
-    return false;
+        pWS->GetGroup()->Broadcast(strMessage);
+    }
+    break;
+
+    case ccWebsocket::ccWebSocketEvent_Data:
+    {
+        std::string strBroadcastMsg;
+        std::string strMessage(strData, size);
+
+        ccString::format(strBroadcastMsg, "%08x: %s", pWS->GetInstance(), strMessage.c_str());
+
+        pWS->GetGroup()->Broadcast(strBroadcastMsg);
+    }
+    break;
+
+    case ccWebsocket::ccWebSocketEvent_Close:
+    {
+        std::string strMessage;
+
+        ccString::format(strMessage, "%08x: Leave", pWS->GetInstance());
+
+        pWS->GetGroup()->Broadcast(strMessage);
+    }
+    break;
+    }
+    return true;
 }
+
+//bool ccRESTfulChatting::session_message(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)
+//{
+//
+//    pResponse->Status(500, string("Server Error!"));
+//    pResponse->ContentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
+//
+//    return false;
+//}
