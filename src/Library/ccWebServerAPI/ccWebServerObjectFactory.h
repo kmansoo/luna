@@ -15,7 +15,7 @@
 class ccWebServerObjectFactory
 {
 public:
-    virtual std::shared_ptr<ccWebServer>        CreateWebServer(const char* name, const char* ports) = 0;
+    virtual std::shared_ptr<ccWebServer> CreateWebServer(const std::string& name, const std::string& ports, const std::string& root_path) = 0;
 };
 
 #endif /* CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVEROBJECTFACTORY_H_ */

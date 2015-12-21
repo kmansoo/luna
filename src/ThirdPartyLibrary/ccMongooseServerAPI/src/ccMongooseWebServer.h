@@ -17,7 +17,7 @@
 class ccMongooseWebServer : public ccWebServer
 {
 public:
-    ccMongooseWebServer(const char* name, const char* ports);
+    ccMongooseWebServer(const std::string& name, const std::string& ports, const std::string& root_path);
     virtual ~ccMongooseWebServer();
 
 public:

@@ -21,7 +21,7 @@ using namespace std;
 class ccWebServer
 {
 public:
-    ccWebServer(const char* name, const char* ports);
+    ccWebServer(const std::string& name, const std::string& ports, const std::string& root_path);
     virtual ~ccWebServer();
 
 public:
@@ -40,6 +40,7 @@ protected:
 protected:
     string                      _strName;
     string                      _strHttpPorts;
+    string                      _strWebRootPath;
     ccWebServerEventListener*   _pEventListener;
     vector<string>              _aOptions;
 };

@@ -7,9 +7,10 @@
 
 #include "../ccWebServer.h"
 
-ccWebServer::ccWebServer(const char* name, const char* ports) :
+ccWebServer::ccWebServer(const std::string& name, const std::string& ports, const std::string& root_path) :
     _strName(name),
     _strHttpPorts(ports),
+    _strWebRootPath(root_path),
     _pEventListener(NULL)
 {
     // TODO Auto-generated constructor stub

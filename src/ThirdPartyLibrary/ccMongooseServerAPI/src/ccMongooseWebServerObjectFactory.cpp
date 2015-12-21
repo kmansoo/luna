@@ -20,7 +20,7 @@ ccMongooseWebServerObjectFactory::~ccMongooseWebServerObjectFactory()
     // TODO Auto-generated destructor stub
 }
 
-std::shared_ptr<ccWebServer> ccMongooseWebServerObjectFactory::CreateWebServer(const char* name, const char* ports)
+std::shared_ptr<ccWebServer> ccMongooseWebServerObjectFactory::CreateWebServer(const std::string& name, const std::string& ports, const std::string& root_path)
 {
-    return std::make_shared<ccMongooseWebServer>(name, ports);
+    return std::make_shared<ccMongooseWebServer>(name, ports, root_path);
 }

@@ -26,7 +26,9 @@ public:
 public:
     void    AttachFactory(std::shared_ptr<ccWebServerObjectFactory> pFactory);
 
-    bool    CreateWebServer(const char* name, const char* ports);
+    bool    CreateWebServer(const std::string& name, const std::string& ports);
+    bool    CreateWebServer(const std::string& name, const std::string& ports, const std::string& root_path);
+
     shared_ptr<ccWebServer> GetWebServer(const char* strName);
 
     void    Start();

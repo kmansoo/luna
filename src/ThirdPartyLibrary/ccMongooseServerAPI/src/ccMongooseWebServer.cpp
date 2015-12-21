@@ -16,8 +16,8 @@
 
 static struct mg_serve_http_opts s_http_server_opts;
 
-ccMongooseWebServer::ccMongooseWebServer(const char* name, const char* ports) :
-        ccWebServer(name, ports),
+ccMongooseWebServer::ccMongooseWebServer(const std::string& name, const std::string& ports, const std::string& root_path) :
+        ccWebServer(name, ports, root_path),
         _bIsStopThread(false),
         _mgr(NULL),
         _con(NULL)
@@ -51,7 +51,7 @@ bool ccMongooseWebServer::Start()
     // Set up HTTP server parameters
     mg_set_protocol_http_websocket(_con);
 
-    s_http_server_opts.document_root = ".";  // Serve current directory
+    s_http_server_opts.document_root = _strWebRootPath.c_str();  // Serve current directory
     s_http_server_opts.enable_directory_listing = "yes";
 
     printf("Starting web server on port %s\n", _strHttpPorts.c_str());
