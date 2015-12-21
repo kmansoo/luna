@@ -8,6 +8,6 @@ CPU         = i386
 PRODUCT     = all
 BUILD       = debug
 
-SRCDIRS     = ../src ../src/mongoose6.0
+SRCDIRS     = ../src ../src/mongoose
 
 include ../../../build/makefile.common.txt

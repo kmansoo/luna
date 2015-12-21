@@ -70,9 +70,9 @@ endif
 include $(SOLUCTION_BUILD_DIR)makefile.toolset.$(TOOLSET).txt
 
 ifeq ($(TOOLSET_PRODUCT),)
-    BASE_OUTPUT_DIR = $(PLATFORM)-$(CPU)-$(BUILD)
+    BASE_OUTPUT_DIR = output/$(PLATFORM)-$(CPU)-$(BUILD)/build
 else
-    BASE_OUTPUT_DIR = $(PLATFORM)-$(CPU)-$(PRODUCT)-$(BUILD)
+    BASE_OUTPUT_DIR = output/$(PLATFORM)-$(CPU)-$(PRODUCT)-$(BUILD)/build
 endif
 
 SOLUCTION_LIB_OUTPUT_DIR = $(PLATFORM)-$(CPU)-$(BUILD)

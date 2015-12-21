@@ -286,7 +286,7 @@ bool ccRESTfulChatting::user(std::shared_ptr<ccWebServerRequest> pRequest, std::
             Json::Value oUserList;
             Json::StyledWriter oWriter;
             
-            oUserList["count"] = aMembers.size();
+            oUserList["count"] = (int)aMembers.size();
 
             for (int nIndex = 0; nIndex < aMembers.size(); nIndex++)
                 oUserList["info"][nIndex]["id"] = aMembers[nIndex];
@@ -341,7 +341,7 @@ bool ccRESTfulChatting::session(std::shared_ptr<ccWebServerRequest> pRequest, st
 
             _oSessionManager.GetSessionList(aSessionNames, aOwnerIDs);
 
-            oSessionList["count"] = aSessionNames.size();
+            oSessionList["count"] = (int)aSessionNames.size();
 
             for (int nIndex = 0; nIndex < aSessionNames.size(); nIndex++)
             {
@@ -472,7 +472,7 @@ bool ccRESTfulChatting::session_member(std::shared_ptr<ccWebServerRequest> pRequ
             Json::Value oSessionMemberList;
             Json::StyledWriter oWriter;
             oSessionMemberList["Name"] = strSessionName;
-            oSessionMemberList["count"] = aMemberList.size();
+            oSessionMemberList["count"] = (int)aMemberList.size();
 
             for (int nIndex = 0; nIndex < aMemberList.size(); nIndex++)
                 oSessionMemberList["info"][nIndex]["ID"] = aMemberList[nIndex];
