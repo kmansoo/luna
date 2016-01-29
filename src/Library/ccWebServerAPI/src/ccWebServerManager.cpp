@@ -46,7 +46,7 @@ bool ccWebServerManager::CreateWebServer(const std::string& name, const std::str
 }
 
 
-shared_ptr<ccWebServer> ccWebServerManager::GetWebServer(const char* strName)
+std::shared_ptr<ccWebServer> ccWebServerManager::GetWebServer(const char* strName)
 {
     for (auto server : _aWebServers)
     {
@@ -75,7 +75,7 @@ void ccWebServerManager::Stop()
     }
 }
 
-bool ccWebServerManager::AddRESTfulApi(shared_ptr<ccRESTfulApi> pNewAPI)
+bool ccWebServerManager::AddRESTfulApi(std::shared_ptr<ccRESTfulApi> pNewAPI)
 {
     for (auto item : _aWebAPIs)
     {
@@ -88,7 +88,7 @@ bool ccWebServerManager::AddRESTfulApi(shared_ptr<ccRESTfulApi> pNewAPI)
     return true;
 }
 
-bool ccWebServerManager::RemoveRESTfulApi(shared_ptr<ccRESTfulApi> pNewAPI)
+bool ccWebServerManager::RemoveRESTfulApi(std::shared_ptr<ccRESTfulApi> pNewAPI)
 {
     auto it = std::find(std::begin(_aWebAPIs), std::end(_aWebAPIs), pNewAPI);
 
@@ -109,7 +109,7 @@ bool ccWebServerManager::RemoveAllRESTfulApi()
     return true;
 }
 
-bool ccWebServerManager::AddWebsocketManager(shared_ptr<ccWebsocketManager> pNewWSGM)
+bool ccWebServerManager::AddWebsocketManager(std::shared_ptr<ccWebsocketManager> pNewWSGM)
 {
     for (const auto& item : _aWSMs)
     {
@@ -123,7 +123,7 @@ bool ccWebServerManager::AddWebsocketManager(shared_ptr<ccWebsocketManager> pNew
 }
 
 
-bool ccWebServerManager::RemoveWebsocketManager(shared_ptr<ccWebsocketManager> pNewWSGM)
+bool ccWebServerManager::RemoveWebsocketManager(std::shared_ptr<ccWebsocketManager> pNewWSGM)
 {
     auto it = std::find(std::begin(_aWSMs), std::end(_aWSMs), pNewWSGM);
 
@@ -183,20 +183,20 @@ void ccWebServerManager::OnWebsocketCreated(std::shared_ptr<ccWebsocket> newWebs
 
 void ccWebServerManager::OnWebsocketConnected(std::int32_t socketID)
 {
-    DoPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent_Connected, socketID);
+    DoPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent_Connected, socketID, _strNoData);
 }
 
-void ccWebServerManager::OnWebsocketClosed(std::int32_t socketID)
+void ccWebServerManager::OnWebsocketDisconnected(std::int32_t socketID)
 {
-    DoPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent_Close, socketID);
+    DoPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent_Disconnected, socketID, _strNoData);
 }
 
-void ccWebServerManager::OnWebsocketData(std::int32_t socketID, const char* pData, std::size_t size)
+void ccWebServerManager::OnWebsocketReceivedData(std::int32_t socketID, const std::string& strData)
 {
-    DoPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent_Data, socketID, pData, size);
+    DoPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent_ReceivedData, socketID, strData);
 }
 
-void ccWebServerManager::DoPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent eEvent, std::int32_t socketID, const char* pData, std::size_t size)
+void ccWebServerManager::DoPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent eEvent, std::int32_t socketID, const std::string& strData)
 {
     std::shared_ptr<ccWebsocket> newWebsocket;
 
@@ -205,7 +205,7 @@ void ccWebServerManager::DoPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent e
         if (item->GetWebsocket(socketID, newWebsocket))
         {
             if (newWebsocket != NULL)
-                item->PerformWebsocketEvent(eEvent, newWebsocket, pData, size);
+                item->PerformWebsocketEvent(eEvent, newWebsocket, strData);
 
             return;
         }

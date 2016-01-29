@@ -1,0 +1,21 @@
+SHELL = /bin/sh
+
+TARGET      = IoTDeviceManagerTest
+TARGET_TYPE = exe
+
+PLATFORM    = linux
+CPU         = i386
+PRODUCT     = all
+BUILD       = debug
+
+SRCDIRS     = ../src
+
+PRJ_STRIP_DEBUG_INFO = TRUE
+
+LIBS = \
+        libccMongooseServerAPI.a \
+        libccWebServerAPI.a \
+        libccCoreAPI.a
+
+
+include ../../../build/makefile.common.txt

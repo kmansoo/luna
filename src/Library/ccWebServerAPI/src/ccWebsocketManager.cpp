@@ -108,7 +108,7 @@ bool ccWebsocketManager::HasUri(const std::string& strUri)
     return true;
 }
 
-bool ccWebsocketManager::AddFunction(const std::string& strUri, std::function<bool(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const char* strData, std::size_t size)> f)
+bool ccWebsocketManager::AddFunction(const std::string& strUri, std::function<bool(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const std::string& strData)> f)
 {
     _aFunctions[strUri] = f;
 
@@ -129,16 +129,16 @@ bool ccWebsocketManager::RemoveFunction(const std::string& strUri)
     return true;
 }
 
-bool ccWebsocketManager::PerformWebsocketEvent(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const char* strData, std::size_t size)
+bool ccWebsocketManager::PerformWebsocketEvent(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const std::string& strData)
 {
     std::lock_guard<std::mutex> lock(_mtxFunction);
 
     if (HasUri(pWS->GetUri()) == false)
         return false;
 
-    _aFunctions[pWS->GetUri()](eEvent, pWS, strData, size);
+    _aFunctions[pWS->GetUri()](eEvent, pWS, strData);
 
-    if (eEvent == ccWebsocket::ccWebSocketEvent_Close)
+    if (eEvent == ccWebsocket::ccWebSocketEvent_Disconnected)
         RemoveWebsocket(pWS);
 
     return true;

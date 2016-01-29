@@ -153,7 +153,9 @@ void ccMongooseWebServer::ev_handler(struct mg_connection *nc, int ev, void *p)
         {
             struct websocket_message *wm = (struct websocket_message *) p;
 
-            pServer->_pEventListener->OnWebsocketData(nc->sock, (const char*)wm->data, wm->size);
+            std::string strData((const char*)wm->data, wm->size);
+
+            pServer->_pEventListener->OnWebsocketReceivedData(nc->sock, strData);
         }
         break;
 
@@ -163,7 +165,7 @@ void ccMongooseWebServer::ev_handler(struct mg_connection *nc, int ev, void *p)
     case MG_EV_CLOSE:
         //  is websocket ?
         if (nc->flags & MG_F_IS_WEBSOCKET)
-            pServer->_pEventListener->OnWebsocketClosed(nc->sock);
+            pServer->_pEventListener->OnWebsocketDisconnected(nc->sock);
 
         break;
     }

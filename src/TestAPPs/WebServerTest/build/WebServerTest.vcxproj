@@ -89,7 +89,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>LUNA_PLATFORM_WIN32;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..;../build;../../../Library;../../../ThirdPartyLibrary;../../../ProductLibrary</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;../build;../../../Library;../../../ThirdPartyLibrary;../../../ProductLibrary;../../../FossLibrary</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -152,6 +152,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\FossLibrary\ccJsonParserAPI\build\ccJsonParserAPI.vcxproj">
       <Project>{e7bfc6a3-98b0-4103-a3ba-de08105f2db3}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\FossLibrary\ccWebsocketClientAPI\build\ccWebsocketClientAPI.vcxproj">
+      <Project>{0e86ffb0-57e1-4a9e-a12d-8a07ca1c5708}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Library\ccCoreAPI\build\ccCoreAPI.vcxproj">
       <Project>{b3b6750e-2acd-4362-845a-2a79ab52fbd1}</Project>

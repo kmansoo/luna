@@ -8,11 +8,6 @@ ccWebsocketGroup::ccWebsocketGroup(const std::string& strUri)
     _strUri = strUri;
 }
 
-ccWebsocketGroup::ccWebsocketGroup(const char* pUri, std::size_t size)
-{
-    _strUri.assign(pUri, size);
-}
-
 ccWebsocketGroup::~ccWebsocketGroup()
 {
     RemoveAll();
@@ -81,31 +76,22 @@ bool ccWebsocketGroup::GetWebsocket(std::int32_t nInstance, std::shared_ptr<ccWe
     return true;
 }
 
-void  ccWebsocketGroup::Broadcast(const char* strMessage, std::size_t size)
+void  ccWebsocketGroup::Broadcast(const std::string& strMessage)
 {
     std::lock_guard<std::mutex> lock(_mtx);
 
     for (auto item : _aWSList)
-        item.second->Send(strMessage, size);
+        item.second->Send(strMessage);
 }
 
-void  ccWebsocketGroup::Broadcast(const std::string& strMessage)
-{
-    Broadcast(strMessage.c_str(), strMessage.length());
-}
-
-void ccWebsocketGroup::BroadcastEx(const char* strMessage, std::size_t size, std::shared_ptr<ccWebsocket>& pExceptSocket)
+void ccWebsocketGroup::BroadcastEx(const std::string& strMessage, std::shared_ptr<ccWebsocket>& pExceptSocket)
 {
     std::lock_guard<std::mutex> lock(_mtx);
 
     for (auto item : _aWSList)
     {
         if (item.second != pExceptSocket)
-            item.second->Send(strMessage, size);
+            item.second->Send(strMessage);
     }
 }
 
-void ccWebsocketGroup::BroadcastEx(const std::string& strMessage, std::shared_ptr<ccWebsocket>& pExceptSocket)
-{
-    BroadcastEx(strMessage.c_str(), strMessage.length(), pExceptSocket);
-}

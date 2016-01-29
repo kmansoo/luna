@@ -1,14 +1,13 @@
 #pragma once
 
 #include <memory>
-#include <functional>
 #include <mutex>
 #include <thread>
+#include <functional>
 
-#include "ccWebServerAPI/ccWebServerRequest.h"
 #include "ccJsonParserAPI/json/json.h"
+#include "ccWebServerAPI/ccWebServerRequest.h"
 #include "ccWin32RgWebApiTransactionNotifier.h"
-
 
 class ccWin32WebApiHelper
 {
@@ -27,8 +26,8 @@ public:
     std::uint16_t   RequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, std::string& strResponse);
     std::uint16_t   RequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, Json::Value& oParams, std::string& strResponse);
 
-    bool    AsyncRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, ccWin32RgWebApiTransactionNotifier *pNotifier = NULL);
-    bool    AsyncRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, Json::Value& oParams, ccWin32RgWebApiTransactionNotifier *pNotifier = NULL);
+    bool            AsyncRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, ccWin32RgWebApiTransactionNotifier *pNotifier = NULL);
+    bool            AsyncRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, Json::Value& oParams, ccWin32RgWebApiTransactionNotifier *pNotifier = NULL);
 
 public:
     static bool getValueString(Json::Value& oValue, const std::string& strName, std::string& strValue, std::string strDefaultValue = _T(""));
@@ -36,13 +35,7 @@ public:
 
 private:
     std::uint16_t   DoSendRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, const std::string& strRequestData, std::string& strResponse);
-
-private:
-    void    DoRunThread();
-
-private:
-    std::thread*    _pPollThread;
-    bool            _bIsStopThread;
+    void            DoRunThread();
 
 private:
     class   XTransactionInfo
@@ -62,8 +55,10 @@ private:
 private:
     std::string     _strDestIP;
     UINT            _uDestPort;
+    std::mutex      _mutex;
+    
+    std::thread     _oPollThread;
+    bool            _bIsStopThread;
 
     std::vector<std::shared_ptr<XTransactionInfo>>   _aTransactionInfos;
-
-    std::mutex      _mutex;
 };

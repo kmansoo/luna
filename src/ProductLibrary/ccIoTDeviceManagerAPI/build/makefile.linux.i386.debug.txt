@@ -1,0 +1,13 @@
+SHELL = /bin/sh
+
+TARGET      = ccIoTDeviceManagerAPI
+TARGET_TYPE = lib
+
+PLATFORM    = linux
+CPU         = i386
+PRODUCT     = all
+BUILD       = debug
+
+SRCDIRS     = ../src
+
+include ../../../build/makefile.common.txt

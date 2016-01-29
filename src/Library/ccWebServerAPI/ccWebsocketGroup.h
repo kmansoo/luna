@@ -19,7 +19,6 @@ class ccWebsocketGroup
 {
 public:
     ccWebsocketGroup(const std::string& strUri);
-    ccWebsocketGroup(const char* pUri, std::size_t size);
 
     virtual ~ccWebsocketGroup();
 
@@ -33,10 +32,7 @@ public:
 
     bool    GetWebsocket(std::int32_t nInstance, std::shared_ptr<ccWebsocket>& pSocket);
 
-    void    Broadcast(const char* strMessage, std::size_t size);
     void    Broadcast(const std::string& strMessage);
-
-    void    BroadcastEx(const char* strMessage, std::size_t size, std::shared_ptr<ccWebsocket>& pExceptSocket);
     void    BroadcastEx(const std::string& strMessage, std::shared_ptr<ccWebsocket>& pExceptSocket);
 
 private:

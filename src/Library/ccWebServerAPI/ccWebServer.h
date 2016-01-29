@@ -16,8 +16,6 @@
 
 #include "ccWebServerEventListener.h"
 
-using namespace std;
-
 class ccWebServer
 {
 public:
@@ -29,20 +27,20 @@ public:
     virtual bool Stop();
 
 public:
-    const string&  GetName();
+    const std::string&  GetName();
 
-    bool    SetOption(string const& name, string const& value);
+    bool    SetOption(std::string const& name, std::string const& value);
     void    SetListener(ccWebServerEventListener* pListener);
 
 protected:
-    vector<string>&    DoGetOptions() const;
+    std::vector<std::string>&    DoGetOptions() const;
 
 protected:
-    string                      _strName;
-    string                      _strHttpPorts;
-    string                      _strWebRootPath;
+    std::string                 _strName;
+    std::string                 _strHttpPorts;
+    std::string                 _strWebRootPath;
     ccWebServerEventListener*   _pEventListener;
-    vector<string>              _aOptions;
+    std::vector<std::string>    _aOptions;
 };
 
 

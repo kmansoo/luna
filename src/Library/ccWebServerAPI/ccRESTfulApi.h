@@ -27,10 +27,10 @@ public:
     virtual bool    PerformAPI(const std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse);
 
 public:
-    bool    AddAPI(const std::string& strUri, function<bool(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)> f);
+    bool    AddAPI(const std::string& strUri, std::function<bool(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)> f);
 
 protected:
-    std::map < string, function<bool(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)>> _aAPIs;
+    std::map < std::string, std::function<bool(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)>> _aAPIs;
 };
 
 #endif

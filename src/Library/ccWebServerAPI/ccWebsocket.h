@@ -9,36 +9,46 @@
 #define CCLIBRARY_CCWEBSERVERAPI_CCWEBSOCKET_H_
 
 #include <string>
+#include <functional>
 
 class ccWebsocketGroup;
 
 class ccWebsocket
 {
 public:
+    ccWebsocket() {};
     ccWebsocket(const std::string& strUri);
-    ccWebsocket(const char* pUri, std::size_t size);
     virtual ~ccWebsocket();
 
 public:
     enum ccWebSocketEvent {
         ccWebSocketEvent_Connected,
-        ccWebSocketEvent_Data,
-        ccWebSocketEvent_Close,
+        ccWebSocketEvent_Disconnected,
+        ccWebSocketEvent_ReceivedData,
     };
 
 public:
+    typedef std::function<void(ccWebSocketEvent eEvent, const std::string& message)> WebSocketEventFunction;
+
+public:
+    virtual bool            Open(const std::string& strUri) = 0;
+    virtual bool            Close() = 0;
+
+    virtual std::int32_t    GetInstance() = 0;  // It may be a Socket ID. 
+    virtual bool            Send(const std::string& strMessage) = 0;
+    virtual bool            SendBinary(const void* pBuffer, std::size_t size) = 0;
+
+public:
+    void                    SetEventListener(WebSocketEventFunction f);
+
     const std::string       GetUri();
     void                    SetGroup(ccWebsocketGroup* pGroup);
     ccWebsocketGroup*       GetGroup();
 
-public:
-    virtual std::int32_t    GetInstance() = 0;  // It may be a Socket ID. 
-    virtual bool            Send(const char* strMessage, std::size_t size) = 0;
-    virtual bool            Send(const std::string& strMessage);
-
 protected:
-    std::string         _strUri;
-    ccWebsocketGroup*   _pMyGroup;
+    std::string             _strUri;
+    ccWebsocketGroup*       _pMyGroup;
+    WebSocketEventFunction  _oEventListener;
 };
 
 #endif

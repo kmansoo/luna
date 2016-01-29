@@ -20,3 +20,8 @@ src/build/ipch/CHATTINGWEBAPITEST-7bdee54/CHATTINGWEBAPITEST-c913a716.ipch
 src/build/ipch/CHATTINGWEBAPITEST-7bdee54/CHATTINGWEBAPITEST-f85b6e34.ipch
 src/build/Luna_Test.sdf
 src/build/Luna.VC.opendb
+src/.cproject
+src/build/Luna_DevceTest.VC.opendb
+src/build/Luna_DevceManagerTest.VC.opendb
+*.sdf
+src/.project

@@ -254,21 +254,21 @@ bool ccRESTfulChatting::user(std::shared_ptr<ccWebServerRequest> pRequest, std::
 
             if (!oReader.parse(strJsonData, oRootValue))
             {
-                pResponse->Status(500, string("Server Error!"));
+                pResponse->Status(500, std::string("Server Error!"));
                 return false;
             }
 
             if (oRootValue["user_info"].isObject() == false)
             {
-                pResponse->Status(500, string("Server Error!"));
+                pResponse->Status(500, std::string("Server Error!"));
                 return false;
             }
 
             //  Json::Value oUserInfp = oRootValue["user_info"];
             if (_oSessionManager.CreateID(oRootValue["user_info"]["ID"].asString(), oRootValue["user_info"]["Name"].asString()) == true)
-                pResponse->Status(201, string("Created"));
+                pResponse->Status(201, std::string("Created"));
             else
-                pResponse->Status(500, string("Server Error!"));
+                pResponse->Status(500, std::string("Server Error!"));
     
             pResponse->ContentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
         }
@@ -280,7 +280,7 @@ bool ccRESTfulChatting::user(std::shared_ptr<ccWebServerRequest> pRequest, std::
 
             _oSessionManager.GetUserList(aMembers);
 
-            pResponse->Status(200, string("OK"));
+            pResponse->Status(200, std::string("OK"));
 
             Json::Value oResponseJsonData;
             Json::Value oUserList;
@@ -307,16 +307,16 @@ bool ccRESTfulChatting::user(std::shared_ptr<ccWebServerRequest> pRequest, std::
             std::string strID = pRequest->GetVar("ID");
 
             if (_oSessionManager.DeleteID(strID) == true)
-                pResponse->Status(202, string("OK"));
+                pResponse->Status(202, std::string("OK"));
             else
-                pResponse->Status(500, string("Server Error!"));
+                pResponse->Status(500, std::string("Server Error!"));
     
             pResponse->ContentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
     }
         break;
 
     default:
-        pResponse->Status(500, string("Server Error!"));
+        pResponse->Status(500, std::string("Server Error!"));
         pResponse->ContentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
         break;
 
@@ -353,7 +353,7 @@ bool ccRESTfulChatting::session(std::shared_ptr<ccWebServerRequest> pRequest, st
 
             std::string strJsonData = oWriter.write(oResponseJsonValue);
 
-            pResponse->Status(200, string("OK"));
+            pResponse->Status(200, std::string("OK"));
             pResponse->ContentType("application/javascript", strJsonData.length());
             pResponse->Write(strJsonData);
         }
@@ -372,13 +372,13 @@ bool ccRESTfulChatting::session(std::shared_ptr<ccWebServerRequest> pRequest, st
 
             if (!oReader.parse(strJsonData, oRootValue))
             {
-                pResponse->Status(500, string("Server Error!"));
+                pResponse->Status(500, std::string("Server Error!"));
                 return false;
             }
 
             if (oRootValue["session_info"].isObject() == false)
             {
-                pResponse->Status(500, string("Server Error!"));
+                pResponse->Status(500, std::string("Server Error!"));
                 return false;
             }
 
@@ -387,16 +387,16 @@ bool ccRESTfulChatting::session(std::shared_ptr<ccWebServerRequest> pRequest, st
 
             if (_oSessionManager.CreateSession(strSessionName, strOwnerID) == true)
             {
-                pResponse->Status(201, string("Created"));
+                pResponse->Status(201, std::string("Created"));
 
                 std::string strWSUrl;
 
                 ccString::format(strWSUrl, "/session/chat/%s", strSessionName.c_str());
                 
-                AddFunction(strWSUrl, std::bind(&ccRESTfulChatting::ws_chat, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+                AddFunction(strWSUrl, std::bind(&ccRESTfulChatting::ws_chat, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
             }
             else
-                pResponse->Status(500, string("Server Error!"));
+                pResponse->Status(500, std::string("Server Error!"));
     
             pResponse->ContentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
         }
@@ -415,13 +415,13 @@ bool ccRESTfulChatting::session(std::shared_ptr<ccWebServerRequest> pRequest, st
 
             if (!oReader.parse(strJsonData, oRootValue))
             {
-                pResponse->Status(500, string("Server Error!"));
+                pResponse->Status(500, std::string("Server Error!"));
                 return false;
             }
 
             if (oRootValue["session_info"].isObject() == false)
             {
-                pResponse->Status(500, string("Server Error!"));
+                pResponse->Status(500, std::string("Server Error!"));
                 return false;
             }
 
@@ -430,7 +430,7 @@ bool ccRESTfulChatting::session(std::shared_ptr<ccWebServerRequest> pRequest, st
 
             if (_oSessionManager.DeleteSession(strSessionName, strOwnerID) == true)
             {
-                pResponse->Status(202, string("OK"));
+                pResponse->Status(202, std::string("OK"));
 
                 std::string strWSUrl;
 
@@ -439,14 +439,14 @@ bool ccRESTfulChatting::session(std::shared_ptr<ccWebServerRequest> pRequest, st
                 RemoveFunction(strWSUrl);
             }
             else
-                pResponse->Status(500, string("Server Error!"));
+                pResponse->Status(500, std::string("Server Error!"));
 
             pResponse->ContentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
         }
         break;
 
     default:
-        pResponse->Status(500, string("Server Error!"));
+        pResponse->Status(500, std::string("Server Error!"));
         pResponse->ContentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
         break;
 
@@ -481,7 +481,7 @@ bool ccRESTfulChatting::session_member(std::shared_ptr<ccWebServerRequest> pRequ
 
             std::string strJsonData = oWriter.write(oResponseJsonValue);
 
-            pResponse->Status(200, string("OK"));
+            pResponse->Status(200, std::string("OK"));
             pResponse->ContentType("application/javascript", strJsonData.length());
             pResponse->Write(strJsonData);
         }
@@ -493,9 +493,9 @@ bool ccRESTfulChatting::session_member(std::shared_ptr<ccWebServerRequest> pRequ
             std::string strUserID = pRequest->GetVar("UserID");
 
             if (_oSessionManager.JoinSession(strSessionName, strUserID) == true)
-                pResponse->Status(200, string("OK"));
+                pResponse->Status(200, std::string("OK"));
             else
-                pResponse->Status(500, string("Server Error!"));
+                pResponse->Status(500, std::string("Server Error!"));
 
             pResponse->ContentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
         }
@@ -507,16 +507,16 @@ bool ccRESTfulChatting::session_member(std::shared_ptr<ccWebServerRequest> pRequ
             std::string strUserID = pRequest->GetVar("UserID");
 
             if (_oSessionManager.LeaveSession(strSessionName, strUserID) == true)
-                pResponse->Status(202, string("OK"));
+                pResponse->Status(202, std::string("OK"));
             else
-                pResponse->Status(500, string("Server Error!"));
+                pResponse->Status(500, std::string("Server Error!"));
 
             pResponse->ContentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
         }
         break;
 
         default:
-            pResponse->Status(500, string("Server Error!"));
+            pResponse->Status(500, std::string("Server Error!"));
             pResponse->ContentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
             break;
     }
@@ -525,7 +525,7 @@ bool ccRESTfulChatting::session_member(std::shared_ptr<ccWebServerRequest> pRequ
 }
 
 //  
-bool ccRESTfulChatting::ws_chat(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const char* strData, std::size_t size)
+bool ccRESTfulChatting::ws_chat(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const std::string& strData)
 {
     switch ((int)eEvent)
     {
@@ -539,18 +539,17 @@ bool ccRESTfulChatting::ws_chat(ccWebsocket::ccWebSocketEvent eEvent, std::share
     }
     break;
 
-    case ccWebsocket::ccWebSocketEvent_Data:
+    case ccWebsocket::ccWebSocketEvent_ReceivedData:
     {
         std::string strBroadcastMsg;
-        std::string strMessage(strData, size);
 
-        ccString::format(strBroadcastMsg, "%08x: %s", pWS->GetInstance(), strMessage.c_str());
+        ccString::format(strBroadcastMsg, "%08x: %s", pWS->GetInstance(), strData.c_str());
 
         pWS->GetGroup()->Broadcast(strBroadcastMsg);
     }
     break;
 
-    case ccWebsocket::ccWebSocketEvent_Close:
+    case ccWebsocket::ccWebSocketEvent_Disconnected:
     {
         std::string strMessage;
 

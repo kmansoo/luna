@@ -222,7 +222,6 @@ void CChattingWebApiTestDlg::OnBnClickedLogin()
 
     Json::Value oRequestJsonData;
     Json::Value oExtInfo;
-    Json::StyledWriter oWriter;
 
     oExtInfo["ID"] = (LPCTSTR)_strUserID;
     oExtInfo["Name"] = (LPCTSTR)_strUserName;
@@ -262,7 +261,6 @@ void CChattingWebApiTestDlg::OnBnClickedSessionCreate()
 
     Json::Value oRequestJsonData;
     Json::Value oExtInfo;
-    Json::StyledWriter oWriter;
 
     oExtInfo["Name"] = (LPCTSTR)_strSessionName;
     oExtInfo["OwnerID"] = (LPCTSTR)_strUserID;
@@ -281,7 +279,6 @@ void CChattingWebApiTestDlg::OnBnClickedSessionDelete()
 
     Json::Value oRequestJsonData;
     Json::Value oExtInfo;
-    Json::StyledWriter oWriter;
 
     oExtInfo["Name"] = (LPCTSTR)_strSessionName;
     oExtInfo["OwnerID"] = (LPCTSTR)_strUserID;
@@ -458,7 +455,12 @@ void CChattingWebApiTestDlg::OnTimer(UINT_PTR nIDEvent)
             if (_pWSClient->getReadyState() != easywsclient::WebSocket::CLOSED)
             {
                 _pWSClient->poll(1);
+
+#if __cplusplus > 199711L || defined(WIN32)
                 _pWSClient->dispatch(std::bind(&CChattingWebApiTestDlg::DoWebsocketCleintHandleMessage, this, std::placeholders::_1));
+#else
+                _pWSClient->dispatch(easywsclient::DispatchFunction(&CChattingWebApiTestDlg::DoWebsocketCleintHandleMessage, this));
+#endif
             }
         }
         break;

@@ -15,15 +15,15 @@ ccWebsocket::ccWebsocket(const std::string& strUri)
     _strUri = strUri;
 }
 
-ccWebsocket::ccWebsocket(const char* pUri, std::size_t size)
-    : _pMyGroup(NULL)
-{
-    _strUri.assign(pUri, size);
-}
-
 ccWebsocket::~ccWebsocket()
 {
 }
+
+void  ccWebsocket::SetEventListener(WebSocketEventFunction f)
+{
+    _oEventListener = f;
+}
+
 
 const std::string ccWebsocket::GetUri()
 {
@@ -42,5 +42,5 @@ ccWebsocketGroup* ccWebsocket::GetGroup()
 
 bool ccWebsocket::Send(const std::string& strMessage)
 {
-    return Send(strMessage.c_str(), strMessage.length());
+    return false;
 }

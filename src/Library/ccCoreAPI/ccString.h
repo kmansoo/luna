@@ -10,9 +10,7 @@
 
 #include <string>
 
-using namespace std;
-
-class ccString : public string
+class ccString : public std::string
 {
 public:
     ccString();
@@ -25,28 +23,28 @@ public:
 public:
     ccString& operator=(const ccString& _Right)
     {   // assign _Right
-        string::assign(_Right.c_str());
+        std::string::assign(_Right.c_str());
 
         return *this;
     }
 
     ccString& operator=(const std::string& _Right)
     {   // assign _Right
-        string::assign(_Right.c_str());
+        std::string::assign(_Right.c_str());
 
         return *this;
     }
 
     ccString& operator=(const char *_Ptr)
     {   // assign [_Ptr, <null>)
-        string::assign(_Ptr);
+        std::string::assign(_Ptr);
 
         return *this;
     }
 
     ccString& operator=(char _Ch)
     {   // assign 1 * _Ch
-        string::assign(1, _Ch);
+        std::string::assign(1, _Ch);
 
         return *this;
     }
@@ -66,10 +64,10 @@ public:
 
 public:
     // Supports up to 512 bytes
-    static  void    format(string& destStr, const char* format, ...);
+    static  void    format(std::string& destStr, const char* format, ...);
     static  long    decodeStringToHex(const char* strVal, int nLength = -1, int* pConvertedSize = NULL);
-    static  bool    encodeBase64(string& destStr, string& src);
-    static  bool    decodeBase64(string& destStr, string& src);
+    static  bool    encodeBase64(std::string& destStr, std::string& src);
+    static  bool    decodeBase64(std::string& destStr, std::string& src);
 
 private:
     enum CONST_VALUE

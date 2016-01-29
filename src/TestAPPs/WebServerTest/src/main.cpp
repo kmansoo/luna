@@ -1,14 +1,17 @@
 
 #include <memory>
-#include <thread>
 
+#include "ccCoreAPI/ccCoreAPI.h"
 #include "ccCoreAPI/ccString.h"
+
 #include "ccWebServerAPI/ccWebServerManager.h"
 
 #include "ccMongooseServerAPI/ccMongooseWebServerObjectFactory.h"
 #include "ccRESTfulChattingAPI/ccRESTfulChatting.h"
 
 #include "ccWebServerAPI/ccWebsocketManager.h"
+
+#include "ccWebsocketClientAPI/ccEasyWebsocketClient.h"
 
 class ccChattingWSManager : public ccWebsocketManager
 {
@@ -34,7 +37,7 @@ public:
             }
             break;
 
-        case ccWebsocket::ccWebSocketEvent_Data:
+        case ccWebsocket::ccWebSocketEvent_ReceivedData:
             {
                 std::string strBroadcastMsg;
                 std::string strMessage(strData, size);
@@ -45,7 +48,7 @@ public:
             }
             break;
 
-        case ccWebsocket::ccWebSocketEvent_Close:
+        case ccWebsocket::ccWebSocketEvent_Disconnected:
             {
                 std::string strMessage;
 
@@ -60,29 +63,95 @@ public:
 
 };
 
-//  #include "ccBoostServerAPI/ccBoostWebServerObjectFactory.h"
+class WebSocketTest
+{
+public:
+    WebSocketTest() {
+
+    }
+
+public:
+    void    Test()
+    {
+        _eWSC.SetEventListener(std::bind(&WebSocketTest::OnRecvMessage, this, std::placeholders::_1, std::placeholders::_2));
+        _eWSC.Open("ws://localhost:8126/foo");
+    }
+
+private:
+    ccEasyWebsocketClient   _eWSC;
+
+protected:
+    void    OnRecvMessage(ccEasyWebsocketClient::WebSocketEvent eEvent, const std::string& message)
+    {
+        switch ((int)eEvent)
+        {
+        case ccEasyWebsocketClient::kWebsocketEvent_Connected:
+            std::cout << "WebSocketTest: Connected" << std::endl;
+            _eWSC.Send(std::string("Hello!"));
+            break;
+
+        case ccEasyWebsocketClient::kWebSocketEvent_Disconnected:
+            std::cout << "WebSocketTest: Disconnected" << std::endl;
+            break;
+
+        case ccEasyWebsocketClient::kWebSocketEvent_ReceivedData:
+            std::cout << "WebSocketTest: ReceivedData, " << message << std::endl;
+            break;
+        }
+    }
+};
+
+#ifdef WIN32
+#   include <Winsock2.h>
+#endif
 
 int main(int argc, char* argv[])
 {
-    ccWebServerManager  oManager;
+#ifdef WIN32
+    WORD wVersionRequested = MAKEWORD(2, 2);
+    WSADATA wsaData;
+    int err;
+
+    err = WSAStartup(wVersionRequested, &wsaData);
+
+    if (err != 0)
+    {
+        //// could not find a usable WinSock DLL
+        ////cerr << "Could not load winsock" << endl;
+        //assert(0); // is this is failing, try a different version that 2.2, 1.0 or later will likely work
+        //exit(1);
+    }
+#endif
+
+    std::string temp = "abcdefghijk./...";
+
+    for (auto it : temp)
+        std::cout << it << std::endl;
+
+    WebSocketTest   oTest;
+
+    oTest.Test();
+
+    while (1)
+        Luna::sleep(10);
 
     //  choose a Web Server : Abstract Factory Design Pattern
 
-    oManager.AttachFactory(std::make_shared<ccMongooseWebServerObjectFactory>());
+    ccWebServerManager::getInstance().AttachFactory(std::make_shared<ccMongooseWebServerObjectFactory>());
     //oManager.AttachFactory(std::make_shared<ccBoostWebServerObjectFactory>());
 
     std::shared_ptr<ccRESTfulChatting>      pChattingApi(new ccRESTfulChatting);
     std::shared_ptr<ccWebsocketManager>     pChattingWSM(new ccChattingWSManager);
 
-    oManager.CreateWebServer("WebServer #1", "8000");
+    ccWebServerManager::getInstance().CreateWebServer("WebServer #1", "8000", "C:\\web_root\\Chatting\\");
 
-    oManager.AddRESTfulApi(pChattingApi);
-    oManager.AddWebsocketManager(pChattingApi);
+    ccWebServerManager::getInstance().AddRESTfulApi(pChattingApi);
+    ccWebServerManager::getInstance().AddWebsocketManager(pChattingApi);
 
-    oManager.AddWebsocketManager(pChattingWSM);
+    ccWebServerManager::getInstance().AddWebsocketManager(pChattingWSM);
 
-    oManager.Start();
+    ccWebServerManager::getInstance().Start();
 
     while (1)
-        std::this_thread::sleep_for(std::chrono::microseconds{ 100 });
+        Luna::sleep(100);
 }
