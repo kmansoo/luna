@@ -12,19 +12,20 @@
 
 #include "ccCoreAPI/ccSingletonT.h"
 
+#include "ccJsonParserAPI/json/value.h"
+
 #include "ccWebsocketClientAPI/ccEasyWebsocketClient.h"
+
 #include "ccIoTDeviceProtocolAPI/ccIoTDeviceProtocol.h"
+#include "ccIoTDeviceProtocolAPI/ccIoTDeviceSpecification.h"
 
 #include "ccIoTDeviceTransport.h"
-//#include "ccIoTDeviceSpecification.h"
 #include "ccIoTDeviceTransportFactory.h"
-
-#include "ccJsonParserAPI/json/value.h"
 
 class ccIoTDevice
 {
 public:
-    ccIoTDevice();
+    ccIoTDevice(const std::string& strSpecFile = "MyDeviceInfo.json");
     virtual ~ccIoTDevice();
 
 public:
@@ -38,16 +39,20 @@ public:
     virtual bool    OnRecvCommand(ccIoTDeviceProtocol& oProtocol);
 
 protected:
-    bool    DoSetDeviceCommand(ccIoTDeviceProtocol& oProtocol);
-    bool    DoGetDeviceStatusCommand(ccIoTDeviceProtocol& oProtocol);
+    virtual bool    DoSetDeviceCommand(ccIoTDeviceProtocol& oProtocol);
+    virtual bool    DoGetDeviceStatusCommand(ccIoTDeviceProtocol& oProtocol);
 
 protected:
     void    DoRetryConnect();
     void    DoRecvDataFromWebsocket(ccWebsocket::ccWebSocketEvent eEvent, const std::string& message);
 
 protected:
-    std::string             _strTargetUri;
-    ccEasyWebsocketClient   _oWSC;
+    bool                        _bIsConnected;
+    bool                        _bIsStopByUser;
+
+    ccIoTDeviceSpecification    _oSpecification;
+    std::string                 _strTargetUri;
+    ccEasyWebsocketClient       _oWSC;
     std::shared_ptr<ccIoTDeviceTransportFactory> _pFactory;
 
     std::map < std::string, std::function<bool(ccIoTDeviceProtocol& oProtocol)>> _aCommands;

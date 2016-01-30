@@ -12,20 +12,31 @@
 #include <memory>
 
 #include "ccWebServerAPI/ccWebsocket.h"
+#include "ccJsonParserAPI/json/value.h"
+
+#include "ccIoTDeviceProtocolAPI/ccIoTDeviceSpecification.h"
 
 class ccIoTDeviceAgent
 {
 public:
-    ccIoTDeviceAgent(std::shared_ptr<ccWebsocket> pWS);
+    ccIoTDeviceAgent(std::shared_ptr<ccWebsocket> pWS, const Json::Value& oSpec);
     virtual ~ccIoTDeviceAgent();
 
 public:
-    const std::string& GetName() {return _strName; }
-    const std::shared_ptr<ccWebsocket> GetWebsockt() {return _pWS; }
+    void    Show();
+
+public:
+    ccIoTDeviceSpecification::IoTDeviceType GetType() { return _oSpecification.GetType(); }
+
+    std::int32_t                        GetID() { return _pWS->GetInstance(); }
+    const std::string&                  GetName() {return _oSpecification.GetName(); }
+    const std::shared_ptr<ccWebsocket>  GetWebsockt() {return _pWS; }
+    ccIoTDeviceSpecification&           GetDeviceSPec() { return _oSpecification; }
 
 private:
-    std::string                     _strName;
     std::shared_ptr<ccWebsocket>    _pWS;
+    ccIoTDeviceSpecification        _oSpecification;
+
 };
 
 #endif /* PRODUCTLIBRARY_CCIOTDEVICEMANAGERAPI_CCIOTDEVICEAGENT_H_ */

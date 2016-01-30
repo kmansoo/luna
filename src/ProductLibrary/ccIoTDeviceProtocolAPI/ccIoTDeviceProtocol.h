@@ -36,10 +36,31 @@ protected:
     bool    DoParserGetDeviceStatusCommand(const Json::Value& oExtInfo);
 
 public:
+    enum IoTDeviceSwitchControl {
+        kDeviceSwitchControl_Off,
+        kDeviceSwitchControl_On
+    };
+
+    enum IoTDeviceLightCommand {
+        kDeviceLightControl_Off,
+        kDeviceLightControl_On,
+        kDeviceLightControl_Control
+    };
+
+    enum IoTDeviceDoorCommand {
+        kDeviceDoorControl_Close,
+        kDeviceDoorControl_Open,
+        kDeviceDoorControl_Bell,
+    };
+
+public:
     //  header
     bool            _IsRequest;
     std::string     _strCommand;
     Json::Value     _oExtInfo;
+
+    //  Device COntrol
+    std::uint32_t   _uDeviceControl;
 
 private:
     std::map < std::string, std::function<bool(const Json::Value& oExtInfo)>> _aParsers;

@@ -27,10 +27,19 @@ public:
     ccIoTDeviceManager();
     virtual ~ccIoTDeviceManager();
 
-protected:
-    bool    devices(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse);
+public:
+    void    Show();
+    void    AllSwitchesControl(bool bOn);
+    void    AllLightsControl(bool bOn);
+    void    AllLocksControl(bool bOpen);
 
 protected:
+    //  RESTful API Function
+    bool    devices(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse);
+    bool    devices_device(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse);
+
+protected:
+    //  Websocket Function
     bool    ws_IoTDevice(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const std::string strData);
 
 protected:
@@ -41,6 +50,7 @@ protected:
     bool    DoDeRegisterCommand(std::shared_ptr<ccWebsocket> pWS, ccIoTDeviceProtocol& oProtocol);
     bool    DoGetDeviceStatusCommand(std::shared_ptr<ccWebsocket> pWS, ccIoTDeviceProtocol& oProtocol);
     bool    DoUpdateDeviceStatusCommand(std::shared_ptr<ccWebsocket> pWS, ccIoTDeviceProtocol& oProtocol);
+
 private:
     std::map < std::int32_t, std::shared_ptr<ccIoTDeviceAgent> > _aAgents;
 

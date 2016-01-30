@@ -5,19 +5,61 @@
 #include "ccNetworkAPI/ccNetworkManager.h"
 #include "ccIoTDeviceAPI/ccIoTDevice.h"
 
+class IoTSwitchDevice : public ccIoTDevice
+{
+public:
+    IoTSwitchDevice() : ccIoTDevice("SwitchDeviceInfo.json") {}
+
+    virtual bool    DoSetDeviceCommand(ccIoTDeviceProtocol& oProtocol)
+    {
+        std::cout << "#### IoTSwitchDevice::DoSetDeviceCommand" << std::endl;
+
+        return false;
+    }
+
+    virtual bool    DoGetDeviceStatusCommand(ccIoTDeviceProtocol& oProtocol)
+    {
+        std::cout << "### IoTSwitchDevice::DoGetDeviceStatusCommand" << std::endl;
+
+        return false;
+    }
+};
+
+class IoTLightDevice : public ccIoTDevice
+{
+public:
+    IoTLightDevice() : ccIoTDevice("LightDeviceInfo.json") {}
+
+    virtual bool    DoSetDeviceCommand(ccIoTDeviceProtocol& oProtocol)
+    {
+        std::cout << "**** IoTLightDevice::DoSetDeviceCommand" << std::endl;
+
+        return false;
+    }
+
+    virtual bool    DoGetDeviceStatusCommand(ccIoTDeviceProtocol& oProtocol)
+    {
+        std::cout << "**** IoTLightDevice::DoGetDeviceStatusCommand" << std::endl;
+
+        return false;
+    }
+};
+
 int main(int argc, char* argv[])
 {
     ccNetworkManager::getInstance().Init();
 
-    ccIoTDevice         oDevice;
+    IoTSwitchDevice     oSwitchDevice;
+    IoTLightDevice      oLightDevice;
+
     std::string         strCommand;
 
-    oDevice.Start("ws://localhost:8000/ws_iot_deivce");
-    //oDevice.Start("ws://localhost:8126/foo");
+    oSwitchDevice.Start("ws://localhost:8000/ws_iot_deivce");
+    oLightDevice.Start("ws://localhost:8000/ws_iot_deivce");
 
     while (true)
     {
-        std::cout << "R: Register, U: DeRegister, A: Update Device Status" << std::endl;
+        std::cout << "S: Start, T: Stop, A: Update Device Status" << std::endl;
         std::cout << "Please press 'q' to stop this program. What is your command? ";
         std::cin >> strCommand;
         std::cout << std::endl;
@@ -25,25 +67,11 @@ int main(int argc, char* argv[])
         if (strCommand == "q")
             break;
 
-        if (strCommand == "R")
-        {
-            ccIoTDeviceProtocol oProtocol;
+        if (strCommand == "S")
+            oSwitchDevice.Start("ws://localhost:8000/ws_iot_deivce");
 
-            oProtocol._IsRequest = true;
-            oProtocol._strCommand = "Register";
-
-            oDevice.Send(oProtocol);
-        }
-
-        if (strCommand == "U")
-        {
-            ccIoTDeviceProtocol oProtocol;
-
-            oProtocol._IsRequest = true;
-            oProtocol._strCommand = "DeRegister";
-
-            oDevice.Send(oProtocol);
-        }
+        if (strCommand == "T")
+            oSwitchDevice.Stop();
 
         Luna::sleep(10);
     }

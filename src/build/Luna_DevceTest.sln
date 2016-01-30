@@ -25,8 +25,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccWebsocketClientAPI", "..\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IoTDeviceTest", "..\TestAPPs\IoTDeviceTest\build\IoTDeviceTest.vcxproj", "{0F24B3C9-5582-4E40-88AF-8A10DA62EA42}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IoTDeviceManagerTest", "..\TestAPPs\IoTDeviceManagerTest\build\IoTDeviceManager.vcxproj", "{F52A768C-28E4-49B1-B744-B3F8C4903892}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccIoTDeviceProtocolAPI", "..\ProductLibrary\ccIoTDeviceProtocolAPI\build\ccIoTDeviceProtocolAPI.vcxproj", "{CF720975-BDD5-4F9C-9867-0EAD1AB35981}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccIoTDeviceAPI", "..\ProductLibrary\ccIoTDeviceAPI\build\ccIoTDeviceAPI.vcxproj", "{6FCEEDD0-C893-4C4E-B85A-10FBD1D36387}"
@@ -113,14 +111,6 @@ Global
 		{0F24B3C9-5582-4E40-88AF-8A10DA62EA42}.Release|x64.Build.0 = Release|x64
 		{0F24B3C9-5582-4E40-88AF-8A10DA62EA42}.Release|x86.ActiveCfg = Release|Win32
 		{0F24B3C9-5582-4E40-88AF-8A10DA62EA42}.Release|x86.Build.0 = Release|Win32
-		{F52A768C-28E4-49B1-B744-B3F8C4903892}.Debug|x64.ActiveCfg = Debug|x64
-		{F52A768C-28E4-49B1-B744-B3F8C4903892}.Debug|x64.Build.0 = Debug|x64
-		{F52A768C-28E4-49B1-B744-B3F8C4903892}.Debug|x86.ActiveCfg = Debug|Win32
-		{F52A768C-28E4-49B1-B744-B3F8C4903892}.Debug|x86.Build.0 = Debug|Win32
-		{F52A768C-28E4-49B1-B744-B3F8C4903892}.Release|x64.ActiveCfg = Release|x64
-		{F52A768C-28E4-49B1-B744-B3F8C4903892}.Release|x64.Build.0 = Release|x64
-		{F52A768C-28E4-49B1-B744-B3F8C4903892}.Release|x86.ActiveCfg = Release|Win32
-		{F52A768C-28E4-49B1-B744-B3F8C4903892}.Release|x86.Build.0 = Release|Win32
 		{CF720975-BDD5-4F9C-9867-0EAD1AB35981}.Debug|x64.ActiveCfg = Debug|Win32
 		{CF720975-BDD5-4F9C-9867-0EAD1AB35981}.Debug|x86.ActiveCfg = Debug|Win32
 		{CF720975-BDD5-4F9C-9867-0EAD1AB35981}.Debug|x86.Build.0 = Debug|Win32

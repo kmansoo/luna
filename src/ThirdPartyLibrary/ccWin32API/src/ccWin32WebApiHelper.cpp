@@ -307,7 +307,7 @@ bool ccWin32WebApiHelper::getValueString(Json::Value& oValue, const std::string&
     {
         if (oValue[strName].isString())
         {
-            strValue = oValue[strName].asCString();
+            strValue = oValue[strName].asString();
 
             return true;
         }

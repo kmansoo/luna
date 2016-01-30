@@ -31,6 +31,8 @@ ccIoTDeviceManager::ccIoTDeviceManager()
 
     // TODO Auto-generated constructor stub
     _oWebAPI->AddAPI(std::string("/devices"), std::bind(&ccIoTDeviceManager::devices, this, std::placeholders::_1, std::placeholders::_2));
+    _oWebAPI->AddAPI(std::string("/devices/device"), std::bind(&ccIoTDeviceManager::devices_device, this, std::placeholders::_1, std::placeholders::_2));
+
     _oWSM->AddFunction("/ws_iot_deivce", std::bind(&ccIoTDeviceManager::ws_IoTDevice, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
     ccWebServerManager::getInstance().AttachFactory(std::make_shared<ccMongooseWebServerObjectFactory>());
@@ -47,6 +49,82 @@ ccIoTDeviceManager::~ccIoTDeviceManager()
     // TODO Auto-generated destructor stub
 }
 
+void ccIoTDeviceManager::Show()
+{
+    std::lock_guard<std::mutex> lock(_mtx);
+
+    int nIndex = 0;
+    for (auto it : _aAgents)
+    {
+        std::cout << "-----------------------------------------------" << std::endl;
+        std::cout << "* Index: " << (nIndex++ + 1) << std::endl;
+
+        it.second->Show();
+
+        std::cout << "-----------------------------------------------" << std::endl;
+    }
+}
+
+void ccIoTDeviceManager::AllSwitchesControl(bool bOn)
+{
+    std::lock_guard<std::mutex> lock(_mtx);
+
+    ccIoTDeviceProtocol oControlProtocol;
+
+    Json::Value oExtInfo;
+
+    if (bOn)
+        oExtInfo["Control"] = "On";
+    else
+        oExtInfo["Control"] = "Off";
+
+    for (auto it : _aAgents)
+    {
+        if (it.second->GetType() == ccIoTDeviceSpecification::kDeviceType_Switch)
+            oControlProtocol.Send(it.second->GetWebsockt().get(), true, "SetDevice", oExtInfo);
+    }
+}
+
+void ccIoTDeviceManager::AllLightsControl(bool bOn)
+{
+    std::lock_guard<std::mutex> lock(_mtx);
+
+    ccIoTDeviceProtocol oControlProtocol;
+
+    Json::Value oExtInfo;
+
+    if (bOn)
+        oExtInfo["Control"] = "On";
+    else
+        oExtInfo["Control"] = "Off";
+
+    for (auto it : _aAgents)
+    {
+        if (it.second->GetType() == ccIoTDeviceSpecification::kDeviceType_Light)
+            oControlProtocol.Send(it.second->GetWebsockt().get(), true, "SetDevice", oExtInfo);
+    }
+}
+
+void ccIoTDeviceManager::AllLocksControl(bool bOpen)
+{
+    std::lock_guard<std::mutex> lock(_mtx);
+
+    ccIoTDeviceProtocol oControlProtocol;
+
+    Json::Value oExtInfo;
+
+    if (bOpen)
+        oExtInfo["Control"] = "Open";
+    else
+        oExtInfo["Control"] = "Close";
+
+    for (auto it : _aAgents)
+    {
+        if (it.second->GetType() == ccIoTDeviceSpecification::kDeviceType_Lock)
+            oControlProtocol.Send(it.second->GetWebsockt().get(), true, "SetDevice", oExtInfo);
+    }
+}
+
 //  Open API
 bool ccIoTDeviceManager::devices(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)
 {
@@ -55,12 +133,46 @@ bool ccIoTDeviceManager::devices(std::shared_ptr<ccWebServerRequest> pRequest, s
     switch (pRequest->GetMethod())
     {
     case ccWebServerRequest::HttpMethod_Post:   //  Create
+        pResponse->Status(406, std::string("Not Acceptable"));
+        pResponse->Write("");
         break;
 
     case ccWebServerRequest::HttpMethod_Get:    //  Read
+        {
+            pResponse->Status(200, std::string("OK"));
+
+            Json::Value oResponseJsonData;
+            Json::Value oDeviceList;
+            Json::StyledWriter oWriter;
+
+            oDeviceList["count"] = (int)_aAgents.size();
+
+            int nIndex = 0;
+
+            for (auto it : _aAgents)
+            { 
+                Json::Value oDeviceInfo;
+
+                oDeviceInfo = it.second->GetDeviceSPec().ToJson();
+                oDeviceInfo["ID"] = it.second->GetID();
+
+                oDeviceList["device"][nIndex++] = oDeviceInfo;
+            }
+
+            oResponseJsonData["device_list"] = oDeviceList;
+
+            std::string strJsonData = oWriter.write(oResponseJsonData);
+
+            pResponse->ContentType("application/javascript", strJsonData.length());
+            pResponse->Write(strJsonData);
+
+            return true;
+        }
         break;
 
     case ccWebServerRequest::HttpMethod_Delete:   //  Delete
+        pResponse->Status(406, std::string("Not Acceptable"));
+        pResponse->Write("");
         break;
 
     default:
@@ -69,6 +181,90 @@ bool ccIoTDeviceManager::devices(std::shared_ptr<ccWebServerRequest> pRequest, s
 
     return false;
 }
+
+bool ccIoTDeviceManager::devices_device(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)
+{
+    //std::cout << "enter ccRESTfulChatting::list, query_string=" << pRequest->GetQueryString() << endl;
+
+    switch (pRequest->GetMethod())
+    {
+    case ccWebServerRequest::HttpMethod_Post:   //  Create
+        pResponse->Status(406, std::string("Not Acceptable"));
+        pResponse->Write("");
+        break;
+
+    case ccWebServerRequest::HttpMethod_Get:    //  Read
+    {
+        int nDeviceID = std::stoi(pRequest->GetVar("ID"));
+
+        auto it = _aAgents.find(nDeviceID);
+
+        if (it == std::end(_aAgents))
+        {
+            pResponse->Status(404, std::string("Not Found"));
+            return false;
+        }
+
+        pResponse->Status(200, std::string("OK"));
+
+        Json::Value oResponseJsonData;
+        Json::StyledWriter oWriter;
+
+        Json::Value oDeviceInfo;
+
+        oDeviceInfo = it->second->GetDeviceSPec().ToJson();
+        oDeviceInfo["ID"] = it->second->GetID();
+
+        oResponseJsonData["device"] = oDeviceInfo;
+
+        std::string strJsonData = oWriter.write(oResponseJsonData);
+
+        pResponse->ContentType("application/javascript", strJsonData.length());
+        pResponse->Write(strJsonData);
+
+        return true;
+    }
+    break;
+
+    case ccWebServerRequest::HttpMethod_Put:    //  Control
+    {
+        int nDeviceID = std::stoi(pRequest->GetVar("ID"));
+
+        auto it = _aAgents.find(nDeviceID);
+
+        if (it == std::end(_aAgents))
+        {
+            pResponse->Status(404, std::string("Not Found"));
+            return false;
+        }
+
+        pResponse->Status(200, std::string("OK"));
+
+        std::string strControlData;
+
+        pRequest->GetContentBody(strControlData);
+
+        ccIoTDeviceProtocol oControlProtocol;
+        oControlProtocol.Parse(strControlData);
+        oControlProtocol.Send(it->second->GetWebsockt().get());
+
+        pResponse->Write("");
+        return true;
+    }
+    break;
+
+    case ccWebServerRequest::HttpMethod_Delete:   //  Delete
+        pResponse->Status(406, std::string("Not Acceptable"));
+        pResponse->Write("");
+        break;
+
+    default:
+        break;
+    }
+
+    return false;
+}
+
 
 //  WebSocket
 bool ccIoTDeviceManager::ws_IoTDevice(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const std::string strData)
@@ -125,7 +321,7 @@ bool ccIoTDeviceManager::DoRegisterCommand(std::shared_ptr<ccWebsocket> pWS, ccI
     if (oProtocol._IsRequest == false)
         return false;
 
-    std::shared_ptr<ccIoTDeviceAgent> pNewDeviceAgent(new ccIoTDeviceAgent(pWS));
+    std::shared_ptr<ccIoTDeviceAgent> pNewDeviceAgent(new ccIoTDeviceAgent(pWS, oProtocol._oExtInfo));
 
     std::lock_guard<std::mutex> lock(_mtx);
 
@@ -137,8 +333,8 @@ bool ccIoTDeviceManager::DoRegisterCommand(std::shared_ptr<ccWebsocket> pWS, ccI
     _aAgents[pWS->GetInstance()] = pNewDeviceAgent;
 
     //  상태 가져오기
-    ccIoTDeviceProtocol oResponseProtocol;
-    oResponseProtocol.Send(pWS.get(), true, "GetDeviceStatus");
+    //ccIoTDeviceProtocol oResponseProtocol;
+    //oResponseProtocol.Send(pWS.get(), true, "GetDeviceStatus");
 
     return true;
 }

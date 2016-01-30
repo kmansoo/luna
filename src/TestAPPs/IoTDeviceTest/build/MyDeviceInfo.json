@@ -1,0 +1,8 @@
+{
+    "IoTDeviceSpecification" : {
+        "Type" : "Switch",
+        "Name" : "Simple Switch",
+        "Description" : "On/Off",
+        "Manufacture" : "Mansoo"
+    }
+}

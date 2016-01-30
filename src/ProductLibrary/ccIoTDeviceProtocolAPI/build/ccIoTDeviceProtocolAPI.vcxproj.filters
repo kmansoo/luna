@@ -26,13 +26,10 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\ccIoTDeviceSpecification.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\ccIoTDeviceProtocol.h">
       <Filter>API</Filter>
     </ClInclude>
-    <ClInclude Include="..\ccIotDeviceSyncProtocol.h">
+    <ClInclude Include="..\ccIoTDeviceSpecification.h">
       <Filter>API</Filter>
     </ClInclude>
   </ItemGroup>
