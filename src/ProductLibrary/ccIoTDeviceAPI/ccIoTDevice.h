@@ -30,7 +30,7 @@ public:
 
 public:
     bool    AttachFactory(std::shared_ptr<ccIoTDeviceTransportFactory> pFactory);
-    bool    Start(const std::string& strIoTManagerUri);
+    bool    Start();
     bool    Stop();
 
     bool    Send(ccIoTDeviceProtocol& oProtocol);

@@ -34,14 +34,17 @@ bool ccIoTDevice::AttachFactory(std::shared_ptr<ccIoTDeviceTransportFactory> pFa
     return false;
 }
 
-bool ccIoTDevice::Start(const std::string& strIoTManagerUri)
+bool ccIoTDevice::Start()
 {
     if (_bIsConnected)
         return true;
 
     _bIsStopByUser = false;
 
-    _strTargetUri = std::move(strIoTManagerUri);
+    _strTargetUri = _oSpecification.GetIoTDeviceMasterUri();
+
+    if (_strTargetUri == "")
+    	_strTargetUri = "ws://localhost:8000/ws_iot_deivce";
 
     DoRetryConnect();
 

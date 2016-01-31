@@ -5,6 +5,7 @@
  *      Author: kmansoo
  */
 #include <iostream>
+#include <string.h>
 
 #if defined(WIN32)
 #   include <Winsock2.h>

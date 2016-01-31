@@ -12,8 +12,6 @@
 #include <string>
 #include <memory>
 
-#include "ccWebSocketGroup.h"
-
 #include "ccWebServerEventListener.h"
 
 class ccWebServer

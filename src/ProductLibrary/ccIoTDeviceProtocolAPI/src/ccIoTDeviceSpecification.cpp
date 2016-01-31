@@ -31,7 +31,7 @@ ccIoTDeviceSpecification::~ccIoTDeviceSpecification()
 const std::string& ccIoTDeviceSpecification::GetTypeName()
 {
     if ((std::uint16_t)_eDeviceType > kDeviceType_Lock)
-        s_aDeviceTypeName[0];
+        return s_aDeviceTypeName[0];
 
     return s_aDeviceTypeName[_eDeviceType];
 }
@@ -54,6 +54,9 @@ bool ccIoTDeviceSpecification::Parse(const Json::Value& oInfo)
         return false;
 
     if (oInfo["IoTDeviceSpecification"].isNull())
+        return false;
+
+    if (oInfo["IoTDeviceMasterUri"].isNull())
         return false;
 
     if (oInfo["IoTDeviceSpecification"]["Type"].isNull())
@@ -84,6 +87,8 @@ bool ccIoTDeviceSpecification::Parse(const Json::Value& oInfo)
 
     if (!_oSpecificationValue["IoTDeviceSpecification"]["Manufacture"].isNull())
         _strManufacture = _oSpecificationValue["IoTDeviceSpecification"]["Manufacture"].asString();
+
+    _strIoTDeviceMasterUri = std::move(oInfo["IoTDeviceMasterUri"].asString());
 
     return true;
 }

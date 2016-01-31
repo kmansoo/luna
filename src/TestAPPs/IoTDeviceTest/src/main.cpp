@@ -54,8 +54,8 @@ int main(int argc, char* argv[])
 
     std::string         strCommand;
 
-    oSwitchDevice.Start("ws://localhost:8000/ws_iot_deivce");
-    oLightDevice.Start("ws://localhost:8000/ws_iot_deivce");
+    oSwitchDevice.Start();
+    oLightDevice.Start();
 
     while (true)
     {
@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
             break;
 
         if (strCommand == "S")
-            oSwitchDevice.Start("ws://localhost:8000/ws_iot_deivce");
+            oSwitchDevice.Start();
 
         if (strCommand == "T")
             oSwitchDevice.Stop();

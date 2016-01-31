@@ -8,7 +8,7 @@
 #ifndef THIRDPARTYLIBRARY_CCMONGOOSESERVERAPI_CCMONGOOSEWEBSERVERREQUEST_H_
 #define THIRDPARTYLIBRARY_CCMONGOOSESERVERAPI_CCMONGOOSEWEBSERVERREQUEST_H_
 
-#include "CCWebServerAPI/ccWebServerRequest.h"
+#include "ccWebServerAPI/ccWebServerRequest.h"
 
 #include "mongoose/mongoose.h"
 

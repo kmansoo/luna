@@ -41,6 +41,8 @@ public:
 
     const Json::Value& ToJson() { return _oSpecificationValue; }
 
+    const std::string&	GetIoTDeviceMasterUri() {return _strIoTDeviceMasterUri; }
+
 protected:
     //  Example
     //
@@ -50,7 +52,8 @@ protected:
     //          "Name" : "Simple Switch",
     //          "Description" : "On/Off",
     //          "Manufacture" : "Mansoo"
-    //      }
+    //      },
+    //		"IoTDeviceMasterUri" : "ws://localhost:8000/ws_iot_deivce"
     //  }
     //
     Json::Value     _oSpecificationValue;
@@ -59,6 +62,7 @@ protected:
     std::string     _strName;
     std::string     _strDescription;
     std::string     _strManufacture;
+    std::string     _strIoTDeviceMasterUri;
 };
 
 #endif /* PRODUCTLIBRARY_CCIOTDEVICEPROTOCOLAPI_CCIOTDEVICESPECIFICATION_H_ */

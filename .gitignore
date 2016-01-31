@@ -24,4 +24,7 @@ src/.cproject
 src/build/Luna_DevceTest.VC.opendb
 src/build/Luna_DevceManagerTest.VC.opendb
 *.sdf
-src/.project
+.project
+.cproject
+output/
+src/build/lib/

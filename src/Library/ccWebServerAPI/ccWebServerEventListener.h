@@ -10,6 +10,7 @@
 
 #include "ccWebServerRequest.h"
 #include "ccWebServerResponse.h"
+#include "ccWebsocket.h"
 
 class ccWebServerEventListener
 {
