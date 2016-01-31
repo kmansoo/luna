@@ -195,7 +195,9 @@ bool ccIoTDeviceManager::devices_device(std::shared_ptr<ccWebServerRequest> pReq
 
     case ccWebServerRequest::HttpMethod_Get:    //  Read
     {
-        int nDeviceID = std::stoi(pRequest->GetVar("ID"));
+        std::string strID = std::move(pRequest->GetVar("ID"));
+
+        int nDeviceID = std::stoi(strID);
 
         auto it = _aAgents.find(nDeviceID);
 

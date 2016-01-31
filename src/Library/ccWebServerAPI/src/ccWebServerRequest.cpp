@@ -41,19 +41,19 @@ const std::string& ccWebServerRequest::GetURI() const
     return _strUri;
 }
 
-const std::string&& ccWebServerRequest::GetQueryString()
+std::string ccWebServerRequest::GetQueryString()
 {
-    return std::move(_strNullData);
+    return _strNullData;
 }
 
-std::string&& ccWebServerRequest::GetPath()
+std::string ccWebServerRequest::GetPath()
 {
-    return std::move(_strNullData);
+    return _strNullData;
 }
 
-std::string&& ccWebServerRequest::GetResource()
+std::string ccWebServerRequest::GetResource()
 {
-    return std::move(_strNullData);
+    return _strNullData;
 }
 
 bool ccWebServerRequest::HasVar(const std::string& name) const
@@ -61,20 +61,19 @@ bool ccWebServerRequest::HasVar(const std::string& name) const
     return false;
 }
 
-
-std::string&& ccWebServerRequest::GetVar(const std::string& name)
+std::string ccWebServerRequest::GetVar(const std::string& name)
 {
-    return std::move(_strNullData);
+    return _strNullData;
 }
 
-std::string&& ccWebServerRequest::GetHeader(const std::string& name)
+std::string ccWebServerRequest::GetHeader(const std::string& name)
 {
-    return std::move(_strNullData);
+    return _strNullData;
 }
 
-std::string&& ccWebServerRequest::GetContentType()
+std::string ccWebServerRequest::GetContentType()
 {
-    return std::move(_strNullData);
+    return _strNullData;
 }
 
 unsigned long ccWebServerRequest::GetContentLength()

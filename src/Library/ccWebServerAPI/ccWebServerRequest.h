@@ -38,16 +38,16 @@ public:
     virtual const std::string&  GetMethod_c() const;
     virtual const std::string&  GetURI() const;
 
-    virtual const std::string&& GetQueryString();
-    virtual std::string&&       GetPath();
-    virtual std::string&&       GetResource();
+    virtual std::string         GetQueryString();
+    virtual std::string         GetPath();
+    virtual std::string         GetResource();
 
     virtual bool                HasVar(const std::string& name) const;
-    virtual std::string&&       GetVar(const std::string& name);
+    virtual std::string         GetVar(const std::string& name);
 
-    virtual std::string&&       GetHeader(const std::string& name);
+    virtual std::string         GetHeader(const std::string& name);
 
-    virtual std::string&&       GetContentType();
+    virtual std::string         GetContentType();
     virtual unsigned long       GetContentLength();
 
     virtual long                GetContentBody(std::string& strBody);
