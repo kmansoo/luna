@@ -5,7 +5,7 @@
  *      Author: kmansoo
  */
 
-#include "C:/MyProjects/C-Study/Luna/src/ProductLibrary/ccIoTDeviceAPI/ccIoTDeviceTransport.h"
+#include "ccIoTDeviceTransport.h"
 
 ccIoTDeviceTransport::ccIoTDeviceTransport()
 {

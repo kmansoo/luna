@@ -5,7 +5,7 @@
  *      Author: kmansoo
  */
 
-#include "C:/MyProjects/C-Study/Luna/src/ProductLibrary/ccIoTDeviceProtocolAPI/ccIotDeviceSyncProtocol.h"
+#include "ccIotDeviceSyncProtocol.h"
 
 ccIotDeviceSyncProtocol::ccIotDeviceSyncProtocol()
 {

@@ -21,17 +21,17 @@ public:
     virtual ~ccMongooseWebServerRequest();
 
 public:
-    virtual const std::string&   GetQueryString() const;
-    virtual std::string          GetPath() const;
-    virtual std::string          GetResource() const;
+    virtual const std::string&&  GetQueryString();
+    virtual std::string&&        GetPath();
+    virtual std::string&&        GetResource();
 
     virtual bool            HasVar(const std::string& name) const;
-    virtual std::string     GetVar(const std::string& name) const;
+    virtual std::string&&   GetVar(const std::string& name);
 
-    virtual std::string     GetHeader(const std::string& name) const;
+    virtual std::string&&   GetHeader(const std::string& name);
 
-    virtual std::string     GetContentType() const;
-    virtual unsigned long   GetContentLength() const;
+    virtual std::string&&   GetContentType();
+    virtual unsigned long   GetContentLength();
 
     virtual long            GetContentBody(std::string& strBody);
     virtual long            GetContentBody(char* pBuf, std::size_t size);
@@ -42,10 +42,10 @@ public:
     virtual long            GetRemoteIp() const;
 
 private:
-    void        DoSplitePathPos() const;
+    void            DoSplitePathPos() const;
 
-    bool        DoHasVarInConnection(const std::string& name) const;
-    std::string DoGetVarInConnection(const std::string& name) const;
+    bool            DoHasVarInConnection(const std::string& name) const;
+    std::string&&   DoGetVarInConnection(const std::string& name);
 
 private:
     struct mg_connection*           _pMgConnection;

@@ -22,15 +22,8 @@ ifeq ($(TARGET_TYPE), shared_lib)
   TARGET_FILE = lib$(TARGET).so
 endif
 
-ifneq ($(sip),)
-   ifeq ($(sip),1)
-      EMTA_TYPE = sip
-   endif
-endif
- 
 ifeq ($(TARGET_TYPE),exe)
-  TARGET_FILE           := $(TARGET)
-
+  TARGET_FILE := $(TARGET)
 endif
 
 ifeq ($(TARGET_TYPE),exe)

@@ -14,6 +14,10 @@
 #else
 #   include <netdb.h>
 #   include <sys/socket.h>       /* for AF_INET */
+#   include <unistd.h>
+#   include <arpa/inet.h>
+
+#   define  SOCKET_ERROR    -1
 #endif
 
 #include "ccCoreAPI/ccString.h"
