@@ -29,12 +29,24 @@
     <ClInclude Include="..\ccString.h">
       <Filter>API</Filter>
     </ClInclude>
+    <ClInclude Include="..\ccSingletonT.h">
+      <Filter>API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccCoreAPI.h">
+      <Filter>API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccTimer.h">
+      <Filter>API</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ccString.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccCoreAPI.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

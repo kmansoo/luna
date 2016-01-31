@@ -32,12 +32,12 @@ bool ccWebServer::Stop()
     return false;
 }
 
-const string&  ccWebServer::GetName()
+const std::string&  ccWebServer::GetName()
 {
     return _strName;
 }
 
-bool ccWebServer::SetOption(string const& name, string const& value)
+bool ccWebServer::SetOption(std::string const& name, std::string const& value)
 {
     _aOptions.push_back(name);
     _aOptions.push_back(value);

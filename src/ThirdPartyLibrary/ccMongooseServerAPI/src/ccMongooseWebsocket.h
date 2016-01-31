@@ -20,9 +20,12 @@ public:
 
     virtual ~ccMongooseWebsocket();
 
-protected:
+public:
+    virtual bool            Open(const std::string& strUri);
+    virtual bool            Close();
     virtual std::int32_t    GetInstance();  // It may be a Socket ID. 
-    virtual bool            Send(const char* strMessage, std::size_t size);
+    virtual bool            Send(const std::string& strMessage);
+    virtual bool            SendBinary(const void* pBuffer, std::size_t size);
 
 private:
     struct mg_connection*   _pMgConnection;

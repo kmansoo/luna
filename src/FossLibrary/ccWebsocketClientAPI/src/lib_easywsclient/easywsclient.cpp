@@ -74,8 +74,10 @@
 
 #include "easywsclient/easywsclient.hpp"
 
+#if (__cplusplus > 199711L) || defined(WIN32)
 using easywsclient::Callback_Imp;
 using easywsclient::BytesCallback_Imp;
+#endif
 
 namespace { // private module-only namespace
 
@@ -120,8 +122,16 @@ class _DummyWebSocket : public easywsclient::WebSocket
     void sendPing() { }
     void close() { } 
     readyStateValues getReadyState() const { return CLOSED; }
+    virtual std::int32_t    getInstance() const { return -1; }
+
+
+#if __cplusplus > 199711L || defined(WIN32)
     void _dispatch(Callback_Imp & callable) { }
     void _dispatchBinary(BytesCallback_Imp& callable) { }
+#else
+    void _dispatch(easywsclient::DispatchFunction f) { }
+    void _dispatchBinary(easywsclient::DispatchFunction f) { }
+#endif
 };
 
 
@@ -178,6 +188,10 @@ class _RealWebSocket : public easywsclient::WebSocket
 
     readyStateValues getReadyState() const {
       return readyState;
+    }
+
+    std::int32_t    getInstance() const { 
+        return sockfd; 
     }
 
     void poll(int timeout) { // timeout in milliseconds
@@ -247,6 +261,8 @@ class _RealWebSocket : public easywsclient::WebSocket
     // lambda:
     //template<class Callable>
     //void dispatch(Callable callable)
+
+#if __cplusplus > 199711L || defined(WIN32)  //  supports std++ 11
     virtual void _dispatch(Callback_Imp & callable) {
         struct CallbackAdapter : public BytesCallback_Imp
             // Adapt void(const std::string<uint8_t>&) to void(const std::string&)
@@ -263,6 +279,87 @@ class _RealWebSocket : public easywsclient::WebSocket
     }
 
     virtual void _dispatchBinary(BytesCallback_Imp & callable) {
+        // TODO: consider acquiring a lock on rxbuf...
+        while (true) {
+            wsheader_type ws;
+            if (rxbuf.size() < 2) { return; /* Need at least 2 */ }
+            const uint8_t * data = (uint8_t *)&rxbuf[0]; // peek, but don't consume
+            ws.fin = (data[0] & 0x80) == 0x80;
+            ws.opcode = (wsheader_type::opcode_type) (data[0] & 0x0f);
+            ws.mask = (data[1] & 0x80) == 0x80;
+            ws.N0 = (data[1] & 0x7f);
+            ws.header_size = 2 + (ws.N0 == 126 ? 2 : 0) + (ws.N0 == 127 ? 8 : 0) + (ws.mask ? 4 : 0);
+            if (rxbuf.size() < ws.header_size) { return; /* Need: ws.header_size - rxbuf.size() */ }
+            int i = 0;
+            if (ws.N0 < 126) {
+                ws.N = ws.N0;
+                i = 2;
+            }
+            else if (ws.N0 == 126) {
+                ws.N = 0;
+                ws.N |= ((uint64_t)data[2]) << 8;
+                ws.N |= ((uint64_t)data[3]) << 0;
+                i = 4;
+            }
+            else if (ws.N0 == 127) {
+                ws.N = 0;
+                ws.N |= ((uint64_t)data[2]) << 56;
+                ws.N |= ((uint64_t)data[3]) << 48;
+                ws.N |= ((uint64_t)data[4]) << 40;
+                ws.N |= ((uint64_t)data[5]) << 32;
+                ws.N |= ((uint64_t)data[6]) << 24;
+                ws.N |= ((uint64_t)data[7]) << 16;
+                ws.N |= ((uint64_t)data[8]) << 8;
+                ws.N |= ((uint64_t)data[9]) << 0;
+                i = 10;
+            }
+            if (ws.mask) {
+                ws.masking_key[0] = ((uint8_t)data[i + 0]) << 0;
+                ws.masking_key[1] = ((uint8_t)data[i + 1]) << 0;
+                ws.masking_key[2] = ((uint8_t)data[i + 2]) << 0;
+                ws.masking_key[3] = ((uint8_t)data[i + 3]) << 0;
+            }
+            else {
+                ws.masking_key[0] = 0;
+                ws.masking_key[1] = 0;
+                ws.masking_key[2] = 0;
+                ws.masking_key[3] = 0;
+            }
+            if (rxbuf.size() < ws.header_size + ws.N) { return; /* Need: ws.header_size+ws.N - rxbuf.size() */ }
+
+            // We got a whole message, now do something with it:
+            if (false) {}
+            else if (
+                ws.opcode == wsheader_type::TEXT_FRAME
+                || ws.opcode == wsheader_type::BINARY_FRAME
+                || ws.opcode == wsheader_type::CONTINUATION
+                ) {
+                if (ws.mask) { for (size_t i = 0; i != ws.N; ++i) { rxbuf[i + ws.header_size] ^= ws.masking_key[i & 0x3]; } }
+                receivedData.insert(receivedData.end(), rxbuf.begin() + ws.header_size, rxbuf.begin() + ws.header_size + (size_t)ws.N);// just feed
+                if (ws.fin) {
+                    callable((const std::vector<uint8_t>) receivedData);
+                    receivedData.erase(receivedData.begin(), receivedData.end());
+                    std::vector<uint8_t>().swap(receivedData);// free memory
+                }
+            }
+            else if (ws.opcode == wsheader_type::PING) {
+                if (ws.mask) { for (size_t i = 0; i != ws.N; ++i) { rxbuf[i + ws.header_size] ^= ws.masking_key[i & 0x3]; } }
+                std::string data(rxbuf.begin() + ws.header_size, rxbuf.begin() + ws.header_size + (size_t)ws.N);
+                sendData(wsheader_type::PONG, data.size(), data.begin(), data.end());
+            }
+            else if (ws.opcode == wsheader_type::PONG) {}
+            else if (ws.opcode == wsheader_type::CLOSE) { close(); }
+            else { fprintf(stderr, "ERROR: Got unexpected WebSocket message.\n"); close(); }
+
+            rxbuf.erase(rxbuf.begin(), rxbuf.begin() + ws.header_size + (size_t)ws.N);
+        }
+    }
+#else
+    virtual void _dispatch(easywsclient::DispatchFunction callable) {
+        _dispatchBinary(callable);
+    }
+
+    virtual void _dispatchBinary(easywsclient::DispatchFunction callable) {
         // TODO: consider acquiring a lock on rxbuf...
         while (true) {
             wsheader_type ws;
@@ -320,8 +417,16 @@ class _RealWebSocket : public easywsclient::WebSocket
             ) {
                 if (ws.mask) { for (size_t i = 0; i != ws.N; ++i) { rxbuf[i+ws.header_size] ^= ws.masking_key[i&0x3]; } }
                 receivedData.insert(receivedData.end(), rxbuf.begin()+ws.header_size, rxbuf.begin()+ws.header_size+(size_t)ws.N);// just feed
-                if (ws.fin) {
-                    callable((const std::vector<uint8_t>) receivedData);
+                if (ws.fin) 
+                {
+                    if (callable.HasMethod(1))
+                        callable((const std::vector<uint8_t>) receivedData);
+                    else
+                    {
+                        std::string stringMessage(receivedData.begin(), receivedData.end());
+                        callable((const std::string) stringMessage);
+                    }
+
                     receivedData.erase(receivedData.begin(), receivedData.end());
                     std::vector<uint8_t> ().swap(receivedData);// free memory
                 }
@@ -338,6 +443,7 @@ class _RealWebSocket : public easywsclient::WebSocket
             rxbuf.erase(rxbuf.begin(), rxbuf.begin() + ws.header_size+(size_t)ws.N);
         }
     }
+#endif
 
     void sendPing() {
         std::string empty;
@@ -410,7 +516,7 @@ class _RealWebSocket : public easywsclient::WebSocket
         txbuf.insert(txbuf.end(), header.begin(), header.end());
         txbuf.insert(txbuf.end(), message_begin, message_end);
         if (useMask) {
-            for (size_t i = 0; i != message_size; ++i) { *(txbuf.end() - message_size + i) ^= masking_key[i&0x3]; }
+            for (size_t i = 0; i != (size_t)message_size; ++i) { *(txbuf.end() - (size_t)message_size + i) ^= masking_key[i&0x3]; }
         }
     }
 

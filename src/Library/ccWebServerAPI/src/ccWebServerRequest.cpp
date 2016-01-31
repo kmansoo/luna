@@ -31,48 +31,48 @@ ccWebServerRequest::HttpMethod  ccWebServerRequest::GetMethod() const
     return HttpMethod_Unknown;
 }
 
-const string& ccWebServerRequest::GetMethod_c() const
+const std::string& ccWebServerRequest::GetMethod_c() const
 {
     return _strMethod;
 }
 
-const string& ccWebServerRequest::GetURI() const
+const std::string& ccWebServerRequest::GetURI() const
 {
     return _strUri;
 }
 
-const string& ccWebServerRequest::GetQueryString() const
+const std::string& ccWebServerRequest::GetQueryString() const
 {
     return _strNullData;
 }
 
-string ccWebServerRequest::GetPath() const
+std::string ccWebServerRequest::GetPath() const
 {
     return _strNullData;
 }
 
-string ccWebServerRequest::GetResource() const
+std::string ccWebServerRequest::GetResource() const
 {
     return _strNullData;
 }
 
-bool ccWebServerRequest::HasVar(const string& name) const
+bool ccWebServerRequest::HasVar(const std::string& name) const
 {
     return false;
 }
 
 
-string ccWebServerRequest::GetVar(const string& name) const
+std::string ccWebServerRequest::GetVar(const std::string& name) const
 {
     return _strNullData;
 }
 
-string ccWebServerRequest::GetHeader(const string& name) const
+std::string ccWebServerRequest::GetHeader(const std::string& name) const
 {
     return _strNullData;
 }
 
-string ccWebServerRequest::GetContentType() const
+std::string ccWebServerRequest::GetContentType() const
 {
     return _strNullData;
 }

@@ -6,26 +6,17 @@
 ccWin32WebApiHelper::ccWin32WebApiHelper(void) :
     _strDestIP(_T("192.168.0.1")),
     _uDestPort(80),
-    _bIsStopThread(false),
-    _pPollThread(NULL)
+    _bIsStopThread(false)
 {
     _bIsStopThread = false;
 
-    _pPollThread = new std::thread(std::bind(&ccWin32WebApiHelper::DoRunThread, this));
+    _oPollThread = std::thread(std::bind(&ccWin32WebApiHelper::DoRunThread, this));
 }
 
 ccWin32WebApiHelper::~ccWin32WebApiHelper(void)
 {
-    if (_pPollThread)
-    {
-        _bIsStopThread = true;
-
-        _pPollThread->join();
-
-        delete _pPollThread;
-
-        _pPollThread = NULL;
-    }
+    _bIsStopThread = true;
+    _oPollThread.join();
 }
 
 std::shared_ptr<ccWin32WebApiHelper> ccWin32WebApiHelper::getInstance()
@@ -316,7 +307,7 @@ bool ccWin32WebApiHelper::getValueString(Json::Value& oValue, const std::string&
     {
         if (oValue[strName].isString())
         {
-            strValue = oValue[strName].asCString();
+            strValue = oValue[strName].asString();
 
             return true;
         }

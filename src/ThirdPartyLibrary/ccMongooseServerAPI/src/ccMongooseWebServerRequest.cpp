@@ -25,7 +25,7 @@ ccMongooseWebServerRequest::~ccMongooseWebServerRequest()
     // TODO Auto-generated destructor stub
 }
 
-const string& ccMongooseWebServerRequest::GetQueryString() const
+const std::string& ccMongooseWebServerRequest::GetQueryString() const
 {
     if (_pMgHttpMessage == NULL)
         return _strNullData;
@@ -35,7 +35,7 @@ const string& ccMongooseWebServerRequest::GetQueryString() const
     return strQuery;
 }
 
-string ccMongooseWebServerRequest::GetPath() const
+std::string ccMongooseWebServerRequest::GetPath() const
 {
     if (_pMgHttpMessage == NULL)
         return _strNullData;
@@ -50,28 +50,28 @@ string ccMongooseWebServerRequest::GetPath() const
     return strPath;
 }
 
-string ccMongooseWebServerRequest::GetResource() const
+std::string ccMongooseWebServerRequest::GetResource() const
 {
     if (_pMgConnection == NULL)
         return _strNullData;
 
     DoSplitePathPos();
 
-    return string(_pPathPos, _pathEnd);
+    return std::string(_pPathPos, _pathEnd);
 }
 
-bool ccMongooseWebServerRequest::HasVar(const string& name) const
+bool ccMongooseWebServerRequest::HasVar(const std::string& name) const
 {
     return DoHasVarInConnection(name);
 }
 
 
-string ccMongooseWebServerRequest::GetVar(const string& name) const
+std::string ccMongooseWebServerRequest::GetVar(const std::string& name) const
 {
     return DoGetVarInConnection(name);
 }
 
-string ccMongooseWebServerRequest::GetHeader(const string& name) const
+std::string ccMongooseWebServerRequest::GetHeader(const std::string& name) const
 {
     if (_pMgHttpMessage == NULL)
         return _strNullData;
@@ -86,7 +86,7 @@ string ccMongooseWebServerRequest::GetHeader(const string& name) const
     return strHeader;
 }
 
-string ccMongooseWebServerRequest::GetContentType() const
+std::string ccMongooseWebServerRequest::GetContentType() const
 {
     return GetHeader("Content-Type");
 }
@@ -155,7 +155,7 @@ void ccMongooseWebServerRequest::DoSplitePathPos() const
     //_pPathPos   = slash == 0 ? _pathEnd : slash + 1;
 }
 
-bool ccMongooseWebServerRequest::DoHasVarInConnection(const string& name) const
+bool ccMongooseWebServerRequest::DoHasVarInConnection(const std::string& name) const
 {
     if (_pMgHttpMessage == NULL)
         return false;
@@ -165,9 +165,9 @@ bool ccMongooseWebServerRequest::DoHasVarInConnection(const string& name) const
     return mg_get_http_var(&_pMgHttpMessage->body, name.c_str(), &outbuf[0], CV_MAXGETSIZE) > 0;
 }
 
-string ccMongooseWebServerRequest::DoGetVarInConnection(const string& name) const
+std::string ccMongooseWebServerRequest::DoGetVarInConnection(const std::string& name) const
 {
-    string strGetData;
+    std::string strGetData;
 
     strGetData.resize(CV_MAXGETSIZE);
 

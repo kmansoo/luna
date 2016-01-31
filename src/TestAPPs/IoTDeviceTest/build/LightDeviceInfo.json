@@ -1,0 +1,8 @@
+{
+    "IoTDeviceSpecification" : {
+        "Type" : "Light",
+        "Name" : "Smart Light",
+        "Description" : "On/Off",
+        "Manufacture" : "Mansoo"
+    }
+}

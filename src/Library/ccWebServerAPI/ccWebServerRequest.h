@@ -10,8 +10,6 @@
 
 #include <string>
 
-using namespace std;
-
 class ccWebServerRequest
 {
 public:
@@ -36,32 +34,32 @@ public:
 
 
 public:
-    virtual HttpMethod      GetMethod() const;
-    virtual const string&   GetMethod_c() const;
+    virtual HttpMethod          GetMethod() const;
+    virtual const std::string&  GetMethod_c() const;
 
-    virtual const string&   GetURI() const;
-    virtual const string&   GetQueryString() const;
-    virtual string          GetPath() const;
-    virtual string          GetResource() const;
+    virtual const std::string&  GetURI() const;
+    virtual const std::string&  GetQueryString() const;
+    virtual std::string         GetPath() const;
+    virtual std::string         GetResource() const;
 
-    virtual bool        HasVar(const string& name) const;
-    virtual string      GetVar(const string& name) const;
+    virtual bool                HasVar(const std::string& name) const;
+    virtual std::string         GetVar(const std::string& name) const;
 
-    virtual string      GetHeader(const string& name) const;
+    virtual std::string         GetHeader(const std::string& name) const;
 
-    virtual string          GetContentType() const;
-    virtual unsigned long   GetContentLength() const;
+    virtual std::string         GetContentType() const;
+    virtual unsigned long       GetContentLength() const;
 
-    virtual long            GetContentBody(std::string& strBody);
-    virtual long            GetContentBody(char* pBuf, std::size_t size);
+    virtual long                GetContentBody(std::string& strBody);
+    virtual long                GetContentBody(char* pBuf, std::size_t size);
 
     // Retrieve info for the server interface that was connected with the remote device.
-    virtual long            GetServerIp() const;
-    virtual unsigned short  GetServerPort() const;
-    virtual long            GetRemoteIp() const;
+    virtual long                GetServerIp() const;
+    virtual unsigned short      GetServerPort() const;
+    virtual long                GetRemoteIp() const;
 
 protected:
-    string  _strNullData;
+    std::string _strNullData;
 
     std::string _strMethod;
     std::string _strUri;

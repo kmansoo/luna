@@ -13,8 +13,6 @@
 #include "ccWebServerAPI/ccRESTfulApi.h"
 #include "ccWebServerAPI/ccWebsocketManager.h"
 
-using namespace std;
-
 class ccRESTfulChattingUserInfo
 {
 public:
@@ -96,7 +94,7 @@ protected:
     bool    session_message(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse);
 
 protected:
-    bool    ws_chat(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const char* strData, std::size_t size);
+    bool    ws_chat(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const std::string& strData);
 
 private:
     ccRESTfulChattingSessionManager     _oSessionManager;    

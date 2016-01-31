@@ -167,7 +167,7 @@ long ccString::decodeStringToHex(const char* strVal, int nLength, int* pConverte
 }
 
 //  Supports up to 512 bytes
-void ccString::format(string& destStr, const char* format, ...)
+void ccString::format(std::string& destStr, const char* format, ...)
 {
     char strFormatBuffer[CV_MAX_FORMAT_BUFFER_SIZE];
 
@@ -202,7 +202,7 @@ void ccString::format(string& destStr, const char* format, ...)
  * @param src
  * @return
  */
-bool ccString::encodeBase64(string& dest, string& src)
+bool ccString::encodeBase64(std::string& dest, std::string& src)
 {
     if (src.length() == 0)
         return false;
@@ -246,7 +246,7 @@ bool ccString::encodeBase64(string& dest, string& src)
  * @param src
  * @return
  */
-bool ccString::decodeBase64(string& dest, string& src)
+bool ccString::decodeBase64(std::string& dest, std::string& src)
 {
     if (src.length() == 0)
         return false;

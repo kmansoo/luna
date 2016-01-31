@@ -28,7 +28,7 @@ ccWebServerResponse::~ccWebServerResponse()
     // TODO Auto-generated destructor stub
 }
 
-void ccWebServerResponse::Status(unsigned int code, const string& strStatusText)
+void ccWebServerResponse::Status(unsigned int code, const std::string& strStatusText)
 {
     if (_bStatusSet)
         return;
@@ -46,7 +46,7 @@ void ccWebServerResponse::Status(unsigned int code, const string& strStatusText)
     _bStatusSet = true;
 }
 
-void ccWebServerResponse::Status(unsigned int code, const string& strStatusText, const string& strExtInfo)
+void ccWebServerResponse::Status(unsigned int code, const std::string& strStatusText, const std::string& strExtInfo)
 {
     if (_bStatusSet)
         return;
@@ -67,18 +67,18 @@ void ccWebServerResponse::Status(unsigned int code, const string& strStatusText,
     _bStatusSet = true;
 }
 
-void ccWebServerResponse::ContentType(const string& type, bool bInsertSeparator)
+void ccWebServerResponse::ContentType(const std::string& type, bool bInsertSeparator)
 {
     ContentType(type, 0, bInsertSeparator);
 }
 
-void ccWebServerResponse::ContentType(const string& type, size_t size, bool bInsertSeparator)
+void ccWebServerResponse::ContentType(const std::string& type, size_t size, bool bInsertSeparator)
 {
     if (_bContentTypeSet)
         return;
 
-    string strHeaderInfo;
-    string strContentType = type;
+    std::string strHeaderInfo;
+    std::string strContentType = type;
 
     if (strContentType.length() == 0)
         strContentType = "text/plain";
@@ -113,17 +113,17 @@ void ccWebServerResponse::ContentType(const string& type, size_t size, bool bIns
     _bContentTypeSet = true;
 }
 
-void ccWebServerResponse::HeaderInfo(const string& type, size_t size, string& strExtInfo, bool bInsertSeparator)
+void ccWebServerResponse::HeaderInfo(const std::string& type, size_t size, std::string& strExtInfo, bool bInsertSeparator)
 {
     if (_bContentTypeSet)
         return;
 
-    string strContentType = type;
+    std::string strContentType = type;
 
     if (strContentType.length() == 0)
         strContentType = "text/plain";
 
-    string strHeaderInfo;
+    std::string strHeaderInfo;
 
     if (!_bStatusSet)
     {
@@ -207,7 +207,7 @@ size_t ccWebServerResponse::VPrintf(const char *fmt, va_list ap)
     return DoWriteContentToConnector((const char*)buf, nCalculatedSize);
 }
 
-size_t ccWebServerResponse::Write(const string& buf)
+size_t ccWebServerResponse::Write(const std::string& buf)
 {
     DoCheckHeadersSent();
 
@@ -219,7 +219,7 @@ size_t ccWebServerResponse::Write(const char* strBuf, size_t size)
     return DoWriteContentToConnector(strBuf, size);
 }
 
-size_t ccWebServerResponse::Write(istream & is)
+size_t ccWebServerResponse::Write(std::istream & is)
 {
     size_t  uSentSize = 0;
     char    buf[kMaxBufferSize];
@@ -234,9 +234,9 @@ size_t ccWebServerResponse::Write(istream & is)
     return uSentSize;
 }
 
-bool ccWebServerResponse::NotFoundFile(const string& strURI)
+bool ccWebServerResponse::NotFoundFile(const std::string& strURI)
 {
-    string strContent;
+    std::string strContent;
 
     ccString::format(
         strContent,

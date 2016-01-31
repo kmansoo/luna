@@ -27,7 +27,7 @@ bool ccRESTfulApi::HasAPI(const std::string& strUri)
     return true;
 }
 
-bool ccRESTfulApi::PerformAPI(shared_ptr<ccWebServerRequest> pRequest, shared_ptr<ccWebServerResponse> pResponse)
+bool ccRESTfulApi::PerformAPI(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)
 {
     std::string strUri = pRequest->GetURI();
 
@@ -39,7 +39,7 @@ bool ccRESTfulApi::PerformAPI(shared_ptr<ccWebServerRequest> pRequest, shared_pt
     return it->second(pRequest, pResponse);
 }
 
-bool ccRESTfulApi::AddAPI(const std::string& strUri, function<bool(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)> f)
+bool ccRESTfulApi::AddAPI(const std::string& strUri, std::function<bool(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)> f)
 {
     _aAPIs[strUri] = f;
 

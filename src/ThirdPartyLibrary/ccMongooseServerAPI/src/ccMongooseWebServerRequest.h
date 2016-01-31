@@ -21,16 +21,16 @@ public:
     virtual ~ccMongooseWebServerRequest();
 
 public:
-    virtual const string&   GetQueryString() const;
-    virtual string          GetPath() const;
-    virtual string          GetResource() const;
+    virtual const std::string&   GetQueryString() const;
+    virtual std::string          GetPath() const;
+    virtual std::string          GetResource() const;
 
-    virtual bool        HasVar(const string& name) const;
-    virtual string      GetVar(const string& name) const;
+    virtual bool            HasVar(const std::string& name) const;
+    virtual std::string     GetVar(const std::string& name) const;
 
-    virtual string      GetHeader(const string& name) const;
+    virtual std::string     GetHeader(const std::string& name) const;
 
-    virtual string          GetContentType() const;
+    virtual std::string     GetContentType() const;
     virtual unsigned long   GetContentLength() const;
 
     virtual long            GetContentBody(std::string& strBody);
@@ -44,8 +44,8 @@ public:
 private:
     void        DoSplitePathPos() const;
 
-    bool        DoHasVarInConnection(const string& name) const;
-    string      DoGetVarInConnection(const string& name) const;
+    bool        DoHasVarInConnection(const std::string& name) const;
+    std::string DoGetVarInConnection(const std::string& name) const;
 
 private:
     struct mg_connection*           _pMgConnection;
