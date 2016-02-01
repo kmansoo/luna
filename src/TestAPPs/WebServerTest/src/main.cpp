@@ -18,12 +18,12 @@ class ccChattingWSManager : public ccWebsocketManager
 public:
     ccChattingWSManager()
     {
-        this->AddFunction("/ws", std::bind(&ccChattingWSManager::ws_chat, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-        this->AddFunction("/ws_chat", std::bind(&ccChattingWSManager::ws_chat, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+        this->AddFunction("/ws", std::bind(&ccChattingWSManager::ws_chat, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+        this->AddFunction("/ws_chat", std::bind(&ccChattingWSManager::ws_chat, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
     }
 
 public:
-    bool ws_chat(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const char* strData, std::size_t size)
+    bool ws_chat(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const std::string strData)
     {
         switch ((int)eEvent)
         {
@@ -40,7 +40,7 @@ public:
         case ccWebsocket::ccWebSocketEvent_ReceivedData:
             {
                 std::string strBroadcastMsg;
-                std::string strMessage(strData, size);
+                std::string strMessage(strData);
 
                 ccString::format(strBroadcastMsg, "%08x: %s", pWS->GetInstance(), strMessage.c_str());
 
@@ -81,20 +81,20 @@ private:
     ccEasyWebsocketClient   _eWSC;
 
 protected:
-    void    OnRecvMessage(ccEasyWebsocketClient::WebSocketEvent eEvent, const std::string& message)
+    void    OnRecvMessage(ccWebsocket::ccWebSocketEvent eEvent, const std::string& message)
     {
         switch ((int)eEvent)
         {
-        case ccEasyWebsocketClient::kWebsocketEvent_Connected:
+        case ccWebsocket::ccWebSocketEvent_Connected:
             std::cout << "WebSocketTest: Connected" << std::endl;
             _eWSC.Send(std::string("Hello!"));
             break;
 
-        case ccEasyWebsocketClient::kWebSocketEvent_Disconnected:
+        case ccWebsocket::ccWebSocketEvent_Disconnected:
             std::cout << "WebSocketTest: Disconnected" << std::endl;
             break;
 
-        case ccEasyWebsocketClient::kWebSocketEvent_ReceivedData:
+        case ccWebsocket::ccWebSocketEvent_ReceivedData:
             std::cout << "WebSocketTest: ReceivedData, " << message << std::endl;
             break;
         }

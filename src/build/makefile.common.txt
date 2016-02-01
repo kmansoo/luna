@@ -5,6 +5,7 @@ SOLUCTION_BUILD_DIR     := $(SOLUCTION_DIR)build/
 SOLUCTION_INC_DIR       := -I$(SOLUCTION_DIR)Library -I$(SOLUCTION_DIR)FossLibrary -I$(SOLUCTION_DIR)ProductLibrary -I$(SOLUCTION_DIR)ThirdPartyLibrary
 SOLUCTION_INC_EX_DIR    := 
 SOLUCTION_LIB_DIR       := $(SOLUCTION_BUILD_DIR)lib
+SOLUCTION_BIN_DIR       := $(SOLUCTION_BUILD_DIR)bin
 
 ifndef TARGET
   error "TARGET is not defined!"
@@ -107,6 +108,10 @@ ifndef OUTDIR
 OUTDIR := $(SOLUCTION_LIB_DIR)/$(SOLUCTION_LIB_OUTPUT_DIR)
 endif
 
+ifndef OUTDIR_BIN
+OUTDIR_BIN := $(SOLUCTION_BIN_DIR)/$(SOLUCTION_LIB_OUTPUT_DIR)
+endif
+
 #----------------------------------------------------------
 # Prerequisites
 #----------------------------------------------------------
@@ -125,8 +130,6 @@ include $(OBJS:.o=.d)
 #----------------------------------------------------------
 all:	$(OUTDIR)/$(TARGET_FILE)
 ifneq ($(TARGET_TYPE),exe)
-#   by kmansoo@gmail.com, Do not copy the target file.
-#	$(CP) -Rf $(LIBDIR)/*  $(SOLUCTION_LIB_DIR)/.
 endif
 
 clean:
@@ -142,6 +145,9 @@ $(OUTDIR)/$(TARGET_FILE): $(OBJDIR)/$(TARGET_FILE)
 	@mkdir -p $(OUTDIR)
 ifneq ($(TARGET_TYPE),exe)
 	$(CP) $< $@
+else
+	@mkdir -p $(OUTDIR_BIN)
+	$(CP) $< $(OUTDIR_BIN)	
 endif
 
 #----------------------------------------------------------

@@ -3,8 +3,8 @@ SHELL = /bin/sh
 TARGET      = WebServerTest
 TARGET_TYPE = exe
 
-PLATFORM    = linux
-CPU         = i386
+PLATFORM    = raspberrypi2
+CPU         = arm
 PRODUCT     = all
 BUILD       = debug
 

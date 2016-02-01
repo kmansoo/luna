@@ -74,7 +74,11 @@ bool ccRESTfulChattingSessionInfo::NewMessage(const std::string& strUserID, cons
 
     std::stringstream ss;
     
+#ifndef	LUNA_PLATFORM_RASPBERRY_PI2
     ss << std::put_time(&tm, "%d-%m-%Y %H-%M-%S");
+#else
+    //	std::put_time can use in over gcc 5.2 version
+#endif
 
     pNewMessage->_strDateTime   = ss.str();
     pNewMessage->_strFromID     = strUserID;

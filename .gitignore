@@ -28,3 +28,4 @@ src/build/Luna_DevceManagerTest.VC.opendb
 .cproject
 output/
 src/build/lib/
+src/build/bin/

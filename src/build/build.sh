@@ -7,14 +7,14 @@ LOG=0
 FINDS=""
 LIB_PATH=""
 POWER=""
-LIB_DIRS="Library FossLibrary ProductLibrary ThirdPartyLibrary"
+LIB_DIRS="Library FossLibrary ProductLibrary ThirdPartyLibrary TestAPPs"
 SCOPE=""
 OPTION="all"
 TARGET_OS=""
 
 showlog()
 {
-  echo "ex) build.sh [linux/osx][all/clean]"
+  echo "ex) build.sh [linux/osx/rpi2][all/clean]"
   echo "ex) oneshot.sh linux all"
   echo "ex) oneshot.sh osx clean"
 }
@@ -30,6 +30,11 @@ case $1 in
   "osx") 
         TARGET_OS="osx"
         CPU="i386"
+        PRODUCT="luna"
+        ;;
+  "rpi2")
+        TARGET_OS="raspberrypi2"
+        CPU="arm"
         PRODUCT="luna"
         ;;
   *)

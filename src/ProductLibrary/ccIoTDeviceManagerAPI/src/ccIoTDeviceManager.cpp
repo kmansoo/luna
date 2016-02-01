@@ -36,7 +36,12 @@ ccIoTDeviceManager::ccIoTDeviceManager()
     _oWSM->AddFunction("/ws_iot_deivce", std::bind(&ccIoTDeviceManager::ws_IoTDevice, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
     ccWebServerManager::getInstance().AttachFactory(std::make_shared<ccMongooseWebServerObjectFactory>());
+
+#ifdef	WIN32
     ccWebServerManager::getInstance().CreateWebServer("WebServer #1", "8000", "C:\\web_root\\Chatting\\");
+#else
+    ccWebServerManager::getInstance().CreateWebServer("WebServer #1", "8000", ".");
+#endif
 
     ccWebServerManager::getInstance().AddRESTfulApi(_oWebAPI);
     ccWebServerManager::getInstance().AddWebsocketManager(_oWSM);
