@@ -285,7 +285,7 @@ bool ccIoTDeviceManager::ws_IoTDevice(ccWebsocket::ccWebSocketEvent eEvent, std:
         break;
 
     case ccWebsocket::ccWebSocketEvent_ReceivedData:
-        std::cout << "ccIoTDeviceManager: We got the ommmand from IoT Device. { " << std::endl << strData << std::endl << "}" << std::endl;
+        //  std::cout << "ccIoTDeviceManager: We got the ommmand from IoT Device. { " << std::endl << strData << std::endl << "}" << std::endl;
         DoParseCommand(pWS, strData);
         break;
 
@@ -304,16 +304,27 @@ bool ccIoTDeviceManager::ws_IoTDevice(ccWebsocket::ccWebSocketEvent eEvent, std:
     return true;
 }
 
+bool ccIoTDeviceManager::DoFindeDeviceAgent(std::shared_ptr<ccWebsocket> pWS, std::shared_ptr<ccIoTDeviceAgent>& pDA)
+{
+    auto it = _aAgents.find(pWS->GetInstance());
+
+    if (it == std::end(_aAgents))
+        return false;
+
+    pDA = it->second;
+
+    return true;
+}
+
 bool  ccIoTDeviceManager::DoParseCommand(std::shared_ptr<ccWebsocket> pWS, const std::string strData)
 {
     ccIoTDeviceProtocol oProtocol;
     if (oProtocol.Parse(strData))
     {
-        if (oProtocol._IsRequest)
-            std::cout << "ccIoTDevice Request Command: " << oProtocol._strCommand << std::endl;
-        else
-            std::cout << "ccIoTDevice Response Command: " << oProtocol._strCommand << std::endl;
-
+        //if (oProtocol._IsRequest)
+        //    std::cout << "ccIoTDevice Request Command: " << oProtocol._strCommand << std::endl;
+        //else
+        //    std::cout << "ccIoTDevice Response Command: " << oProtocol._strCommand << std::endl;
         auto it = _aCommands.find(oProtocol._strCommand);
 
         if (it != std::end(_aCommands))
@@ -322,6 +333,7 @@ bool  ccIoTDeviceManager::DoParseCommand(std::shared_ptr<ccWebsocket> pWS, const
 
     return true;
 }
+
 
 bool ccIoTDeviceManager::DoRegisterCommand(std::shared_ptr<ccWebsocket> pWS, ccIoTDeviceProtocol& oProtocol)
 {

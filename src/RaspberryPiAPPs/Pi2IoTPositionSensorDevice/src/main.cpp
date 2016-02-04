@@ -4,13 +4,13 @@
 #include "ccCoreAPI/ccCoreAPI.h"
 #include "ccNetworkAPI/ccNetworkManager.h"
 
-#include "Pi2IoTLightDevice.h"
+#include "Pi2IoTPositionSensor.h"
 
 int main(int argc, char* argv[])
 {
     ccNetworkManager::getInstance().Init();
 
-    Pi2IoTLightDevice   oDevice;
+    Pi2IoTPositionSensor   oDevice;
     oDevice.Start();
 
     std::string         strCommand;

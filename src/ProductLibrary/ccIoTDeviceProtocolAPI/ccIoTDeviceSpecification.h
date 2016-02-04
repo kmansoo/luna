@@ -30,6 +30,9 @@ public:
         kDeviceType_Switch,
         kDeviceType_Light,
         kDeviceType_Lock,
+        kDeviceType_Sensor,
+
+        kDeviceType_Max,
     };
 
 public:

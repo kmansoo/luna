@@ -1,10 +1,10 @@
 SHELL = /bin/sh
 
-TARGET      = Pi2IoTLightDevice
+TARGET      = Pi2IoTServiceManagerBasedPositionSensor
 TARGET_TYPE = exe
 
-PLATFORM    = raspberrypi2
-CPU         = arm
+PLATFORM    = linux
+CPU         = i386
 PRODUCT     = all
 BUILD       = debug
 
@@ -12,9 +12,8 @@ SRCDIRS     = ../src
 
 PRJ_STRIP_DEBUG_INFO = TRUE
 
-PRJ_LIBS = -lwiringPi
 LIBS = \
-        libccIoTDeviceAPI.a \
+        libccIoTDeviceManagerAPI.a \
         libccIoTDeviceProtocolAPI.a \
         libccWebsocketClientAPI.a \
         libccJsonParserAPI.a \
@@ -22,5 +21,6 @@ LIBS = \
         libccWebServerAPI.a \
         libccNetworkAPI.a \
         libccCoreAPI.a
+
 
 include ../../../build/makefile.common.txt

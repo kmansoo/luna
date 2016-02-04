@@ -1,6 +1,6 @@
 SHELL = /bin/sh
 
-TARGET      = Pi2IoTLightDevice
+TARGET      = Pi2IoTPositionSensorDevice
 TARGET_TYPE = exe
 
 PLATFORM    = raspberrypi2

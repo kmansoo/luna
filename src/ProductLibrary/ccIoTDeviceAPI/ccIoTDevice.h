@@ -29,11 +29,11 @@ public:
     virtual ~ccIoTDevice();
 
 public:
-    bool    AttachFactory(std::shared_ptr<ccIoTDeviceTransportFactory> pFactory);
-    bool    Start();
-    bool    Stop();
+    bool            AttachFactory(std::shared_ptr<ccIoTDeviceTransportFactory> pFactory);
+    virtual bool    Start();
+    virtual bool    Stop();
 
-    bool    Send(ccIoTDeviceProtocol& oProtocol);
+    virtual bool    Send(ccIoTDeviceProtocol& oProtocol);
 
 public:
     virtual bool    OnRecvCommand(ccIoTDeviceProtocol& oProtocol);

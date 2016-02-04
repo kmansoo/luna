@@ -16,6 +16,7 @@ std::string s_aDeviceTypeName[]{
     "Switch",
     "Light",
     "Lock",
+    "Sensor"
 };
 
 ccIoTDeviceSpecification::ccIoTDeviceSpecification()
@@ -30,7 +31,7 @@ ccIoTDeviceSpecification::~ccIoTDeviceSpecification()
 
 const std::string& ccIoTDeviceSpecification::GetTypeName()
 {
-    if ((std::uint16_t)_eDeviceType > kDeviceType_Lock)
+    if ((std::uint16_t)_eDeviceType > kDeviceType_Sensor)
         return s_aDeviceTypeName[0];
 
     return s_aDeviceTypeName[_eDeviceType];
@@ -71,14 +72,11 @@ bool ccIoTDeviceSpecification::Parse(const Json::Value& oInfo)
 
     _eDeviceType = kDeviceType_Unknown;
 
-    if (strTemp == "Switch")
-        _eDeviceType = kDeviceType_Switch;
-    else
-        if (strTemp == "Light")
-            _eDeviceType = kDeviceType_Light;
-        else
-            if (strTemp == "Lock")
-                _eDeviceType = kDeviceType_Lock;
+    for (int nIndex = 0; nIndex < kDeviceType_Max; nIndex++)
+    {
+        if (strTemp == s_aDeviceTypeName[nIndex])
+            _eDeviceType = (IoTDeviceType)nIndex;
+    }
 
     _strName = _oSpecificationValue["IoTDeviceSpecification"]["Name"].asCString();
 

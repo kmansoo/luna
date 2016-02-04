@@ -30,9 +30,8 @@ ccIoTDevice::ccIoTDevice(const std::string& strSpecFile) : _bIsConnected(false),
 
 ccIoTDevice::~ccIoTDevice()
 {
-	// TODO Auto-generated destructor stub
+    Stop();
 }
-
 
 bool ccIoTDevice::AttachFactory(std::shared_ptr<ccIoTDeviceTransportFactory> pFactory)
 {

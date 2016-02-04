@@ -23,6 +23,9 @@
     <ClCompile Include="..\src\ccWin32WebApiHelper.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ccWin32SerialPortHelper.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -32,6 +35,9 @@
       <Filter>API</Filter>
     </ClInclude>
     <ClInclude Include="..\ccWin32RgWebApiTransactionNotifier.h">
+      <Filter>API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccWin32SerialPortHelper.h">
       <Filter>API</Filter>
     </ClInclude>
   </ItemGroup>

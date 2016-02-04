@@ -33,9 +33,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccIoTDeviceProtocolAPI", ".
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Pi2IoTLightDevice", "..\RaspberryPiAPPs\Pi2IoTLightDevice\build\Pi2IoTLightDevice.vcxproj", "{0F24B3C9-5582-4E40-88AF-8A10DA62EA42}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IoTDeviceManagerTest", "..\TestAPPs\IoTDeviceManagerTest\build\IoTDeviceManager.vcxproj", "{48C6E127-530C-4C02-9029-854A791AF816}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IoTDeviceTest", "..\TestAPPs\IoTDeviceTest\build\IoTDeviceTest.vcxproj", "{9734DA8A-5988-450F-8F51-6F1F6C7EDE2A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IoTDeviceManagerTest", "..\TestAPPs\IoTDeviceManagerTest\build\IoTDeviceManagerTest.vcxproj", "{48C6E127-530C-4C02-9029-854A791AF816}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Pi2IoTServiceManagerBasedPositionSensor", "..\RaspberryPiAPPs\Pi2IoTServiceManagerBasedPositionSensor\build\Pi2IoTServiceManagerBasedPositionSensor.vcxproj", "{CB4609B1-61A3-4186-8FAC-F3ED0E897E92}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Pi2IoTPositionSensorDevice", "..\RaspberryPiAPPs\Pi2IoTPositionSensorDevice\build\Pi2IoTPositionSensorDevice.vcxproj", "{9C2B5542-5558-4329-B7C6-0A4816091D23}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,14 +145,6 @@ Global
 		{0F24B3C9-5582-4E40-88AF-8A10DA62EA42}.Release|x64.Build.0 = Release|x64
 		{0F24B3C9-5582-4E40-88AF-8A10DA62EA42}.Release|x86.ActiveCfg = Release|Win32
 		{0F24B3C9-5582-4E40-88AF-8A10DA62EA42}.Release|x86.Build.0 = Release|Win32
-		{48C6E127-530C-4C02-9029-854A791AF816}.Debug|x64.ActiveCfg = Debug|x64
-		{48C6E127-530C-4C02-9029-854A791AF816}.Debug|x64.Build.0 = Debug|x64
-		{48C6E127-530C-4C02-9029-854A791AF816}.Debug|x86.ActiveCfg = Debug|Win32
-		{48C6E127-530C-4C02-9029-854A791AF816}.Debug|x86.Build.0 = Debug|Win32
-		{48C6E127-530C-4C02-9029-854A791AF816}.Release|x64.ActiveCfg = Release|x64
-		{48C6E127-530C-4C02-9029-854A791AF816}.Release|x64.Build.0 = Release|x64
-		{48C6E127-530C-4C02-9029-854A791AF816}.Release|x86.ActiveCfg = Release|Win32
-		{48C6E127-530C-4C02-9029-854A791AF816}.Release|x86.Build.0 = Release|Win32
 		{9734DA8A-5988-450F-8F51-6F1F6C7EDE2A}.Debug|x64.ActiveCfg = Debug|x64
 		{9734DA8A-5988-450F-8F51-6F1F6C7EDE2A}.Debug|x64.Build.0 = Debug|x64
 		{9734DA8A-5988-450F-8F51-6F1F6C7EDE2A}.Debug|x86.ActiveCfg = Debug|Win32
@@ -157,6 +153,30 @@ Global
 		{9734DA8A-5988-450F-8F51-6F1F6C7EDE2A}.Release|x64.Build.0 = Release|x64
 		{9734DA8A-5988-450F-8F51-6F1F6C7EDE2A}.Release|x86.ActiveCfg = Release|Win32
 		{9734DA8A-5988-450F-8F51-6F1F6C7EDE2A}.Release|x86.Build.0 = Release|Win32
+		{48C6E127-530C-4C02-9029-854A791AF816}.Debug|x64.ActiveCfg = Debug|x64
+		{48C6E127-530C-4C02-9029-854A791AF816}.Debug|x64.Build.0 = Debug|x64
+		{48C6E127-530C-4C02-9029-854A791AF816}.Debug|x86.ActiveCfg = Debug|Win32
+		{48C6E127-530C-4C02-9029-854A791AF816}.Debug|x86.Build.0 = Debug|Win32
+		{48C6E127-530C-4C02-9029-854A791AF816}.Release|x64.ActiveCfg = Release|x64
+		{48C6E127-530C-4C02-9029-854A791AF816}.Release|x64.Build.0 = Release|x64
+		{48C6E127-530C-4C02-9029-854A791AF816}.Release|x86.ActiveCfg = Release|Win32
+		{48C6E127-530C-4C02-9029-854A791AF816}.Release|x86.Build.0 = Release|Win32
+		{CB4609B1-61A3-4186-8FAC-F3ED0E897E92}.Debug|x64.ActiveCfg = Debug|x64
+		{CB4609B1-61A3-4186-8FAC-F3ED0E897E92}.Debug|x64.Build.0 = Debug|x64
+		{CB4609B1-61A3-4186-8FAC-F3ED0E897E92}.Debug|x86.ActiveCfg = Debug|Win32
+		{CB4609B1-61A3-4186-8FAC-F3ED0E897E92}.Debug|x86.Build.0 = Debug|Win32
+		{CB4609B1-61A3-4186-8FAC-F3ED0E897E92}.Release|x64.ActiveCfg = Release|x64
+		{CB4609B1-61A3-4186-8FAC-F3ED0E897E92}.Release|x64.Build.0 = Release|x64
+		{CB4609B1-61A3-4186-8FAC-F3ED0E897E92}.Release|x86.ActiveCfg = Release|Win32
+		{CB4609B1-61A3-4186-8FAC-F3ED0E897E92}.Release|x86.Build.0 = Release|Win32
+		{9C2B5542-5558-4329-B7C6-0A4816091D23}.Debug|x64.ActiveCfg = Debug|x64
+		{9C2B5542-5558-4329-B7C6-0A4816091D23}.Debug|x64.Build.0 = Debug|x64
+		{9C2B5542-5558-4329-B7C6-0A4816091D23}.Debug|x86.ActiveCfg = Debug|Win32
+		{9C2B5542-5558-4329-B7C6-0A4816091D23}.Debug|x86.Build.0 = Debug|Win32
+		{9C2B5542-5558-4329-B7C6-0A4816091D23}.Release|x64.ActiveCfg = Release|x64
+		{9C2B5542-5558-4329-B7C6-0A4816091D23}.Release|x64.Build.0 = Release|x64
+		{9C2B5542-5558-4329-B7C6-0A4816091D23}.Release|x86.ActiveCfg = Release|Win32
+		{9C2B5542-5558-4329-B7C6-0A4816091D23}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
