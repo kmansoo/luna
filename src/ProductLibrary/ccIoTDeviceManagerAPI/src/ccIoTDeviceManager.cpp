@@ -276,8 +276,6 @@ bool ccIoTDeviceManager::devices_device(std::shared_ptr<ccWebServerRequest> pReq
 //  WebSocket
 bool ccIoTDeviceManager::ws_IoTDevice(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const std::string strData)
 {
-    std::cout << std::endl;
-
     switch ((int)eEvent)
     {
     case ccWebsocket::ccWebSocketEvent_Connected:
