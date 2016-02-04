@@ -5,5 +5,5 @@
         "Description" : "On/Off",
         "Manufacture" : "Mansoo"
     },
-    "IoTDeviceMasterUri" : "ws://10.0.10.2:8000/ws_iot_deivce"
+    "IoTDeviceMasterUri" : "ws://localhost:8000/ws_iot_deivce"
 }

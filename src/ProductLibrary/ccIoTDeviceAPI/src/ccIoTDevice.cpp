@@ -19,7 +19,13 @@ ccIoTDevice::ccIoTDevice(const std::string& strSpecFile) : _bIsConnected(false),
     _oWSC.SetEventListener(std::bind(&ccIoTDevice::DoRecvDataFromWebsocket, this, std::placeholders::_1, std::placeholders::_2));
 
     //  ÀÐ±â
-    _oSpecification.LoadFile(strSpecFile);
+    if (_oSpecification.LoadFile(strSpecFile) == false)
+    {
+        std::cout << "[Warning!!]" << std::endl;
+        std::cout << "  --> Couldn't load the device specification['" << strSpecFile << "'" << std::endl;
+        std::cout << "  --> You have to define this device information using '" << strSpecFile << "'" << std::endl;
+        std::cout << "-----------------------------------------------------------------------------------" << std::endl;
+    }
 }
 
 ccIoTDevice::~ccIoTDevice()

@@ -1,0 +1,28 @@
+SHELL = /bin/sh
+
+TARGET      = Pi2IoTLightDevice
+TARGET_TYPE = exe
+
+PLATFORM    = linux
+CPU         = i386
+PRODUCT     = all
+BUILD       = debug
+
+SRCDIRS     = ../src
+
+PRJ_STRIP_DEBUG_INFO = TRUE
+
+# To use the wiringPi Library
+PRJ_LIBS    = -lwiringPi
+
+LIBS = \
+        libccIoTDeviceAPI.a \
+        libccIoTDeviceProtocolAPI.a \
+        libccWebsocketClientAPI.a \
+        libccJsonParserAPI.a \
+        libccMongooseServerAPI.a \
+        libccWebServerAPI.a \
+        libccNetworkAPI.a \
+        libccCoreAPI.a
+
+include ../../../build/makefile.common.txt

@@ -14,6 +14,14 @@ public:
     {
         std::cout << "#### IoTSwitchDevice::DoSetDeviceCommand" << std::endl;
 
+        if (!oProtocol._oExtInfo.isNull())
+        {
+            if (oProtocol._oExtInfo["Control"] == "On")
+                std::cout << "Control = On" << std::endl;
+            else
+                std::cout << "Control = Off" << std::endl;
+        }
+
         return false;
     }
 
@@ -33,6 +41,14 @@ public:
     virtual bool    DoSetDeviceCommand(ccIoTDeviceProtocol& oProtocol)
     {
         std::cout << "**** IoTLightDevice::DoSetDeviceCommand" << std::endl;
+
+        if (!oProtocol._oExtInfo.isNull())
+        {
+            if (oProtocol._oExtInfo["Control"] == "On")
+                std::cout << "Control = On" << std::endl;
+            else
+                std::cout << "Control = Off" << std::endl;
+        }
 
         return false;
     }

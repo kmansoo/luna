@@ -1,7 +1,7 @@
 {
     "IoTDeviceSpecification" : {
-        "Type" : "Switch",
-        "Name" : "Linux Smart Switch",
+        "Type" : "Light",
+        "Name" : "Raspberry Pi2 LED Controller",
         "Description" : "On/Off",
         "Manufacture" : "Mansoo"
     },
