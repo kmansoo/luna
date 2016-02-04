@@ -43,7 +43,7 @@ bool Pi2IoTPositionSensor::Start()
 {
     if ((_nSerialFd = serialOpen("/dev/ttyACM0", 9600)) < 0)    //  ttyAMA0
     {
-        std::cout << "Unable to open serial device: " << strerror(errno) << std::endl;
+        std::cout << "Unable to open serial device: " << std::endl;
     }
     else
     {
@@ -52,7 +52,7 @@ bool Pi2IoTPositionSensor::Start()
     }
 
     if (wiringPiSetup() == -1)
-        std::cout << "Unable to start wiringPi: " << strerror(errno) << std::endl;
+        std::cout << "Unable to start wiringPi: " << std::endl;
 
     return ccIoTDevice::Start();
 }
@@ -92,30 +92,32 @@ void Pi2IoTPositionSensor::DoPoll()
 
         if (_nSerialFd != -1)
         {
-#ifndef WIN32
+ #ifdef LUNA_PLATFORM_RASPBERRY_PI2
             while (serialDataAvail(_nSerialFd))
-#endif
             {
                 char ch = serialGetchar(_nSerialFd);
 
-                strRecvData += ch;
-
-#ifdef WIN32
-                strRecvData = "123 cm";
-#endif
+                // for debuging
+                // printf("%c[%d]", ch, ch);
+                // fflush(stdout);
+                //
+                //  Arduino --> Raspberry Pi2 : 'xxx cm\n'
+                //
+                //  The following characters are not required. So those are skipping.
+                if (ch == ' ' || ch == 'c' || ch == 'm')
+                    continue;
 
                 if (ch == '\n')
                 {
-                    int nOffset = strRecvData.find("cm", 0);
+                    if (strRecvData.length() > 0)
+                        DoUpdateSesorData(strRecvData);
 
-                    if (std::string::npos != nOffset)
-                        strRecvData.replace(nOffset, 2, "");
-
-                    DoUpdateSesorData(strRecvData);
+                    strRecvData = "";
                 }
                 else
                     strRecvData += ch;
             }
+#endif
         }
     }
 }

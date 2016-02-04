@@ -26,10 +26,16 @@ bool Pi2IoTPositionServiceManager::DoUpdateDeviceStatusCommand(std::shared_ptr<c
     {
         if (pDA->GetType() == ccIoTDeviceSpecification::kDeviceType_Sensor)
         {
+            static int s_nOldValue = 0;
+
             if (oProtocol._oExtInfo.isNull())
                 return false;
 
-            std::cout << "## Pi2IoTPositionServiceManager, Position : " << atoi(oProtocol._oExtInfo["Value"].asString().c_str()) << " cm" << std::endl;
+            //  If the position value  is less than 50cm, all the lights are turned on
+            if (atoi(oProtocol._oExtInfo["Value"].asString().c_str()) > 50)
+                this->AllLightsControl(false);
+            else
+                this->AllLightsControl(true);
         }
     }
 
