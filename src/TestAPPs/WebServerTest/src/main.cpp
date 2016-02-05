@@ -63,44 +63,6 @@ public:
 
 };
 
-class WebSocketTest
-{
-public:
-    WebSocketTest() {
-
-    }
-
-public:
-    void    Test()
-    {
-        _eWSC.SetEventListener(std::bind(&WebSocketTest::OnRecvMessage, this, std::placeholders::_1, std::placeholders::_2));
-        _eWSC.Open("ws://localhost:8126/foo");
-    }
-
-private:
-    ccEasyWebsocketClient   _eWSC;
-
-protected:
-    void    OnRecvMessage(ccWebsocket::ccWebSocketEvent eEvent, const std::string& message)
-    {
-        switch ((int)eEvent)
-        {
-        case ccWebsocket::ccWebSocketEvent_Connected:
-            std::cout << "WebSocketTest: Connected" << std::endl;
-            _eWSC.Send(std::string("Hello!"));
-            break;
-
-        case ccWebsocket::ccWebSocketEvent_Disconnected:
-            std::cout << "WebSocketTest: Disconnected" << std::endl;
-            break;
-
-        case ccWebsocket::ccWebSocketEvent_ReceivedData:
-            std::cout << "WebSocketTest: ReceivedData, " << message << std::endl;
-            break;
-        }
-    }
-};
-
 #ifdef WIN32
 #   include <Winsock2.h>
 #endif
@@ -123,18 +85,6 @@ int main(int argc, char* argv[])
     }
 #endif
 
-    std::string temp = "abcdefghijk./...";
-
-    for (auto it : temp)
-        std::cout << it << std::endl;
-
-    WebSocketTest   oTest;
-
-    oTest.Test();
-
-    while (1)
-        Luna::sleep(10);
-
     //  choose a Web Server : Abstract Factory Design Pattern
 
     ccWebServerManager::getInstance().AttachFactory(std::make_shared<ccMongooseWebServerObjectFactory>());
@@ -143,7 +93,7 @@ int main(int argc, char* argv[])
     std::shared_ptr<ccRESTfulChatting>      pChattingApi(new ccRESTfulChatting);
     std::shared_ptr<ccWebsocketManager>     pChattingWSM(new ccChattingWSManager);
 
-    ccWebServerManager::getInstance().CreateWebServer("WebServer #1", "8000", "C:\\web_root\\Chatting\\");
+    ccWebServerManager::getInstance().CreateWebServer("WebServer #1", "8000", ".");
 
     ccWebServerManager::getInstance().AddRESTfulApi(pChattingApi);
     ccWebServerManager::getInstance().AddWebsocketManager(pChattingApi);
