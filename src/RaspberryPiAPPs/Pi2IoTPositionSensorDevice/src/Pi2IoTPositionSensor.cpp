@@ -12,7 +12,7 @@
 
 #include <iostream>
 
-#ifndef WIN32
+#ifdef LUNA_PLATFORM_RASPBERRY_PI2
 
 #   include <wiringPi.h>
 #   include <wiringSerial.h>
@@ -118,9 +118,9 @@ void Pi2IoTPositionSensor::DoPoll()
                 else
                     strRecvData += ch;
             }
-#elif defined(WIN32)
+#else
             // Send the fake data to test.
-            ccString::format(strRecvData, "%d", rand() % 10 + 50);
+            ccString::format(strRecvData, "%d", rand() % 20 + 50);
             DoUpdateSesorData(strRecvData);
             Luna::sleep(500);
 #endif
