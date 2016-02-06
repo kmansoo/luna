@@ -18,6 +18,7 @@ public:
 
 protected:
     virtual bool    DoUpdateDeviceStatusCommand(std::shared_ptr<ccWebsocket> pWS, ccIoTDeviceProtocol& oProtocol);
+    virtual bool    DoSetControlCommand(std::shared_ptr<ccWebsocket> pWS, ccIoTDeviceProtocol& oProtocol);
 };
 
 #endif /* RASPBERRYPIAPPS_PI2IOTSERVICEMANAGERBASEDPOSITIONSENSOR_SRC_PI2IOTPOSITIONSERVICEMANAGER_H_ */

@@ -6,6 +6,7 @@
  */
 
 #include "ccCoreAPI/ccCoreAPI.h"
+#include "ccCoreAPI/ccString.h"
 
 #include "Pi2IoTPositionSensor.h"
 
@@ -88,7 +89,7 @@ void Pi2IoTPositionSensor::DoPoll()
 
     while (_bIsStopThread == false)
     {
-        Luna::sleep(100);
+        Luna::sleep(10);
 
         if (_nSerialFd != -1)
         {
@@ -117,6 +118,11 @@ void Pi2IoTPositionSensor::DoPoll()
                 else
                     strRecvData += ch;
             }
+#elif defined(WIN32)
+            // Send the fake data to test.
+            ccString::format(strRecvData, "%d", rand() % 10 + 50);
+            DoUpdateSesorData(strRecvData);
+            Luna::sleep(500);
 #endif
         }
     }

@@ -31,13 +31,14 @@ public:
         kDeviceType_Light,
         kDeviceType_Lock,
         kDeviceType_Sensor,
+        kDeviceType_Controller,
 
         kDeviceType_Max,
     };
 
 public:
-    const std::string& GetTypeName();
     const IoTDeviceType GetType() { return _eDeviceType; }
+    const std::string& GetTypeName();
     const std::string& GetName() { return _strName; }
     const std::string& GetDescription() { return _strDescription; }
     const std::string& GetManufacture() { return _strManufacture; }

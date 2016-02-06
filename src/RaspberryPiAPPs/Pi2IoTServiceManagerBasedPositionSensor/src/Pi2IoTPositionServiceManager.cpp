@@ -37,7 +37,42 @@ bool Pi2IoTPositionServiceManager::DoUpdateDeviceStatusCommand(std::shared_ptr<c
             else
                 this->AllLightsControl(true);
         }
+
+        //  It was implemented to show what linked to iOS App.
+        //  It delivers the received protocol to the Controller.
+        std::lock_guard<std::mutex> lock(_mtx);
+
+        for (auto it : _aAgents)
+        {
+            if (it.second->GetType() == ccIoTDeviceSpecification::kDeviceType_Controller)
+                oProtocol.Send(it.second->GetWebsockt().get());
+        }
     }
 
     return ccIoTDeviceManager::DoUpdateDeviceStatusCommand(pWS, oProtocol);
+}
+
+bool Pi2IoTPositionServiceManager::DoSetControlCommand(std::shared_ptr<ccWebsocket> pWS, ccIoTDeviceProtocol& oProtocol)
+{
+    //  We need to implement this feature.
+    if (oProtocol._IsRequest == false)
+        return false;
+
+    _mtx.lock();
+    auto it = _aAgents.find(pWS->GetInstance());
+    _mtx.unlock();
+
+    if (it == std::end(_aAgents))
+        return false;
+
+    if (it->second->GetType() == ccIoTDeviceSpecification::kDeviceType_Controller)
+    {
+        if (oProtocol._oExtInfo["Control"] == "AllLightsTurnOff")
+            AllLightsControl(false);
+
+        if (oProtocol._oExtInfo["Control"] == "AllLightsTurnOn")
+            AllLightsControl(true);
+    }
+
+    return true;
 }

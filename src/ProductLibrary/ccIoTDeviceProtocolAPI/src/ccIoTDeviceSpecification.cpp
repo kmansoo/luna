@@ -16,7 +16,8 @@ std::string s_aDeviceTypeName[]{
     "Switch",
     "Light",
     "Lock",
-    "Sensor"
+    "Sensor",
+    "Controller"
 };
 
 ccIoTDeviceSpecification::ccIoTDeviceSpecification()
@@ -31,7 +32,7 @@ ccIoTDeviceSpecification::~ccIoTDeviceSpecification()
 
 const std::string& ccIoTDeviceSpecification::GetTypeName()
 {
-    if ((std::uint16_t)_eDeviceType > kDeviceType_Sensor)
+    if ((std::uint16_t)_eDeviceType >= kDeviceType_Max)
         return s_aDeviceTypeName[0];
 
     return s_aDeviceTypeName[_eDeviceType];

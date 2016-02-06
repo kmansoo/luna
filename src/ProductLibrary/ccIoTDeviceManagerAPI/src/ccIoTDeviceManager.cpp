@@ -28,6 +28,7 @@ ccIoTDeviceManager::ccIoTDeviceManager()
     _aCommands["DeRegister"] = std::bind(&ccIoTDeviceManager::DoDeRegisterCommand, this, std::placeholders::_1, std::placeholders::_2);
     _aCommands["GetDeviceStatus"] = std::bind(&ccIoTDeviceManager::DoGetDeviceStatusCommand, this, std::placeholders::_1, std::placeholders::_2);
     _aCommands["UpdateDeviceStatus"] = std::bind(&ccIoTDeviceManager::DoUpdateDeviceStatusCommand, this, std::placeholders::_1, std::placeholders::_2);
+    _aCommands["SetControl"] = std::bind(&ccIoTDeviceManager::DoSetControlCommand, this, std::placeholders::_1, std::placeholders::_2);
 
     // TODO Auto-generated constructor stub
     _oWebAPI->AddAPI(std::string("/devices"), std::bind(&ccIoTDeviceManager::devices, this, std::placeholders::_1, std::placeholders::_2));
@@ -279,7 +280,7 @@ bool ccIoTDeviceManager::ws_IoTDevice(ccWebsocket::ccWebSocketEvent eEvent, std:
     switch ((int)eEvent)
     {
     case ccWebsocket::ccWebSocketEvent_Connected:
-        std::cout << "ccIoTDeviceManager: An IoT device is connected. { " << std::endl << strData << std::endl << "}" << std::endl;
+        //  std::cout << "ccIoTDeviceManager: An IoT device is connected. { " << std::endl << strData << std::endl << "}" << std::endl;
         break;
 
     case ccWebsocket::ccWebSocketEvent_ReceivedData:
@@ -288,7 +289,7 @@ bool ccIoTDeviceManager::ws_IoTDevice(ccWebsocket::ccWebSocketEvent eEvent, std:
         break;
 
     case ccWebsocket::ccWebSocketEvent_Disconnected:
-        std::cout << "ccIoTDeviceManager: An IoT device is disconnected." << std::endl;
+        //  std::cout << "ccIoTDeviceManager: An IoT device is disconnected." << std::endl;
         {
             ccIoTDeviceProtocol oNoProtocol;
 
@@ -349,9 +350,7 @@ bool ccIoTDeviceManager::DoRegisterCommand(std::shared_ptr<ccWebsocket> pWS, ccI
 
     _aAgents[pWS->GetInstance()] = pNewDeviceAgent;
 
-    //  상태 가져오기
-    //ccIoTDeviceProtocol oResponseProtocol;
-    //oResponseProtocol.Send(pWS.get(), true, "GetDeviceStatus");
+    std::cout << "Registerd: " << pNewDeviceAgent->GetTypeName() << ", " << pNewDeviceAgent->GetName() << std::endl;
 
     return true;
 }
@@ -367,6 +366,8 @@ bool ccIoTDeviceManager::DoDeRegisterCommand(std::shared_ptr<ccWebsocket> pWS, c
 
     if (it == std::end(_aAgents))
         return false;
+
+    std::cout << "DeRegisterd: " << it->second->GetTypeName() << ", " << it->second->GetName() << std::endl;
 
     _aAgents.erase(it);
 
@@ -399,6 +400,13 @@ bool ccIoTDeviceManager::DoUpdateDeviceStatusCommand(std::shared_ptr<ccWebsocket
 
     if (it == std::end(_aAgents))
         return false;
+
+    return false;
+}
+
+bool ccIoTDeviceManager::DoSetControlCommand(std::shared_ptr<ccWebsocket> pWS, ccIoTDeviceProtocol& oProtocol)
+{
+    //  We need to implement this feature.
 
     return false;
 }

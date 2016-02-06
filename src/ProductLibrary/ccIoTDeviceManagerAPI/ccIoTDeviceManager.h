@@ -51,8 +51,9 @@ protected:
     virtual bool    DoDeRegisterCommand(std::shared_ptr<ccWebsocket> pWS, ccIoTDeviceProtocol& oProtocol);
     virtual bool    DoGetDeviceStatusCommand(std::shared_ptr<ccWebsocket> pWS, ccIoTDeviceProtocol& oProtocol);
     virtual bool    DoUpdateDeviceStatusCommand(std::shared_ptr<ccWebsocket> pWS, ccIoTDeviceProtocol& oProtocol);
+    virtual bool    DoSetControlCommand(std::shared_ptr<ccWebsocket> pWS, ccIoTDeviceProtocol& oProtocol);
 
-private:
+protected:
     std::map < std::int32_t, std::shared_ptr<ccIoTDeviceAgent> > _aAgents;
 
     std::mutex  _mtx;

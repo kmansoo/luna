@@ -5,13 +5,40 @@
  *      Author: kmansoo
  */
 
+#include <iostream>
+
 #include "ccJsonParserAPI/json/value.h"
 #include "ccJsonParserAPI/json/writer.h"
 #include "ccJsonParserAPI/json/reader.h"
 
 #include "ccIoTDeviceProtocol.h"
 
-
+//  Protocol Example
+//  "Register"
+//{
+//    "Request" : true,
+//    "Command" : "Register",
+//    "Info" : {
+//      "IoTDeviceSpecification" : {
+//          "Type" : "Light"
+//          "Name" : "Linux Smart Light",
+//          "Description" : "On/Off",
+//          "Manufacture" : "Mansoo",
+//      },
+//      "IoTDeviceMasterUri" : "ws://localhost:8000/ws_iot_deivce",
+//    }
+//}
+//
+//
+//  "SetDevice"
+//{
+//    "Request" : true,
+//    "Command" : "SetDevice",
+//    "Info" : {
+//          "Control" : "On"
+//     },
+//}
+//
 ccIoTDeviceProtocol::ccIoTDeviceProtocol()
 {
     // TODO Auto-generated constructor stub
@@ -59,6 +86,11 @@ bool ccIoTDeviceProtocol::Send(ccWebsocket* oWS, bool bIsRequest, const std::str
 
 bool ccIoTDeviceProtocol::Parse(const std::string& strData)
 {
+    //  for debug
+    //std::cout << std::endl;
+    //std::cout << strData << std::endl;
+    //std::cout << std::endl << std::endl;
+
     Json::Reader    oReader;
     Json::Value     oProtocol;
 

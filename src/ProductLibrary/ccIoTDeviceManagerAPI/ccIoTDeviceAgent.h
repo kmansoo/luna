@@ -27,6 +27,7 @@ public:
 
 public:
     ccIoTDeviceSpecification::IoTDeviceType GetType() { return _oSpecification.GetType(); }
+    const std::string&                  GetTypeName() { return _oSpecification.GetTypeName(); }
 
     std::int32_t                        GetID() { return _pWS->GetInstance(); }
     const std::string&                  GetName() {return _oSpecification.GetName(); }
