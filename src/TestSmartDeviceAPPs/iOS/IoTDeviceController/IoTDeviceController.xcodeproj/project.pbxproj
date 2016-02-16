@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		165FFBAD1C73476700FCB8DF /* iOSDeviceInfo.json in Resources */ = {isa = PBXBuildFile; fileRef = 165FFBAC1C73476700FCB8DF /* iOSDeviceInfo.json */; };
 		B3316C0B1C64404F00A7F28A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3316C0A1C64404F00A7F28A /* AppDelegate.swift */; };
 		B3316C0D1C64404F00A7F28A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3316C0C1C64404F00A7F28A /* ViewController.swift */; };
 		B3316C101C64404F00A7F28A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B3316C0E1C64404F00A7F28A /* Main.storyboard */; };
@@ -38,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		165FFBAC1C73476700FCB8DF /* iOSDeviceInfo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iOSDeviceInfo.json; sourceTree = "<group>"; };
 		B3316C071C64404F00A7F28A /* IoTDeviceController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IoTDeviceController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3316C0A1C64404F00A7F28A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B3316C0C1C64404F00A7F28A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 				B3CA78541C6579B000BFCB22 /* MyDeviceInfo.json */,
 				B3CA78561C6595A000BFCB22 /* SwiftyJSON.h */,
 				B3CA78571C6595C300BFCB22 /* SwiftyJSON.swift */,
+				165FFBAC1C73476700FCB8DF /* iOSDeviceInfo.json */,
 			);
 			path = IoTDeviceController;
 			sourceTree = "<group>";
@@ -248,6 +251,7 @@
 			files = (
 				B3316C151C64404F00A7F28A /* LaunchScreen.storyboard in Resources */,
 				B3316C121C64404F00A7F28A /* Assets.xcassets in Resources */,
+				165FFBAD1C73476700FCB8DF /* iOSDeviceInfo.json in Resources */,
 				B3316C101C64404F00A7F28A /* Main.storyboard in Resources */,
 				B3CA78551C657D4600BFCB22 /* MyDeviceInfo.json in Resources */,
 			);
