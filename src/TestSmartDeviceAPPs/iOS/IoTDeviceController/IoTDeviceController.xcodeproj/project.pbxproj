@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		165FFBAD1C73476700FCB8DF /* iOSDeviceInfo.json in Resources */ = {isa = PBXBuildFile; fileRef = 165FFBAC1C73476700FCB8DF /* iOSDeviceInfo.json */; };
+		165FFBB01C7452B000FCB8DF /* IoTDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 165FFBAE1C7452B000FCB8DF /* IoTDataModel.xcdatamodeld */; };
+		165FFBB21C745C8A00FCB8DF /* ServerConnectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165FFBB11C745C8A00FCB8DF /* ServerConnectViewController.swift */; };
 		B3316C0B1C64404F00A7F28A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3316C0A1C64404F00A7F28A /* AppDelegate.swift */; };
 		B3316C0D1C64404F00A7F28A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3316C0C1C64404F00A7F28A /* ViewController.swift */; };
 		B3316C101C64404F00A7F28A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B3316C0E1C64404F00A7F28A /* Main.storyboard */; };
@@ -40,6 +42,8 @@
 
 /* Begin PBXFileReference section */
 		165FFBAC1C73476700FCB8DF /* iOSDeviceInfo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iOSDeviceInfo.json; sourceTree = "<group>"; };
+		165FFBAF1C7452B000FCB8DF /* IoTDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = IoTDataModel.xcdatamodel; sourceTree = "<group>"; };
+		165FFBB11C745C8A00FCB8DF /* ServerConnectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerConnectViewController.swift; sourceTree = "<group>"; };
 		B3316C071C64404F00A7F28A /* IoTDeviceController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IoTDeviceController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3316C0A1C64404F00A7F28A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B3316C0C1C64404F00A7F28A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -120,6 +124,8 @@
 				B3CA78561C6595A000BFCB22 /* SwiftyJSON.h */,
 				B3CA78571C6595C300BFCB22 /* SwiftyJSON.swift */,
 				165FFBAC1C73476700FCB8DF /* iOSDeviceInfo.json */,
+				165FFBAE1C7452B000FCB8DF /* IoTDataModel.xcdatamodeld */,
+				165FFBB11C745C8A00FCB8DF /* ServerConnectViewController.swift */,
 			);
 			path = IoTDeviceController;
 			sourceTree = "<group>";
@@ -278,8 +284,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				165FFBB21C745C8A00FCB8DF /* ServerConnectViewController.swift in Sources */,
 				B3316C0D1C64404F00A7F28A /* ViewController.swift in Sources */,
 				B3316C391C64446800A7F28A /* WebSocket.swift in Sources */,
+				165FFBB01C7452B000FCB8DF /* IoTDataModel.xcdatamodeld in Sources */,
 				B3316C3B1C6444E300A7F28A /* SSLSecurity.swift in Sources */,
 				B3CA78581C6595C300BFCB22 /* SwiftyJSON.swift in Sources */,
 				B3316C0B1C64404F00A7F28A /* AppDelegate.swift in Sources */,
@@ -528,6 +536,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		165FFBAE1C7452B000FCB8DF /* IoTDataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				165FFBAF1C7452B000FCB8DF /* IoTDataModel.xcdatamodel */,
+			);
+			currentVersion = 165FFBAF1C7452B000FCB8DF /* IoTDataModel.xcdatamodel */;
+			path = IoTDataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = B3316BFF1C64404F00A7F28A /* Project object */;
 }
