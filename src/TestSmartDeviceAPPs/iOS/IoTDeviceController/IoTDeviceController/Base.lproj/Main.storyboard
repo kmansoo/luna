@@ -67,7 +67,7 @@
         <!--Luna Server-->
         <scene sceneID="eFG-tY-pbp">
             <objects>
-                <tableViewController id="uUz-5l-CYu" sceneMemberID="viewController">
+                <tableViewController id="uUz-5l-CYu" customClass="ConnectViewController" customModule="IoTDeviceController" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="LBJ-MS-kNg">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
