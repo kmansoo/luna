@@ -26,6 +26,7 @@ class PhoneController: WebSocketDelegate {
     }
     
     // MARK: - WebSocket Functions
+    
     func websocketDidConnect(ws: WebSocket) {
         do {
             let data = try NSJSONSerialization.dataWithJSONObject(myDeviceInfo!, options: NSJSONWritingOptions.PrettyPrinted)

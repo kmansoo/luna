@@ -248,7 +248,7 @@
         <!--Devices-->
         <scene sceneID="7sq-RG-VTI">
             <objects>
-                <tableViewController title="Devices" id="aIB-Dh-gx3" sceneMemberID="viewController">
+                <tableViewController title="Devices" id="aIB-Dh-gx3" customClass="LunaDevicesController" customModule="IoTDeviceController" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="ujz-D2-FCM">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

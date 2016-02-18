@@ -10,8 +10,10 @@ import Foundation
 
 protocol Notification {
     func connect()
+    func list()
 }
 
 extension Notification {
     func connect() {}
+    func list() {}
 }
