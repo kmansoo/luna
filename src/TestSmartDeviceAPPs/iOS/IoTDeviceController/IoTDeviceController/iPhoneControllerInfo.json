@@ -1,7 +1,7 @@
 {
     "IoTDeviceSpecification" : {
         "Type" : "Controller",
-        "Name" : "xho95's iPhone UI",
+        "Name" : "xho95's iPhone Controller",
         "Description" : "Modified Control Device",
         "Manufacture" : "Kim, Min Ho"
     },
