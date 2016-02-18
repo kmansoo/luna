@@ -1,5 +1,5 @@
 //
-//  ControllerManager.swift
+//  PhoneController.swift
 //  IoTDeviceController
 //
 //  Created by Kim, Min Ho on 2016. 2. 18..
@@ -8,9 +8,9 @@
 
 import Foundation
 
-class ControllerManager: WebSocketDelegate {
+class PhoneController: WebSocketDelegate {
     
-    static let sharedInstance = ControllerManager()
+    static let sharedInstance = PhoneController()
     
     var myDeviceInfo : AnyObject?
     var socket: WebSocket!
@@ -20,7 +20,7 @@ class ControllerManager: WebSocketDelegate {
     var connected: Bool = false {
         didSet {
             if connected == true {
-                viewController?.doSomething()
+                viewController?.connect()
             }
         }
     }
@@ -92,13 +92,6 @@ class ControllerManager: WebSocketDelegate {
                 myDeviceInfo = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments)
                 
                 print(myDeviceInfo)
-                
-                // change the 'managerUri' in the JSON file
-                //                if let uri = myDeviceInfo!["IoTDeviceMasterUri"] as? String {
-                //                    managerUri.text = uri
-                //
-                //                    print("managerUri.text = '\(managerUri.text)'")
-                //                }
             }
             catch {
                 print("error")

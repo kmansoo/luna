@@ -9,5 +9,9 @@
 import Foundation
 
 protocol Notification {
-    func doSomething()
+    func connect()
+}
+
+extension Notification {
+    func connect() {}
 }

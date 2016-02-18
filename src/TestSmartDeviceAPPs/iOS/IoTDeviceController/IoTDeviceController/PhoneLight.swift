@@ -1,5 +1,5 @@
 //
-//  DeviceManager.swift
+//  PhoneLight
 //  IoTDeviceController
 //
 //  Created by Kim, Min Ho on 2016. 2. 18..
@@ -7,23 +7,18 @@
 //
 
 import Foundation
+import AVFoundation
 
-class DeviceManager: WebSocketDelegate {
+class PhoneLight: WebSocketDelegate {
     
-    static let sharedInstance = DeviceManager()
+    static let sharedInstance = PhoneLight()
     
     var myDeviceInfo : AnyObject?
     var socket: WebSocket!
     var timer = NSTimer()
     
     var controller: Notification?
-    var connected: Bool = false {
-        didSet {
-            if connected == true {
-                controller?.doSomething()
-            }
-        }
-    }
+    var connected: Bool = false
     
     // MARK: - WebSocket Functions
     func websocketDidConnect(ws: WebSocket) {
@@ -66,15 +61,15 @@ class DeviceManager: WebSocketDelegate {
         
         if (json != JSON.null)
         {
-            if (json["Command"] == "UpdateDeviceStatus")
+            if (json["Command"] == "SetDevice")
             {
-                let value = json["Info"]["Value"].stringValue;
+                let light = json["Info"]["Control"].stringValue
                 
-                //                devicePositionInfo.setValue(Float(json["Info"]["Value"].intValue), animated: false)
-                //
-                //                value += " cm"
-                //                positionDisplay.text = value
-                print("\(value)")
+                if light == "On" {
+                    phoneFlash(isOn: true)
+                } else {
+                    phoneFlash(isOn: false)
+                }
             }
         }
     }
@@ -92,13 +87,6 @@ class DeviceManager: WebSocketDelegate {
                 myDeviceInfo = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments)
                 
                 print(myDeviceInfo)
-                
-                // change the 'managerUri' in the JSON file
-                //                if let uri = myDeviceInfo!["IoTDeviceMasterUri"] as? String {
-                //                    managerUri.text = uri
-                //
-                //                    print("managerUri.text = '\(managerUri.text)'")
-                //                }
             }
             catch {
                 print("error")
@@ -120,5 +108,26 @@ class DeviceManager: WebSocketDelegate {
         
         socket.delegate = self
         socket.connect()
+    }
+    
+    func phoneFlash(isOn isOn: Bool) {
+        
+        let device = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
+        
+        if (device.hasTorch) {
+            do {
+                try device.lockForConfiguration()
+                
+                if isOn == true {
+                    try device.setTorchModeOnWithLevel(0.5)
+                } else {
+                    device.torchMode = AVCaptureTorchMode.Off
+                }
+
+                device.unlockForConfiguration()
+            } catch {
+                print(error)
+            }
+        }
     }
 }

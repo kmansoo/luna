@@ -14,14 +14,15 @@ class LunaConnectController: UITableViewController, Notification {
     
     @IBOutlet weak var lunaURI: UILabel!
     
-    let deviceManager = DeviceManager.sharedInstance
+    let phoneController = PhoneController.sharedInstance
+    let light = PhoneLight.sharedInstance
     
     // MARK: - Controller Functions
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        ControllerManager.sharedInstance.viewController = self
+        phoneController.viewController = self
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -37,8 +38,11 @@ class LunaConnectController: UITableViewController, Notification {
 
     @IBAction func connectButton(sender: UIButton) {
         if let uri = lunaURI.text {
-            deviceManager.loadJSON()
-            deviceManager.retryConnectToIoTManagerWith(uri)
+            phoneController.loadJSON()
+            phoneController.retryConnectToIoTManagerWith(uri)
+
+            light.loadJSON()
+            light.retryConnectToIoTManagerWith(uri)
         }
     }
 
@@ -55,7 +59,7 @@ class LunaConnectController: UITableViewController, Notification {
     }
     // MARK: - Notification Protocol
     
-    func doSomething() {
+    func connect() {
         self.performSegueWithIdentifier("LogInSegue", sender: self)
     }
 }
