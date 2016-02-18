@@ -8,19 +8,21 @@
 
 import UIKit
 
-class LunaConnectController: UITableViewController, WebSocketDelegate {
+class LunaConnectController: UITableViewController, Notification {
 
+    // MARK: - Properties
+    
     @IBOutlet weak var lunaURI: UILabel!
     
-    var myDeviceInfo : AnyObject?
-    var socket : WebSocket!
-    var timer = NSTimer()
-
+    let deviceManager = DeviceManager.sharedInstance
+    
     // MARK: - Controller Functions
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        ControllerManager.sharedInstance.viewController = self
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -34,18 +36,10 @@ class LunaConnectController: UITableViewController, WebSocketDelegate {
     }
 
     @IBAction func connectButton(sender: UIButton) {
-        
-        loadJSON()
-        retryConnectToIoTManager()
-        
-//        let alert = UIAlertController(title: "Server Connect", message: "Connecting", preferredStyle: UIAlertControllerStyle.Alert)
-//        
-//        alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.Default, handler: nil))
-//        alert.addAction(UIAlertAction(title:"OK", style: .Default, handler:  { action in
-//            self.performSegueWithIdentifier("LogInSegue", sender: self)
-//        }))
-//        
-//        self.presentViewController(alert, animated: true, completion: nil)
+        if let uri = lunaURI.text {
+            deviceManager.loadJSON()
+            deviceManager.retryConnectToIoTManagerWith(uri)
+        }
     }
 
     // MARK: - Navigation
@@ -59,96 +53,9 @@ class LunaConnectController: UITableViewController, WebSocketDelegate {
             
         }
     }
+    // MARK: - Notification Protocol
     
-    // MARK: - Helper Functions
-    
-    func loadJSON() {
-        if let filePath = NSBundle.mainBundle().pathForResource("iPhoneControllerInfo", ofType: "json"), data = NSData(contentsOfFile: filePath) {
-            
-            do {
-                myDeviceInfo = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments)
-                
-                print(myDeviceInfo)
-                
-// change the 'managerUri' in the JSON file
-//                if let uri = myDeviceInfo!["IoTDeviceMasterUri"] as? String {
-//                    managerUri.text = uri
-//                    
-//                    print("managerUri.text = '\(managerUri.text)'")
-//                }
-            }
-            catch {
-                print("error")
-            }
-        } else {
-            print("Invalid filename/path.")
-        }
-    }
-    
-    //  for Timer
-    // must be internal or public.
-    func retryConnectToIoTManager() {
-        if let uri = lunaURI.text {
-            print("connect to the \(uri)")
-            socket = WebSocket(url: NSURL(string: uri)!, protocols: ["chat", "superchat"])
-            
-            socket.delegate = self
-            socket.connect()
-        }
-    }
-    
-    // MARK: - WebSocket Functions
-    func websocketDidConnect(ws: WebSocket) {
-        do {
-            let data = try NSJSONSerialization.dataWithJSONObject(myDeviceInfo!, options: NSJSONWritingOptions.PrettyPrinted)
-            let convertedData = NSString(data: data, encoding: NSUTF8StringEncoding)
-            
-            //  Register..
-            var registerCmd = "{"
-            registerCmd += "   \"Request\" : true,"
-            registerCmd += "   \"Command\" : \"Register\","
-            registerCmd += "   \"Info\": "
-            registerCmd += (convertedData as! String)
-            registerCmd += "}"
-            
-            socket.writeString(registerCmd)            
-        }
-        catch {
-            print("error")
-        }
+    func doSomething() {
         self.performSegueWithIdentifier("LogInSegue", sender: self)
-    }
-    
-    func websocketDidDisconnect(ws: WebSocket, error: NSError?) {
-        if let e = error {
-            print("websocket is disconnected: \(e.localizedDescription)")
-        } else {
-            print("websocket disconnected")
-        }
-        
-        //  다시 연결 시도
-        timer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: "retryConnectToIoTManager", userInfo: nil, repeats: false)
-    }
-    
-    func websocketDidReceiveMessage(ws: WebSocket, text: String) {
-        var json = JSON.parse(text);
-        
-        if (json != JSON.null)
-        {
-            if (json["Command"] == "UpdateDeviceStatus")
-            {
-                let value = json["Info"]["Value"].stringValue;
-                
-//                devicePositionInfo.setValue(Float(json["Info"]["Value"].intValue), animated: false)
-//                
-//                value += " cm"
-//                positionDisplay.text = value
-                print("\(value)")
-            }
-        }
-    }
-    
-    func websocketDidReceiveData(ws: WebSocket, data: NSData) {
-        print("Received data: \(data.length)")
     }
 }

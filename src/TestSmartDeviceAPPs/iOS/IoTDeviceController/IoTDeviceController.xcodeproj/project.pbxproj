@@ -10,6 +10,10 @@
 		165FFBAD1C73476700FCB8DF /* iPhoneControllerInfo.json in Resources */ = {isa = PBXBuildFile; fileRef = 165FFBAC1C73476700FCB8DF /* iPhoneControllerInfo.json */; };
 		165FFBB01C7452B000FCB8DF /* IoTDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 165FFBAE1C7452B000FCB8DF /* IoTDataModel.xcdatamodeld */; };
 		165FFBB61C7528EC00FCB8DF /* LunaConnectController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165FFBB51C7528EC00FCB8DF /* LunaConnectController.swift */; };
+		165FFBB81C7586BB00FCB8DF /* iPhoneDeviceInfo.json in Resources */ = {isa = PBXBuildFile; fileRef = 165FFBB71C7586BB00FCB8DF /* iPhoneDeviceInfo.json */; };
+		165FFBBA1C758A0F00FCB8DF /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165FFBB91C758A0F00FCB8DF /* DeviceManager.swift */; };
+		165FFBBC1C758C9B00FCB8DF /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165FFBBB1C758C9B00FCB8DF /* Notification.swift */; };
+		165FFBBE1C75975000FCB8DF /* ControllerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165FFBBD1C75975000FCB8DF /* ControllerManager.swift */; };
 		B3316C0B1C64404F00A7F28A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3316C0A1C64404F00A7F28A /* AppDelegate.swift */; };
 		B3316C0D1C64404F00A7F28A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3316C0C1C64404F00A7F28A /* ViewController.swift */; };
 		B3316C101C64404F00A7F28A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B3316C0E1C64404F00A7F28A /* Main.storyboard */; };
@@ -44,6 +48,10 @@
 		165FFBAC1C73476700FCB8DF /* iPhoneControllerInfo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iPhoneControllerInfo.json; sourceTree = "<group>"; };
 		165FFBAF1C7452B000FCB8DF /* IoTDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = IoTDataModel.xcdatamodel; sourceTree = "<group>"; };
 		165FFBB51C7528EC00FCB8DF /* LunaConnectController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LunaConnectController.swift; sourceTree = "<group>"; };
+		165FFBB71C7586BB00FCB8DF /* iPhoneDeviceInfo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iPhoneDeviceInfo.json; sourceTree = "<group>"; };
+		165FFBB91C758A0F00FCB8DF /* DeviceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceManager.swift; sourceTree = "<group>"; };
+		165FFBBB1C758C9B00FCB8DF /* Notification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
+		165FFBBD1C75975000FCB8DF /* ControllerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControllerManager.swift; sourceTree = "<group>"; };
 		B3316C071C64404F00A7F28A /* IoTDeviceController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IoTDeviceController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3316C0A1C64404F00A7F28A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B3316C0C1C64404F00A7F28A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -120,12 +128,16 @@
 				B3316C161C64404F00A7F28A /* Info.plist */,
 				B3316C381C64446800A7F28A /* WebSocket.swift */,
 				B3316C3A1C6444E300A7F28A /* SSLSecurity.swift */,
-				B3CA78541C6579B000BFCB22 /* MyDeviceInfo.json */,
 				B3CA78561C6595A000BFCB22 /* SwiftyJSON.h */,
 				B3CA78571C6595C300BFCB22 /* SwiftyJSON.swift */,
+				B3CA78541C6579B000BFCB22 /* MyDeviceInfo.json */,
 				165FFBAC1C73476700FCB8DF /* iPhoneControllerInfo.json */,
+				165FFBB71C7586BB00FCB8DF /* iPhoneDeviceInfo.json */,
 				165FFBAE1C7452B000FCB8DF /* IoTDataModel.xcdatamodeld */,
 				165FFBB51C7528EC00FCB8DF /* LunaConnectController.swift */,
+				165FFBB91C758A0F00FCB8DF /* DeviceManager.swift */,
+				165FFBBD1C75975000FCB8DF /* ControllerManager.swift */,
+				165FFBBB1C758C9B00FCB8DF /* Notification.swift */,
 			);
 			path = IoTDeviceController;
 			sourceTree = "<group>";
@@ -255,6 +267,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				165FFBB81C7586BB00FCB8DF /* iPhoneDeviceInfo.json in Resources */,
 				B3316C151C64404F00A7F28A /* LaunchScreen.storyboard in Resources */,
 				B3316C121C64404F00A7F28A /* Assets.xcassets in Resources */,
 				165FFBAD1C73476700FCB8DF /* iPhoneControllerInfo.json in Resources */,
@@ -285,8 +298,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				B3316C0D1C64404F00A7F28A /* ViewController.swift in Sources */,
+				165FFBBA1C758A0F00FCB8DF /* DeviceManager.swift in Sources */,
+				165FFBBC1C758C9B00FCB8DF /* Notification.swift in Sources */,
 				B3316C391C64446800A7F28A /* WebSocket.swift in Sources */,
 				165FFBB01C7452B000FCB8DF /* IoTDataModel.xcdatamodeld in Sources */,
+				165FFBBE1C75975000FCB8DF /* ControllerManager.swift in Sources */,
 				B3316C3B1C6444E300A7F28A /* SSLSecurity.swift in Sources */,
 				165FFBB61C7528EC00FCB8DF /* LunaConnectController.swift in Sources */,
 				B3CA78581C6595C300BFCB22 /* SwiftyJSON.swift in Sources */,
