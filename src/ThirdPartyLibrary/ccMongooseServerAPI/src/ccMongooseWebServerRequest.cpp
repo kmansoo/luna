@@ -139,22 +139,22 @@ long ccMongooseWebServerRequest::GetContentBody(char* pBuf, std::size_t size)
 //  private method
 void ccMongooseWebServerRequest::DoSplitePathPos() const
 {
-    //if (_pPathPos || _pMgHttpMessage == NULL)
-    //    return;
+    if (_pPathPos || _pMgHttpMessage == NULL)
+        return;
 
-    //char const * slash = 0;
-    //char const * it = _pMgHttpMessage->uri.p;
+    char const * slash = 0;
+    char const * it = _pMgHttpMessage->uri.p;
 
-    //for (int nIndex = 0; nIndex < _pMgHttpMessage->uri.len; nIndex++)
-    //{
-    //    if (*it == '/')
-    //        slash = it;
+    for (int nIndex = 0; nIndex < _pMgHttpMessage->uri.len; nIndex++)
+    {
+        if (*it == '/')
+            slash = it;
 
-    //    ++it;
-    //}
+        ++it;
+    }
 
-    //_pathEnd    = it;
-    //_pPathPos   = slash == 0 ? _pathEnd : slash + 1;
+    _pathEnd    = it;
+    _pPathPos   = slash == 0 ? _pathEnd : slash + 1;
 }
 
 bool ccMongooseWebServerRequest::DoHasVarInConnection(const std::string& name) const

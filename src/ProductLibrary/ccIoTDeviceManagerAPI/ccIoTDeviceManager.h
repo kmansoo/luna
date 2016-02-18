@@ -43,8 +43,8 @@ protected:
     bool    ws_IoTDevice(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const std::string strData);
 
 protected:
-    bool        DoFindeDeviceAgent(std::shared_ptr<ccWebsocket> pWS, std::shared_ptr<ccIoTDeviceAgent>& pDA);
-    bool        DoParseCommand(std::shared_ptr<ccWebsocket> pWS, const std::string strData);
+    bool    DoFindeDeviceAgent(std::shared_ptr<ccWebsocket> pWS, std::shared_ptr<ccIoTDeviceAgent>& pDA);
+    bool    DoParseCommand(std::shared_ptr<ccWebsocket> pWS, const std::string strData);
 
 protected:
     virtual bool    DoRegisterCommand(std::shared_ptr<ccWebsocket> pWS, ccIoTDeviceProtocol& oProtocol);

@@ -25,29 +25,58 @@ ccIoTDeviceSpecification::ccIoTDeviceSpecification()
     _eDeviceType = kDeviceType_Unknown;
 }
 
+ccIoTDeviceSpecification::ccIoTDeviceSpecification(const ccIoTDeviceSpecification& other)
+{
+    _eDeviceType            = other._eDeviceType;
+    _strName                = other._strName;
+    _strDescription         = other._strDescription;
+}
+
+
+ccIoTDeviceSpecification::ccIoTDeviceSpecification(ccIoTDeviceSpecification&& other)
+{
+    *this = std::move(other);
+}
+
 ccIoTDeviceSpecification::~ccIoTDeviceSpecification()
 {
     // TODO Auto-generated destructor stub
 }
 
-const std::string& ccIoTDeviceSpecification::GetTypeName()
+const std::string& ccIoTDeviceSpecification::getTypeNameString(IoTDeviceType eType)
 {
-    if ((std::uint16_t)_eDeviceType >= kDeviceType_Max)
+    if ((std::uint16_t)eType >= kDeviceType_Max)
         return s_aDeviceTypeName[0];
 
-    return s_aDeviceTypeName[_eDeviceType];
+    return s_aDeviceTypeName[eType];
 }
 
-bool ccIoTDeviceSpecification::LoadFile(const std::string& strFileName)
+ccIoTDeviceSpecification::IoTDeviceType ccIoTDeviceSpecification::getType(const std::string& strName)
 {
-    std::ifstream ifs(strFileName);
+    for (int nIndex = 0; nIndex < kDeviceType_Max; nIndex++)
+    {
+        if (strName == s_aDeviceTypeName[nIndex])
+            return (IoTDeviceType)nIndex;
+    }
 
-    if (!ifs)
-        return false;
+    return kDeviceType_Unknown;
+}
 
-    std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
+ccIoTDeviceSpecification& ccIoTDeviceSpecification::operator=(ccIoTDeviceSpecification&& other) 
+{
+    if (this == &other)
+        return *this;
 
-    return Parse(content);
+    _eDeviceType    = other._eDeviceType;
+    _strName        = std::move(other._strName);
+    _strDescription = std::move(other._strDescription);
+
+    return *this;
+}
+
+const std::string& ccIoTDeviceSpecification::GetTypeName()
+{
+    return getTypeNameString(_eDeviceType);
 }
 
 bool ccIoTDeviceSpecification::Parse(const Json::Value& oInfo)
@@ -55,39 +84,20 @@ bool ccIoTDeviceSpecification::Parse(const Json::Value& oInfo)
     if (oInfo.isObject() == false)
         return false;
 
-    if (oInfo["IoTDeviceSpecification"].isNull())
+    if (oInfo["Type"].isNull())
         return false;
 
-    if (oInfo["IoTDeviceMasterUri"].isNull())
+    if (oInfo["Name"].isNull())
         return false;
 
-    if (oInfo["IoTDeviceSpecification"]["Type"].isNull())
-        return false;
+    _eDeviceType    = getType(oInfo["Type"].asString());
+    _strName        = oInfo["Name"].asCString();
 
-    if (oInfo["IoTDeviceSpecification"]["Name"].isNull())
-        return false;
+    if (!oInfo["Description"].isNull())
+        _strDescription = oInfo["Description"].asString();
 
-    _oSpecificationValue = oInfo;
-
-    std::string strTemp =_oSpecificationValue["IoTDeviceSpecification"]["Type"].asString();
-
-    _eDeviceType = kDeviceType_Unknown;
-
-    for (int nIndex = 0; nIndex < kDeviceType_Max; nIndex++)
-    {
-        if (strTemp == s_aDeviceTypeName[nIndex])
-            _eDeviceType = (IoTDeviceType)nIndex;
-    }
-
-    _strName = _oSpecificationValue["IoTDeviceSpecification"]["Name"].asCString();
-
-    if (!_oSpecificationValue["IoTDeviceSpecification"]["Description"].isNull())
-        _strDescription = _oSpecificationValue["IoTDeviceSpecification"]["Description"].asString();
-
-    if (!_oSpecificationValue["IoTDeviceSpecification"]["Manufacture"].isNull())
-        _strManufacture = _oSpecificationValue["IoTDeviceSpecification"]["Manufacture"].asString();
-
-    _strIoTDeviceMasterUri = std::move(oInfo["IoTDeviceMasterUri"].asString());
+    if (!oInfo["Manufacture"].isNull())
+        _strManufacture = oInfo["Manufacture"].asString();
 
     return true;
 }

@@ -17,10 +17,11 @@
 #include "ccWebsocketClientAPI/ccEasyWebsocketClient.h"
 
 #include "ccIoTDeviceProtocolAPI/ccIoTDeviceProtocol.h"
-#include "ccIoTDeviceProtocolAPI/ccIoTDeviceSpecification.h"
 
 #include "ccIoTDeviceTransport.h"
 #include "ccIoTDeviceTransportFactory.h"
+
+#include "ccIoTDeviceInfo.h"
 
 class ccIoTDevice
 {
@@ -34,6 +35,10 @@ public:
     virtual bool    Stop();
 
     virtual bool    Send(ccIoTDeviceProtocol& oProtocol);
+
+public:
+    bool    HasDevice(ccIoTDeviceSpecification::IoTDeviceType eDeviceType);
+    bool    HasDevice(const std::string& strDeviceName);
 
 public:
     virtual bool    OnRecvCommand(ccIoTDeviceProtocol& oProtocol);
@@ -50,7 +55,7 @@ protected:
     bool                        _bIsConnected;
     bool                        _bIsStopByUser;
 
-    ccIoTDeviceSpecification    _oSpecification;
+    ccIoTDeviceInfo             _oMyDeviceInfo;
     std::string                 _strTargetUri;
     ccEasyWebsocketClient       _oWSC;
     std::shared_ptr<ccIoTDeviceTransportFactory> _pFactory;

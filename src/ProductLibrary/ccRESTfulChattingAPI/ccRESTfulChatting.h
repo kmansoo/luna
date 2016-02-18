@@ -58,6 +58,7 @@ public:
 public:
     bool    CreateID(const std::string& strID, const std::string& strName);
     bool    DeleteID(const std::string& strID);
+    bool    GetUserInfo(const std::string& strID, ccRESTfulChattingUserInfo& oUserInfo);
     bool    GetUserList(std::vector<std::string>& aUserIDs);
 
     bool    CreateSession(const std::string& strName, const std::string& strOwnerID);
@@ -91,6 +92,7 @@ protected:
     bool    user(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse);
     bool    session(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse);
     bool    session_member(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse);
+    bool    session_member_id(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse);
     bool    session_message(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse);
 
 protected:

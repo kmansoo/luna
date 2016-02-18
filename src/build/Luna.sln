@@ -17,9 +17,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccRESTfulChattingAPI", "..\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccWin32API", "..\ThirdPartyLibrary\ccWin32API\build\ccWin32API.vcxproj", "{5F76776D-8695-43D9-B134-D0E24FA685C8}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebApiTest", "..\TestAPPs\WebApiTest\WebApiTest.vcxproj", "{DEFDC4EC-8F73-4131-9061-4771DD476EAC}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChattingWebApiTest", "..\TestAPPs\ChattingWebApiTest\ChattingWebApiTest.vcxproj", "{80272939-A0F1-4B52-BFB2-DB83E6BEBED1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChattingWebApiTestWin32", "..\TestAPPs\ChattingWebApiTest\ChattingWebApiTest.vcxproj", "{80272939-A0F1-4B52-BFB2-DB83E6BEBED1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccWebsocketClientAPI", "..\FossLibrary\ccWebsocketClientAPI\build\ccWebsocketClientAPI.vcxproj", "{0E86FFB0-57E1-4A9E-A12D-8A07CA1C5708}"
 EndProject
@@ -40,6 +38,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Pi2IoTServiceManagerBasedPositionSensor", "..\RaspberryPiAPPs\Pi2IoTServiceManagerBasedPositionSensor\build\Pi2IoTServiceManagerBasedPositionSensor.vcxproj", "{CB4609B1-61A3-4186-8FAC-F3ED0E897E92}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Pi2IoTPositionSensorDevice", "..\RaspberryPiAPPs\Pi2IoTPositionSensorDevice\build\Pi2IoTPositionSensorDevice.vcxproj", "{9C2B5542-5558-4329-B7C6-0A4816091D23}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IoTMultiFunctionDeviceTest", "..\TestAPPs\IoTMultiFunctionDeviceTest\build\IoTMultiFunctionDeviceTest.vcxproj", "{C03A2F80-0A3C-4CD5-89CC-04C637F5BAC9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,12 +93,6 @@ Global
 		{5F76776D-8695-43D9-B134-D0E24FA685C8}.Release|x64.ActiveCfg = Release|Win32
 		{5F76776D-8695-43D9-B134-D0E24FA685C8}.Release|x86.ActiveCfg = Release|Win32
 		{5F76776D-8695-43D9-B134-D0E24FA685C8}.Release|x86.Build.0 = Release|Win32
-		{DEFDC4EC-8F73-4131-9061-4771DD476EAC}.Debug|x64.ActiveCfg = Debug|Win32
-		{DEFDC4EC-8F73-4131-9061-4771DD476EAC}.Debug|x86.ActiveCfg = Debug|Win32
-		{DEFDC4EC-8F73-4131-9061-4771DD476EAC}.Debug|x86.Build.0 = Debug|Win32
-		{DEFDC4EC-8F73-4131-9061-4771DD476EAC}.Release|x64.ActiveCfg = Release|Win32
-		{DEFDC4EC-8F73-4131-9061-4771DD476EAC}.Release|x86.ActiveCfg = Release|Win32
-		{DEFDC4EC-8F73-4131-9061-4771DD476EAC}.Release|x86.Build.0 = Release|Win32
 		{80272939-A0F1-4B52-BFB2-DB83E6BEBED1}.Debug|x64.ActiveCfg = Debug|x64
 		{80272939-A0F1-4B52-BFB2-DB83E6BEBED1}.Debug|x64.Build.0 = Debug|x64
 		{80272939-A0F1-4B52-BFB2-DB83E6BEBED1}.Debug|x86.ActiveCfg = Debug|Win32
@@ -177,6 +171,14 @@ Global
 		{9C2B5542-5558-4329-B7C6-0A4816091D23}.Release|x64.Build.0 = Release|x64
 		{9C2B5542-5558-4329-B7C6-0A4816091D23}.Release|x86.ActiveCfg = Release|Win32
 		{9C2B5542-5558-4329-B7C6-0A4816091D23}.Release|x86.Build.0 = Release|Win32
+		{C03A2F80-0A3C-4CD5-89CC-04C637F5BAC9}.Debug|x64.ActiveCfg = Debug|x64
+		{C03A2F80-0A3C-4CD5-89CC-04C637F5BAC9}.Debug|x64.Build.0 = Debug|x64
+		{C03A2F80-0A3C-4CD5-89CC-04C637F5BAC9}.Debug|x86.ActiveCfg = Debug|Win32
+		{C03A2F80-0A3C-4CD5-89CC-04C637F5BAC9}.Debug|x86.Build.0 = Debug|Win32
+		{C03A2F80-0A3C-4CD5-89CC-04C637F5BAC9}.Release|x64.ActiveCfg = Release|x64
+		{C03A2F80-0A3C-4CD5-89CC-04C637F5BAC9}.Release|x64.Build.0 = Release|x64
+		{C03A2F80-0A3C-4CD5-89CC-04C637F5BAC9}.Release|x86.ActiveCfg = Release|Win32
+		{C03A2F80-0A3C-4CD5-89CC-04C637F5BAC9}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

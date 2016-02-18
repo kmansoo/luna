@@ -16,11 +16,12 @@ class ccIoTDeviceSpecification
 {
 public:
     ccIoTDeviceSpecification();
+    ccIoTDeviceSpecification(const ccIoTDeviceSpecification& other);
+    ccIoTDeviceSpecification(ccIoTDeviceSpecification&& other);
+
     virtual ~ccIoTDeviceSpecification();
 
 public:
-    bool    LoadFile(const std::string& strFileName);
-
     bool    Parse(const Json::Value& oInfo);
     bool    Parse(const std::string& strInfo);
 
@@ -37,36 +38,53 @@ public:
     };
 
 public:
+    static const std::string&   getTypeNameString(IoTDeviceType eType);
+    static IoTDeviceType        getType(const std::string& strName);
+
+public:
+    ccIoTDeviceSpecification& operator=(ccIoTDeviceSpecification&& other);
+
     const IoTDeviceType GetType() { return _eDeviceType; }
     const std::string& GetTypeName();
     const std::string& GetName() { return _strName; }
     const std::string& GetDescription() { return _strDescription; }
     const std::string& GetManufacture() { return _strManufacture; }
 
-    const Json::Value& ToJson() { return _oSpecificationValue; }
-
-    const std::string&	GetIoTDeviceMasterUri() {return _strIoTDeviceMasterUri; }
-
 protected:
     //  Example
     //
+    //  -- Single Device
     //  {
     //      "IoTDeviceSpecification" : {
     //          "Type" : "Switch",
     //          "Name" : "Simple Switch",
     //          "Description" : "On/Off",
     //          "Manufacture" : "Mansoo"
-    //      },
-    //		"IoTDeviceMasterUri" : "ws://localhost:8000/ws_iot_deivce"
+    //      }
     //  }
     //
-    Json::Value     _oSpecificationValue;
-
+    //  -- Multi Device
+    //  {
+    //      "IoTDeviceSpecification" : [
+    //          {
+    //              "Type" : "Light"
+    //              "Name" : "Linux Virtual Smart Light",
+    //              "Description" : "On/Off",
+    //              "Manufacture" : "Mansoo",
+    //          },
+    //          {
+    //              "Type" : "Switch",
+    //              "Name" : "Linux Virtual Smart Switch",
+    //              "Description" : "On/Off",
+    //              "Manufacture" : "Mansoo"
+    //          }
+    //      ]
+    //  }
+    //
     IoTDeviceType   _eDeviceType;
     std::string     _strName;
     std::string     _strDescription;
     std::string     _strManufacture;
-    std::string     _strIoTDeviceMasterUri;
 };
 
 #endif /* PRODUCTLIBRARY_CCIOTDEVICEPROTOCOLAPI_CCIOTDEVICESPECIFICATION_H_ */

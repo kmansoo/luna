@@ -149,6 +149,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\Pi2GpioControlManager.cpp" />
     <ClCompile Include="..\src\Pi2IoTPositionSensor.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +176,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\Pi2GpioControlManager.h" />
     <ClInclude Include="..\src\Pi2IoTPositionSensor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

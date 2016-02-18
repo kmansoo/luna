@@ -10,33 +10,46 @@
 
 #include <string>
 #include <memory>
+#include <vector>
 
 #include "ccWebServerAPI/ccWebsocket.h"
 #include "ccJsonParserAPI/json/value.h"
 
-#include "ccIoTDeviceProtocolAPI/ccIoTDeviceSpecification.h"
+#include "ccIoTDeviceProtocolAPI/ccIoTDeviceSpecificationList.h"
 
 class ccIoTDeviceAgent
 {
 public:
-    ccIoTDeviceAgent(std::shared_ptr<ccWebsocket> pWS, const Json::Value& oSpec);
+    ccIoTDeviceAgent(std::shared_ptr<ccWebsocket> pWS, ccIoTDeviceSpecificationList&& oSpecInfo);
     virtual ~ccIoTDeviceAgent();
 
 public:
     void    Show();
 
 public:
-    ccIoTDeviceSpecification::IoTDeviceType GetType() { return _oSpecification.GetType(); }
-    const std::string&                  GetTypeName() { return _oSpecification.GetTypeName(); }
+    int GetDeviceCount() { return _oDeviceSpecInfo.Size(); }
+    ccIoTDeviceSpecificationList&   GetDeviceSpecInfo() { return _oDeviceSpecInfo; }    //  for All Device Info
+
+    bool    HasDevice(ccIoTDeviceSpecification::IoTDeviceType eDeviceType);
+    bool    HasDevice(const std::string& strDeviceName);
+
+    int     GetDeviceIndex(ccIoTDeviceSpecification::IoTDeviceType eDeviceType);
+
+    ccIoTDeviceSpecification&       GetDeviceSpec(std::size_t nIndex = 0);  //  for Specific Device
+
+    ccIoTDeviceSpecification::IoTDeviceType GetType(std::size_t nIndex = 0);
+    const std::string&                  GetTypeName(std::size_t nIndex = 0);
+    const std::string&                  GetName(std::size_t nIndex = 0);
 
     std::int32_t                        GetID() { return _pWS->GetInstance(); }
-    const std::string&                  GetName() {return _oSpecification.GetName(); }
     const std::shared_ptr<ccWebsocket>  GetWebsockt() {return _pWS; }
-    ccIoTDeviceSpecification&           GetDeviceSPec() { return _oSpecification; }
 
 private:
     std::shared_ptr<ccWebsocket>    _pWS;
-    ccIoTDeviceSpecification        _oSpecification;
+    ccIoTDeviceSpecificationList    _oDeviceSpecInfo;
+
+    ccIoTDeviceSpecification        _oNullObj;
+    std::string                     _oNullData;
 
 };
 

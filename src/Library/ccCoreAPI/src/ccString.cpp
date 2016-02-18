@@ -55,13 +55,7 @@ ccString::~ccString()
 
 void  ccString::ReplaceStringInPlace(const ccString& search, const ccString& replace)
 {
-    size_t pos = 0;
-
-    while ((pos = this->find(search, pos)) != ccString::npos)
-    {
-        this->replace(pos, search.length(), replace);
-        pos += replace.length();
-    }
+    ccString::replace(*this, search, replace);
 }
 
 unsigned long ccString::DecodeHex(int *pConvertedSize)
@@ -191,6 +185,17 @@ void ccString::format(std::string& destStr, const char* format, ...)
     strFormatBuffer[nAllocSize] = '\0';
 
     destStr.assign(strFormatBuffer);
+}
+
+void ccString::replace(std::string& destStr, const ccString& search, const ccString& replace)
+{
+    size_t pos = 0;
+
+    while ((pos = destStr.find(search, pos)) != ccString::npos)
+    {
+        destStr.replace(pos, search.length(), replace);
+        pos += replace.length();
+    }
 }
 
 /**
