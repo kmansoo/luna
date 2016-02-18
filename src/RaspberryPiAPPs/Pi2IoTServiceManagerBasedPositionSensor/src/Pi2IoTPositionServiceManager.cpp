@@ -44,7 +44,7 @@ bool Pi2IoTPositionServiceManager::DoUpdateDeviceStatusCommand(std::shared_ptr<c
 
         for (auto it : _aAgents)
         {
-            if (it.second->GetType() == ccIoTDeviceSpecification::kDeviceType_Controller)
+            if (it.second->HasDevice(ccIoTDeviceSpecification::kDeviceType_Controller))
                 oProtocol.Send(it.second->GetWebsockt().get());
         }
     }

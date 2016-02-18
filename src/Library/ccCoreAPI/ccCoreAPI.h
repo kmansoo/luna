@@ -13,6 +13,8 @@ namespace Luna {
 void    sleep(int milliseconds);
 void    usleep(int milliseconds);
 
+unsigned long long getTickCount();     //  tick count(ms)
+
 }
 
 #endif /* LIBRARY_CCCOREAPI_CCCOREAPI_H_ */

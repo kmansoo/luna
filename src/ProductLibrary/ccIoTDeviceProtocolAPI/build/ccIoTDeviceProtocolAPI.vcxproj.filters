@@ -32,6 +32,9 @@
     <ClInclude Include="..\ccIoTDeviceSpecification.h">
       <Filter>API</Filter>
     </ClInclude>
+    <ClInclude Include="..\ccIoTDeviceSpecificationList.h">
+      <Filter>API</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -41,6 +44,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ccIoTDeviceSpecification.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccIoTDeviceSpecificationList.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

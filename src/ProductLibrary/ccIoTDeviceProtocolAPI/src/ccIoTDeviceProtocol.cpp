@@ -14,7 +14,7 @@
 #include "ccIoTDeviceProtocol.h"
 
 //  Protocol Example
-//  "Register"
+//  "Register" : Single Device
 //{
 //    "Request" : true,
 //    "Command" : "Register",
@@ -29,13 +29,49 @@
 //    }
 //}
 //
+//  "Register"  : Multi Device
+//{
+//    "Request" : true,
+//    "Command" : "Register",
+//    "Info" : {
+//      "IoTDeviceSpecification" : [
+//          {
+//              "Type" : "Light"
+//              "Name" : "Linux Virtual Smart Light",
+//              "Description" : "On/Off",
+//              "Manufacture" : "Mansoo",
+//          },
+//          {
+//              "Type" : "Switch",
+//              "Name" : "Linux Virtual Smart Switch",
+//              "Description" : "On/Off",
+//              "Manufacture" : "Mansoo"
+//          }
+//      ],
+//      "IoTDeviceMasterUri" : "ws://localhost:8000/ws_iot_deivce",
+//    }
+//}
+
+//
 //
 //  "SetDevice"
 //{
 //    "Request" : true,
 //    "Command" : "SetDevice",
 //    "Info" : {
-//          "Control" : "On"
+//          "DeviceType"    : "Light"
+//          "Control"       : "On"
+//     },
+//}
+//
+//
+//  "SetDevice"
+//{
+//    "Request" : true,
+//    "Command" : "SetDevice",
+//    "Info" : {
+//          "DeviceType"    : "Light"
+//          "Control"       : "On"
 //     },
 //}
 //
@@ -90,7 +126,6 @@ bool ccIoTDeviceProtocol::Parse(const std::string& strData)
     //std::cout << std::endl;
     //std::cout << strData << std::endl;
     //std::cout << std::endl << std::endl;
-
     Json::Reader    oReader;
     Json::Value     oProtocol;
 
@@ -112,14 +147,24 @@ bool ccIoTDeviceProtocol::Parse(const std::string& strData)
     if (oProtocol["Info"].isObject() == true)
         _oExtInfo = std::move(oProtocol["Info"]);
 
+    auto fun = _aParsers[_strCommand];
+
+    if (fun != NULL)
+        fun(_oExtInfo);
+
     return true;
 }
 
 //  I'll implement the following method.
 bool ccIoTDeviceProtocol::DoParserRegisterCommand(const Json::Value& oExtInfo)
 {
-    
-    return false;
+    if (oExtInfo.isNull())
+        return false;
+
+    if (oExtInfo["IoTDeviceSpecification"].isNull())
+        return false;
+
+    return _aSpecificationInfo.Parse(oExtInfo["IoTDeviceSpecification"]);
 }
 
 bool ccIoTDeviceProtocol::DoParserDeRegisterCommand(const Json::Value& oExtInfo)

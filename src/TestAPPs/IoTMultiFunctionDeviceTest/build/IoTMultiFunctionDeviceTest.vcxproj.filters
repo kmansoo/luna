@@ -17,19 +17,5 @@
     <ClCompile Include="..\src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Pi2IoTPositionSensor.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Pi2GpioControlManager.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\src\Pi2IoTPositionSensor.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Pi2GpioControlManager.h">
-      <Filter>src</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

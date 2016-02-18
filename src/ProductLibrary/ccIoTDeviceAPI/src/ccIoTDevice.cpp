@@ -19,7 +19,7 @@ ccIoTDevice::ccIoTDevice(const std::string& strSpecFile) : _bIsConnected(false),
     _oWSC.SetEventListener(std::bind(&ccIoTDevice::DoRecvDataFromWebsocket, this, std::placeholders::_1, std::placeholders::_2));
 
     //  ÀÐ±â
-    if (_oSpecification.LoadFile(strSpecFile) == false)
+    if (_oMyDeviceInfo.LoadFile(strSpecFile) == false)
     {
         std::cout << "[Warning!!]" << std::endl;
         std::cout << "  --> Couldn't load the device specification['" << strSpecFile << "'" << std::endl;
@@ -46,7 +46,7 @@ bool ccIoTDevice::Start()
 
     _bIsStopByUser = false;
 
-    _strTargetUri = _oSpecification.GetIoTDeviceMasterUri();
+    _strTargetUri = _oMyDeviceInfo.GetMasterUri();
 
     if (_strTargetUri == "")
     	_strTargetUri = "ws://localhost:8000/ws_iot_deivce";
@@ -76,6 +76,16 @@ bool ccIoTDevice::Stop()
 bool ccIoTDevice::Send(ccIoTDeviceProtocol& oProtocol)
 {
     return oProtocol.Send(&_oWSC);
+}
+
+bool ccIoTDevice::HasDevice(ccIoTDeviceSpecification::IoTDeviceType eDeviceType)
+{
+    return _oMyDeviceInfo.GetSpecificationInfo().HasDevice(eDeviceType);
+}
+
+bool ccIoTDevice::HasDevice(const std::string& strDeviceName)
+{
+    return _oMyDeviceInfo.GetSpecificationInfo().HasDevice(strDeviceName);
 }
 
 //  virtual functions
@@ -108,7 +118,7 @@ void ccIoTDevice::DoRetryConnect()
     _bIsConnected = true;
 
     ccIoTDeviceProtocol oProtocol;
-    oProtocol.Send(&_oWSC, true, "Register", _oSpecification.ToJson());
+    oProtocol.Send(&_oWSC, true, "Register", _oMyDeviceInfo.GetSpecificationInfo().ToJson());
 }
 
 //void ccIoTDevice::DoCloseWS()
@@ -125,7 +135,7 @@ void ccIoTDevice::DoRecvDataFromWebsocket(ccWebsocket::ccWebSocketEvent eEvent, 
         {
             _bIsConnected = true;
             ccIoTDeviceProtocol oProtocol;
-            oProtocol.Send(&_oWSC, true, "Register", _oSpecification.ToJson());
+            oProtocol.Send(&_oWSC, true, "Register", _oMyDeviceInfo.GetSpecificationInfo().ToJson());
 
             std::cout << "ccIoTDevice: Connected" << std::endl;
         }

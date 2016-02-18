@@ -10,11 +10,14 @@
 
 #include <functional>
 #include <string>
+#include <vector>
 #include <map>
 
 #include "ccJsonParserAPI/json/value.h"
 
 #include "ccWebServerAPI/ccWebsocket.h"
+
+#include "ccIoTDeviceSpecificationList.h"
 
 class ccIoTDeviceProtocol
 {
@@ -59,8 +62,12 @@ public:
     std::string     _strCommand;
     Json::Value     _oExtInfo;
 
-    //  Device COntrol
+    //  Device Control
     std::uint32_t   _uDeviceControl;
+
+    //  Registration
+    ccIoTDeviceSpecificationList    _aSpecificationInfo;            //  Device Specfication
+    std::string                     _strIoTDeviceMasterUri;
 
 private:
     std::map < std::string, std::function<bool(const Json::Value& oExtInfo)>> _aParsers;

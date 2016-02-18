@@ -79,6 +79,8 @@ void ccIoTDeviceManager::AllSwitchesControl(bool bOn)
 
     Json::Value oExtInfo;
 
+    oExtInfo["DeviceType"] = "Switch";
+
     if (bOn)
         oExtInfo["Control"] = "On";
     else
@@ -86,7 +88,7 @@ void ccIoTDeviceManager::AllSwitchesControl(bool bOn)
 
     for (auto it : _aAgents)
     {
-        if (it.second->GetType() == ccIoTDeviceSpecification::kDeviceType_Switch)
+        if (it.second->HasDevice(ccIoTDeviceSpecification::kDeviceType_Switch))
             oControlProtocol.Send(it.second->GetWebsockt().get(), true, "SetDevice", oExtInfo);
     }
 }
@@ -99,6 +101,8 @@ void ccIoTDeviceManager::AllLightsControl(bool bOn)
 
     Json::Value oExtInfo;
 
+    oExtInfo["DeviceType"] = "Light";
+
     if (bOn)
         oExtInfo["Control"] = "On";
     else
@@ -106,7 +110,7 @@ void ccIoTDeviceManager::AllLightsControl(bool bOn)
 
     for (auto it : _aAgents)
     {
-        if (it.second->GetType() == ccIoTDeviceSpecification::kDeviceType_Light)
+        if (it.second->HasDevice(ccIoTDeviceSpecification::kDeviceType_Light))
             oControlProtocol.Send(it.second->GetWebsockt().get(), true, "SetDevice", oExtInfo);
     }
 }
@@ -119,6 +123,8 @@ void ccIoTDeviceManager::AllLocksControl(bool bOpen)
 
     Json::Value oExtInfo;
 
+    oExtInfo["DeviceType"] = "Lock";
+
     if (bOpen)
         oExtInfo["Control"] = "Open";
     else
@@ -126,7 +132,7 @@ void ccIoTDeviceManager::AllLocksControl(bool bOpen)
 
     for (auto it : _aAgents)
     {
-        if (it.second->GetType() == ccIoTDeviceSpecification::kDeviceType_Lock)
+        if (it.second->HasDevice(ccIoTDeviceSpecification::kDeviceType_Lock))
             oControlProtocol.Send(it.second->GetWebsockt().get(), true, "SetDevice", oExtInfo);
     }
 }
@@ -159,7 +165,7 @@ bool ccIoTDeviceManager::devices(std::shared_ptr<ccWebServerRequest> pRequest, s
             { 
                 Json::Value oDeviceInfo;
 
-                oDeviceInfo = it.second->GetDeviceSPec().ToJson();
+                oDeviceInfo = it.second->GetDeviceSpecInfo().ToJson();
                 oDeviceInfo["ID"] = it.second->GetID();
 
                 oDeviceList["device"][nIndex++] = oDeviceInfo;
@@ -220,7 +226,7 @@ bool ccIoTDeviceManager::devices_device(std::shared_ptr<ccWebServerRequest> pReq
 
         Json::Value oDeviceInfo;
 
-        oDeviceInfo = it->second->GetDeviceSPec().ToJson();
+        oDeviceInfo = it->second->GetDeviceSpecInfo().ToJson();
         oDeviceInfo["ID"] = it->second->GetID();
 
         oResponseJsonData["device"] = oDeviceInfo;
@@ -320,10 +326,6 @@ bool  ccIoTDeviceManager::DoParseCommand(std::shared_ptr<ccWebsocket> pWS, const
     ccIoTDeviceProtocol oProtocol;
     if (oProtocol.Parse(strData))
     {
-        //if (oProtocol._IsRequest)
-        //    std::cout << "ccIoTDevice Request Command: " << oProtocol._strCommand << std::endl;
-        //else
-        //    std::cout << "ccIoTDevice Response Command: " << oProtocol._strCommand << std::endl;
         auto it = _aCommands.find(oProtocol._strCommand);
 
         if (it != std::end(_aCommands))
@@ -339,7 +341,7 @@ bool ccIoTDeviceManager::DoRegisterCommand(std::shared_ptr<ccWebsocket> pWS, ccI
     if (oProtocol._IsRequest == false)
         return false;
 
-    std::shared_ptr<ccIoTDeviceAgent> pNewDeviceAgent(new ccIoTDeviceAgent(pWS, oProtocol._oExtInfo));
+    std::shared_ptr<ccIoTDeviceAgent> pNewDeviceAgent(new ccIoTDeviceAgent(pWS, std::move(oProtocol._aSpecificationInfo)));
 
     std::lock_guard<std::mutex> lock(_mtx);
 

@@ -22,7 +22,23 @@ bool ccRESTfulApi::HasAPI(const std::string& strUri)
     auto it = _aAPIs.find(strUri);
 
     if (it == _aAPIs.end())
-        return false;
+    {
+        //  '/xxx/xxx/*' 패턴을 찾음
+        std::string strTemp = strUri;
+
+        int nPos = strTemp.rfind("/");
+
+        if (nPos >= 0)
+        {
+            strTemp.erase(nPos + 1, (strTemp.length() - nPos) - 1);
+
+            strTemp += "*";
+            it = _aAPIs.find(strTemp);
+
+            if (it == _aAPIs.end())
+                return false;
+        }
+    }
 
     return true;
 }
@@ -34,7 +50,23 @@ bool ccRESTfulApi::PerformAPI(std::shared_ptr<ccWebServerRequest> pRequest, std:
     auto it = _aAPIs.find(strUri);
 
     if (it == _aAPIs.end())
-        return false;
+    {
+        //  '/xxx/xxx/*' 패턴을 찾음
+        std::string strTemp = strUri;
+
+        int nPos = strTemp.rfind("/");
+
+        if (nPos >= 0)
+        {
+            strTemp.erase(nPos + 1, (strTemp.length() - nPos) - 1);
+
+            strTemp += "*";
+            it = _aAPIs.find(strTemp);
+
+            if (it == _aAPIs.end())
+                return false;
+        }
+    }
 
     return it->second(pRequest, pResponse);
 }

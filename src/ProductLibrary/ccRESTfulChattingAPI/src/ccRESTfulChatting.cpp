@@ -182,6 +182,22 @@ bool ccRESTfulChattingSessionManager::LeaveSession(const std::string& strName, c
     return false;
 }
 
+bool ccRESTfulChattingSessionManager::GetUserInfo(const std::string& strID, ccRESTfulChattingUserInfo& oUserInfo)
+{
+    for (auto info : _aUserInfos)
+    {
+        if (strID == info->_strID)
+        {
+            oUserInfo = *info;
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
 bool ccRESTfulChattingSessionManager::GetUserList(std::vector<std::string>& aUserIDs)
 {
     aUserIDs.clear();
@@ -231,6 +247,7 @@ ccRESTfulChatting::ccRESTfulChatting()
     AddAPI(std::string("/user"), std::bind(&ccRESTfulChatting::user, this, std::placeholders::_1, std::placeholders::_2));
     AddAPI(std::string("/session"), std::bind(&ccRESTfulChatting::session, this, std::placeholders::_1, std::placeholders::_2));
     AddAPI(std::string("/session/member"), std::bind(&ccRESTfulChatting::session_member, this, std::placeholders::_1, std::placeholders::_2));
+    AddAPI(std::string("/session/member/*"), std::bind(&ccRESTfulChatting::session_member_id, this, std::placeholders::_1, std::placeholders::_2));
     //  AddAPI(std::string("/session/message"), std::bind(&ccRESTfulChatting::session_message, this, std::placeholders::_1, std::placeholders::_2));
 }
 
@@ -460,7 +477,7 @@ bool ccRESTfulChatting::session(std::shared_ptr<ccWebServerRequest> pRequest, st
 }
 
 bool ccRESTfulChatting::session_member(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)
-{   
+{
     switch (pRequest->GetMethod())
     {
         case ccWebServerRequest::HttpMethod_Get:
@@ -528,6 +545,17 @@ bool ccRESTfulChatting::session_member(std::shared_ptr<ccWebServerRequest> pRequ
     return true;
 }
 
+bool ccRESTfulChatting::session_member_id(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)
+{
+    //  I'll implement this method as soon as possible.
+    std::string strUserID = pRequest->GetResource();
+
+    pResponse->Status(500, std::string("Server Error!"));
+    pResponse->ContentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
+
+    return true;
+}
+
 //  
 bool ccRESTfulChatting::ws_chat(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const std::string& strData)
 {
@@ -565,12 +593,3 @@ bool ccRESTfulChatting::ws_chat(ccWebsocket::ccWebSocketEvent eEvent, std::share
     }
     return true;
 }
-
-//bool ccRESTfulChatting::session_message(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)
-//{
-//
-//    pResponse->Status(500, string("Server Error!"));
-//    pResponse->ContentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
-//
-//    return false;
-//}

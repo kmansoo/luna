@@ -25,12 +25,16 @@ public:
 private:
     void    DoPoll();
     bool    DoUpdateSesorData(std::string& strData);
+    void    DoMeasureLength();
 
 private:
+    enum CONST_VALUE {
+        kUltraSonicPingSensor_TriggerPin    =   23, // pin which triggers ultrasonic sound
+        kUltraSonicPingSensor_EchoPin       =   24  // pin which delivers time to receive echo using pulseIn()
+    };
+
     std::thread _oPollThread;
     bool        _bIsStopThread;
-
-    int         _nSerialFd;
 };
 
 #endif /* RASPBERRYPIAPPS_PI2IOTLIGHTDEVICE_SRC_PI2IOTPOSITIONSENSOR_H_ */

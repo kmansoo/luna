@@ -65,6 +65,8 @@ public:
 public:
     // Supports up to 512 bytes
     static  void    format(std::string& destStr, const char* format, ...);
+    static void     replace(std::string& destStr, const ccString& search, const ccString& replace);
+
     static  long    decodeStringToHex(const char* strVal, int nLength = -1, int* pConvertedSize = NULL);
     static  bool    encodeBase64(std::string& destStr, std::string& src);
     static  bool    decodeBase64(std::string& destStr, std::string& src);
