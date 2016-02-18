@@ -81,7 +81,7 @@ class PhoneLight: WebSocketDelegate {
     // MARK: - Helper Functions
     
     func loadJSON() {
-        if let filePath = NSBundle.mainBundle().pathForResource("iPhoneDeviceInfo", ofType: "json"), data = NSData(contentsOfFile: filePath) {
+        if let filePath = NSBundle.mainBundle().pathForResource("iPhoneLightInfo", ofType: "json"), data = NSData(contentsOfFile: filePath) {
             
             do {
                 myDeviceInfo = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments)

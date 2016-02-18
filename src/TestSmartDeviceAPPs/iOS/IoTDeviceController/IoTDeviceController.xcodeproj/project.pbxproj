@@ -10,7 +10,7 @@
 		165FFBAD1C73476700FCB8DF /* iPhoneControllerInfo.json in Resources */ = {isa = PBXBuildFile; fileRef = 165FFBAC1C73476700FCB8DF /* iPhoneControllerInfo.json */; };
 		165FFBB01C7452B000FCB8DF /* IoTDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 165FFBAE1C7452B000FCB8DF /* IoTDataModel.xcdatamodeld */; };
 		165FFBB61C7528EC00FCB8DF /* LunaConnectController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165FFBB51C7528EC00FCB8DF /* LunaConnectController.swift */; };
-		165FFBB81C7586BB00FCB8DF /* iPhoneDeviceInfo.json in Resources */ = {isa = PBXBuildFile; fileRef = 165FFBB71C7586BB00FCB8DF /* iPhoneDeviceInfo.json */; };
+		165FFBB81C7586BB00FCB8DF /* iPhoneLightInfo.json in Resources */ = {isa = PBXBuildFile; fileRef = 165FFBB71C7586BB00FCB8DF /* iPhoneLightInfo.json */; };
 		165FFBBA1C758A0F00FCB8DF /* PhoneLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165FFBB91C758A0F00FCB8DF /* PhoneLight.swift */; };
 		165FFBBC1C758C9B00FCB8DF /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165FFBBB1C758C9B00FCB8DF /* Notification.swift */; };
 		165FFBBE1C75975000FCB8DF /* PhoneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165FFBBD1C75975000FCB8DF /* PhoneController.swift */; };
@@ -48,7 +48,7 @@
 		165FFBAC1C73476700FCB8DF /* iPhoneControllerInfo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iPhoneControllerInfo.json; sourceTree = "<group>"; };
 		165FFBAF1C7452B000FCB8DF /* IoTDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = IoTDataModel.xcdatamodel; sourceTree = "<group>"; };
 		165FFBB51C7528EC00FCB8DF /* LunaConnectController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LunaConnectController.swift; sourceTree = "<group>"; };
-		165FFBB71C7586BB00FCB8DF /* iPhoneDeviceInfo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iPhoneDeviceInfo.json; sourceTree = "<group>"; };
+		165FFBB71C7586BB00FCB8DF /* iPhoneLightInfo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iPhoneLightInfo.json; sourceTree = "<group>"; };
 		165FFBB91C758A0F00FCB8DF /* PhoneLight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneLight.swift; sourceTree = "<group>"; };
 		165FFBBB1C758C9B00FCB8DF /* Notification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		165FFBBD1C75975000FCB8DF /* PhoneController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneController.swift; sourceTree = "<group>"; };
@@ -132,7 +132,7 @@
 				B3CA78571C6595C300BFCB22 /* SwiftyJSON.swift */,
 				B3CA78541C6579B000BFCB22 /* MyDeviceInfo.json */,
 				165FFBAC1C73476700FCB8DF /* iPhoneControllerInfo.json */,
-				165FFBB71C7586BB00FCB8DF /* iPhoneDeviceInfo.json */,
+				165FFBB71C7586BB00FCB8DF /* iPhoneLightInfo.json */,
 				165FFBAE1C7452B000FCB8DF /* IoTDataModel.xcdatamodeld */,
 				165FFBB51C7528EC00FCB8DF /* LunaConnectController.swift */,
 				165FFBB91C758A0F00FCB8DF /* PhoneLight.swift */,
@@ -267,7 +267,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				165FFBB81C7586BB00FCB8DF /* iPhoneDeviceInfo.json in Resources */,
+				165FFBB81C7586BB00FCB8DF /* iPhoneLightInfo.json in Resources */,
 				B3316C151C64404F00A7F28A /* LaunchScreen.storyboard in Resources */,
 				B3316C121C64404F00A7F28A /* Assets.xcassets in Resources */,
 				165FFBAD1C73476700FCB8DF /* iPhoneControllerInfo.json in Resources */,
