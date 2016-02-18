@@ -9,7 +9,7 @@
 
 #include "Pi2GpioControlManager.h"
 
-#ifndef WIN32
+#ifdef LUNA_PLATFORM_RASPBERRY_PI2
 
 // To install the wiringPi.h, please refer to http://wiringpi.com/reference/
 // wiringPi : GPIO Interface library for the Raspberry Pi
@@ -24,10 +24,10 @@
 #define PWM_OUTPUT  kGpioPinMode_PWM_OUTPUT
 #define GPIO_CLOCK  kGpioPinMode_GPIO_CLOCK
 
-void    wiringPiSetup() {}
-void    pinMode(std::uint32_t, int) {}
-void    digitalWrite(std::uint32_t, int) {}
-int     digitalRead(std::uint32_t) { return 0; }
+static void    wiringPiSetup() {}
+static void    pinMode(std::uint32_t, int) {}
+static void    digitalWrite(std::uint32_t, int) {}
+static int     digitalRead(std::uint32_t) { return 0; }
 
 #endif
 
