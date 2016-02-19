@@ -21,8 +21,8 @@ class ViewController: UIViewController , WebSocketDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         
+        print("test")
         if let filePath = NSBundle.mainBundle().pathForResource("MyDeviceInfo", ofType: "json"), data = NSData(contentsOfFile: filePath) {
             
             do {
@@ -55,7 +55,6 @@ class ViewController: UIViewController , WebSocketDelegate {
     //  for Timer
     // must be internal or public.
     func retryConnectToIoTManager() {
-        
         print("connect to the \(managerUri.text)")
         socket = WebSocket(url: NSURL(string: managerUri.text!)!, protocols: ["chat", "superchat"])
         

@@ -1,0 +1,9 @@
+{
+    "IoTDeviceSpecification" : {
+        "Type" : "Light",
+        "Name" : "xho95's iPhone Light",
+        "Description" : "On/Off",
+        "Manufacture" : "Kim, Min Ho"
+    },
+    "IoTDeviceMasterUri" : "ws://localhost:8000/ws_iot_deivce"
+}
