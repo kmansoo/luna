@@ -135,9 +135,8 @@ class PhoneController: WebSocketDelegate {
         registerCmd += "   \"Command\" : \"SetControl\","
         registerCmd += "   \"Info\": { "
         registerCmd += "       \"DeviceType\" : \"Light\","
-        registerCmd += "       \"Control\" : \"AllLightsTurnOn\""
-//        registerCmd += "       \"Control\" : \"" + on + "\""
-        registerCmd += "    },"
+        registerCmd += "       \"Control\" : \"" + on + "\""
+        registerCmd += "    }"
         registerCmd += "}"
         
         socket.writeString(registerCmd)
