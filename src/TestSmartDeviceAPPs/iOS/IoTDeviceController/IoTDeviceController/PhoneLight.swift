@@ -111,8 +111,9 @@ class PhoneLight: WebSocketDelegate {
     }
     
     func phoneFlash(isOn isOn: Bool) {
-        
-        let device = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
+        guard let device = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo) else {
+            return
+        }
         
         if (device.hasTorch) {
             do {

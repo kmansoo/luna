@@ -126,7 +126,7 @@ class PhoneController: WebSocketDelegate {
         
         print(resultURI)
     }
-    
+
     func toggleLight(isOn: Bool) {
         let on = isOn ? "AllLightsTurnOn" : "AllLightsTurnOff"
         
@@ -140,20 +140,21 @@ class PhoneController: WebSocketDelegate {
         registerCmd += "}"
         
         socket.writeString(registerCmd)
+        print(registerCmd)
     }
     
     func toggleSwitch(isOn: Bool) {
-            let on = isOn ? "AllSwitchesTurnOn" : "AllSwitchesTurnOff"
-
-            var registerCmd = "{"
-            registerCmd += "   \"Request\" : true,"
-            registerCmd += "   \"Command\" : \"SetControl\","
-            registerCmd += "   \"Info\": { "
-            registerCmd += "       \"DeviceType\" : \"Switch\","
-            registerCmd += "       \"Control\" : \"" + on + "\""
-            registerCmd += "    }"
-            registerCmd += "}"
-            
-            socket.writeString(registerCmd)
+        let on = isOn ? "AllSwitchesTurnOn" : "AllSwitchesTurnOff"
+        
+        var registerCmd = "{"
+        registerCmd += "   \"Request\" : true,"
+        registerCmd += "   \"Command\" : \"SetControl\","
+        registerCmd += "   \"Info\": { "
+        registerCmd += "       \"DeviceType\" : \"Switch\","
+        registerCmd += "       \"Control\" : \"" + on + "\""
+        registerCmd += "    }"
+        registerCmd += "}"
+        
+        socket.writeString(registerCmd)
     }
 }
