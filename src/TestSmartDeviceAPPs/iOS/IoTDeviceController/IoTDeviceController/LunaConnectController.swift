@@ -13,9 +13,10 @@ class LunaConnectController: UITableViewController, Notification {
     // MARK: - Properties
     
     @IBOutlet weak var lunaURI: UILabel!
+    @IBOutlet weak var lunaCommand: UILabel!
     
-    let phoneController = PhoneController.sharedInstance
-    let light = PhoneLight.sharedInstance
+    var phoneController = PhoneController.sharedInstance
+    var light = PhoneLight.sharedInstance
     
     // MARK: - Controller Functions
     
@@ -37,7 +38,8 @@ class LunaConnectController: UITableViewController, Notification {
     }
 
     @IBAction func connectButton(sender: UIButton) {
-        if let uri = lunaURI.text {
+        if let url = lunaURI.text, let command = lunaCommand.text  {
+            let uri = url + command
             phoneController.loadJSON()
             phoneController.retryConnectToIoTManagerWith(uri)
 
@@ -54,7 +56,9 @@ class LunaConnectController: UITableViewController, Notification {
         // Pass the selected object to the new view controller.
         
         if segue.identifier == "LogInSegue" {
+            let destination = segue.destinationViewController as! LunaDevicesController
             
+            destination.url = self.lunaURI.text
         }
     }
     // MARK: - Notification Protocol

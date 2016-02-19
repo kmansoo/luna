@@ -63,19 +63,22 @@ class PhoneController: WebSocketDelegate {
     }
     
     func websocketDidReceiveMessage(ws: WebSocket, text: String) {
-        var json = JSON.parse(text);
+        var json = JSON.parse(text)
         
-        if (json != JSON.null)
-        {
-            if (json["Command"] == "UpdateDeviceStatus")
-            {
-                let value = json["Info"]["Value"].stringValue;
+        if json != JSON.null {
+            if json["Command"] == "UpdateDeviceStatus" {
+                let value = json["Info"]["Value"].stringValue
                 
-                //                devicePositionInfo.setValue(Float(json["Info"]["Value"].intValue), animated: false)
-                //
-                //                value += " cm"
-                //                positionDisplay.text = value
                 print("\(value)")
+            }
+            
+            // getting the device's list
+            
+            if json["device_list"].stringValue != "" {
+                let jsonList = json["device_list"]
+                print(jsonList["count"].stringValue)
+                
+                self.viewController?.list()
             }
         }
     }
@@ -114,5 +117,44 @@ class PhoneController: WebSocketDelegate {
         
         socket.delegate = self
         socket.connect()
+    }
+    
+    func getDeviceList(uri: String) {
+        let resultURI = uri.stringByReplacingOccurrencesOfString("ws", withString:"http")
+        
+        socket.writeString(resultURI)
+        
+        print(resultURI)
+    }
+    
+    func toggleLight(isOn: Bool) {
+        let on = isOn ? "AllLightsTurnOn" : "AllLightsTurnOff"
+        
+        var registerCmd = "{"
+        registerCmd += "   \"Request\" : true,"
+        registerCmd += "   \"Command\" : \"SetControl\","
+        registerCmd += "   \"Info\": { "
+        registerCmd += "       \"DeviceType\" : \"Light\","
+        registerCmd += "       \"Control\" : \"AllLightsTurnOn\""
+//        registerCmd += "       \"Control\" : \"" + on + "\""
+        registerCmd += "    },"
+        registerCmd += "}"
+        
+        socket.writeString(registerCmd)
+    }
+    
+    func toggleSwitch(isOn: Bool) {
+            let on = isOn ? "AllSwitchesTurnOn" : "AllSwitchesTurnOff"
+
+            var registerCmd = "{"
+            registerCmd += "   \"Request\" : true,"
+            registerCmd += "   \"Command\" : \"SetControl\","
+            registerCmd += "   \"Info\": { "
+            registerCmd += "       \"DeviceType\" : \"Switch\","
+            registerCmd += "       \"Control\" : \"" + on + "\""
+            registerCmd += "    }"
+            registerCmd += "}"
+            
+            socket.writeString(registerCmd)
     }
 }

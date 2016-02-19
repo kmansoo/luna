@@ -162,7 +162,7 @@ bool ccIoTDeviceManager::devices(std::shared_ptr<ccWebServerRequest> pRequest, s
             int nIndex = 0;
 
             for (auto it : _aAgents)
-            { 
+            {
                 Json::Value oDeviceInfo;
 
                 oDeviceInfo = it.second->GetDeviceSpecInfo().ToJson();

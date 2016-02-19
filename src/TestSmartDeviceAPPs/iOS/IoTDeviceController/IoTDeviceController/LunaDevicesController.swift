@@ -10,13 +10,15 @@ import UIKit
 
 class LunaDevicesController: UITableViewController, Notification {
 
-    let phoneController = PhoneController.sharedInstance
-    let light = PhoneLight.sharedInstance
+    var phoneController = PhoneController.sharedInstance
+    var light = PhoneLight.sharedInstance
+    var url: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         phoneController.viewController = self
+        phoneController.getDeviceList(self.url + "devices")
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -30,6 +32,7 @@ class LunaDevicesController: UITableViewController, Notification {
         // Dispose of any resources that can be recreated.
     }
 
+/*
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -41,7 +44,7 @@ class LunaDevicesController: UITableViewController, Notification {
         // #warning Incomplete implementation, return the number of rows
         return 0
     }
-
+*/
     /*
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
@@ -96,5 +99,12 @@ class LunaDevicesController: UITableViewController, Notification {
         // Pass the selected object to the new view controller.
     }
     */
-
+    @IBAction func lightSwitch(sender: UISwitch) {
+        phoneController.toggleLight(sender.on)
+    }
+    
+    func list() {
+        print("ok")
+//        self.performSegueWithIdentifier("LogInSegue", sender: self)
+    }
 }
