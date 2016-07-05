@@ -1,9 +1,0 @@
-{
-    "IoTDeviceSpecification" : {
-        "Type" : "Switch",
-        "Name" : "Switch",
-        "Description" : "On/Off",
-        "Manufacture" : "Mansoo"
-    },
-    "IoTDeviceMasterUri" : "ws://localhost:8000/ws_iot_deivce"
-}
