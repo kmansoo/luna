@@ -89,7 +89,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>LUNA_PLATFORM_WIN32;WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..;../build;../../../Library;../../../ThirdPartyLibrary;../../../ProductLibrary;../../../FossLibrary</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../Library;../../../FossLibrary;../../../ThirdPartyLibrary;../../../ProductLibrary</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -104,6 +104,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../../Library;../../../FossLibrary;../../../ThirdPartyLibrary;../../../ProductLibrary</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,22 +152,22 @@
     <ClCompile Include="..\src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\FossLibrary\ccJsonParserAPI\build\ccJsonParserAPI.vcxproj">
+    <ProjectReference Include="..\..\..\FossLibrary\ccJsonParser\build\ccJsonParser.vcxproj">
       <Project>{e7bfc6a3-98b0-4103-a3ba-de08105f2db3}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\FossLibrary\ccWebsocketClientAPI\build\ccWebsocketClientAPI.vcxproj">
-      <Project>{0e86ffb0-57e1-4a9e-a12d-8a07ca1c5708}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Library\ccCoreAPI\build\ccCoreAPI.vcxproj">
+    <ProjectReference Include="..\..\..\Library\ccCore\build\ccCore.vcxproj">
       <Project>{b3b6750e-2acd-4362-845a-2a79ab52fbd1}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Library\ccWebServerAPI\build\ccWebServerAPI.vcxproj">
+    <ProjectReference Include="..\..\..\Library\ccNetwork\build\ccNetwork.vcxproj">
+      <Project>{22622606-5d5b-499c-8f3d-bad302a10950}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Library\ccWebServer\build\ccWebServer.vcxproj">
       <Project>{4b237a6f-f4d9-4bbf-9d63-6460ddf8b984}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\ProductLibrary\ccRESTfulChattingAPI\build\ccRESTfulChattingAPI.vcxproj">
       <Project>{cec6dc46-192c-4a85-8fc9-b745c87a0c95}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\ThirdPartyLibrary\ccMongooseServerAPI\build\ccMongooseServerAPI.vcxproj">
+    <ProjectReference Include="..\..\..\ThirdPartyLibrary\ccMongooseServer\build\ccMongooseServer.vcxproj">
       <Project>{e3fcc667-3505-4635-a78b-ea15e73d4755}</Project>
     </ProjectReference>
   </ItemGroup>

@@ -92,7 +92,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>LUNA_PLATFORM_WIN32;WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..;../build;../../Library;../../ThirdPartyLibrary;../../ProductLibrary;../../FossLibrary</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../Library;../../FossLibrary;../../ThirdPartyLibrary</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -115,6 +115,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../../Library;../../FossLibrary;../../ThirdPartyLibrary</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -214,16 +215,16 @@
     <Image Include="res\ChattingWebApiTest.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\FossLibrary\ccJsonParserAPI\build\ccJsonParserAPI.vcxproj">
+    <ProjectReference Include="..\..\FossLibrary\ccJsonParser\build\ccJsonParser.vcxproj">
       <Project>{e7bfc6a3-98b0-4103-a3ba-de08105f2db3}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\FossLibrary\ccWebsocketClientAPI\build\ccWebsocketClientAPI.vcxproj">
+    <ProjectReference Include="..\..\FossLibrary\ccWebsocketClient\build\ccWebsocketClient.vcxproj">
       <Project>{0e86ffb0-57e1-4a9e-a12d-8a07ca1c5708}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\Library\ccCoreAPI\build\ccCoreAPI.vcxproj">
+    <ProjectReference Include="..\..\Library\ccCore\build\ccCore.vcxproj">
       <Project>{b3b6750e-2acd-4362-845a-2a79ab52fbd1}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\ThirdPartyLibrary\ccWin32API\build\ccWin32API.vcxproj">
+    <ProjectReference Include="..\..\ThirdPartyLibrary\ccWin32Core\build\ccWin32Core.vcxproj">
       <Project>{5f76776d-8695-43d9-b134-d0e24fa685c8}</Project>
     </ProjectReference>
   </ItemGroup>

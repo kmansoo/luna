@@ -6,7 +6,8 @@
 #include "afxwin.h"
 
 #include <memory>
-#include "ccWebsocketClientAPI/easywsclient/easywsclient.hpp"
+#include "ccWebsocketClient/easywsclient/easywsclient.hpp"
+//#include "ccWebsocketClient/easywsclient/easywsclient.hpp"
 
 // CChattingWebApiTestDlg dialog
 class CChattingWebApiTestDlg : public CDialogEx

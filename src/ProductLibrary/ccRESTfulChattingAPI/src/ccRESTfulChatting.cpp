@@ -13,11 +13,11 @@
 
 #include <sstream>
 
-#include "ccCoreAPI/ccString.h"
+#include "ccCore/ccString.h"
 
-#include "ccJsonParserAPI/json/value.h"
-#include "ccJsonParserAPI/json/writer.h"
-#include "ccJsonParserAPI/json/reader.h"
+#include "ccJsonParser/json/value.h"
+#include "ccJsonParser/json/writer.h"
+#include "ccJsonParser/json/reader.h"
 
 #include "../ccRESTfulChatting.h"
 

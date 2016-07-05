@@ -1,0 +1,13 @@
+SHELL = /bin/sh
+
+TARGET      = ccCore
+TARGET_TYPE = lib
+
+PLATFORM    = raspberrypi2
+CPU         = arm
+PRODUCT     = all
+BUILD       = debug
+
+SRCDIRS     = ../src
+
+include ../../../build/makefile.common.txt

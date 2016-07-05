@@ -11,8 +11,8 @@
 #define new DEBUG_NEW
 #endif
 
-#include "ccCoreAPI/ccString.h"
-#include "ccWin32API/ccWin32WebApiHelper.h"
+#include "ccCore/ccString.h"
+#include "ccWin32Core/ccWin32WebApiHelper.h"
 
 // CAboutDlg dialog used for App About
 

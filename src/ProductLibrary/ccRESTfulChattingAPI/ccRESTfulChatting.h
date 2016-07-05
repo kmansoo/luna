@@ -10,8 +10,8 @@
 
 #include <vector>
 
-#include "ccWebServerAPI/ccRESTfulApi.h"
-#include "ccWebServerAPI/ccWebsocketManager.h"
+#include "ccWebServer/ccRESTfulApi.h"
+#include "ccWebServer/ccWebsocketManager.h"
 
 class ccRESTfulChattingUserInfo
 {

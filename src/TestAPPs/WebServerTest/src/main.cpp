@@ -1,17 +1,17 @@
 
 #include <memory>
 
-#include "ccCoreAPI/ccCoreAPI.h"
-#include "ccCoreAPI/ccString.h"
+#include "ccCore/ccCoreAPI.h"
+#include "ccCore/ccString.h"
 
-#include "ccWebServerAPI/ccWebServerManager.h"
+#include "ccWebServer/ccWebServerManager.h"
 
-#include "ccMongooseServerAPI/ccMongooseWebServerObjectFactory.h"
+#include "ccMongooseServer/ccMongooseWebServerObjectFactory.h"
 #include "ccRESTfulChattingAPI/ccRESTfulChatting.h"
 
-#include "ccWebServerAPI/ccWebsocketManager.h"
+#include "ccWebServer/ccWebsocketManager.h"
 
-#include "ccWebsocketClientAPI/ccEasyWebsocketClient.h"
+#include "ccWebsocketClient/ccEasyWebsocketClient.h"
 
 class ccChattingWSManager : public ccWebsocketManager
 {
