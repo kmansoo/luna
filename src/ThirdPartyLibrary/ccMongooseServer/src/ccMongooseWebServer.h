@@ -14,6 +14,8 @@
 
 #include "ccWebServer/ccWebServer.h"
 
+namespace Luna {
+
 class ccMongooseWebServer : public ccWebServer
 {
 public:
@@ -37,5 +39,7 @@ private:
     struct mg_mgr*          _mgr;
     struct mg_connection*   _con;
 };
+
+}
 
 #endif /* THIRDPARTYLIBRARY_CCMONGOOSESERVERAPI_CCMONGOOSEWEBSERVER_H_ */

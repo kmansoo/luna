@@ -10,6 +10,8 @@
 
 #include <string>
 
+namespace Luna {
+
 class ccWebServerRequest
 {
 public:
@@ -64,5 +66,7 @@ protected:
     std::string _strMethod;
     std::string _strUri;
 };
+
+}
 
 #endif /* CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVERREQUEST_H_ */

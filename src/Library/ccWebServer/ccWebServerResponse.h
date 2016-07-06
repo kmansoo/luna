@@ -13,6 +13,8 @@
 #include <string>
 #include <iostream>
 
+namespace Luna {
+
 class ccWebServerResponse
 {
 public:
@@ -60,5 +62,7 @@ protected:
     bool    _bHeadersSent;
 
 };
+
+}
 
 #endif /* CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVERRESPONSE_H_ */

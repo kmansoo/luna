@@ -11,6 +11,8 @@
 #include <string>
 #include <functional>
 
+namespace Luna {
+
 class ccWebsocketGroup;
 
 class ccWebsocket
@@ -50,5 +52,7 @@ protected:
     ccWebsocketGroup*       _pMyGroup;
     WebSocketEventFunction  _oEventListener;
 };
+
+}
 
 #endif

@@ -9,6 +9,8 @@
 
 #include "ccWebsocket.h"
 
+namespace Luna {
+
 ccWebsocket::ccWebsocket(const std::string& strUri)
     : _pMyGroup(NULL)
 {
@@ -43,4 +45,6 @@ ccWebsocketGroup* ccWebsocket::GetGroup()
 bool ccWebsocket::Send(const std::string& strMessage)
 {
     return false;
+}
+
 }

@@ -7,6 +7,8 @@
 
 #include "ccMongooseWebServerRequest.h"
 
+namespace Luna {
+
 ccMongooseWebServerRequest::ccMongooseWebServerRequest(struct mg_connection* con, struct http_message* http_msg)
     : _pMgConnection(con),
       _pMgHttpMessage(http_msg),
@@ -184,4 +186,6 @@ std::string ccMongooseWebServerRequest::DoGetVarInConnection(const std::string& 
     strGetData.resize(sz);
 
     return strGetData;
+}
+
 }

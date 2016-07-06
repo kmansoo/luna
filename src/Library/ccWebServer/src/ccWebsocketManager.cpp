@@ -3,10 +3,11 @@
 
 #include <algorithm>
 
+namespace Luna {
+
 ccWebsocketManager::ccWebsocketManager()
 {
 }
-
 
 ccWebsocketManager::~ccWebsocketManager()
 {
@@ -142,4 +143,6 @@ bool ccWebsocketManager::PerformWebsocketEvent(ccWebsocket::ccWebSocketEvent eEv
         RemoveWebsocket(pWS);
 
     return true;
+}
+
 }

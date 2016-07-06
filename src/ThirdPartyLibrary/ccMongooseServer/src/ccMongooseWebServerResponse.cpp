@@ -7,6 +7,8 @@
 
 #include "ccMongooseWebServerResponse.h"
 
+namespace Luna {
+
 ccMongooseWebServerResponse::ccMongooseWebServerResponse(struct mg_connection* con) :
     _pMgConnection(con)
 {
@@ -24,4 +26,6 @@ size_t ccMongooseWebServerResponse::DoWriteContentToConnector(const char* strBuf
     mg_send(_pMgConnection, strBuf, size);
 
     return size;
+}
+
 }

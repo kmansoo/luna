@@ -8,6 +8,7 @@
 
 #include "ccWin32SerialPortHelper.h"
 
+namespace Luna {
 
 #define MAX_RETRY_COUNT	3600
 
@@ -663,4 +664,6 @@ void ccWin32SerialPortHelper::WatchSerialProc(LPVOID pParam)
 #ifdef _DEBUG
     TRACE(" # Terminated WatchThread for Serial.\n");
 #endif
+}
+
 }

@@ -23,6 +23,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccWebsocketClient", "..\Fos
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccNetwork", "..\Library\ccNetwork\build\ccNetwork.vcxproj", "{22622606-5D5B-499C-8F3D-BAD302A10950}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccMessageBus", "..\Library\ccMessageBus\build\ccMessageBus.vcxproj", "{AD522989-8D30-4B69-AE86-AD00F4C2CB29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -95,6 +97,14 @@ Global
 		{22622606-5D5B-499C-8F3D-BAD302A10950}.Release|x64.ActiveCfg = Release|Win32
 		{22622606-5D5B-499C-8F3D-BAD302A10950}.Release|x86.ActiveCfg = Release|Win32
 		{22622606-5D5B-499C-8F3D-BAD302A10950}.Release|x86.Build.0 = Release|Win32
+		{AD522989-8D30-4B69-AE86-AD00F4C2CB29}.Debug|x64.ActiveCfg = Debug|x64
+		{AD522989-8D30-4B69-AE86-AD00F4C2CB29}.Debug|x64.Build.0 = Debug|x64
+		{AD522989-8D30-4B69-AE86-AD00F4C2CB29}.Debug|x86.ActiveCfg = Debug|Win32
+		{AD522989-8D30-4B69-AE86-AD00F4C2CB29}.Debug|x86.Build.0 = Debug|Win32
+		{AD522989-8D30-4B69-AE86-AD00F4C2CB29}.Release|x64.ActiveCfg = Release|x64
+		{AD522989-8D30-4B69-AE86-AD00F4C2CB29}.Release|x64.Build.0 = Release|x64
+		{AD522989-8D30-4B69-AE86-AD00F4C2CB29}.Release|x86.ActiveCfg = Release|Win32
+		{AD522989-8D30-4B69-AE86-AD00F4C2CB29}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

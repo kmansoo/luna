@@ -2,6 +2,8 @@
 
 #include "ccEasyWebsocketClient.h"
 
+namespace Luna {
+
 ccEasyWebsocketClient::ccEasyWebsocketClient()
 {
     _bIsStopThread = false;
@@ -132,4 +134,6 @@ void ccEasyWebsocketClient::DoPoll()
             _pWorkWS->dispatch(std::bind(&ccEasyWebsocketClient::DoReceive, this, std::placeholders::_1));
         }
     }
+}
+
 }

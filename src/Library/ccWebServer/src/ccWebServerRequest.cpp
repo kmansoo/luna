@@ -7,6 +7,8 @@
 
 #include "../ccWebServerRequest.h"
 
+namespace Luna {
+
 ccWebServerRequest::ccWebServerRequest()
 {
     // TODO Auto-generated constructor stub
@@ -106,4 +108,6 @@ long ccWebServerRequest::GetContentBody(std::string& strBody)
 long ccWebServerRequest::GetContentBody(char* pBuf, std::size_t size)
 {
     return 0;
+}
+
 }

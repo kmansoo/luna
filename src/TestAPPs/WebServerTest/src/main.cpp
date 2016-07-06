@@ -13,7 +13,7 @@
 
 #include "ccWebsocketClient/ccEasyWebsocketClient.h"
 
-class ccChattingWSManager : public ccWebsocketManager
+class ccChattingWSManager : public Luna::ccWebsocketManager
 {
 public:
     ccChattingWSManager()
@@ -23,36 +23,36 @@ public:
     }
 
 public:
-    bool ws_chat(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const std::string strData)
+    bool ws_chat(Luna::ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<Luna::ccWebsocket> pWS, const std::string strData)
     {
         switch ((int)eEvent)
         {
-        case ccWebsocket::ccWebSocketEvent_Connected:
+        case Luna::ccWebsocket::ccWebSocketEvent_Connected:
             {
                 std::string strMessage;
 
-                ccString::format(strMessage, "%08x: Join", pWS->GetInstance());
+                Luna::ccString::format(strMessage, "%08x: Join", pWS->GetInstance());
 
                 pWS->GetGroup()->Broadcast(strMessage);
             }
             break;
 
-        case ccWebsocket::ccWebSocketEvent_ReceivedData:
+        case Luna::ccWebsocket::ccWebSocketEvent_ReceivedData:
             {
                 std::string strBroadcastMsg;
                 std::string strMessage(strData);
 
-                ccString::format(strBroadcastMsg, "%08x: %s", pWS->GetInstance(), strMessage.c_str());
+                Luna::ccString::format(strBroadcastMsg, "%08x: %s", pWS->GetInstance(), strMessage.c_str());
 
                 pWS->GetGroup()->Broadcast(strBroadcastMsg);
             }
             break;
 
-        case ccWebsocket::ccWebSocketEvent_Disconnected:
+        case Luna::ccWebsocket::ccWebSocketEvent_Disconnected:
             {
                 std::string strMessage;
 
-                ccString::format(strMessage, "%08x: Leave", pWS->GetInstance());
+                Luna::ccString::format(strMessage, "%08x: Leave", pWS->GetInstance());
 
                 pWS->GetGroup()->Broadcast(strMessage);
             }
@@ -87,20 +87,20 @@ int main(int argc, char* argv[])
 
     //  choose a Web Server : Abstract Factory Design Pattern
 
-    ccWebServerManager::getInstance().AttachFactory(std::make_shared<ccMongooseWebServerObjectFactory>());
+    Luna::ccWebServerManager::getInstance().AttachFactory(std::make_shared<Luna::ccMongooseWebServerObjectFactory>());
     //oManager.AttachFactory(std::make_shared<ccBoostWebServerObjectFactory>());
 
     std::shared_ptr<ccRESTfulChatting>      pChattingApi(new ccRESTfulChatting);
-    std::shared_ptr<ccWebsocketManager>     pChattingWSM(new ccChattingWSManager);
+    std::shared_ptr<Luna::ccWebsocketManager>     pChattingWSM(new ccChattingWSManager);
 
-    ccWebServerManager::getInstance().CreateWebServer("WebServer #1", "8000", ".");
+    Luna::ccWebServerManager::getInstance().CreateWebServer("WebServer #1", "8000", ".");
 
-    ccWebServerManager::getInstance().AddRESTfulApi(pChattingApi);
-    ccWebServerManager::getInstance().AddWebsocketManager(pChattingApi);
+    Luna::ccWebServerManager::getInstance().AddRESTfulApi(pChattingApi);
+    Luna::ccWebServerManager::getInstance().AddWebsocketManager(pChattingApi);
 
-    ccWebServerManager::getInstance().AddWebsocketManager(pChattingWSM);
+    Luna::ccWebServerManager::getInstance().AddWebsocketManager(pChattingWSM);
 
-    ccWebServerManager::getInstance().Start();
+    Luna::ccWebServerManager::getInstance().Start();
 
     while (1)
         Luna::sleep(100);

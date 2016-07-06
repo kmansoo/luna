@@ -140,7 +140,7 @@ BOOL CChattingWebApiTestDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
     //  
-    ccWin32WebApiHelper::getInstance()->SetConnectionInfo((LPCTSTR)_strServerIP, atoi(_strServerPort));
+    Luna::ccWin32WebApiHelper::getInstance()->SetConnectionInfo((LPCTSTR)_strServerIP, atoi(_strServerPort));
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -208,7 +208,7 @@ void CChattingWebApiTestDlg::OnBnClickedServerInfoUpdate()
     AfxGetApp()->WriteProfileString("Config", "IP", _strServerIP);
     AfxGetApp()->WriteProfileString("Config", "Port", _strServerPort);
 
-    ccWin32WebApiHelper::getInstance()->SetConnectionInfo((LPCTSTR)_strServerIP, atoi(_strServerPort));
+    Luna::ccWin32WebApiHelper::getInstance()->SetConnectionInfo((LPCTSTR)_strServerIP, atoi(_strServerPort));
 }
 
 void CChattingWebApiTestDlg::OnBnClickedLogin()
@@ -228,7 +228,7 @@ void CChattingWebApiTestDlg::OnBnClickedLogin()
 
     oRequestJsonData["user_info"] = oExtInfo;
 
-    ccWin32WebApiHelper::getInstance()->RequestAPI(ccWebServerRequest::HttpMethod_Post, "/user", oRequestJsonData, strResponse);
+    Luna::ccWin32WebApiHelper::getInstance()->RequestAPI(Luna::ccWebServerRequest::HttpMethod_Post, "/user", oRequestJsonData, strResponse);
 
     DoSessionListUpdate();
 }
@@ -241,9 +241,9 @@ void CChattingWebApiTestDlg::OnBnClickedLogout()
     std::string strResponse;
     std::string strQueryString;
 
-    ccString::format(strQueryString, "/user?ID=%s", _strUserID);
+    Luna::ccString::format(strQueryString, "/user?ID=%s", _strUserID);
 
-    ccWin32WebApiHelper::getInstance()->RequestAPI(ccWebServerRequest::HttpMethod_Delete, strQueryString,strResponse);
+    Luna::ccWin32WebApiHelper::getInstance()->RequestAPI(Luna::ccWebServerRequest::HttpMethod_Delete, strQueryString,strResponse);
 
     _ctlSessionList.ResetContent();
     _ctlSessionMemberList.ResetContent();
@@ -267,7 +267,7 @@ void CChattingWebApiTestDlg::OnBnClickedSessionCreate()
 
     oRequestJsonData["session_info"] = oExtInfo;
 
-    if (ccWin32WebApiHelper::getInstance()->RequestAPI(ccWebServerRequest::HttpMethod_Post, "/session", oRequestJsonData, strResponse) == 201)
+    if (Luna::ccWin32WebApiHelper::getInstance()->RequestAPI(Luna::ccWebServerRequest::HttpMethod_Post, "/session", oRequestJsonData, strResponse) == 201)
         DoSessionListUpdate();
 }
 
@@ -285,7 +285,7 @@ void CChattingWebApiTestDlg::OnBnClickedSessionDelete()
 
     oRequestJsonData["session_info"] = oExtInfo;
 
-    if (ccWin32WebApiHelper::getInstance()->RequestAPI(ccWebServerRequest::HttpMethod_Delete, "/session", oRequestJsonData, strResponse) == 202)
+    if (Luna::ccWin32WebApiHelper::getInstance()->RequestAPI(Luna::ccWebServerRequest::HttpMethod_Delete, "/session", oRequestJsonData, strResponse) == 202)
         DoSessionListUpdate();
 }
 
@@ -295,7 +295,7 @@ void CChattingWebApiTestDlg::DoSessionListUpdate()
 
     _ctlSessionList.ResetContent();
 
-    if (ccWin32WebApiHelper::getInstance()->RequestAPI(ccWebServerRequest::HttpMethod_Get, "/session", strResponse) == 200)
+    if (Luna::ccWin32WebApiHelper::getInstance()->RequestAPI(Luna::ccWebServerRequest::HttpMethod_Get, "/session", strResponse) == 200)
     {
         Json::Reader    oReader;
         Json::Value     oRootValue;
@@ -322,9 +322,9 @@ void CChattingWebApiTestDlg::DoSessionMemberListUpdate()
     std::string strResponse;
     std::string strQueryString;
 
-    ccString::format(strQueryString, "/session/member?Name=%s&UserID=%s", _strJoinedSessionName, _strUserID);
+    Luna::ccString::format(strQueryString, "/session/member?Name=%s&UserID=%s", _strJoinedSessionName, _strUserID);
 
-    if (ccWin32WebApiHelper::getInstance()->RequestAPI(ccWebServerRequest::HttpMethod_Get, strQueryString, strResponse) == 200)
+    if (Luna::ccWin32WebApiHelper::getInstance()->RequestAPI(Luna::ccWebServerRequest::HttpMethod_Get, strQueryString, strResponse) == 200)
     {
         Json::Reader    oReader;
         Json::Value     oRootValue;
@@ -360,9 +360,9 @@ void CChattingWebApiTestDlg::OnBnClickedSessionJoin()
     std::string strResponse;
     std::string strQueryString;
 
-    ccString::format(strQueryString, "/session/member?Name=%s&UserID=%s", _strSessionName, _strUserID);
+    Luna::ccString::format(strQueryString, "/session/member?Name=%s&UserID=%s", _strSessionName, _strUserID);
 
-    if (ccWin32WebApiHelper::getInstance()->RequestAPI(ccWebServerRequest::HttpMethod_Put, strQueryString, strResponse) == 200)
+    if (Luna::ccWin32WebApiHelper::getInstance()->RequestAPI(Luna::ccWebServerRequest::HttpMethod_Put, strQueryString, strResponse) == 200)
     {
         _strJoinedSessionName = _strSessionName;
 
@@ -370,9 +370,9 @@ void CChattingWebApiTestDlg::OnBnClickedSessionJoin()
 
         DoSessionMemberListUpdate();
 
-        ccString strSessionUri;
+        Luna::ccString strSessionUri;
 
-        ccString::format(strSessionUri, "ws://%s:%d/session/chat/%s", _strServerIP, atoi(_strServerPort), _strSessionName);
+        Luna::ccString::format(strSessionUri, "ws://%s:%d/session/chat/%s", _strServerIP, atoi(_strServerPort), _strSessionName);
 
         _pWSClient.reset(easywsclient::WebSocket::from_url(strSessionUri));
 
@@ -393,9 +393,9 @@ void CChattingWebApiTestDlg::OnBnClickedSessionLeave()
     std::string strResponse;
     std::string strQueryString;
 
-    ccString::format(strQueryString, "/session/member?Name=%s&UserID=%s", _strSessionName, _strUserID);
+    Luna::ccString::format(strQueryString, "/session/member?Name=%s&UserID=%s", _strSessionName, _strUserID);
 
-    if (ccWin32WebApiHelper::getInstance()->RequestAPI(ccWebServerRequest::HttpMethod_Delete, strQueryString, strResponse) == 200)
+    if (Luna::ccWin32WebApiHelper::getInstance()->RequestAPI(Luna::ccWebServerRequest::HttpMethod_Delete, strQueryString, strResponse) == 200)
     {
 
     }
@@ -419,7 +419,7 @@ void CChattingWebApiTestDlg::OnBnClickedMessageSend()
     GetDlgItem(IDC_MESSAGE)->GetWindowText(_strSendMessage);
 
     std::string strSendString;
-    ccString::format(strSendString, "%s: %s", _strUserID, _strSendMessage);
+    Luna::ccString::format(strSendString, "%s: %s", _strUserID, _strSendMessage);
 
     if (_pWSClient)
         _pWSClient->send(strSendString);

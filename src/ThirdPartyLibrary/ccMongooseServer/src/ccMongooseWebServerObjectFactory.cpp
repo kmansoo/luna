@@ -9,6 +9,8 @@
 
 #include "../ccMongooseWebServerObjectFactory.h"
 
+namespace Luna {
+
 ccMongooseWebServerObjectFactory::ccMongooseWebServerObjectFactory()
 {
     // TODO Auto-generated constructor stub
@@ -23,4 +25,6 @@ ccMongooseWebServerObjectFactory::~ccMongooseWebServerObjectFactory()
 std::shared_ptr<ccWebServer> ccMongooseWebServerObjectFactory::CreateWebServer(const std::string& name, const std::string& ports, const std::string& root_path)
 {
     return std::make_shared<ccMongooseWebServer>(name, ports, root_path);
+}
+
 }

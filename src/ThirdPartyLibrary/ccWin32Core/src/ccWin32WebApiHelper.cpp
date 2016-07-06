@@ -3,6 +3,8 @@
 #include "afxinet.h"
 #include "ccWin32WebApiHelper.h"
 
+namespace Luna {
+
 ccWin32WebApiHelper::ccWin32WebApiHelper(void) :
     _strDestIP(_T("192.168.0.1")),
     _uDestPort(80),
@@ -333,3 +335,4 @@ bool ccWin32WebApiHelper::getValueInt(Json::Value& oValue, const std::string& st
     return false;
 }
 
+}

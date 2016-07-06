@@ -81,22 +81,22 @@ private:
 };
 
 class ccRESTfulChatting : 
-    public ccRESTfulApi,
-    public ccWebsocketManager
+    public Luna::ccRESTfulApi,
+    public Luna::ccWebsocketManager
 {
 public:
     ccRESTfulChatting();
     virtual ~ccRESTfulChatting();
 
 protected:
-    bool    user(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse);
-    bool    session(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse);
-    bool    session_member(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse);
-    bool    session_member_id(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse);
-    bool    session_message(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse);
+    bool    user(std::shared_ptr<Luna::ccWebServerRequest> pRequest, std::shared_ptr<Luna::ccWebServerResponse> pResponse);
+    bool    session(std::shared_ptr<Luna::ccWebServerRequest> pRequest, std::shared_ptr<Luna::ccWebServerResponse> pResponse);
+    bool    session_member(std::shared_ptr<Luna::ccWebServerRequest> pRequest, std::shared_ptr<Luna::ccWebServerResponse> pResponse);
+    bool    session_member_id(std::shared_ptr<Luna::ccWebServerRequest> pRequest, std::shared_ptr<Luna::ccWebServerResponse> pResponse);
+    bool    session_message(std::shared_ptr<Luna::ccWebServerRequest> pRequest, std::shared_ptr<Luna::ccWebServerResponse> pResponse);
 
 protected:
-    bool    ws_chat(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const std::string& strData);
+    bool    ws_chat(Luna::ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<Luna::ccWebsocket> pWS, const std::string& strData);
 
 private:
     ccRESTfulChattingSessionManager     _oSessionManager;    

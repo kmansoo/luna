@@ -14,6 +14,8 @@
 #include "ccMongooseWebServerResponse.h"
 #include "ccMongooseWebsocket.h"
 
+namespace Luna {
+
 static struct mg_serve_http_opts s_http_server_opts;
 
 ccMongooseWebServer::ccMongooseWebServer(const std::string& name, const std::string& ports, const std::string& root_path) :
@@ -169,6 +171,8 @@ void ccMongooseWebServer::ev_handler(struct mg_connection *nc, int ev, void *p)
 
         break;
     }
+}
+
 }
 
 //

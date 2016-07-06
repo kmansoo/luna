@@ -256,13 +256,13 @@ ccRESTfulChatting::~ccRESTfulChatting()
     // TODO Auto-generated destructor stub
 }
 
-bool ccRESTfulChatting::user(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)
+bool ccRESTfulChatting::user(std::shared_ptr<Luna::ccWebServerRequest> pRequest, std::shared_ptr<Luna::ccWebServerResponse> pResponse)
 {
     //std::cout << "enter ccRESTfulChatting::list, query_string=" << pRequest->GetQueryString() << endl;
 
     switch (pRequest->GetMethod())
     {
-    case ccWebServerRequest::HttpMethod_Post:   //  Create
+    case Luna::ccWebServerRequest::HttpMethod_Post:   //  Create
         {
             Json::Reader    oReader;
             Json::Value     oRootValue;
@@ -295,7 +295,7 @@ bool ccRESTfulChatting::user(std::shared_ptr<ccWebServerRequest> pRequest, std::
         }
         break;
 
-    case ccWebServerRequest::HttpMethod_Get:    //  Read
+    case Luna::ccWebServerRequest::HttpMethod_Get:    //  Read
         {
             std::vector<std::string> aMembers;
 
@@ -323,7 +323,7 @@ bool ccRESTfulChatting::user(std::shared_ptr<ccWebServerRequest> pRequest, std::
         }
         break;
 
-    case ccWebServerRequest::HttpMethod_Delete:   //  Delete
+    case Luna::ccWebServerRequest::HttpMethod_Delete:   //  Delete
         {
             std::string strID = pRequest->GetVar("ID");
 
@@ -346,11 +346,11 @@ bool ccRESTfulChatting::user(std::shared_ptr<ccWebServerRequest> pRequest, std::
     return false;
 }
 
-bool ccRESTfulChatting::session(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)
+bool ccRESTfulChatting::session(std::shared_ptr<Luna::ccWebServerRequest> pRequest, std::shared_ptr<Luna::ccWebServerResponse> pResponse)
 {
     switch (pRequest->GetMethod())
     {
-    case ccWebServerRequest::HttpMethod_Get:
+    case Luna::ccWebServerRequest::HttpMethod_Get:
         {
             std::cout << "enter ccRESTfulChatting::session" << std::endl;
 
@@ -380,7 +380,7 @@ bool ccRESTfulChatting::session(std::shared_ptr<ccWebServerRequest> pRequest, st
         }
         break;
 
-    case ccWebServerRequest::HttpMethod_Post:
+    case Luna::ccWebServerRequest::HttpMethod_Post:
         {
             Json::Reader    oReader;
             Json::Value     oRootValue;
@@ -412,7 +412,7 @@ bool ccRESTfulChatting::session(std::shared_ptr<ccWebServerRequest> pRequest, st
 
                 std::string strWSUrl;
 
-                ccString::format(strWSUrl, "/session/chat/%s", strSessionName.c_str());
+                Luna::ccString::format(strWSUrl, "/session/chat/%s", strSessionName.c_str());
                 
                 AddFunction(strWSUrl, std::bind(&ccRESTfulChatting::ws_chat, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
             }
@@ -423,7 +423,7 @@ bool ccRESTfulChatting::session(std::shared_ptr<ccWebServerRequest> pRequest, st
         }
         break;
 
-    case ccWebServerRequest::HttpMethod_Delete:
+    case Luna::ccWebServerRequest::HttpMethod_Delete:
         {
             Json::Reader    oReader;
             Json::Value     oRootValue;
@@ -455,7 +455,7 @@ bool ccRESTfulChatting::session(std::shared_ptr<ccWebServerRequest> pRequest, st
 
                 std::string strWSUrl;
 
-                ccString::format(strWSUrl, "/session/chat/%s", strSessionName.c_str());
+                Luna::ccString::format(strWSUrl, "/session/chat/%s", strSessionName.c_str());
                 
                 RemoveFunction(strWSUrl);
             }
@@ -476,11 +476,11 @@ bool ccRESTfulChatting::session(std::shared_ptr<ccWebServerRequest> pRequest, st
     return true;
 }
 
-bool ccRESTfulChatting::session_member(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)
+bool ccRESTfulChatting::session_member(std::shared_ptr<Luna::ccWebServerRequest> pRequest, std::shared_ptr<Luna::ccWebServerResponse> pResponse)
 {
     switch (pRequest->GetMethod())
     {
-        case ccWebServerRequest::HttpMethod_Get:
+        case Luna::ccWebServerRequest::HttpMethod_Get:
         {
             std::string strSessionName = pRequest->GetVar("Name");
             std::string strUserID = pRequest->GetVar("UserID");
@@ -508,7 +508,7 @@ bool ccRESTfulChatting::session_member(std::shared_ptr<ccWebServerRequest> pRequ
         }
         break;
 
-        case ccWebServerRequest::HttpMethod_Put:    //  join
+        case Luna::ccWebServerRequest::HttpMethod_Put:    //  join
         {
             std::string strSessionName = pRequest->GetVar("Name");
             std::string strUserID = pRequest->GetVar("UserID");
@@ -522,7 +522,7 @@ bool ccRESTfulChatting::session_member(std::shared_ptr<ccWebServerRequest> pRequ
         }
         break;
 
-        case ccWebServerRequest::HttpMethod_Delete:
+        case Luna::ccWebServerRequest::HttpMethod_Delete:
         {
             std::string strSessionName = pRequest->GetVar("Name");
             std::string strUserID = pRequest->GetVar("UserID");
@@ -545,7 +545,7 @@ bool ccRESTfulChatting::session_member(std::shared_ptr<ccWebServerRequest> pRequ
     return true;
 }
 
-bool ccRESTfulChatting::session_member_id(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)
+bool ccRESTfulChatting::session_member_id(std::shared_ptr<Luna::ccWebServerRequest> pRequest, std::shared_ptr<Luna::ccWebServerResponse> pResponse)
 {
     //  I'll implement this method as soon as possible.
     std::string strUserID = pRequest->GetResource();
@@ -557,35 +557,35 @@ bool ccRESTfulChatting::session_member_id(std::shared_ptr<ccWebServerRequest> pR
 }
 
 //  
-bool ccRESTfulChatting::ws_chat(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const std::string& strData)
+bool ccRESTfulChatting::ws_chat(Luna::ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<Luna::ccWebsocket> pWS, const std::string& strData)
 {
     switch ((int)eEvent)
     {
-    case ccWebsocket::ccWebSocketEvent_Connected:
+    case Luna::ccWebsocket::ccWebSocketEvent_Connected:
     {
         std::string strMessage;
 
-        ccString::format(strMessage, "%08x: Join", pWS->GetInstance());
+        Luna::ccString::format(strMessage, "%08x: Join", pWS->GetInstance());
 
         pWS->GetGroup()->Broadcast(strMessage);
     }
     break;
 
-    case ccWebsocket::ccWebSocketEvent_ReceivedData:
+    case Luna::ccWebsocket::ccWebSocketEvent_ReceivedData:
     {
         std::string strBroadcastMsg;
 
-        ccString::format(strBroadcastMsg, "%08x: %s", pWS->GetInstance(), strData.c_str());
+        Luna::ccString::format(strBroadcastMsg, "%08x: %s", pWS->GetInstance(), strData.c_str());
 
         pWS->GetGroup()->Broadcast(strBroadcastMsg);
     }
     break;
 
-    case ccWebsocket::ccWebSocketEvent_Disconnected:
+    case Luna::ccWebsocket::ccWebSocketEvent_Disconnected:
     {
         std::string strMessage;
 
-        ccString::format(strMessage, "%08x: Leave", pWS->GetInstance());
+        Luna::ccString::format(strMessage, "%08x: Leave", pWS->GetInstance());
 
         pWS->GetGroup()->Broadcast(strMessage);
     }

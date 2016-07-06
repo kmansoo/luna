@@ -7,6 +7,8 @@
 
 #include "ccMongooseWebsocket.h"
 
+namespace Luna {
+
 ccMongooseWebsocket::ccMongooseWebsocket(const std::string& strUri, struct mg_connection* con) :
     ccWebsocket(strUri),
     _pMgConnection(con)
@@ -56,4 +58,6 @@ bool ccMongooseWebsocket::SendBinary(const void* pBuffer, std::size_t size)
     mg_send_websocket_frame(_pMgConnection, WEBSOCKET_OP_BINARY, pBuffer, size);
 
     return true;
+}
+
 }

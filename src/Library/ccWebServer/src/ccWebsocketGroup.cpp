@@ -3,6 +3,8 @@
 
 #include <algorithm>
 
+namespace Luna {
+
 ccWebsocketGroup::ccWebsocketGroup(const std::string& strUri)
 {
     _strUri = strUri;
@@ -95,3 +97,4 @@ void ccWebsocketGroup::BroadcastEx(const std::string& strMessage, std::shared_pt
     }
 }
 
+}

@@ -16,6 +16,8 @@
 #include "ccWebServerRequest.h"
 #include "ccWebServerResponse.h"
 
+namespace Luna {
+
 class ccRESTfulApi
 {
 public:
@@ -32,5 +34,7 @@ public:
 protected:
     std::map < std::string, std::function<bool(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)>> _aAPIs;
 };
+
+}
 
 #endif

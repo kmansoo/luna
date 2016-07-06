@@ -10,6 +10,8 @@
 
 #include <string>
 
+namespace Luna {
+
 class ccString : public std::string
 {
 public:
@@ -76,6 +78,8 @@ private:
     {
         CV_MAX_FORMAT_BUFFER_SIZE = 512
     };
+};
+
 };
 
 #endif /* CCLIBRARY_CCCOREAPI_CCSTRING_H_ */

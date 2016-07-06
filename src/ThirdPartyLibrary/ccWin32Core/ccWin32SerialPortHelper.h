@@ -27,6 +27,8 @@
 //	virtual void    OnHSPSerialPortOccurError(ccWin32SerialPortHelper* pSH, DWORD dwErrorCode) = 0;
 //};
 
+namespace Luna {
+
 class ccWin32SerialPortHelper
 {
 public:
@@ -147,3 +149,5 @@ private:
     std::mutex  _mtx;
     std::mutex  _mtx_buffer;
 };
+
+}

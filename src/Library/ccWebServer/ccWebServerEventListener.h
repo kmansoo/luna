@@ -12,6 +12,8 @@
 #include "ccWebServerResponse.h"
 #include "ccWebsocket.h"
 
+namespace Luna {
+
 class ccWebServerEventListener
 {
 public:
@@ -26,5 +28,7 @@ public:
     virtual void OnWebsocketReceivedData(std::int32_t socketID, const std::string& strData) {}
     virtual void OnWebsocketDisconnected(std::int32_t socketID) {}
 };
+
+}
 
 #endif /* CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVEREVENTLISTENERH_ */

@@ -12,6 +12,8 @@
 
 #include "../ccString.h"
 
+namespace Luna {
+
 //  static function
 static char            b64_encode(unsigned char u);
 static unsigned char   b64_decode(char c);
@@ -339,3 +341,4 @@ static int is_base64(char c)
     return 0;
 }
 
+}

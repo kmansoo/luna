@@ -25,6 +25,8 @@
 
 #include "ccNetworkManager.h"
 
+namespace Luna {
+
 ccNetworkManager::ccNetworkManager()
 {
     // TODO Auto-generated constructor stub
@@ -249,4 +251,6 @@ bool ccNetworkManager::isPublicIP(const std::string& strIP)
     }
 
     return true;
+}
+
 }

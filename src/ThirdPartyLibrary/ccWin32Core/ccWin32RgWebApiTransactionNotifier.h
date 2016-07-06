@@ -2,6 +2,8 @@
 
 #include <string>
 
+namespace Luna {
+
 class ccWin32RgWebApiTransactionNotifier
 {
 public:
@@ -9,3 +11,4 @@ public:
     virtual void    OnTransactionRequestTimeout() = 0;
 };
 
+}

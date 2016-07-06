@@ -7,6 +7,7 @@
 
 #include "../ccRESTfulApi.h"
 
+namespace Luna {
 
 ccRESTfulApi::ccRESTfulApi()
 {
@@ -76,4 +77,6 @@ bool ccRESTfulApi::AddAPI(const std::string& strUri, std::function<bool(std::sha
     _aAPIs[strUri] = f;
 
     return true;
+}
+
 }

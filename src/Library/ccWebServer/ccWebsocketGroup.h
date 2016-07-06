@@ -15,6 +15,8 @@
 
 #include "ccWebsocket.h"
 
+namespace Luna {
+
 class ccWebsocketGroup
 {
 public:
@@ -41,5 +43,7 @@ private:
 
     std::map< std::int32_t, std::shared_ptr<ccWebsocket> >  _aWSList;
 };
+
+}
 
 #endif

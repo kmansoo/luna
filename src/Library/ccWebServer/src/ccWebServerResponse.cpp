@@ -11,6 +11,7 @@
 
 #include "ccWebServerResponse.h"
 
+namespace Luna {
 
 ccWebServerResponse::ccWebServerResponse() :
     _uStatudCode(100),
@@ -285,4 +286,6 @@ size_t ccWebServerResponse::DoPrintf(const char *fmt, ...)
 
 
     return result;
+}
+
 }

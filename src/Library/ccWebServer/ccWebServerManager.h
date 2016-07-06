@@ -19,6 +19,8 @@
 #include "ccRESTfulApi.h"
 #include "ccWebsocketManager.h"
 
+namespace Luna {
+
 class ccWebServerManager : 
     public ccSingletonT<ccWebServerManager>,
     public ccWebServerEventListener
@@ -70,5 +72,7 @@ private:
 
     const std::string                                   _strNoData;
 };
+
+}
 
 #endif /* CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVERMANAGER_H_ */

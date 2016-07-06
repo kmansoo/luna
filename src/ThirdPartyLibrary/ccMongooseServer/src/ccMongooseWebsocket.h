@@ -12,6 +12,8 @@
 
 #include "mongoose/mongoose.h"
 
+namespace Luna {
+
 class ccMongooseWebsocket : public ccWebsocket
 {
 public:
@@ -30,5 +32,7 @@ public:
 private:
     struct mg_connection*   _pMgConnection;
 };
+
+}
 
 #endif /* THIRDPARTYLIBRARY_CCMONGOOSESERVERAPI_CCMONGOOSEWEBSERVERRESPONSE_H_ */

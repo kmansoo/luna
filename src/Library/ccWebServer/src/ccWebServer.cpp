@@ -7,6 +7,8 @@
 
 #include "../ccWebServer.h"
 
+namespace Luna {
+
 ccWebServer::ccWebServer(const std::string& name, const std::string& ports, const std::string& root_path) :
     _strName(name),
     _strHttpPorts(ports),
@@ -50,3 +52,4 @@ void ccWebServer::SetListener(ccWebServerEventListener* pListener)
     _pEventListener = pListener;
 }
 
+}

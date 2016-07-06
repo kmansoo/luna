@@ -12,6 +12,8 @@
 
 #include "mongoose/mongoose.h"
 
+namespace Luna {
+
 class ccMongooseWebServerResponse : public ccWebServerResponse
 {
 public:
@@ -24,5 +26,7 @@ protected:
 private:
     struct mg_connection*   _pMgConnection;
 };
+
+}
 
 #endif /* THIRDPARTYLIBRARY_CCMONGOOSESERVERAPI_CCMONGOOSEWEBSERVERRESPONSE_H_ */

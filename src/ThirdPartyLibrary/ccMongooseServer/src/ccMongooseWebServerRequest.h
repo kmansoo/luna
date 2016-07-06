@@ -14,6 +14,8 @@
 
 #include <vector>
 
+namespace Luna {
+
 class ccMongooseWebServerRequest : public ccWebServerRequest
 {
 public:
@@ -56,5 +58,7 @@ private:
 
     mutable std::vector<char>       _pPostBuffer;
 };
+
+}
 
 #endif /* THIRDPARTYLIBRARY_CCMONGOOSESERVERAPI_CCMONGOOSEWEBSERVERREQUEST_H_ */

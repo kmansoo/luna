@@ -9,6 +9,8 @@
 
 #include "../ccWebServerManager.h"
 
+namespace Luna {
+
 ccWebServerManager::ccWebServerManager()
 {
     // TODO Auto-generated constructor stub
@@ -210,4 +212,6 @@ void ccWebServerManager::DoPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent e
             return;
         }
     }
+}
+
 }

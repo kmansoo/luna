@@ -16,6 +16,8 @@
 
 #include "ccWebsocketGroup.h"
 
+namespace Luna {
+
 class ccWebsocketManager
 {
 public:
@@ -44,5 +46,7 @@ protected:
     std::map<std::string, std::shared_ptr<ccWebsocketGroup>>    _aWSGList;
     std::map<std::string, std::function<bool(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const std::string& strData)>> _aFunctions;
 };
+
+}
 
 #endif

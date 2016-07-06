@@ -12,6 +12,8 @@
 #include <chrono>
 #include <future>
 
+namespace Luna {
+
 class ccTimer
 {
 public:
@@ -36,5 +38,6 @@ public:
 
 };
 
+};
 
 #endif /* LIBRARY_CCCOREAPI_CCTIMER_H_ */

@@ -12,6 +12,8 @@
 
 #include "ccCore/ccSingletonT.h"
 
+namespace Luna {
+
 class ccNetworkManager : public ccSingletonT<ccNetworkManager>
 {
 public:
@@ -38,5 +40,7 @@ public:
 private:
     bool    _bIsInitNetwork;
 };
+
+}
 
 #endif /* LIBRARY_CCNETWORKAPI_CCNETWORKMANAGER_H_ */

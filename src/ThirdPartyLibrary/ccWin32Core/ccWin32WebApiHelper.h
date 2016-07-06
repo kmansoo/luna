@@ -9,6 +9,8 @@
 #include "ccWebServer/ccWebServerRequest.h"
 #include "ccWin32RgWebApiTransactionNotifier.h"
 
+namespace Luna {
+
 class ccWin32WebApiHelper
 {
 protected:
@@ -62,3 +64,5 @@ private:
 
     std::vector<std::shared_ptr<XTransactionInfo>>   _aTransactionInfos;
 };
+
+}

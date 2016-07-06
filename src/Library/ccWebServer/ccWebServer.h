@@ -14,6 +14,8 @@
 
 #include "ccWebServerEventListener.h"
 
+namespace Luna {
+
 class ccWebServer
 {
 public:
@@ -41,5 +43,6 @@ protected:
     std::vector<std::string>    _aOptions;
 };
 
+}
 
 #endif /* CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVER_H_ */

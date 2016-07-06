@@ -18,6 +18,8 @@
 
 //  I will implement a wrapper class for easywsclient.
 
+namespace Luna {
+
 class ccEasyWebsocketClient : public ccWebsocket
 {
 public:
@@ -43,5 +45,7 @@ private:
     bool                    _bIsStopThread;
     const std::string       _oNullData;
 };
+
+}
 
 #endif
