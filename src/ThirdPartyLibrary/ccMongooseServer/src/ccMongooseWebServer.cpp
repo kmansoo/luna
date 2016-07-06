@@ -28,7 +28,7 @@ ccMongooseWebServer::ccMongooseWebServer(const std::string& name, const std::str
 
 ccMongooseWebServer::~ccMongooseWebServer()
 {
-    Stop();
+    stop();
 
     if (_mgr != NULL)
         delete _mgr;
@@ -37,8 +37,7 @@ ccMongooseWebServer::~ccMongooseWebServer()
     _con  = NULL;
 }
 
-
-bool ccMongooseWebServer::Start()
+bool ccMongooseWebServer::start()
 {
     if (_mgr != NULL)
         return false;
@@ -60,12 +59,12 @@ bool ccMongooseWebServer::Start()
 
     _bIsStopThread = false;
 
-    _pPollThread = new std::thread(std::bind(&ccMongooseWebServer::DoRunThread, this));
+    _pPollThread = new std::thread(std::bind(&ccMongooseWebServer::doRunThread, this));
 
     return true;
 }
 
-bool ccMongooseWebServer::Stop()
+bool ccMongooseWebServer::stop()
 {
     if (_pPollThread)
     {
@@ -89,7 +88,7 @@ bool ccMongooseWebServer::Stop()
     return true;
 }
 
-void ccMongooseWebServer::DoRunThread()
+void ccMongooseWebServer::doRunThread()
 {
     while (_bIsStopThread == false)
         mg_mgr_poll(_mgr, 200);
@@ -110,7 +109,7 @@ void ccMongooseWebServer::ev_handler(struct mg_connection *nc, int ev, void *p)
             std::shared_ptr<ccMongooseWebServerRequest> pRequest(new ccMongooseWebServerRequest(nc, (http_message *)p));
             std::shared_ptr<ccMongooseWebServerResponse> pResponse(new ccMongooseWebServerResponse(nc));
 
-            bIsBuiltinProcess = !pServer->_pEventListener->OnWebServerRequest(pRequest, pResponse);
+            bIsBuiltinProcess = !pServer->_pEventListener->onWebServerRequest(pRequest, pResponse);
 
             //if (!bIsBuiltinProcess)
             //    pResponse->
@@ -136,11 +135,11 @@ void ccMongooseWebServer::ev_handler(struct mg_connection *nc, int ev, void *p)
 
             std::string strRequestUri(hm->uri.p, hm->uri.len);
 
-            if (pServer->_pEventListener->OnNewWebsocketRequest(strRequestUri) == true)
+            if (pServer->_pEventListener->onNewWebsocketRequest(strRequestUri) == true)
             {
                 std::shared_ptr<ccWebsocket> pNewWS(new ccMongooseWebsocket(strRequestUri, nc));
 
-                pServer->_pEventListener->OnWebsocketCreated(pNewWS);
+                pServer->_pEventListener->onWebsocketCreated(pNewWS);
             }
             else
                 nc->flags |= MG_F_CLOSE_IMMEDIATELY;
@@ -148,7 +147,7 @@ void ccMongooseWebServer::ev_handler(struct mg_connection *nc, int ev, void *p)
         break;
 
     case MG_EV_WEBSOCKET_HANDSHAKE_DONE:    /* NULL */
-        pServer->_pEventListener->OnWebsocketConnected(nc->sock);
+        pServer->_pEventListener->onWebsocketConnected(nc->sock);
         break;
 
     case MG_EV_WEBSOCKET_FRAME:             /* struct websocket_message * */
@@ -157,7 +156,7 @@ void ccMongooseWebServer::ev_handler(struct mg_connection *nc, int ev, void *p)
 
             std::string strData((const char*)wm->data, wm->size);
 
-            pServer->_pEventListener->OnWebsocketReceivedData(nc->sock, strData);
+            pServer->_pEventListener->onWebsocketReceivedData(nc->sock, strData);
         }
         break;
 
@@ -167,7 +166,7 @@ void ccMongooseWebServer::ev_handler(struct mg_connection *nc, int ev, void *p)
     case MG_EV_CLOSE:
         //  is websocket ?
         if (nc->flags & MG_F_IS_WEBSOCKET)
-            pServer->_pEventListener->OnWebsocketDisconnected(nc->sock);
+            pServer->_pEventListener->onWebsocketDisconnected(nc->sock);
 
         break;
     }

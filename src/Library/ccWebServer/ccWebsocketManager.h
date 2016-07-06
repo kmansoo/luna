@@ -25,19 +25,19 @@ public:
     virtual ~ccWebsocketManager();
 
 public:
-    bool    AddWebsocket(std::shared_ptr<ccWebsocket> pNewWS);
-    bool    RemoveWebsocket(std::shared_ptr<ccWebsocket> pNewWS);
-    bool    RemoveAllWebsocket();
+    bool    addWebsocket(std::shared_ptr<ccWebsocket> pNewWS);
+    bool    removeWebsocket(std::shared_ptr<ccWebsocket> pNewWS);
+    bool    removeAllWebsocket();
 
-    bool    GetWebsocket(std::int32_t nInstance, std::shared_ptr<ccWebsocket>& pSocket);
-    bool    GetWebsocket(const std::string& strUri, std::int32_t nInstance, std::shared_ptr<ccWebsocket>& pSocket);
-    bool    GetGroup(const std::string& strUri, std::shared_ptr<ccWebsocketGroup>& pGroup);
+    bool    getWebsocket(std::int32_t nInstance, std::shared_ptr<ccWebsocket>& pSocket);
+    bool    getWebsocket(const std::string& strUri, std::int32_t nInstance, std::shared_ptr<ccWebsocket>& pSocket);
+    bool    getGroup(const std::string& strUri, std::shared_ptr<ccWebsocketGroup>& pGroup);
 
 public:
-    virtual bool    HasUri(const std::string& strUri);
-    virtual bool    AddFunction(const std::string& strUri, std::function<bool(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const std::string& strData)> f);
-    virtual bool    RemoveFunction(const std::string& strUri);
-    virtual bool    PerformWebsocketEvent(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const std::string& strData);
+    virtual bool    hasUri(const std::string& strUri);
+    virtual bool    addFunction(const std::string& strUri, std::function<bool(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const std::string& strData)> f);
+    virtual bool    removeFunction(const std::string& strUri);
+    virtual bool    performWebsocketEvent(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const std::string& strData);
 
 protected:
     std::mutex      _mtx;

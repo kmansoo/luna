@@ -35,11 +35,11 @@ public:
     ~ccRESTfulChattingSessionInfo() {}
 
 public:
-    bool    Join(const std::string& strUserID);
-    bool    Leave(const std::string& strUserID);
-    bool    GetMemberList(std::vector<std::string>& aUserIDs);
+    bool    join(const std::string& strUserID);
+    bool    leave(const std::string& strUserID);
+    bool    getMemberList(std::vector<std::string>& aUserIDs);
 
-    bool    NewMessage(const std::string& strUserID, const std::string& strMessage);
+    bool    newMessage(const std::string& strUserID, const std::string& strMessage);
 
 public:
     std::string     _strName;
@@ -56,21 +56,21 @@ public:
     ccRESTfulChattingSessionManager() {}
 
 public:
-    bool    CreateID(const std::string& strID, const std::string& strName);
-    bool    DeleteID(const std::string& strID);
-    bool    GetUserInfo(const std::string& strID, ccRESTfulChattingUserInfo& oUserInfo);
-    bool    GetUserList(std::vector<std::string>& aUserIDs);
+    bool    createID(const std::string& strID, const std::string& strName);
+    bool    deleteID(const std::string& strID);
+    bool    getUserInfo(const std::string& strID, ccRESTfulChattingUserInfo& oUserInfo);
+    bool    getUserList(std::vector<std::string>& aUserIDs);
 
-    bool    CreateSession(const std::string& strName, const std::string& strOwnerID);
-    bool    DeleteSession(const std::string& strName, const std::string& strRequestID);
+    bool    createSession(const std::string& strName, const std::string& strOwnerID);
+    bool    deleteSession(const std::string& strName, const std::string& strRequestID);
 
-    bool    JoinSession(const std::string& strSessionName, const std::string& strUserID);
-    bool    LeaveSession(const std::string& strSessionName, const std::string& strUserID);
+    bool    joinSession(const std::string& strSessionName, const std::string& strUserID);
+    bool    leaveSession(const std::string& strSessionName, const std::string& strUserID);
 
-    bool    GetSessionList(std::vector<std::string>& aSessionNames, std::vector<std::string>& aOwnerIDs);
-    bool    GetSessionInfo(const std::string& strSessionName, std::vector<std::string>& aMembers);
+    bool    getSessionList(std::vector<std::string>& aSessionNames, std::vector<std::string>& aOwnerIDs);
+    bool    getSessionInfo(const std::string& strSessionName, std::vector<std::string>& aMembers);
 
-    bool    BroadcastMessage(const std::string& strSessionName, const std::string& strUserID, const std::string& strMessage);
+    bool    broadcastMessage(const std::string& strSessionName, const std::string& strUserID, const std::string& strMessage);
 
 protected:
     std::shared_ptr<ccRESTfulChattingSessionInfo> DoFindSession(const std::string& strName);

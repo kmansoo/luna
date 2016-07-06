@@ -93,7 +93,7 @@ ccWin32SerialPortHelper::~ccWin32SerialPortHelper()
 
 ////////////////////////////////////////////////////////////
 // 포트를 연다.
-BOOL ccWin32SerialPortHelper::CheckValidPort(
+BOOL ccWin32SerialPortHelper::checkValidPort(
     UINT uComPort, 
     DWORD dwRate, 
     PARITY_BIT	ParityBit, 
@@ -116,7 +116,7 @@ BOOL ccWin32SerialPortHelper::CheckValidPort(
         GENERIC_READ | GENERIC_WRITE,
         0,
         NULL, 
-        OPEN_EXISTING, 
+        open_EXISTING, 
         FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED,
         NULL);
 
@@ -141,7 +141,7 @@ BOOL ccWin32SerialPortHelper::CheckValidPort(
 
     SetCommTimeouts(_hFile, &CommTimeOuts);
 
-    if (SettingPort() != TRUE)
+    if (settingPort() != TRUE)
         return FALSE;
 
     _bOpenPort = TRUE;
@@ -149,7 +149,7 @@ BOOL ccWin32SerialPortHelper::CheckValidPort(
     return TRUE;
 }
 
-BOOL ccWin32SerialPortHelper::Open(
+BOOL ccWin32SerialPortHelper::open(
     UINT		uComPort, 
     DWORD		dwRate, 
     PARITY_BIT	ParityBit, 
@@ -171,7 +171,7 @@ BOOL ccWin32SerialPortHelper::Open(
         GENERIC_READ | GENERIC_WRITE,
         0,
         NULL, 
-        OPEN_EXISTING, 
+        open_EXISTING, 
         FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED,
         NULL);
 
@@ -197,7 +197,7 @@ BOOL ccWin32SerialPortHelper::Open(
     SetCommTimeouts(_hFile, &CommTimeOuts);
 
     //
-    if (SettingPort() != TRUE)
+    if (settingPort() != TRUE)
         return FALSE;
 
     _bOpenPort = TRUE;
@@ -208,20 +208,20 @@ BOOL ccWin32SerialPortHelper::Open(
     return TRUE;
 }
 
-BOOL	ccWin32SerialPortHelper::Open(
+BOOL	ccWin32SerialPortHelper::open(
     UINT		uComPort, 
     DWORD		dwRate, 
     PARITY_BIT	ParityBit, 
     BYTE_SIZE	ByteSize, 
     STOP_BITS	StopBits)
 {
-    return Open(uComPort, dwRate, ParityBit, ByteSize, StopBits);
+    return open(uComPort, dwRate, ParityBit, ByteSize, StopBits);
 }
 
 /*
 *	Serail Port를 닫음
 */
-void ccWin32SerialPortHelper::Close()
+void ccWin32SerialPortHelper::close()
 {
     if (_bOpenPort)
     {
@@ -237,7 +237,7 @@ void ccWin32SerialPortHelper::Close()
         if (_hFile != INVALID_HANDLE_VALUE)
             CloseHandle(_hFile);
 
-        StopWatchThread();
+        stopWatchThread();
 
         _bOpenPort      =	FALSE;
         _hFile		    =	INVALID_HANDLE_VALUE;
@@ -272,7 +272,7 @@ void ccWin32SerialPortHelper::DoSetupHardwareFlowControl(DCB& stDCB)
 /*
 *	포트를 설정한다.
 */
-BOOL ccWin32SerialPortHelper::SettingPort()
+BOOL ccWin32SerialPortHelper::settingPort()
 {
     //	최초 한번만 수행
     //	CreateFile이 성공적이여야 한다.
@@ -361,7 +361,7 @@ BOOL ccWin32SerialPortHelper::StartPollThread()
 }
 
 /////////////////////////////
-BOOL ccWin32SerialPortHelper::StopWatchThread()
+BOOL ccWin32SerialPortHelper::stopPollThread()
 {
     if (_bActiveThread)
     {
@@ -385,7 +385,7 @@ BOOL ccWin32SerialPortHelper::StopWatchThread()
 
 ////////////////////////////
 // 자료 읽기
-BOOL ccWin32SerialPortHelper::IsEmpty()
+BOOL ccWin32SerialPortHelper::isEmpty()
 {
     HSAutoLocking al(&_mtx_buffer);
 
@@ -395,9 +395,9 @@ BOOL ccWin32SerialPortHelper::IsEmpty()
     return FALSE;
 }
 
-char ccWin32SerialPortHelper::GetChar()
+char ccWin32SerialPortHelper::getChar()
 {
-    if (IsEmpty())
+    if (isEmpty())
         return 0;
 
     char ch = 0;
@@ -409,7 +409,7 @@ char ccWin32SerialPortHelper::GetChar()
     return ch;
 }
 
-DWORD ccWin32SerialPortHelper::Read(void*pBuf, DWORD dwReadSize)
+DWORD ccWin32SerialPortHelper::read(void*pBuf, DWORD dwReadSize)
 {
     _mtx_buffer.lock();
 
@@ -429,7 +429,7 @@ DWORD ccWin32SerialPortHelper::Read(void*pBuf, DWORD dwReadSize)
 /////////////////////////////
 // 자료 송신 및 수신
 
-void ccWin32SerialPortHelper::ResetBuffer()
+void ccWin32SerialPortHelper::resetBuffer()
 {
     _mtx_buffer.lock();
     _sReceiveData.clear();
@@ -438,22 +438,22 @@ void ccWin32SerialPortHelper::ResetBuffer()
     //	_pQueue->RemoveAll();
 }
 
-void ccWin32SerialPortHelper::SetReceiveEvent(BOOL bEvent)
+void ccWin32SerialPortHelper::setReceiveEvent(BOOL bEvent)
 {
     _bReceiveEvent = bEvent;
 }
 
-BOOL ccWin32SerialPortHelper::Putc(BYTE ch)
+BOOL ccWin32SerialPortHelper::putc(BYTE ch)
 {
     return Write(&ch, sizeof(BYTE));
 }
 
-BOOL ccWin32SerialPortHelper::Puts(const char *pData)
+BOOL ccWin32SerialPortHelper::puts(const char *pData)
 {
     return Write(pData, strlen(pData));
 }
 
-BOOL ccWin32SerialPortHelper::Write(const void *lpBuf, DWORD dwCount)
+BOOL ccWin32SerialPortHelper::write(const void *lpBuf, DWORD dwCount)
 {
     if (!_bActiveThread)
         return FALSE;
@@ -500,7 +500,7 @@ BOOL ccWin32SerialPortHelper::Write(const void *lpBuf, DWORD dwCount)
 }
 
 
-BOOL ccWin32SerialPortHelper::Write(const void *lpBuf, DWORD dwCount, DWORD *pBytesWritten)
+BOOL ccWin32SerialPortHelper::write(const void *lpBuf, DWORD dwCount, DWORD *pBytesWritten)
 {
     if (!_bActiveThread)
         return FALSE;
@@ -541,12 +541,12 @@ BOOL ccWin32SerialPortHelper::Write(const void *lpBuf, DWORD dwCount, DWORD *pBy
     return bResult;
 }
 
-BOOL ccWin32SerialPortHelper::WriteString(std::string& str, DWORD *pBytesWritten)
+BOOL ccWin32SerialPortHelper::writeString(std::string& str, DWORD *pBytesWritten)
 {
-    return Write(str.c_str(), str.length(), pBytesWritten);
+    return write(str.c_str(), str.length(), pBytesWritten);
 }
 
-void ccWin32SerialPortHelper::ReadFromDevice()
+void ccWin32SerialPortHelper::readFromDevice()
 {
     if (!_bActiveThread)	
     {	
@@ -603,7 +603,7 @@ void ccWin32SerialPortHelper::ReadFromDevice()
 }
 
 /////////////////////////////////
-void ccWin32SerialPortHelper::WatchSerialProc(LPVOID pParam)
+void ccWin32SerialPortHelper::watchSerialProc(LPVOID pParam)
 {
     HSWatchCommProcParam wcppParam;
     DWORD		dwEvtMask;

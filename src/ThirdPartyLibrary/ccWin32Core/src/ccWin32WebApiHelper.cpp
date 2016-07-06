@@ -12,7 +12,7 @@ ccWin32WebApiHelper::ccWin32WebApiHelper(void) :
 {
     _bIsStopThread = false;
 
-    _oPollThread = std::thread(std::bind(&ccWin32WebApiHelper::DoRunThread, this));
+    _oPollThread = std::thread(std::bind(&ccWin32WebApiHelper::doRunThread, this));
 }
 
 ccWin32WebApiHelper::~ccWin32WebApiHelper(void)
@@ -35,32 +35,32 @@ std::shared_ptr<ccWin32WebApiHelper> ccWin32WebApiHelper::getInstance()
     return s_singleInstance;
 }
 
-void ccWin32WebApiHelper::SetConnectionInfo(const std::string& strIP, UINT uPort)
+void ccWin32WebApiHelper::setConnectionInfo(const std::string& strIP, UINT uPort)
 {
     _strDestIP  =   strIP;
     _uDestPort  =   uPort;
 }
 
-std::uint16_t ccWin32WebApiHelper::RequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, std::string& strResponse)
+std::uint16_t ccWin32WebApiHelper::requestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, std::string& strResponse)
 {
-    return DoSendRequestAPI(eMethod, strWebAPI, "", strResponse);
+    return doSendRequestAPI(eMethod, strWebAPI, "", strResponse);
 }
 
-std::uint16_t ccWin32WebApiHelper::RequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, Json::Value& oParams, std::string& strResponse)
+std::uint16_t ccWin32WebApiHelper::requestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, Json::Value& oParams, std::string& strResponse)
 {
     Json::StyledWriter writer;
 
-    return DoSendRequestAPI(eMethod, strWebAPI, writer.write(oParams), strResponse);
+    return doSendRequestAPI(eMethod, strWebAPI, writer.write(oParams), strResponse);
 }
 
-bool ccWin32WebApiHelper::AsyncRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, ccWin32RgWebApiTransactionNotifier *pNotifier)
+bool ccWin32WebApiHelper::asyncRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, ccWin32RgWebApiTransactionNotifier *pNotifier)
 {
     Json::Value oParams;
 
-    return AsyncRequestAPI(eMethod, strWebAPI, oParams, pNotifier);
+    return asyncRequestAPI(eMethod, strWebAPI, oParams, pNotifier);
 }
 
-bool ccWin32WebApiHelper::AsyncRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, Json::Value& oParams, ccWin32RgWebApiTransactionNotifier *pNotifier)
+bool ccWin32WebApiHelper::asyncRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, Json::Value& oParams, ccWin32RgWebApiTransactionNotifier *pNotifier)
 {
     if (pNotifier == NULL)
         return false;
@@ -96,7 +96,7 @@ bool ccWin32WebApiHelper::AsyncRequestAPI(ccWebServerRequest::HttpMethod eMethod
     return true;
 }
 
-std::uint16_t ccWin32WebApiHelper::DoSendRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, const std::string& strRequestData, std::string& strResponse)
+std::uint16_t ccWin32WebApiHelper::doSendRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, const std::string& strRequestData, std::string& strResponse)
 {
     USES_CONVERSION;  
 
@@ -243,7 +243,7 @@ clearVariabls:
     return uStatusCode;
 }
 
-void ccWin32WebApiHelper::DoRunThread()
+void ccWin32WebApiHelper::doRunThread()
 {
     while (_bIsStopThread == false)
     {
@@ -259,12 +259,12 @@ void ccWin32WebApiHelper::DoRunThread()
 
             if (pWorkTransction->_pNotifier)
             {
-                std::uint16_t uStatusCode = DoSendRequestAPI(pWorkTransction->_eMethod, pWorkTransction->_strWebAPI, pWorkTransction->_strRequestData, strResponse);
+                std::uint16_t uStatusCode = doSendRequestAPI(pWorkTransction->_eMethod, pWorkTransction->_strWebAPI, pWorkTransction->_strRequestData, strResponse);
 
                 if (uStatusCode == 0)
-                    pWorkTransction->_pNotifier->OnTransactionRecveResponse(uStatusCode, strResponse);
+                    pWorkTransction->_pNotifier->onTransactionRecveResponse(uStatusCode, strResponse);
                 else
-                    pWorkTransction->_pNotifier->OnTransactionRequestTimeout();
+                    pWorkTransction->_pNotifier->onTransactionRequestTimeout();
             }
         }
 
@@ -301,7 +301,7 @@ void ccWin32WebApiHelper::DoRunThread()
 //}
 
 
-bool ccWin32WebApiHelper::getValueString(Json::Value& oValue, const std::string& strName, std::string& strValue, std::string strDefaultValue)
+bool ccWin32WebApiHelper::get_value_string(Json::Value& oValue, const std::string& strName, std::string& strValue, std::string strDefaultValue)
 {
     strValue = strDefaultValue;
 
@@ -318,7 +318,7 @@ bool ccWin32WebApiHelper::getValueString(Json::Value& oValue, const std::string&
     return false;
 }
 
-bool ccWin32WebApiHelper::getValueInt(Json::Value& oValue, const std::string& strName, int& nValue, int nDefaultValue)
+bool ccWin32WebApiHelper::get_value_int(Json::Value& oValue, const std::string& strName, int& nValue, int nDefaultValue)
 {
     nValue = nDefaultValue;
 

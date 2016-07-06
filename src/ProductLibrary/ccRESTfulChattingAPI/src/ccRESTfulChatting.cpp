@@ -30,7 +30,7 @@ ccRESTfulChattingSessionInfo::ccRESTfulChattingSessionInfo(const std::string& st
  
 }
 
-bool ccRESTfulChattingSessionInfo::Join(const std::string& strUserID)
+bool ccRESTfulChattingSessionInfo::join(const std::string& strUserID)
 {
     for (auto user : _aMembers)
     {
@@ -43,7 +43,7 @@ bool ccRESTfulChattingSessionInfo::Join(const std::string& strUserID)
     return true;
 }
 
-bool ccRESTfulChattingSessionInfo::Leave(const std::string& strUserID)
+bool ccRESTfulChattingSessionInfo::leave(const std::string& strUserID)
 {
     for (auto it = _aMembers.begin(); it != _aMembers.end(); it++)
     {
@@ -57,7 +57,7 @@ bool ccRESTfulChattingSessionInfo::Leave(const std::string& strUserID)
     return false;
 }
 
-bool  ccRESTfulChattingSessionInfo::GetMemberList(std::vector<std::string>& aUserIDs)
+bool  ccRESTfulChattingSessionInfo::getMemberList(std::vector<std::string>& aUserIDs)
 {
     for (auto user : _aMembers)
         aUserIDs.push_back(user);
@@ -65,7 +65,7 @@ bool  ccRESTfulChattingSessionInfo::GetMemberList(std::vector<std::string>& aUse
     return true;
 }
 
-bool ccRESTfulChattingSessionInfo::NewMessage(const std::string& strUserID, const std::string& strMessage)
+bool ccRESTfulChattingSessionInfo::newMessage(const std::string& strUserID, const std::string& strMessage)
 {
     std::shared_ptr<ccRESTfulChattingMessageInfo> pNewMessage(new ccRESTfulChattingMessageInfo);
 
@@ -90,7 +90,7 @@ bool ccRESTfulChattingSessionInfo::NewMessage(const std::string& strUserID, cons
 //--
 //  ccRESTfulChattingSessionInfo
 //
-bool ccRESTfulChattingSessionManager::CreateID(const std::string& strID, const std::string& strName)
+bool ccRESTfulChattingSessionManager::createID(const std::string& strID, const std::string& strName)
 {
     for (auto userInfo : _aUserInfos)
     {
@@ -113,7 +113,7 @@ bool ccRESTfulChattingSessionManager::CreateID(const std::string& strID, const s
     return true;
 }
 
-bool ccRESTfulChattingSessionManager::DeleteID(const std::string& strID)
+bool ccRESTfulChattingSessionManager::deleteID(const std::string& strID)
 {
     for (auto it = _aUserInfos.begin(); it != _aUserInfos.end(); it++)
     {
@@ -131,7 +131,7 @@ bool ccRESTfulChattingSessionManager::DeleteID(const std::string& strID)
     return false;
 }
 
-bool ccRESTfulChattingSessionManager::CreateSession(const std::string& strName, const std::string& strOwnerID)
+bool ccRESTfulChattingSessionManager::createSession(const std::string& strName, const std::string& strOwnerID)
 {
     for (auto sessionInfo : _aSessionInfos)
     {
@@ -146,7 +146,7 @@ bool ccRESTfulChattingSessionManager::CreateSession(const std::string& strName, 
     return true;
 }
 
-bool ccRESTfulChattingSessionManager::DeleteSession(const std::string& strName, const std::string& strOwnerID)
+bool ccRESTfulChattingSessionManager::deleteSession(const std::string& strName, const std::string& strOwnerID)
 {
     for (auto it = _aSessionInfos.begin(); it != _aSessionInfos.end(); it++)
     {
@@ -160,29 +160,29 @@ bool ccRESTfulChattingSessionManager::DeleteSession(const std::string& strName, 
     return false;
 }
 
-bool ccRESTfulChattingSessionManager::JoinSession(const std::string& strName, const std::string& strUserID)
+bool ccRESTfulChattingSessionManager::joinSession(const std::string& strName, const std::string& strUserID)
 {
     for (auto sessionInfo : _aSessionInfos)
     {
         if (sessionInfo->_strName == strName)
-            return sessionInfo->Join(strUserID);
+            return sessionInfo->join(strUserID);
     }
 
     return false;
 }
 
-bool ccRESTfulChattingSessionManager::LeaveSession(const std::string& strName, const std::string& strUserID)
+bool ccRESTfulChattingSessionManager::leaveSession(const std::string& strName, const std::string& strUserID)
 {
     for (auto sessionInfo : _aSessionInfos)
     {
         if (sessionInfo->_strName == strName)
-            return sessionInfo->Leave(strUserID);
+            return sessionInfo->leave(strUserID);
     }
 
     return false;
 }
 
-bool ccRESTfulChattingSessionManager::GetUserInfo(const std::string& strID, ccRESTfulChattingUserInfo& oUserInfo)
+bool ccRESTfulChattingSessionManager::getUserInfo(const std::string& strID, ccRESTfulChattingUserInfo& oUserInfo)
 {
     for (auto info : _aUserInfos)
     {
@@ -198,7 +198,7 @@ bool ccRESTfulChattingSessionManager::GetUserInfo(const std::string& strID, ccRE
 }
 
 
-bool ccRESTfulChattingSessionManager::GetUserList(std::vector<std::string>& aUserIDs)
+bool ccRESTfulChattingSessionManager::getUserList(std::vector<std::string>& aUserIDs)
 {
     aUserIDs.clear();
 
@@ -208,7 +208,7 @@ bool ccRESTfulChattingSessionManager::GetUserList(std::vector<std::string>& aUse
     return true;
 }
 
-bool ccRESTfulChattingSessionManager::GetSessionList(std::vector<std::string>& aSessionNames, std::vector<std::string>& aOwnerIDs)
+bool ccRESTfulChattingSessionManager::getSessionList(std::vector<std::string>& aSessionNames, std::vector<std::string>& aOwnerIDs)
 {
     aSessionNames.clear();
 
@@ -221,19 +221,19 @@ bool ccRESTfulChattingSessionManager::GetSessionList(std::vector<std::string>& a
     return true;
 }
 
-bool ccRESTfulChattingSessionManager::GetSessionInfo(const std::string& strSessionName, std::vector<std::string>& aMembers)
+bool ccRESTfulChattingSessionManager::getSessionInfo(const std::string& strSessionName, std::vector<std::string>& aMembers)
 {
     for (auto sessionInfo : _aSessionInfos)
     {
         if (sessionInfo->_strName == strSessionName)
-            return sessionInfo->GetMemberList(aMembers);
+            return sessionInfo->getMemberList(aMembers);
     }
 
 
     return false;
 }
 
-bool  ccRESTfulChattingSessionManager::BroadcastMessage(const std::string& strSessionName, const std::string& strUserID, const std::string& strMessage)
+bool  ccRESTfulChattingSessionManager::broadcastMessage(const std::string& strSessionName, const std::string& strUserID, const std::string& strMessage)
 {
 
     return false;
@@ -244,10 +244,10 @@ bool  ccRESTfulChattingSessionManager::BroadcastMessage(const std::string& strSe
 ccRESTfulChatting::ccRESTfulChatting()
 {
     // TODO Auto-generated constructor stub
-    AddAPI(std::string("/user"), std::bind(&ccRESTfulChatting::user, this, std::placeholders::_1, std::placeholders::_2));
-    AddAPI(std::string("/session"), std::bind(&ccRESTfulChatting::session, this, std::placeholders::_1, std::placeholders::_2));
-    AddAPI(std::string("/session/member"), std::bind(&ccRESTfulChatting::session_member, this, std::placeholders::_1, std::placeholders::_2));
-    AddAPI(std::string("/session/member/*"), std::bind(&ccRESTfulChatting::session_member_id, this, std::placeholders::_1, std::placeholders::_2));
+    addAPI(std::string("/user"), std::bind(&ccRESTfulChatting::user, this, std::placeholders::_1, std::placeholders::_2));
+    addAPI(std::string("/session"), std::bind(&ccRESTfulChatting::session, this, std::placeholders::_1, std::placeholders::_2));
+    addAPI(std::string("/session/member"), std::bind(&ccRESTfulChatting::session_member, this, std::placeholders::_1, std::placeholders::_2));
+    addAPI(std::string("/session/member/*"), std::bind(&ccRESTfulChatting::session_member_id, this, std::placeholders::_1, std::placeholders::_2));
     //  AddAPI(std::string("/session/message"), std::bind(&ccRESTfulChatting::session_message, this, std::placeholders::_1, std::placeholders::_2));
 }
 
@@ -260,7 +260,7 @@ bool ccRESTfulChatting::user(std::shared_ptr<Luna::ccWebServerRequest> pRequest,
 {
     //std::cout << "enter ccRESTfulChatting::list, query_string=" << pRequest->GetQueryString() << endl;
 
-    switch (pRequest->GetMethod())
+    switch (pRequest->getMethod())
     {
     case Luna::ccWebServerRequest::HttpMethod_Post:   //  Create
         {
@@ -271,27 +271,27 @@ bool ccRESTfulChatting::user(std::shared_ptr<Luna::ccWebServerRequest> pRequest,
 
             strJsonData.reserve(1024);
 
-            pRequest->GetContentBody(strJsonData);
+            pRequest->getContentBody(strJsonData);
 
             if (!oReader.parse(strJsonData, oRootValue))
             {
-                pResponse->Status(500, std::string("Server Error!"));
+                pResponse->status(500, std::string("Server Error!"));
                 return false;
             }
 
             if (oRootValue["user_info"].isObject() == false)
             {
-                pResponse->Status(500, std::string("Server Error!"));
+                pResponse->status(500, std::string("Server Error!"));
                 return false;
             }
 
             //  Json::Value oUserInfp = oRootValue["user_info"];
-            if (_oSessionManager.CreateID(oRootValue["user_info"]["ID"].asString(), oRootValue["user_info"]["Name"].asString()) == true)
-                pResponse->Status(201, std::string("Created"));
+            if (_oSessionManager.createID(oRootValue["user_info"]["ID"].asString(), oRootValue["user_info"]["Name"].asString()) == true)
+                pResponse->status(201, std::string("Created"));
             else
-                pResponse->Status(500, std::string("Server Error!"));
+                pResponse->status(500, std::string("Server Error!"));
     
-            pResponse->ContentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
+            pResponse->contentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
         }
         break;
 
@@ -299,9 +299,9 @@ bool ccRESTfulChatting::user(std::shared_ptr<Luna::ccWebServerRequest> pRequest,
         {
             std::vector<std::string> aMembers;
 
-            _oSessionManager.GetUserList(aMembers);
+            _oSessionManager.getUserList(aMembers);
 
-            pResponse->Status(200, std::string("OK"));
+            pResponse->status(200, std::string("OK"));
 
             Json::Value oResponseJsonData;
             Json::Value oUserList;
@@ -316,8 +316,8 @@ bool ccRESTfulChatting::user(std::shared_ptr<Luna::ccWebServerRequest> pRequest,
 
             std::string strJsonData = oWriter.write(oResponseJsonData);
 
-            pResponse->ContentType("application/javascript", strJsonData.length());
-            pResponse->Write(strJsonData);
+            pResponse->contentType("application/javascript", strJsonData.length());
+            pResponse->write(strJsonData);
 
             return true;
         }
@@ -325,20 +325,20 @@ bool ccRESTfulChatting::user(std::shared_ptr<Luna::ccWebServerRequest> pRequest,
 
     case Luna::ccWebServerRequest::HttpMethod_Delete:   //  Delete
         {
-            std::string strID = pRequest->GetVar("ID");
+            std::string strID = pRequest->getVar("ID");
 
-            if (_oSessionManager.DeleteID(strID) == true)
-                pResponse->Status(202, std::string("OK"));
+            if (_oSessionManager.deleteID(strID) == true)
+                pResponse->status(202, std::string("OK"));
             else
-                pResponse->Status(500, std::string("Server Error!"));
+                pResponse->status(500, std::string("Server Error!"));
     
-            pResponse->ContentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
+            pResponse->contentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
     }
         break;
 
     default:
-        pResponse->Status(500, std::string("Server Error!"));
-        pResponse->ContentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
+        pResponse->status(500, std::string("Server Error!"));
+        pResponse->contentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
         break;
 
     }
@@ -348,7 +348,7 @@ bool ccRESTfulChatting::user(std::shared_ptr<Luna::ccWebServerRequest> pRequest,
 
 bool ccRESTfulChatting::session(std::shared_ptr<Luna::ccWebServerRequest> pRequest, std::shared_ptr<Luna::ccWebServerResponse> pResponse)
 {
-    switch (pRequest->GetMethod())
+    switch (pRequest->getMethod())
     {
     case Luna::ccWebServerRequest::HttpMethod_Get:
         {
@@ -360,7 +360,7 @@ bool ccRESTfulChatting::session(std::shared_ptr<Luna::ccWebServerRequest> pReque
 
             std::vector<std::string> aSessionNames, aOwnerIDs;
 
-            _oSessionManager.GetSessionList(aSessionNames, aOwnerIDs);
+            _oSessionManager.getSessionList(aSessionNames, aOwnerIDs);
 
             oSessionList["count"] = (int)aSessionNames.size();
 
@@ -374,9 +374,9 @@ bool ccRESTfulChatting::session(std::shared_ptr<Luna::ccWebServerRequest> pReque
 
             std::string strJsonData = oWriter.write(oResponseJsonValue);
 
-            pResponse->Status(200, std::string("OK"));
-            pResponse->ContentType("application/javascript", strJsonData.length());
-            pResponse->Write(strJsonData);
+            pResponse->status(200, std::string("OK"));
+            pResponse->contentType("application/javascript", strJsonData.length());
+            pResponse->write(strJsonData);
         }
         break;
 
@@ -389,37 +389,37 @@ bool ccRESTfulChatting::session(std::shared_ptr<Luna::ccWebServerRequest> pReque
 
             strJsonData.reserve(1024);
 
-            pRequest->GetContentBody(strJsonData);
+            pRequest->getContentBody(strJsonData);
 
             if (!oReader.parse(strJsonData, oRootValue))
             {
-                pResponse->Status(500, std::string("Server Error!"));
+                pResponse->status(500, std::string("Server Error!"));
                 return false;
             }
 
             if (oRootValue["session_info"].isObject() == false)
             {
-                pResponse->Status(500, std::string("Server Error!"));
+                pResponse->status(500, std::string("Server Error!"));
                 return false;
             }
 
             std::string strSessionName = oRootValue["session_info"]["Name"].asString();
             std::string strOwnerID = oRootValue["session_info"]["OwnerID"].asString();
 
-            if (_oSessionManager.CreateSession(strSessionName, strOwnerID) == true)
+            if (_oSessionManager.createSession(strSessionName, strOwnerID) == true)
             {
-                pResponse->Status(201, std::string("Created"));
+                pResponse->status(201, std::string("Created"));
 
                 std::string strWSUrl;
 
                 Luna::ccString::format(strWSUrl, "/session/chat/%s", strSessionName.c_str());
                 
-                AddFunction(strWSUrl, std::bind(&ccRESTfulChatting::ws_chat, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+                addFunction(strWSUrl, std::bind(&ccRESTfulChatting::ws_chat, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
             }
             else
-                pResponse->Status(500, std::string("Server Error!"));
+                pResponse->status(500, std::string("Server Error!"));
     
-            pResponse->ContentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
+            pResponse->contentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
         }
         break;
 
@@ -432,43 +432,43 @@ bool ccRESTfulChatting::session(std::shared_ptr<Luna::ccWebServerRequest> pReque
 
             strJsonData.reserve(1024);
 
-            pRequest->GetContentBody(strJsonData);
+            pRequest->getContentBody(strJsonData);
 
             if (!oReader.parse(strJsonData, oRootValue))
             {
-                pResponse->Status(500, std::string("Server Error!"));
+                pResponse->status(500, std::string("Server Error!"));
                 return false;
             }
 
             if (oRootValue["session_info"].isObject() == false)
             {
-                pResponse->Status(500, std::string("Server Error!"));
+                pResponse->status(500, std::string("Server Error!"));
                 return false;
             }
 
             std::string strSessionName = oRootValue["session_info"]["Name"].asString();
             std::string strOwnerID = oRootValue["session_info"]["OwnerID"].asString();
 
-            if (_oSessionManager.DeleteSession(strSessionName, strOwnerID) == true)
+            if (_oSessionManager.deleteSession(strSessionName, strOwnerID) == true)
             {
-                pResponse->Status(202, std::string("OK"));
+                pResponse->status(202, std::string("OK"));
 
                 std::string strWSUrl;
 
                 Luna::ccString::format(strWSUrl, "/session/chat/%s", strSessionName.c_str());
                 
-                RemoveFunction(strWSUrl);
+                removeFunction(strWSUrl);
             }
             else
-                pResponse->Status(500, std::string("Server Error!"));
+                pResponse->status(500, std::string("Server Error!"));
 
-            pResponse->ContentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
+            pResponse->contentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
         }
         break;
 
     default:
-        pResponse->Status(500, std::string("Server Error!"));
-        pResponse->ContentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
+        pResponse->status(500, std::string("Server Error!"));
+        pResponse->contentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
         break;
 
     }
@@ -478,16 +478,16 @@ bool ccRESTfulChatting::session(std::shared_ptr<Luna::ccWebServerRequest> pReque
 
 bool ccRESTfulChatting::session_member(std::shared_ptr<Luna::ccWebServerRequest> pRequest, std::shared_ptr<Luna::ccWebServerResponse> pResponse)
 {
-    switch (pRequest->GetMethod())
+    switch (pRequest->getMethod())
     {
         case Luna::ccWebServerRequest::HttpMethod_Get:
         {
-            std::string strSessionName = pRequest->GetVar("Name");
-            std::string strUserID = pRequest->GetVar("UserID");
+            std::string strSessionName = pRequest->getVar("Name");
+            std::string strUserID = pRequest->getVar("UserID");
 
             std::vector<std::string> aMemberList;
 
-            _oSessionManager.GetSessionInfo(strSessionName, aMemberList);
+            _oSessionManager.getSessionInfo(strSessionName, aMemberList);
 
             Json::Value oResponseJsonValue;
             Json::Value oSessionMemberList;
@@ -502,43 +502,43 @@ bool ccRESTfulChatting::session_member(std::shared_ptr<Luna::ccWebServerRequest>
 
             std::string strJsonData = oWriter.write(oResponseJsonValue);
 
-            pResponse->Status(200, std::string("OK"));
-            pResponse->ContentType("application/javascript", strJsonData.length());
-            pResponse->Write(strJsonData);
+            pResponse->status(200, std::string("OK"));
+            pResponse->contentType("application/javascript", strJsonData.length());
+            pResponse->write(strJsonData);
         }
         break;
 
         case Luna::ccWebServerRequest::HttpMethod_Put:    //  join
         {
-            std::string strSessionName = pRequest->GetVar("Name");
-            std::string strUserID = pRequest->GetVar("UserID");
+            std::string strSessionName = pRequest->getVar("Name");
+            std::string strUserID = pRequest->getVar("UserID");
 
-            if (_oSessionManager.JoinSession(strSessionName, strUserID) == true)
-                pResponse->Status(200, std::string("OK"));
+            if (_oSessionManager.joinSession(strSessionName, strUserID) == true)
+                pResponse->status(200, std::string("OK"));
             else
-                pResponse->Status(500, std::string("Server Error!"));
+                pResponse->status(500, std::string("Server Error!"));
 
-            pResponse->ContentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
+            pResponse->contentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
         }
         break;
 
         case Luna::ccWebServerRequest::HttpMethod_Delete:
         {
-            std::string strSessionName = pRequest->GetVar("Name");
-            std::string strUserID = pRequest->GetVar("UserID");
+            std::string strSessionName = pRequest->getVar("Name");
+            std::string strUserID = pRequest->getVar("UserID");
 
-            if (_oSessionManager.LeaveSession(strSessionName, strUserID) == true)
-                pResponse->Status(202, std::string("OK"));
+            if (_oSessionManager.leaveSession(strSessionName, strUserID) == true)
+                pResponse->status(202, std::string("OK"));
             else
-                pResponse->Status(500, std::string("Server Error!"));
+                pResponse->status(500, std::string("Server Error!"));
 
-            pResponse->ContentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
+            pResponse->contentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
         }
         break;
 
         default:
-            pResponse->Status(500, std::string("Server Error!"));
-            pResponse->ContentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
+            pResponse->status(500, std::string("Server Error!"));
+            pResponse->contentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
             break;
     }
 
@@ -548,10 +548,10 @@ bool ccRESTfulChatting::session_member(std::shared_ptr<Luna::ccWebServerRequest>
 bool ccRESTfulChatting::session_member_id(std::shared_ptr<Luna::ccWebServerRequest> pRequest, std::shared_ptr<Luna::ccWebServerResponse> pResponse)
 {
     //  I'll implement this method as soon as possible.
-    std::string strUserID = pRequest->GetResource();
+    std::string strUserID = pRequest->getResource();
 
-    pResponse->Status(500, std::string("Server Error!"));
-    pResponse->ContentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
+    pResponse->status(500, std::string("Server Error!"));
+    pResponse->contentType("Content-Type: application/x-www-form-urlencoded", (size_t)0);
 
     return true;
 }
@@ -565,9 +565,9 @@ bool ccRESTfulChatting::ws_chat(Luna::ccWebsocket::ccWebSocketEvent eEvent, std:
     {
         std::string strMessage;
 
-        Luna::ccString::format(strMessage, "%08x: Join", pWS->GetInstance());
+        Luna::ccString::format(strMessage, "%08x: Join", pWS->getInstance());
 
-        pWS->GetGroup()->Broadcast(strMessage);
+        pWS->getGroup()->broadcast(strMessage);
     }
     break;
 
@@ -575,9 +575,9 @@ bool ccRESTfulChatting::ws_chat(Luna::ccWebsocket::ccWebSocketEvent eEvent, std:
     {
         std::string strBroadcastMsg;
 
-        Luna::ccString::format(strBroadcastMsg, "%08x: %s", pWS->GetInstance(), strData.c_str());
+        Luna::ccString::format(strBroadcastMsg, "%08x: %s", pWS->getInstance(), strData.c_str());
 
-        pWS->GetGroup()->Broadcast(strBroadcastMsg);
+        pWS->getGroup()->broadcast(strBroadcastMsg);
     }
     break;
 
@@ -585,9 +585,9 @@ bool ccRESTfulChatting::ws_chat(Luna::ccWebsocket::ccWebSocketEvent eEvent, std:
     {
         std::string strMessage;
 
-        Luna::ccString::format(strMessage, "%08x: Leave", pWS->GetInstance());
+        Luna::ccString::format(strMessage, "%08x: Leave", pWS->getInstance());
 
-        pWS->GetGroup()->Broadcast(strMessage);
+        pWS->getGroup()->broadcast(strMessage);
     }
     break;
     }

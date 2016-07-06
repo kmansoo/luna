@@ -20,7 +20,7 @@ ccWebServerRequest::~ccWebServerRequest()
     // TODO Auto-generated destructor stub
 }
 
-ccWebServerRequest::HttpMethod  ccWebServerRequest::GetMethod() const
+ccWebServerRequest::HttpMethod  ccWebServerRequest::getMethod() const
 {
     if (_strMethod == "GET")        return HttpMethod_Get;
     if (_strMethod == "HEAD")       return HttpMethod_Head;
@@ -33,79 +33,78 @@ ccWebServerRequest::HttpMethod  ccWebServerRequest::GetMethod() const
     return HttpMethod_Unknown;
 }
 
-const std::string& ccWebServerRequest::GetMethod_c() const
+const std::string& ccWebServerRequest::getMethod_c() const
 {
     return _strMethod;
 }
 
-const std::string& ccWebServerRequest::GetURI() const
+const std::string& ccWebServerRequest::getURI() const
 {
     return _strUri;
 }
 
-std::string ccWebServerRequest::GetQueryString()
+std::string ccWebServerRequest::getQueryString()
 {
     return _strNullData;
 }
 
-std::string ccWebServerRequest::GetPath()
+std::string ccWebServerRequest::getPath()
 {
     return _strNullData;
 }
 
-std::string ccWebServerRequest::GetResource()
+std::string ccWebServerRequest::getResource()
 {
     return _strNullData;
 }
 
-bool ccWebServerRequest::HasVar(const std::string& name) const
+bool ccWebServerRequest::hasVar(const std::string& name) const
 {
     return false;
 }
 
-std::string ccWebServerRequest::GetVar(const std::string& name)
+std::string ccWebServerRequest::getVar(const std::string& name)
 {
     return _strNullData;
 }
 
-std::string ccWebServerRequest::GetHeader(const std::string& name)
+std::string ccWebServerRequest::getHeader(const std::string& name)
 {
     return _strNullData;
 }
 
-std::string ccWebServerRequest::GetContentType()
+std::string ccWebServerRequest::getContentType()
 {
     return _strNullData;
 }
 
-unsigned long ccWebServerRequest::GetContentLength()
+unsigned long ccWebServerRequest::getContentLength()
 {
     return 0;
 }
-
 
 // Retrieve info for the server interface that was connected with the remote device.
-long ccWebServerRequest::GetServerIp() const
+long ccWebServerRequest::getServerIp() const
 {
     return 0;
 }
 
-unsigned short  ccWebServerRequest::GetServerPort() const
+unsigned short  ccWebServerRequest::getServerPort() const
 {
     return 0;
 }
 
-long ccWebServerRequest::GetRemoteIp() const
+long ccWebServerRequest::getRemoteIp() const
 {
     return 0;
 }
 
-long ccWebServerRequest::GetContentBody(std::string& strBody)
+long ccWebServerRequest::getContentBody(std::string& strBody)
 {
     return 0;
 }
 
-long ccWebServerRequest::GetContentBody(char* pBuf, std::size_t size)
+long ccWebServerRequest::getContentBody(char* pBuf, std::size_t size)
 {
     return 0;
 }

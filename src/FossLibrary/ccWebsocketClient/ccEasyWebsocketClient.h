@@ -28,16 +28,16 @@ public:
     ~ccEasyWebsocketClient();
 
 public:
-    virtual bool    Open(const std::string& strUri);
-    virtual bool    Close();
+    virtual bool    open(const std::string& strUri);
+    virtual bool    close();
 
-    virtual std::int32_t    GetInstance();  // It may be a Socket ID. 
-    virtual bool            Send(const std::string& strMessage);
-    virtual bool            SendBinary(const void* pBuffer, std::size_t size);
+    virtual std::int32_t    getInstance();  // It may be a Socket ID. 
+    virtual bool            send(const std::string& strMessage);
+    virtual bool            sendBinary(const void* pBuffer, std::size_t size);
 
 private:
-    void    DoPoll();
-    void    DoReceive(const std::string& message);
+    void    doPoll();
+    void    doReceive(const std::string& message);
 
 private:
     std::shared_ptr<easywsclient::WebSocket> _pWorkWS;

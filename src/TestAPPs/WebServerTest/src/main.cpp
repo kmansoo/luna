@@ -18,8 +18,8 @@ class ccChattingWSManager : public Luna::ccWebsocketManager
 public:
     ccChattingWSManager()
     {
-        this->AddFunction("/ws", std::bind(&ccChattingWSManager::ws_chat, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-        this->AddFunction("/ws_chat", std::bind(&ccChattingWSManager::ws_chat, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+        this->addFunction("/ws", std::bind(&ccChattingWSManager::ws_chat, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+        this->addFunction("/ws_chat", std::bind(&ccChattingWSManager::ws_chat, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
     }
 
 public:
@@ -31,9 +31,9 @@ public:
             {
                 std::string strMessage;
 
-                Luna::ccString::format(strMessage, "%08x: Join", pWS->GetInstance());
+                Luna::ccString::format(strMessage, "%08x: Join", pWS->getInstance());
 
-                pWS->GetGroup()->Broadcast(strMessage);
+                pWS->getGroup()->broadcast(strMessage);
             }
             break;
 
@@ -42,9 +42,9 @@ public:
                 std::string strBroadcastMsg;
                 std::string strMessage(strData);
 
-                Luna::ccString::format(strBroadcastMsg, "%08x: %s", pWS->GetInstance(), strMessage.c_str());
+                Luna::ccString::format(strBroadcastMsg, "%08x: %s", pWS->getInstance(), strMessage.c_str());
 
-                pWS->GetGroup()->Broadcast(strBroadcastMsg);
+                pWS->getGroup()->broadcast(strBroadcastMsg);
             }
             break;
 
@@ -52,9 +52,9 @@ public:
             {
                 std::string strMessage;
 
-                Luna::ccString::format(strMessage, "%08x: Leave", pWS->GetInstance());
+                Luna::ccString::format(strMessage, "%08x: Leave", pWS->getInstance());
 
-                pWS->GetGroup()->Broadcast(strMessage);
+                pWS->getGroup()->broadcast(strMessage);
             }
             break;
         }
@@ -87,20 +87,20 @@ int main(int argc, char* argv[])
 
     //  choose a Web Server : Abstract Factory Design Pattern
 
-    Luna::ccWebServerManager::getInstance().AttachFactory(std::make_shared<Luna::ccMongooseWebServerObjectFactory>());
+    Luna::ccWebServerManager::getInstance().attachFactory(std::make_shared<Luna::ccMongooseWebServerObjectFactory>());
     //oManager.AttachFactory(std::make_shared<ccBoostWebServerObjectFactory>());
 
     std::shared_ptr<ccRESTfulChatting>      pChattingApi(new ccRESTfulChatting);
     std::shared_ptr<Luna::ccWebsocketManager>     pChattingWSM(new ccChattingWSManager);
 
-    Luna::ccWebServerManager::getInstance().CreateWebServer("WebServer #1", "8000", ".");
+    Luna::ccWebServerManager::getInstance().createWebServer("WebServer #1", "8000", ".");
 
-    Luna::ccWebServerManager::getInstance().AddRESTfulApi(pChattingApi);
-    Luna::ccWebServerManager::getInstance().AddWebsocketManager(pChattingApi);
+    Luna::ccWebServerManager::getInstance().addRESTfulApi(pChattingApi);
+    Luna::ccWebServerManager::getInstance().addWebsocketManager(pChattingApi);
 
-    Luna::ccWebServerManager::getInstance().AddWebsocketManager(pChattingWSM);
+    Luna::ccWebServerManager::getInstance().addWebsocketManager(pChattingWSM);
 
-    Luna::ccWebServerManager::getInstance().Start();
+    Luna::ccWebServerManager::getInstance().start();
 
     while (1)
         Luna::sleep(100);

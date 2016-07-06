@@ -24,18 +24,18 @@ protected:
     ccNetworkManager();
 
 public:
-    bool    Init();
-    void    Shutdown();
+    bool    init();
+    void    shutdown();
 
-    bool    GetLocalIP(std::string& strIP);
-    bool    GetNetMaskIP(std::string& strIP);
-    bool    GetGatewayIP(std::string& strIP);
+    bool    getLocalIP(std::string& strIP);
+    bool    getNetMaskIP(std::string& strIP);
+    bool    getGatewayIP(std::string& strIP);
 
     std::uint32_t   convertIP2Int(const std::string& strIP);
     bool            convertInt2IP(std::uint32_t uIP, std::string& strIP);
     bool            isPublicIP(const std::string& strIP);
 
-    bool            GetHostName(std::string& strName);
+    bool            getHostName(std::string& strName);
 
 private:
     bool    _bIsInitNetwork;

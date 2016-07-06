@@ -24,22 +24,22 @@ ccWebServer::~ccWebServer()
     // TODO Auto-generated destructor stub
 }
 
-bool ccWebServer::Start()
+bool ccWebServer::start()
 {
     return false;
 }
 
-bool ccWebServer::Stop()
+bool ccWebServer::stop()
 {
     return false;
 }
 
-const std::string&  ccWebServer::GetName()
+const std::string&  ccWebServer::getName()
 {
     return _strName;
 }
 
-bool ccWebServer::SetOption(std::string const& name, std::string const& value)
+bool ccWebServer::setOption(std::string const& name, std::string const& value)
 {
     _aOptions.push_back(name);
     _aOptions.push_back(value);
@@ -47,7 +47,7 @@ bool ccWebServer::SetOption(std::string const& name, std::string const& value)
     return true;
 }
 
-void ccWebServer::SetListener(ccWebServerEventListener* pListener)
+void ccWebServer::setListener(ccWebServerEventListener* pListener)
 {
     _pEventListener = pListener;
 }

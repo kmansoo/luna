@@ -22,17 +22,17 @@ ccMongooseWebsocket::~ccMongooseWebsocket()
     // TODO Auto-generated destructor stub
 }
 
-bool ccMongooseWebsocket::Open(const std::string& strUri)
+bool ccMongooseWebsocket::open(const std::string& strUri)
 {
     return false;
 }
 
-bool ccMongooseWebsocket::Close()
+bool ccMongooseWebsocket::close()
 {
     return false;
 }
 
-std::int32_t ccMongooseWebsocket::GetInstance()  // It may be a Socket ID. 
+std::int32_t ccMongooseWebsocket::getInstance()  // It may be a Socket ID. 
 {
     if (_pMgConnection == NULL)
         return -1;
@@ -40,7 +40,7 @@ std::int32_t ccMongooseWebsocket::GetInstance()  // It may be a Socket ID.
     return _pMgConnection->sock;
 }
 
-bool ccMongooseWebsocket::Send(const std::string& strMessage)
+bool ccMongooseWebsocket::send(const std::string& strMessage)
 {
     if (_pMgConnection == NULL)
         return false;
@@ -50,7 +50,7 @@ bool ccMongooseWebsocket::Send(const std::string& strMessage)
     return true;
 }
 
-bool ccMongooseWebsocket::SendBinary(const void* pBuffer, std::size_t size)
+bool ccMongooseWebsocket::sendBinary(const void* pBuffer, std::size_t size)
 {
     if (_pMgConnection == NULL)
         return false;

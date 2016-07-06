@@ -23,14 +23,14 @@ public:
     virtual ~ccMongooseWebServer();
 
 public:
-    virtual bool Start();
-    virtual bool Stop();
+    virtual bool start();
+    virtual bool stop();
 
 private:
     static void ev_handler(struct mg_connection *nc, int ev, void *p);
 
 private:
-    void    DoRunThread();
+    void    doRunThread();
 
 private:
     bool                    _bIsStopThread;

@@ -61,48 +61,48 @@ public:
 
     // Operations
 public:
-    BOOL 	IsOpenPort()	{return _bOpenPort;};
+    BOOL 	isOpenPort()	{return _bOpenPort;};
 
-    BOOL 	Open(
+    BOOL 	open(
         UINT		uComPort, 
         DWORD		dwRate, 
         PARITY_BIT	ParityBit = PB_NONE, 
         BYTE_SIZE	ByteSize = BS_SIZE8, 
         STOP_BITS	StopBits = SB_1_BITS);
 
-    BOOL 	CheckValidPort(
+    BOOL 	checkValidPort(
         UINT        uComPort, 
         DWORD       dwRate,
         PARITY_BIT	ParityBit = PB_NONE, 
         BYTE_SIZE	ByteSize = BS_SIZE8, 
         STOP_BITS	StopBits = SB_1_BITS);
 
-    void	Close();
+    void	close();
 
-    const std::string	&GetPortName();
+    const std::string	&getPortName();
 
-    BOOL 	Putc(BYTE ch);
-    BOOL 	Puts(const char *pData);
+    BOOL 	putc(BYTE ch);
+    BOOL 	puts(const char *pData);
 
-    BOOL 	Write(const void*, DWORD dwWriteSize);
-    BOOL 	Write(const void *lpBuf, DWORD dwCount, DWORD *pBytesWritten);
-    BOOL 	WriteString(std::string& str, DWORD *pBytesWritten = NULL);
+    BOOL 	write(const void*, DWORD dwWriteSize);
+    BOOL 	write(const void *lpBuf, DWORD dwCount, DWORD *pBytesWritten);
+    BOOL 	writeString(std::string& str, DWORD *pBytesWritten = NULL);
 
     // 자료 읽기
-    BOOL 	IsEmpty();
-    CHAR	GetChar();
-    DWORD	Read(void*, DWORD dwReadSize);
+    BOOL 	isEmpty();
+    CHAR	getChar();
+    DWORD	read(void*, DWORD dwReadSize);
 
-    void	ResetBuffer();
+    void	resetBuffer();
 
-    void	SetReceiveEvent(BOOL  bEvent = true);
+    void	setReceiveEvent(BOOL  bEvent = true);
 
     //	Frame에러가 났을 경우에 처리한다.
-    BOOL 	StartPollThread();
-    BOOL 	StopPollThread();
+    BOOL 	startPollThread();
+    BOOL 	stopPollThread();
 
 protected:
-    virtual void    DoSetupHardwareFlowControl(DCB& stDCB);
+    virtual void    doSetupHardwareFlowControl(DCB& stDCB);
 
 private:
     BOOL 	Open(
@@ -112,14 +112,15 @@ private:
         BYTE_SIZE	ByteSize, 
         STOP_BITS	StopBits);
 
-    BOOL        SettingPort();
-    BOOL 		CreateRWEvent();
+    BOOL        settingPort();
+    BOOL 		createRWEvent();
 
 protected:
     BOOL                    _bReceiveEvent;
     std::list<char>	        _sReceiveData;
 
-    virtual void            ReadFromDevice();
+protected:
+    virtual void            readFromDevice();
 
 private:
     std::thread _oPollThread;

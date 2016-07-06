@@ -21,28 +21,28 @@ ccWebsocket::~ccWebsocket()
 {
 }
 
-void  ccWebsocket::SetEventListener(WebSocketEventFunction f)
+void  ccWebsocket::setEventListener(WebSocketEventFunction f)
 {
     _oEventListener = f;
 }
 
 
-const std::string ccWebsocket::GetUri()
+const std::string ccWebsocket::getUri()
 {
     return _strUri;
 }
 
-void ccWebsocket::SetGroup(ccWebsocketGroup* pGroup)
+void ccWebsocket::setGroup(ccWebsocketGroup* pGroup)
 {
     _pMyGroup = pGroup;
 }
 
-ccWebsocketGroup* ccWebsocket::GetGroup()
+ccWebsocketGroup* ccWebsocket::getGroup()
 {
     return _pMyGroup;
 }
 
-bool ccWebsocket::Send(const std::string& strMessage)
+bool ccWebsocket::send(const std::string& strMessage)
 {
     return false;
 }

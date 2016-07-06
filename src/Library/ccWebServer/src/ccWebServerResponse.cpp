@@ -29,36 +29,36 @@ ccWebServerResponse::~ccWebServerResponse()
     // TODO Auto-generated destructor stub
 }
 
-void ccWebServerResponse::Status(unsigned int code, const std::string& strStatusText)
+void ccWebServerResponse::status(unsigned int code, const std::string& strStatusText)
 {
     if (_bStatusSet)
         return;
 
     if (code == 200)
-        DoPrintf("HTTP/1.1 %d OK\r\n", code);
+        doPrintf("HTTP/1.1 %d OK\r\n", code);
     else
     {
         if (strStatusText.length() == 0)
-            DoPrintf("HTTP/1.1 %d\r\n", code);
+            doPrintf("HTTP/1.1 %d\r\n", code);
         else
-            DoPrintf("HTTP/1.1 %d %s\r\n", code, strStatusText.c_str());
+            doPrintf("HTTP/1.1 %d %s\r\n", code, strStatusText.c_str());
     }
 
     _bStatusSet = true;
 }
 
-void ccWebServerResponse::Status(unsigned int code, const std::string& strStatusText, const std::string& strExtInfo)
+void ccWebServerResponse::status(unsigned int code, const std::string& strStatusText, const std::string& strExtInfo)
 {
     if (_bStatusSet)
         return;
 
     if (code == 200 || strStatusText.length() == 0 || strExtInfo.length() == 0)
     {
-        Status(code, strStatusText);
+        status(code, strStatusText);
         return;
     }
 
-    DoPrintf(
+    doPrintf(
         "HTTP/1.1 %d %s\r\n"
         "%s\r\n",
         code,
@@ -68,12 +68,12 @@ void ccWebServerResponse::Status(unsigned int code, const std::string& strStatus
     _bStatusSet = true;
 }
 
-void ccWebServerResponse::ContentType(const std::string& type, bool bInsertSeparator)
+void ccWebServerResponse::contentType(const std::string& type, bool bInsertSeparator)
 {
-    ContentType(type, 0, bInsertSeparator);
+    contentType(type, 0, bInsertSeparator);
 }
 
-void ccWebServerResponse::ContentType(const std::string& type, size_t size, bool bInsertSeparator)
+void ccWebServerResponse::contentType(const std::string& type, size_t size, bool bInsertSeparator)
 {
     if (_bContentTypeSet)
         return;
@@ -109,12 +109,12 @@ void ccWebServerResponse::ContentType(const std::string& type, size_t size, bool
     if (bInsertSeparator)
         strHeaderInfo += "\r\n";
 
-    DoWriteContentToConnector(strHeaderInfo.c_str(), strHeaderInfo.length());
+    doWriteContentToConnector(strHeaderInfo.c_str(), strHeaderInfo.length());
 
     _bContentTypeSet = true;
 }
 
-void ccWebServerResponse::HeaderInfo(const std::string& type, size_t size, std::string& strExtInfo, bool bInsertSeparator)
+void ccWebServerResponse::headerInfo(const std::string& type, size_t size, std::string& strExtInfo, bool bInsertSeparator)
 {
     if (_bContentTypeSet)
         return;
@@ -155,26 +155,26 @@ void ccWebServerResponse::HeaderInfo(const std::string& type, size_t size, std::
     if (bInsertSeparator)
         strHeaderInfo += "\r\n";
 
-    DoWriteContentToConnector(strHeaderInfo.c_str(), strHeaderInfo.length());
+    doWriteContentToConnector(strHeaderInfo.c_str(), strHeaderInfo.length());
 
     _bContentTypeSet = true;
 }
 
 
-size_t ccWebServerResponse::Printf(const char *fmt, ...)
+size_t ccWebServerResponse::printf(const char *fmt, ...)
 {
-    DoCheckHeadersSent();
+    doCheckHeadersSent();
 
     va_list ap;
     va_start(ap, fmt);
 
-    int result = VPrintf(fmt,ap);
+    int result = vprintf(fmt,ap);
     va_end(ap);
 
     return result;
 }
 
-size_t ccWebServerResponse::VPrintf(const char *fmt, va_list ap)
+size_t ccWebServerResponse::vprintf(const char *fmt, va_list ap)
 {
     char buf[kMaxBufferSize];
 
@@ -205,22 +205,22 @@ size_t ccWebServerResponse::VPrintf(const char *fmt, va_list ap)
 
     buf[nCalculatedSize] = '\0';
 
-    return DoWriteContentToConnector((const char*)buf, nCalculatedSize);
+    return doWriteContentToConnector((const char*)buf, nCalculatedSize);
 }
 
-size_t ccWebServerResponse::Write(const std::string& buf)
+size_t ccWebServerResponse::write(const std::string& buf)
 {
-    DoCheckHeadersSent();
+    doCheckHeadersSent();
 
-    return DoWriteContentToConnector(buf.c_str(), buf.length());
+    return doWriteContentToConnector(buf.c_str(), buf.length());
 }
 
-size_t ccWebServerResponse::Write(const char* strBuf, size_t size)
+size_t ccWebServerResponse::write(const char* strBuf, size_t size)
 {
-    return DoWriteContentToConnector(strBuf, size);
+    return doWriteContentToConnector(strBuf, size);
 }
 
-size_t ccWebServerResponse::Write(std::istream & is)
+size_t ccWebServerResponse::write(std::istream & is)
 {
     size_t  uSentSize = 0;
     char    buf[kMaxBufferSize];
@@ -229,13 +229,13 @@ size_t ccWebServerResponse::Write(std::istream & is)
     {
         is.read(&buf[0], kMaxBufferSize);
 
-        uSentSize += DoWriteContentToConnector((const char*)&buf[0], (size_t)is.gcount());
+        uSentSize += doWriteContentToConnector((const char*)&buf[0], (size_t)is.gcount());
     }
 
     return uSentSize;
 }
 
-bool ccWebServerResponse::NotFoundFile(const std::string& strURI)
+bool ccWebServerResponse::notFoundFile(const std::string& strURI)
 {
     std::string strContent;
 
@@ -255,32 +255,32 @@ bool ccWebServerResponse::NotFoundFile(const std::string& strURI)
         "</html>\r\n",
         strURI.c_str());
 
-    Status(404, "Not Found");
-    ContentType("text/html", strContent.length());
+    status(404, "Not Found");
+    contentType("text/html", strContent.length());
 
-    DoWriteContentToConnector(strContent.c_str(), strContent.length());
+    doWriteContentToConnector(strContent.c_str(), strContent.length());
 
     return true;
 }
 
 
-void ccWebServerResponse::DoCheckHeadersSent()
+void ccWebServerResponse::doCheckHeadersSent()
 {
     if (_bHeadersSent)
         return;
 
     if (!_bContentTypeSet)
-        ContentType("text/plain");
+        contentType("text/plain");
 
     _bHeadersSent = true;
 }
 
-size_t ccWebServerResponse::DoPrintf(const char *fmt, ...)
+size_t ccWebServerResponse::doPrintf(const char *fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
 
-    size_t result = VPrintf(fmt, ap);
+    size_t result = vprintf(fmt, ap);
 
     va_end(ap);
 

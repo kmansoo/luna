@@ -33,35 +33,35 @@ protected:
     friend class ccSingletonT<ccWebServerManager>;
 
 public:
-    void    AttachFactory(std::shared_ptr<ccWebServerObjectFactory> pFactory);
+    void    attachFactory(std::shared_ptr<ccWebServerObjectFactory> pFactory);
 
-    bool    CreateWebServer(const std::string& name, const std::string& ports);
-    bool    CreateWebServer(const std::string& name, const std::string& ports, const std::string& root_path);
+    bool    createWebServer(const std::string& name, const std::string& ports);
+    bool    createWebServer(const std::string& name, const std::string& ports, const std::string& root_path);
 
-    std::shared_ptr<ccWebServer> GetWebServer(const char* strName);
+    std::shared_ptr<ccWebServer> getWebServer(const char* strName);
 
-    void    Start();
-    void    Stop();
+    void    start();
+    void    stop();
 
-    bool    AddRESTfulApi(std::shared_ptr<ccRESTfulApi> pNewAPI);
-    bool    RemoveRESTfulApi(std::shared_ptr<ccRESTfulApi> pNewAPI);
-    bool    RemoveAllRESTfulApi();
+    bool    addRESTfulApi(std::shared_ptr<ccRESTfulApi> pNewAPI);
+    bool    removeRESTfulApi(std::shared_ptr<ccRESTfulApi> pNewAPI);
+    bool    removeAllRESTfulApi();
 
-    bool    AddWebsocketManager(std::shared_ptr<ccWebsocketManager> pNewWSGM);
-    bool    RemoveWebsocketManager(std::shared_ptr<ccWebsocketManager> pNewWSGM);
-    bool    RemoveAllWebsocketManager();
-
-protected:
-    virtual bool    OnWebServerRequest(std::shared_ptr<ccWebServerRequest> request, std::shared_ptr<ccWebServerResponse> response);
-
-    virtual bool    OnNewWebsocketRequest(const std::string& strWebsocketUri);
-    virtual void    OnWebsocketCreated(std::shared_ptr<ccWebsocket> newWebsocket);
-    virtual void    OnWebsocketConnected(std::int32_t socketID);
-    virtual void    OnWebsocketReceivedData(std::int32_t socketID, const std::string& strData);
-    virtual void    OnWebsocketDisconnected(std::int32_t socketID);
+    bool    addWebsocketManager(std::shared_ptr<ccWebsocketManager> pNewWSGM);
+    bool    removeWebsocketManager(std::shared_ptr<ccWebsocketManager> pNewWSGM);
+    bool    removeAllWebsocketManager();
 
 protected:
-    void    DoPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent eEvent, std::int32_t socketID, const std::string& strData);
+    virtual bool    onWebServerRequest(std::shared_ptr<ccWebServerRequest> request, std::shared_ptr<ccWebServerResponse> response);
+
+    virtual bool    onNewWebsocketRequest(const std::string& strWebsocketUri);
+    virtual void    onWebsocketCreated(std::shared_ptr<ccWebsocket> newWebsocket);
+    virtual void    onWebsocketConnected(std::int32_t socketID);
+    virtual void    onWebsocketReceivedData(std::int32_t socketID, const std::string& strData);
+    virtual void    onWebsocketDisconnected(std::int32_t socketID);
+
+protected:
+    void    doPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent eEvent, std::int32_t socketID, const std::string& strData);
 
 private:
     std::shared_ptr<ccWebServerObjectFactory>       _pObjFactory;

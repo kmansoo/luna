@@ -55,47 +55,47 @@ ccString::~ccString()
 }
 
 
-void  ccString::ReplaceStringInPlace(const ccString& search, const ccString& replace)
+void  ccString::replaceStringInPlace(const ccString& search, const ccString& replace)
 {
     ccString::replace(*this, search, replace);
 }
 
-unsigned long ccString::DecodeHex(int *pConvertedSize)
+unsigned long ccString::decodeHex(int *pConvertedSize)
 {
-    return decodeStringToHex(c_str(), length(), pConvertedSize);
+    return decode_string_to_hex(c_str(), length(), pConvertedSize);
 }
 
 
-void ccString::MakeUpper()
+void ccString::makeUpper()
 {
     for (size_t nIndex = 0; nIndex < length(); nIndex++)
         at(nIndex) = toupper(at(nIndex));
 }
 
-void ccString::MakeLower()
+void ccString::makeLower()
 {
     for (size_t nIndex = 0; nIndex < length(); nIndex++)
         at(nIndex) = tolower(at(nIndex));
 }
 
-void ccString::Trim()
+void ccString::trim()
 {
-    TrimLeft();
-    TrimRight();
+    trimLeft();
+    trimRight();
 }
 
-void ccString::TrimLeft()
+void ccString::trimLeft()
 {
     erase(0, find_first_not_of(' '));
 }
 
-void ccString::TrimRight()
+void ccString::trimRight()
 {
     erase(find_last_not_of(' ') + 1);
 }
 
 //  static method
-long ccString::decodeStringToHex(const char* strVal, int nLength, int* pConvertedSize)
+long ccString::decode_string_to_hex(const char* strVal, int nLength, int* pConvertedSize)
 {
     int nConvertedSize  = 0;
     int nOffset         = 0;
@@ -209,7 +209,7 @@ void ccString::replace(std::string& destStr, const ccString& search, const ccStr
  * @param src
  * @return
  */
-bool ccString::encodeBase64(std::string& dest, std::string& src)
+bool ccString::encode_base64(std::string& dest, std::string& src)
 {
     if (src.length() == 0)
         return false;
@@ -253,7 +253,7 @@ bool ccString::encodeBase64(std::string& dest, std::string& src)
  * @param src
  * @return
  */
-bool ccString::decodeBase64(std::string& dest, std::string& src)
+bool ccString::decode_base64(std::string& dest, std::string& src)
 {
     if (src.length() == 0)
         return false;

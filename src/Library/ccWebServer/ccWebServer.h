@@ -23,17 +23,17 @@ public:
     virtual ~ccWebServer();
 
 public:
-    virtual bool Start();
-    virtual bool Stop();
+    virtual bool start();
+    virtual bool stop();
 
 public:
-    const std::string&  GetName();
+    const std::string&  getName();
 
-    bool    SetOption(std::string const& name, std::string const& value);
-    void    SetListener(ccWebServerEventListener* pListener);
+    bool    setOption(std::string const& name, std::string const& value);
+    void    setListener(ccWebServerEventListener* pListener);
 
 protected:
-    std::vector<std::string>&    DoGetOptions() const;
+    std::vector<std::string>&    doGetOptions() const;
 
 protected:
     std::string                 _strName;

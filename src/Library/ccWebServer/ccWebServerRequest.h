@@ -36,29 +36,29 @@ public:
 
 
 public:
-    virtual HttpMethod          GetMethod() const;
-    virtual const std::string&  GetMethod_c() const;
-    virtual const std::string&  GetURI() const;
+    virtual HttpMethod          getMethod() const;
+    virtual const std::string&  getMethod_c() const;
+    virtual const std::string&  getURI() const;
 
-    virtual std::string         GetQueryString();
-    virtual std::string         GetPath();
-    virtual std::string         GetResource();
+    virtual std::string         getQueryString();
+    virtual std::string         getPath();
+    virtual std::string         getResource();
 
-    virtual bool                HasVar(const std::string& name) const;
-    virtual std::string         GetVar(const std::string& name);
+    virtual bool                hasVar(const std::string& name) const;
+    virtual std::string         getVar(const std::string& name);
 
-    virtual std::string         GetHeader(const std::string& name);
+    virtual std::string         getHeader(const std::string& name);
 
-    virtual std::string         GetContentType();
-    virtual unsigned long       GetContentLength();
+    virtual std::string         getContentType();
+    virtual unsigned long       getContentLength();
 
-    virtual long                GetContentBody(std::string& strBody);
-    virtual long                GetContentBody(char* pBuf, std::size_t size);
+    virtual long                getContentBody(std::string& strBody);
+    virtual long                getContentBody(char* pBuf, std::size_t size);
 
     // Retrieve info for the server interface that was connected with the remote device.
-    virtual long                GetServerIp() const;
-    virtual unsigned short      GetServerPort() const;
-    virtual long                GetRemoteIp() const;
+    virtual long                getServerIp() const;
+    virtual unsigned short      getServerPort() const;
+    virtual long                getRemoteIp() const;
 
 protected:
     std::string _strNullData;

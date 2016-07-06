@@ -37,10 +37,10 @@ ccNetworkManager::ccNetworkManager()
 ccNetworkManager::~ccNetworkManager()
 {
     // TODO Auto-generated destructor stub
-    Shutdown();
+    shutdown();
 }
 
-bool ccNetworkManager::Init()
+bool ccNetworkManager::init()
 {
     if (_bIsInitNetwork)
         return true;
@@ -67,7 +67,7 @@ bool ccNetworkManager::Init()
 }
 
 
-void ccNetworkManager::Shutdown()
+void ccNetworkManager::shutdown()
 {
 #if defined(WIN32)
     if (_bIsInitNetwork)
@@ -79,7 +79,7 @@ void ccNetworkManager::Shutdown()
 #endif
 }
 
-bool ccNetworkManager::GetHostName(std::string& strName)
+bool ccNetworkManager::getHostName(std::string& strName)
 {
     char szBuffer[1024];
 
@@ -92,11 +92,11 @@ bool ccNetworkManager::GetHostName(std::string& strName)
 }
 
 
-bool ccNetworkManager::GetLocalIP(std::string& strIP)
+bool ccNetworkManager::getLocalIP(std::string& strIP)
 {
     std::string strHostName;
 
-    if (GetHostName(strHostName) == false)
+    if (getHostName(strHostName) == false)
         return false;
 
     struct hostent *host = ::gethostbyname((char*)strHostName.c_str());
@@ -119,13 +119,12 @@ bool ccNetworkManager::GetLocalIP(std::string& strIP)
     return true;
 }
 
-bool ccNetworkManager::GetNetMaskIP(std::string& strIP)
+bool ccNetworkManager::getNetMaskIP(std::string& strIP)
 {
-
     return false;
 }
 
-bool ccNetworkManager::GetGatewayIP(std::string& strIP)
+bool ccNetworkManager::getGatewayIP(std::string& strIP)
 {
     char strHoneName[80];
     

@@ -27,7 +27,7 @@ ccMongooseWebServerRequest::~ccMongooseWebServerRequest()
     // TODO Auto-generated destructor stub
 }
 
-std::string ccMongooseWebServerRequest::GetQueryString()
+std::string ccMongooseWebServerRequest::getQueryString()
 {
     if (_pMgHttpMessage == NULL)
         return _strNullData;
@@ -37,12 +37,12 @@ std::string ccMongooseWebServerRequest::GetQueryString()
     return strQuery;
 }
 
-std::string ccMongooseWebServerRequest::GetPath()
+std::string ccMongooseWebServerRequest::getPath()
 {
     if (_pMgHttpMessage == NULL)
         return _strNullData;
 
-    DoSplitePathPos();
+    doSplitePathPos();
 
     std::string strPath = _strUri;
 
@@ -52,28 +52,28 @@ std::string ccMongooseWebServerRequest::GetPath()
     return strPath;
 }
 
-std::string ccMongooseWebServerRequest::GetResource()
+std::string ccMongooseWebServerRequest::getResource()
 {
     if (_pMgConnection == NULL)
         return _strNullData;
 
-    DoSplitePathPos();
+    doSplitePathPos();
 
     return std::string(_pPathPos, _pathEnd);
 }
 
-bool ccMongooseWebServerRequest::HasVar(const std::string& name) const
+bool ccMongooseWebServerRequest::hasVar(const std::string& name) const
 {
-    return DoHasVarInConnection(name);
+    return doHasVarInConnection(name);
 }
 
 
-std::string ccMongooseWebServerRequest::GetVar(const std::string& name)
+std::string ccMongooseWebServerRequest::getVar(const std::string& name)
 {
-    return DoGetVarInConnection(name);
+    return doGetVarInConnection(name);
 }
 
-std::string ccMongooseWebServerRequest::GetHeader(const std::string& name)
+std::string ccMongooseWebServerRequest::getHeader(const std::string& name)
 {
     if (_pMgHttpMessage == NULL)
         return _strNullData;
@@ -88,35 +88,35 @@ std::string ccMongooseWebServerRequest::GetHeader(const std::string& name)
     return strHeader;
 }
 
-std::string ccMongooseWebServerRequest::GetContentType()
+std::string ccMongooseWebServerRequest::getContentType()
 {
-    return GetHeader("Content-Type");
+    return getHeader("Content-Type");
 }
 
-unsigned long ccMongooseWebServerRequest::GetContentLength()
+unsigned long ccMongooseWebServerRequest::getContentLength()
 {
-    std::string strContentLength = GetHeader("Content-Length");
+    std::string strContentLength = getHeader("Content-Length");
 
     return atol(strContentLength.c_str());
 }
 
 // Retrieve info for the server interface that was connected with the remote device.
-long ccMongooseWebServerRequest::GetServerIp() const
+long ccMongooseWebServerRequest::getServerIp() const
 {
     return 0;
 }
 
-unsigned short  ccMongooseWebServerRequest::GetServerPort() const
+unsigned short  ccMongooseWebServerRequest::getServerPort() const
 {
     return 0;
 }
 
-long ccMongooseWebServerRequest::GetRemoteIp() const
+long ccMongooseWebServerRequest::getRemoteIp() const
 {
     return 0;
 }
 
-long ccMongooseWebServerRequest::GetContentBody(std::string& strBody)
+long ccMongooseWebServerRequest::getContentBody(std::string& strBody)
 {
     if (_pMgHttpMessage == NULL)
         return 0;
@@ -126,7 +126,7 @@ long ccMongooseWebServerRequest::GetContentBody(std::string& strBody)
     return _pMgHttpMessage->body.len;
 }
 
-long ccMongooseWebServerRequest::GetContentBody(char* pBuf, std::size_t size)
+long ccMongooseWebServerRequest::getContentBody(char* pBuf, std::size_t size)
 {
     if (_pMgHttpMessage == NULL || pBuf == NULL)
         return 0;
@@ -139,7 +139,7 @@ long ccMongooseWebServerRequest::GetContentBody(char* pBuf, std::size_t size)
 }
 
 //  private method
-void ccMongooseWebServerRequest::DoSplitePathPos() const
+void ccMongooseWebServerRequest::doSplitePathPos() const
 {
     if (_pPathPos || _pMgHttpMessage == NULL)
         return;
@@ -159,7 +159,7 @@ void ccMongooseWebServerRequest::DoSplitePathPos() const
     _pPathPos   = slash == 0 ? _pathEnd : slash + 1;
 }
 
-bool ccMongooseWebServerRequest::DoHasVarInConnection(const std::string& name) const
+bool ccMongooseWebServerRequest::doHasVarInConnection(const std::string& name) const
 {
     if (_pMgHttpMessage == NULL)
         return false;
@@ -169,7 +169,7 @@ bool ccMongooseWebServerRequest::DoHasVarInConnection(const std::string& name) c
     return mg_get_http_var(&_pMgHttpMessage->body, name.c_str(), &outbuf[0], CV_MAXGETSIZE) > 0;
 }
 
-std::string ccMongooseWebServerRequest::DoGetVarInConnection(const std::string& name)
+std::string ccMongooseWebServerRequest::doGetVarInConnection(const std::string& name)
 {
     std::string strGetData;
 

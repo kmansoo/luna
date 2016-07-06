@@ -17,16 +17,16 @@ namespace Luna {
 class ccWebServerEventListener
 {
 public:
-    virtual bool OnWebServerRequest(std::shared_ptr<ccWebServerRequest> request, std::shared_ptr<ccWebServerResponse> response) = 0;
+    virtual bool onWebServerRequest(std::shared_ptr<ccWebServerRequest> request, std::shared_ptr<ccWebServerResponse> response) = 0;
 
     //  return value
     //      true    :   accept
     //      false   :   reject
-    virtual bool OnNewWebsocketRequest(const std::string& strWebsocketUri) { return false; }
-    virtual void OnWebsocketCreated(std::shared_ptr<ccWebsocket> newWebsocket) {};
-    virtual void OnWebsocketConnected(std::int32_t socketID) {}
-    virtual void OnWebsocketReceivedData(std::int32_t socketID, const std::string& strData) {}
-    virtual void OnWebsocketDisconnected(std::int32_t socketID) {}
+    virtual bool onNewWebsocketRequest(const std::string& strWebsocketUri) { return false; }
+    virtual void onWebsocketCreated(std::shared_ptr<ccWebsocket> newWebsocket) {};
+    virtual void onWebsocketConnected(std::int32_t socketID) {}
+    virtual void onWebsocketReceivedData(std::int32_t socketID, const std::string& strData) {}
+    virtual void onWebsocketDisconnected(std::int32_t socketID) {}
 };
 
 }

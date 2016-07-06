@@ -27,28 +27,28 @@ public:
     };
 
 protected:
-    virtual size_t DoWriteContentToConnector(const char* strBuf, size_t size) {return 0;}
+    virtual size_t doWriteContentToConnector(const char* strBuf, size_t size) {return 0;}
 
 protected:
-    void    DoCheckHeadersSent();
-    size_t  DoPrintf(const char *fmt, ...);
+    void    doCheckHeadersSent();
+    size_t  doPrintf(const char *fmt, ...);
 
 public:
-    void    Status(unsigned int code, const std::string& strStatusText);
-    void    Status(unsigned int code, const std::string& strStatusText, const std::string& strExtInfo);
+    void    status(unsigned int code, const std::string& strStatusText);
+    void    status(unsigned int code, const std::string& strStatusText, const std::string& strExtInfo);
 
-    void    ContentType(const std::string& type, bool bInsertSeparator = true);
-    void    ContentType(const std::string& type, size_t size, bool bInsertSeparator = true);
+    void    contentType(const std::string& type, bool bInsertSeparator = true);
+    void    contentType(const std::string& type, size_t size, bool bInsertSeparator = true);
 
-    void    HeaderInfo(const std::string& type, size_t size, std::string& strExtInfo, bool bInsertSeparator = true);
+    void    headerInfo(const std::string& type, size_t size, std::string& strExtInfo, bool bInsertSeparator = true);
 
-    size_t  Printf(const char *fmt, ...);
-    size_t  VPrintf(const char *fmt, va_list ap);
-    size_t  Write(const std::string& buf);
-    size_t  Write(const char* strBuf, size_t size);
-    size_t  Write(std::istream& is);
+    size_t  printf(const char *fmt, ...);
+    size_t  vprintf(const char *fmt, va_list ap);
+    size_t  write(const std::string& buf);
+    size_t  write(const char* strBuf, size_t size);
+    size_t  write(std::istream& is);
 
-    bool    NotFoundFile(const std::string& strURI);
+    bool    notFoundFile(const std::string& strURI);
 
 protected:
     unsigned int    _uStatudCode;

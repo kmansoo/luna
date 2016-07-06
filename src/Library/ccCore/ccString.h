@@ -51,27 +51,26 @@ public:
         return *this;
     }
 
-
 public:
-    void            ReplaceStringInPlace(const ccString& search, const ccString& replace);
+    void            replaceStringInPlace(const ccString& search, const ccString& replace);
 
-    void            MakeUpper();
-    void            MakeLower();
+    void            makeUpper();
+    void            makeLower();
 
-    void            Trim();
-    void            TrimLeft();
-    void            TrimRight();
+    void            trim();
+    void            trimLeft();
+    void            trimRight();
 
-    unsigned long   DecodeHex(int *length = NULL);
+    unsigned long   decodeHex(int *length = NULL);
 
 public:
     // Supports up to 512 bytes
     static  void    format(std::string& destStr, const char* format, ...);
     static void     replace(std::string& destStr, const ccString& search, const ccString& replace);
 
-    static  long    decodeStringToHex(const char* strVal, int nLength = -1, int* pConvertedSize = NULL);
-    static  bool    encodeBase64(std::string& destStr, std::string& src);
-    static  bool    decodeBase64(std::string& destStr, std::string& src);
+    static  long    decode_string_to_hex(const char* strVal, int nLength = -1, int* pConvertedSize = NULL);
+    static  bool    encode_base64(std::string& destStr, std::string& src);
+    static  bool    decode_base64(std::string& destStr, std::string& src);
 
 private:
     enum CONST_VALUE

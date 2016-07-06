@@ -33,19 +33,19 @@ public:
     typedef std::function<void(ccWebSocketEvent eEvent, const std::string& message)> WebSocketEventFunction;
 
 public:
-    virtual bool            Open(const std::string& strUri) = 0;
-    virtual bool            Close() = 0;
+    virtual bool            open(const std::string& strUri) = 0;
+    virtual bool            close() = 0;
 
-    virtual std::int32_t    GetInstance() = 0;  // It may be a Socket ID. 
-    virtual bool            Send(const std::string& strMessage) = 0;
-    virtual bool            SendBinary(const void* pBuffer, std::size_t size) = 0;
+    virtual std::int32_t    getInstance() = 0;  // It may be a Socket ID. 
+    virtual bool            send(const std::string& strMessage) = 0;
+    virtual bool            sendBinary(const void* pBuffer, std::size_t size) = 0;
 
 public:
-    void                    SetEventListener(WebSocketEventFunction f);
+    void                    setEventListener(WebSocketEventFunction f);
 
-    const std::string       GetUri();
-    void                    SetGroup(ccWebsocketGroup* pGroup);
-    ccWebsocketGroup*       GetGroup();
+    const std::string       getUri();
+    void                    setGroup(ccWebsocketGroup* pGroup);
+    ccWebsocketGroup*       getGroup();
 
 protected:
     std::string             _strUri;

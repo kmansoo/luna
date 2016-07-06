@@ -12,50 +12,50 @@ ccWebsocketGroup::ccWebsocketGroup(const std::string& strUri)
 
 ccWebsocketGroup::~ccWebsocketGroup()
 {
-    RemoveAll();
+    removeAll();
 }
 
-const std::string& ccWebsocketGroup::GetUri()
+const std::string& ccWebsocketGroup::getUri()
 {
     return _strUri;
 }
 
-const std::size_t ccWebsocketGroup::GetCount() const
+const std::size_t ccWebsocketGroup::getCount() const
 {
     return _aWSList.size();
 }
 
-bool ccWebsocketGroup::Add(std::shared_ptr<ccWebsocket> pNewWS)
+bool ccWebsocketGroup::add(std::shared_ptr<ccWebsocket> pNewWS)
 {
     if (pNewWS == NULL)
         return false;
 
     std::lock_guard<std::mutex> lock(_mtx);
 
-    _aWSList[pNewWS->GetInstance()] = pNewWS;
+    _aWSList[pNewWS->getInstance()] = pNewWS;
 
-    pNewWS->SetGroup(this);
+    pNewWS->setGroup(this);
 
     return true;
 }
 
-bool ccWebsocketGroup::Remove(std::shared_ptr<ccWebsocket> pNewWS)
+bool ccWebsocketGroup::remove(std::shared_ptr<ccWebsocket> pNewWS)
 {
     std::lock_guard<std::mutex> lock(_mtx);
 
-    auto it = _aWSList.find(pNewWS->GetInstance());
+    auto it = _aWSList.find(pNewWS->getInstance());
 
     if (it == _aWSList.end())
         return false;
 
-    it->second->SetGroup(NULL);
+    it->second->setGroup(NULL);
 
     _aWSList.erase(it);
 
     return true;
 }
 
-bool ccWebsocketGroup::RemoveAll()
+bool ccWebsocketGroup::removeAll()
 {
     std::lock_guard<std::mutex> lock(_mtx);
 
@@ -64,7 +64,7 @@ bool ccWebsocketGroup::RemoveAll()
     return true;
 }
 
-bool ccWebsocketGroup::GetWebsocket(std::int32_t nInstance, std::shared_ptr<ccWebsocket>& pSocket)
+bool ccWebsocketGroup::getWebsocket(std::int32_t nInstance, std::shared_ptr<ccWebsocket>& pSocket)
 {
     std::lock_guard<std::mutex> lock(_mtx);
 
@@ -78,22 +78,22 @@ bool ccWebsocketGroup::GetWebsocket(std::int32_t nInstance, std::shared_ptr<ccWe
     return true;
 }
 
-void  ccWebsocketGroup::Broadcast(const std::string& strMessage)
+void  ccWebsocketGroup::broadcast(const std::string& strMessage)
 {
     std::lock_guard<std::mutex> lock(_mtx);
 
     for (auto item : _aWSList)
-        item.second->Send(strMessage);
+        item.second->send(strMessage);
 }
 
-void ccWebsocketGroup::BroadcastEx(const std::string& strMessage, std::shared_ptr<ccWebsocket>& pExceptSocket)
+void ccWebsocketGroup::broadcastEx(const std::string& strMessage, std::shared_ptr<ccWebsocket>& pExceptSocket)
 {
     std::lock_guard<std::mutex> lock(_mtx);
 
     for (auto item : _aWSList)
     {
         if (item.second != pExceptSocket)
-            item.second->Send(strMessage);
+            item.second->send(strMessage);
     }
 }
 

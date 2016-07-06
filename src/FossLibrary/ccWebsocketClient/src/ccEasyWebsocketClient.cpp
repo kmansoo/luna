@@ -11,10 +11,10 @@ ccEasyWebsocketClient::ccEasyWebsocketClient()
 
 ccEasyWebsocketClient::~ccEasyWebsocketClient()
 {
-    Close();
+    close();
 }
 
-bool ccEasyWebsocketClient::Open(const std::string& strUri)
+bool ccEasyWebsocketClient::open(const std::string& strUri)
 {
     if (_pWorkWS != NULL)
         return false;
@@ -25,12 +25,12 @@ bool ccEasyWebsocketClient::Open(const std::string& strUri)
         return false;
     
     _bIsStopThread = false;
-    _oPollThread = std::thread(std::bind(&ccEasyWebsocketClient::DoPoll, this));
+    _oPollThread = std::thread(std::bind(&ccEasyWebsocketClient::doPoll, this));
     
     return true;
 }
 
-bool ccEasyWebsocketClient::Close()
+bool ccEasyWebsocketClient::close()
 {
     if (_bIsStopThread == true)
         return false;
@@ -47,7 +47,7 @@ bool ccEasyWebsocketClient::Close()
     return true;
 }
 
-std::int32_t ccEasyWebsocketClient::GetInstance()  // It may be a Socket ID. 
+std::int32_t ccEasyWebsocketClient::getInstance()  // It may be a Socket ID. 
 {
     if (_pWorkWS == NULL)
         return -1;
@@ -56,7 +56,7 @@ std::int32_t ccEasyWebsocketClient::GetInstance()  // It may be a Socket ID.
 }
 
 
-bool ccEasyWebsocketClient::Send(const std::string& strMessage)
+bool ccEasyWebsocketClient::send(const std::string& strMessage)
 {
     if (_pWorkWS == NULL)
         return false;
@@ -66,7 +66,7 @@ bool ccEasyWebsocketClient::Send(const std::string& strMessage)
     return true;
 }
 
-bool ccEasyWebsocketClient::SendBinary(const void* pBuffer, std::size_t size)
+bool ccEasyWebsocketClient::sendBinary(const void* pBuffer, std::size_t size)
 {
     if (_pWorkWS == NULL)
         return false;
@@ -81,7 +81,7 @@ bool ccEasyWebsocketClient::SendBinary(const void* pBuffer, std::size_t size)
     return true;
 }
 
-void ccEasyWebsocketClient::DoReceive(const std::string& message)
+void ccEasyWebsocketClient::doReceive(const std::string& message)
 {
     if (!_oEventListener)
         std::cout << "RECV: " << message << std::endl;
@@ -89,7 +89,7 @@ void ccEasyWebsocketClient::DoReceive(const std::string& message)
         _oEventListener(ccWebSocketEvent_ReceivedData, message);
 }
 
-void ccEasyWebsocketClient::DoPoll()
+void ccEasyWebsocketClient::doPoll()
 {
     easywsclient::WebSocket::readyStateValues eConnectStatus = _pWorkWS->getReadyState();
 
@@ -131,7 +131,7 @@ void ccEasyWebsocketClient::DoPoll()
         if (_pWorkWS->getReadyState() != easywsclient::WebSocket::CLOSED)
         {
             _pWorkWS->poll(100);
-            _pWorkWS->dispatch(std::bind(&ccEasyWebsocketClient::DoReceive, this, std::placeholders::_1));
+            _pWorkWS->dispatch(std::bind(&ccEasyWebsocketClient::doReceive, this, std::placeholders::_1));
         }
     }
 }

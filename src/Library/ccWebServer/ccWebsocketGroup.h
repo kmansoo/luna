@@ -25,17 +25,17 @@ public:
     virtual ~ccWebsocketGroup();
 
 public:
-    const std::string&  GetUri();
-    const std::size_t   GetCount() const;
+    const std::string&  getUri();
+    const std::size_t   getCount() const;
 
-    bool    Add(std::shared_ptr<ccWebsocket> pNewWS);
-    bool    Remove(std::shared_ptr<ccWebsocket> pNewWS);
-    bool    RemoveAll();
+    bool    add(std::shared_ptr<ccWebsocket> pNewWS);
+    bool    remove(std::shared_ptr<ccWebsocket> pNewWS);
+    bool    removeAll();
 
-    bool    GetWebsocket(std::int32_t nInstance, std::shared_ptr<ccWebsocket>& pSocket);
+    bool    getWebsocket(std::int32_t nInstance, std::shared_ptr<ccWebsocket>& pSocket);
 
-    void    Broadcast(const std::string& strMessage);
-    void    BroadcastEx(const std::string& strMessage, std::shared_ptr<ccWebsocket>& pExceptSocket);
+    void    broadcast(const std::string& strMessage);
+    void    broadcastEx(const std::string& strMessage, std::shared_ptr<ccWebsocket>& pExceptSocket);
 
 private:
     std::mutex      _mtx;
