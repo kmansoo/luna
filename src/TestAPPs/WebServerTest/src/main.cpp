@@ -7,7 +7,7 @@
 #include "ccWebServer/ccWebServerManager.h"
 
 #include "ccMongooseServer/ccMongooseWebServerObjectFactory.h"
-#include "ccRESTfulChattingAPI/ccRESTfulChatting.h"
+#include "ccRESTfulChatting/ccRESTfulChatting.h"
 
 #include "ccWebServer/ccWebsocketManager.h"
 
