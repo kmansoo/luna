@@ -147,7 +147,7 @@ void ccMongooseWebServerRequest::doSplitePathPos() const
     char const * slash = 0;
     char const * it = _pMgHttpMessage->uri.p;
 
-    for (int nIndex = 0; nIndex < _pMgHttpMessage->uri.len; nIndex++)
+    for (std::size_t nIndex = 0; nIndex < _pMgHttpMessage->uri.len; nIndex++)
     {
         if (*it == '/')
             slash = it;
