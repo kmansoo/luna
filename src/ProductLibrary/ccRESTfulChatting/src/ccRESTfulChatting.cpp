@@ -309,7 +309,7 @@ bool ccRESTfulChatting::user(std::shared_ptr<Luna::ccWebServerRequest> pRequest,
             
             oUserList["count"] = (int)aMembers.size();
 
-            for (std::size_t nIndex = 0; nIndex < aMembers.size(); nIndex++)
+            for (int nIndex = 0; nIndex < (int)aMembers.size(); nIndex++)
                 oUserList["info"][nIndex]["id"] = aMembers[nIndex];
 
             oResponseJsonData["user_list"] = oUserList;
@@ -364,7 +364,7 @@ bool ccRESTfulChatting::session(std::shared_ptr<Luna::ccWebServerRequest> pReque
 
             oSessionList["count"] = (int)aSessionNames.size();
 
-            for (std::size_t nIndex = 0; nIndex < aSessionNames.size(); nIndex++)
+            for (int nIndex = 0; nIndex < (int)aSessionNames.size(); nIndex++)
             {
                 oSessionList["info"][nIndex]["Name"] = aSessionNames[nIndex];
                 oSessionList["info"][nIndex]["OwnerID"] = aOwnerIDs[nIndex];
@@ -495,7 +495,7 @@ bool ccRESTfulChatting::session_member(std::shared_ptr<Luna::ccWebServerRequest>
             oSessionMemberList["Name"] = strSessionName;
             oSessionMemberList["count"] = (int)aMemberList.size();
 
-            for (std::size_t nIndex = 0; nIndex < aMemberList.size(); nIndex++)
+            for (int nIndex = 0; nIndex < (int)aMemberList.size(); nIndex++)
                 oSessionMemberList["info"][nIndex]["ID"] = aMemberList[nIndex];
 
             oResponseJsonValue["session_member_list"] = oSessionMemberList;
