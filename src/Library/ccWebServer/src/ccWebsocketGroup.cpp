@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "ccWebsocketGroup.h"
 
 #include <algorithm>
