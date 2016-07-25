@@ -155,6 +155,9 @@
     <ProjectReference Include="..\..\..\FossLibrary\ccJsonParser\build\ccJsonParser.vcxproj">
       <Project>{e7bfc6a3-98b0-4103-a3ba-de08105f2db3}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\FossLibrary\ccWebsocketClient\build\ccWebsocketClient.vcxproj">
+      <Project>{0e86ffb0-57e1-4a9e-a12d-8a07ca1c5708}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Library\ccCore\build\ccCore.vcxproj">
       <Project>{b3b6750e-2acd-4362-845a-2a79ab52fbd1}</Project>
     </ProjectReference>
@@ -164,11 +167,14 @@
     <ProjectReference Include="..\..\..\Library\ccWebServer\build\ccWebServer.vcxproj">
       <Project>{4b237a6f-f4d9-4bbf-9d63-6460ddf8b984}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\ProductLibrary\ccRESTfulChattingAPI\build\ccRESTfulChattingAPI.vcxproj">
+    <ProjectReference Include="..\..\..\ProductLibrary\ccRESTfulChatting\build\ccRESTfulChatting.vcxproj">
       <Project>{cec6dc46-192c-4a85-8fc9-b745c87a0c95}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\ThirdPartyLibrary\ccMongooseServer\build\ccMongooseServer.vcxproj">
       <Project>{e3fcc667-3505-4635-a78b-ea15e73d4755}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\ThirdPartyLibrary\ccWin32Core\build\ccWin32Core.vcxproj">
+      <Project>{5f76776d-8695-43d9-b134-d0e24fa685c8}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
