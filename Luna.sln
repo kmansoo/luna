@@ -3,27 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccCore", "..\Library\ccCore\build\ccCore.vcxproj", "{B3B6750E-2ACD-4362-845A-2A79AB52FBD1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccCore", "src\Library\ccCore\build\ccCore.vcxproj", "{B3B6750E-2ACD-4362-845A-2A79AB52FBD1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccWebServer", "..\Library\ccWebServer\build\ccWebServer.vcxproj", "{4B237A6F-F4D9-4BBF-9D63-6460DDF8B984}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccWebServer", "src\Library\ccWebServer\build\ccWebServer.vcxproj", "{4B237A6F-F4D9-4BBF-9D63-6460DDF8B984}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccMongooseServer", "..\ThirdPartyLibrary\ccMongooseServer\build\ccMongooseServer.vcxproj", "{E3FCC667-3505-4635-A78B-EA15E73D4755}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccMongooseServer", "src\ThirdPartyLibrary\ccMongooseServer\build\ccMongooseServer.vcxproj", "{E3FCC667-3505-4635-A78B-EA15E73D4755}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebServerTest", "..\TestAPPs\WebServerTest\build\WebServerTest.vcxproj", "{54761A10-7565-4CF4-934C-8AE984255207}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebServerTest", "src\TestAPPs\WebServerTest\build\WebServerTest.vcxproj", "{54761A10-7565-4CF4-934C-8AE984255207}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccJsonParser", "..\FossLibrary\ccJsonParser\build\ccJsonParser.vcxproj", "{E7BFC6A3-98B0-4103-A3BA-DE08105F2DB3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccJsonParser", "src\FossLibrary\ccJsonParser\build\ccJsonParser.vcxproj", "{E7BFC6A3-98B0-4103-A3BA-DE08105F2DB3}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccRESTfulChattingAPI", "..\ProductLibrary\ccRESTfulChattingAPI\build\ccRESTfulChattingAPI.vcxproj", "{CEC6DC46-192C-4A85-8FC9-B745C87A0C95}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccWin32Core", "src\ThirdPartyLibrary\ccWin32Core\build\ccWin32Core.vcxproj", "{5F76776D-8695-43D9-B134-D0E24FA685C8}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccWin32Core", "..\ThirdPartyLibrary\ccWin32Core\build\ccWin32Core.vcxproj", "{5F76776D-8695-43D9-B134-D0E24FA685C8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccWebsocketClient", "src\FossLibrary\ccWebsocketClient\build\ccWebsocketClient.vcxproj", "{0E86FFB0-57E1-4A9E-A12D-8A07CA1C5708}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChattingWebApiTestWin32", "..\TestAPPs\ChattingWebApiTest\ChattingWebApiTest.vcxproj", "{80272939-A0F1-4B52-BFB2-DB83E6BEBED1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccNetwork", "src\Library\ccNetwork\build\ccNetwork.vcxproj", "{22622606-5D5B-499C-8F3D-BAD302A10950}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccWebsocketClient", "..\FossLibrary\ccWebsocketClient\build\ccWebsocketClient.vcxproj", "{0E86FFB0-57E1-4A9E-A12D-8A07CA1C5708}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccNetwork", "..\Library\ccNetwork\build\ccNetwork.vcxproj", "{22622606-5D5B-499C-8F3D-BAD302A10950}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccMessageBus", "..\Library\ccMessageBus\build\ccMessageBus.vcxproj", "{AD522989-8D30-4B69-AE86-AD00F4C2CB29}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccRESTfulChatting", "src\ProductLibrary\ccRESTfulChatting\build\ccRESTfulChatting.vcxproj", "{CEC6DC46-192C-4A85-8FC9-B745C87A0C95}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,7 +48,6 @@ Global
 		{E3FCC667-3505-4635-A78B-EA15E73D4755}.Release|x86.ActiveCfg = Release|Win32
 		{E3FCC667-3505-4635-A78B-EA15E73D4755}.Release|x86.Build.0 = Release|Win32
 		{54761A10-7565-4CF4-934C-8AE984255207}.Debug|x64.ActiveCfg = Debug|x64
-		{54761A10-7565-4CF4-934C-8AE984255207}.Debug|x64.Build.0 = Debug|x64
 		{54761A10-7565-4CF4-934C-8AE984255207}.Debug|x86.ActiveCfg = Debug|Win32
 		{54761A10-7565-4CF4-934C-8AE984255207}.Debug|x86.Build.0 = Debug|Win32
 		{54761A10-7565-4CF4-934C-8AE984255207}.Release|x64.ActiveCfg = Release|x64
@@ -65,26 +60,12 @@ Global
 		{E7BFC6A3-98B0-4103-A3BA-DE08105F2DB3}.Release|x64.ActiveCfg = Release|Win32
 		{E7BFC6A3-98B0-4103-A3BA-DE08105F2DB3}.Release|x86.ActiveCfg = Release|Win32
 		{E7BFC6A3-98B0-4103-A3BA-DE08105F2DB3}.Release|x86.Build.0 = Release|Win32
-		{CEC6DC46-192C-4A85-8FC9-B745C87A0C95}.Debug|x64.ActiveCfg = Debug|Win32
-		{CEC6DC46-192C-4A85-8FC9-B745C87A0C95}.Debug|x86.ActiveCfg = Debug|Win32
-		{CEC6DC46-192C-4A85-8FC9-B745C87A0C95}.Debug|x86.Build.0 = Debug|Win32
-		{CEC6DC46-192C-4A85-8FC9-B745C87A0C95}.Release|x64.ActiveCfg = Release|Win32
-		{CEC6DC46-192C-4A85-8FC9-B745C87A0C95}.Release|x86.ActiveCfg = Release|Win32
-		{CEC6DC46-192C-4A85-8FC9-B745C87A0C95}.Release|x86.Build.0 = Release|Win32
 		{5F76776D-8695-43D9-B134-D0E24FA685C8}.Debug|x64.ActiveCfg = Debug|Win32
 		{5F76776D-8695-43D9-B134-D0E24FA685C8}.Debug|x86.ActiveCfg = Debug|Win32
 		{5F76776D-8695-43D9-B134-D0E24FA685C8}.Debug|x86.Build.0 = Debug|Win32
 		{5F76776D-8695-43D9-B134-D0E24FA685C8}.Release|x64.ActiveCfg = Release|Win32
 		{5F76776D-8695-43D9-B134-D0E24FA685C8}.Release|x86.ActiveCfg = Release|Win32
 		{5F76776D-8695-43D9-B134-D0E24FA685C8}.Release|x86.Build.0 = Release|Win32
-		{80272939-A0F1-4B52-BFB2-DB83E6BEBED1}.Debug|x64.ActiveCfg = Debug|x64
-		{80272939-A0F1-4B52-BFB2-DB83E6BEBED1}.Debug|x64.Build.0 = Debug|x64
-		{80272939-A0F1-4B52-BFB2-DB83E6BEBED1}.Debug|x86.ActiveCfg = Debug|Win32
-		{80272939-A0F1-4B52-BFB2-DB83E6BEBED1}.Debug|x86.Build.0 = Debug|Win32
-		{80272939-A0F1-4B52-BFB2-DB83E6BEBED1}.Release|x64.ActiveCfg = Release|x64
-		{80272939-A0F1-4B52-BFB2-DB83E6BEBED1}.Release|x64.Build.0 = Release|x64
-		{80272939-A0F1-4B52-BFB2-DB83E6BEBED1}.Release|x86.ActiveCfg = Release|Win32
-		{80272939-A0F1-4B52-BFB2-DB83E6BEBED1}.Release|x86.Build.0 = Release|Win32
 		{0E86FFB0-57E1-4A9E-A12D-8A07CA1C5708}.Debug|x64.ActiveCfg = Debug|Win32
 		{0E86FFB0-57E1-4A9E-A12D-8A07CA1C5708}.Debug|x86.ActiveCfg = Debug|Win32
 		{0E86FFB0-57E1-4A9E-A12D-8A07CA1C5708}.Debug|x86.Build.0 = Debug|Win32
@@ -97,14 +78,12 @@ Global
 		{22622606-5D5B-499C-8F3D-BAD302A10950}.Release|x64.ActiveCfg = Release|Win32
 		{22622606-5D5B-499C-8F3D-BAD302A10950}.Release|x86.ActiveCfg = Release|Win32
 		{22622606-5D5B-499C-8F3D-BAD302A10950}.Release|x86.Build.0 = Release|Win32
-		{AD522989-8D30-4B69-AE86-AD00F4C2CB29}.Debug|x64.ActiveCfg = Debug|x64
-		{AD522989-8D30-4B69-AE86-AD00F4C2CB29}.Debug|x64.Build.0 = Debug|x64
-		{AD522989-8D30-4B69-AE86-AD00F4C2CB29}.Debug|x86.ActiveCfg = Debug|Win32
-		{AD522989-8D30-4B69-AE86-AD00F4C2CB29}.Debug|x86.Build.0 = Debug|Win32
-		{AD522989-8D30-4B69-AE86-AD00F4C2CB29}.Release|x64.ActiveCfg = Release|x64
-		{AD522989-8D30-4B69-AE86-AD00F4C2CB29}.Release|x64.Build.0 = Release|x64
-		{AD522989-8D30-4B69-AE86-AD00F4C2CB29}.Release|x86.ActiveCfg = Release|Win32
-		{AD522989-8D30-4B69-AE86-AD00F4C2CB29}.Release|x86.Build.0 = Release|Win32
+		{CEC6DC46-192C-4A85-8FC9-B745C87A0C95}.Debug|x64.ActiveCfg = Debug|Win32
+		{CEC6DC46-192C-4A85-8FC9-B745C87A0C95}.Debug|x86.ActiveCfg = Debug|Win32
+		{CEC6DC46-192C-4A85-8FC9-B745C87A0C95}.Debug|x86.Build.0 = Debug|Win32
+		{CEC6DC46-192C-4A85-8FC9-B745C87A0C95}.Release|x64.ActiveCfg = Release|Win32
+		{CEC6DC46-192C-4A85-8FC9-B745C87A0C95}.Release|x86.ActiveCfg = Release|Win32
+		{CEC6DC46-192C-4A85-8FC9-B745C87A0C95}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
