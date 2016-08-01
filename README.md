@@ -1,19 +1,18 @@
 # Luna
 Very tiny SW Platform for Web API using C++ and mongoose web server.
 
-## For building Library...
+## How to build libraris
 ### Linux & OS X
-  $ mkdir build
-  
-  $ cd build
-  
-  $ cmake ..
-  
-  $ make
+```bash
+mkdir build  
+cd build
+cmake ..
+make
+```
 
-
-## Web Server and Websocket Test
+## How to build a test application to test Web Server and Websocket
 ### Linux
-  $ cd ./Luna/build
-
-  $ ./bin/WebServerTest
+```bash
+cd ./Luna/build
+./bin/WebServerTest
+```
