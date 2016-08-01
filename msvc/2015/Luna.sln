@@ -3,23 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccCore", "src\Library\ccCore\build\ccCore.vcxproj", "{B3B6750E-2ACD-4362-845A-2A79AB52FBD1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccCore", "..\..\src\Library\ccCore\msvc\ccCore.vcxproj", "{B3B6750E-2ACD-4362-845A-2A79AB52FBD1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccWebServer", "src\Library\ccWebServer\build\ccWebServer.vcxproj", "{4B237A6F-F4D9-4BBF-9D63-6460DDF8B984}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccWebServer", "..\..\src\Library\ccWebServer\msvc\ccWebServer.vcxproj", "{4B237A6F-F4D9-4BBF-9D63-6460DDF8B984}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccMongooseServer", "src\ThirdPartyLibrary\ccMongooseServer\build\ccMongooseServer.vcxproj", "{E3FCC667-3505-4635-A78B-EA15E73D4755}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccMongooseServer", "..\..\src\ThirdPartyLibrary\ccMongooseServer\msvc\ccMongooseServer.vcxproj", "{E3FCC667-3505-4635-A78B-EA15E73D4755}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebServerTest", "src\TestAPPs\WebServerTest\build\WebServerTest.vcxproj", "{54761A10-7565-4CF4-934C-8AE984255207}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebServerTest", "..\..\src\TestAPPs\WebServerTest\msvc\WebServerTest.vcxproj", "{54761A10-7565-4CF4-934C-8AE984255207}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccJsonParser", "src\FossLibrary\ccJsonParser\build\ccJsonParser.vcxproj", "{E7BFC6A3-98B0-4103-A3BA-DE08105F2DB3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccJsonParser", "..\..\src\FossLibrary\ccJsonParser\msvc\ccJsonParser.vcxproj", "{E7BFC6A3-98B0-4103-A3BA-DE08105F2DB3}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccWin32Core", "src\ThirdPartyLibrary\ccWin32Core\build\ccWin32Core.vcxproj", "{5F76776D-8695-43D9-B134-D0E24FA685C8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccWin32Core", "..\..\src\ThirdPartyLibrary\ccWin32Core\msvc\ccWin32Core.vcxproj", "{5F76776D-8695-43D9-B134-D0E24FA685C8}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccWebsocketClient", "src\FossLibrary\ccWebsocketClient\build\ccWebsocketClient.vcxproj", "{0E86FFB0-57E1-4A9E-A12D-8A07CA1C5708}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccWebsocketClient", "..\..\src\FossLibrary\ccWebsocketClient\msvc\ccWebsocketClient.vcxproj", "{0E86FFB0-57E1-4A9E-A12D-8A07CA1C5708}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccNetwork", "src\Library\ccNetwork\build\ccNetwork.vcxproj", "{22622606-5D5B-499C-8F3D-BAD302A10950}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccNetwork", "..\..\src\Library\ccNetwork\msvc\ccNetwork.vcxproj", "{22622606-5D5B-499C-8F3D-BAD302A10950}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccRESTfulChatting", "src\ProductLibrary\ccRESTfulChatting\build\ccRESTfulChatting.vcxproj", "{CEC6DC46-192C-4A85-8FC9-B745C87A0C95}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccRESTfulChatting", "..\..\src\ProductLibrary\ccRESTfulChatting\msvc\ccRESTfulChatting.vcxproj", "{CEC6DC46-192C-4A85-8FC9-B745C87A0C95}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
