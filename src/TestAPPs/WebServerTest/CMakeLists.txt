@@ -24,13 +24,13 @@ TARGET_LINK_LIBRARIES(WebServerTest
 add_custom_command(
 	TARGET WebServerTest POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy
-    	${CMAKE_CURRENT_SOURCE_DIR}/build/index.html
+    	${CMAKE_CURRENT_SOURCE_DIR}/html/index.html
         ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/html/index.html
 )
 
 add_custom_command(
 	TARGET WebServerTest POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy
-    	${CMAKE_CURRENT_SOURCE_DIR}/build/chat.html
+    	${CMAKE_CURRENT_SOURCE_DIR}/html/chat.html
         ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/html/chat.html
 )
