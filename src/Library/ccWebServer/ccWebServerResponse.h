@@ -34,7 +34,7 @@ protected:
     size_t  doPrintf(const char *fmt, ...);
 
 public:
-    void    status(unsigned int code, const std::string& strStatusText);
+    void    status(unsigned int code, const std::string& strStatusText, bool bNoContent = false);
     void    status(unsigned int code, const std::string& strStatusText, const std::string& strExtInfo);
 
     void    contentType(const std::string& type, bool bInsertSeparator = true);
@@ -47,6 +47,8 @@ public:
     size_t  write(const std::string& buf);
     size_t  write(const char* strBuf, size_t size);
     size_t  write(std::istream& is);
+
+    void    closeeWithoutContent();
 
     bool    notFoundFile(const std::string& strURI);
 

@@ -29,7 +29,7 @@ ccWebServerResponse::~ccWebServerResponse()
     // TODO Auto-generated destructor stub
 }
 
-void ccWebServerResponse::status(unsigned int code, const std::string& strStatusText)
+void ccWebServerResponse::status(unsigned int code, const std::string& strStatusText, bool bNoContent)
 {
     if (_bStatusSet)
         return;
@@ -45,6 +45,9 @@ void ccWebServerResponse::status(unsigned int code, const std::string& strStatus
     }
 
     _bStatusSet = true;
+
+    if (bNoContent)
+        closeeWithoutContent();
 }
 
 void ccWebServerResponse::status(unsigned int code, const std::string& strStatusText, const std::string& strExtInfo)
@@ -54,7 +57,7 @@ void ccWebServerResponse::status(unsigned int code, const std::string& strStatus
 
     if (code == 200 || strStatusText.length() == 0 || strExtInfo.length() == 0)
     {
-        status(code, strStatusText);
+        status(code, strStatusText, true);
         return;
     }
 
@@ -235,6 +238,15 @@ size_t ccWebServerResponse::write(std::istream & is)
     return uSentSize;
 }
 
+void ccWebServerResponse::closeeWithoutContent()
+{
+    if (!_bStatusSet)
+        return;
+
+    if (!_bContentTypeSet)
+        contentType(std::string(""));
+}
+
 bool ccWebServerResponse::notFoundFile(const std::string& strURI)
 {
     std::string strContent;
@@ -255,7 +267,7 @@ bool ccWebServerResponse::notFoundFile(const std::string& strURI)
         "</html>\r\n",
         strURI.c_str());
 
-    status(404, "Not Found");
+    status(404, "Not Found", false);
     contentType("text/html", strContent.length());
 
     doWriteContentToConnector(strContent.c_str(), strContent.length());
