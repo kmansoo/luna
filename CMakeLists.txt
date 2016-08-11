@@ -32,7 +32,7 @@ SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 #
 # Check OS and Processor Information 
 #
-SET(CMAKE_CXX_FLAGS "-std=c++1z")
+SET(CMAKE_CXX_FLAGS "-std=c++11")
 ADD_DEFINITIONS(-Wall -DCALIB_CFG_OS="${CMAKE_SYSTEM_NAME}" -DCALIB_CFG_CPU="${CMAKE_SYSTEM_PROCESSOR}")
 
 #
@@ -45,9 +45,3 @@ ADD_SUBDIRECTORY(src/FossLibrary/ccJsonParser)
 ADD_SUBDIRECTORY(src/FossLibrary/ccWebsocketClient)
 ADD_SUBDIRECTORY(src/ThirdPartyLibrary/ccMongooseServer)
 ADD_SUBDIRECTORY(src/ProductLibrary/ccRESTfulChatting)
-
-#
-# Make Test Applications
-#
-ADD_SUBDIRECTORY(src/TestAPPs/WebServerTest)
-
