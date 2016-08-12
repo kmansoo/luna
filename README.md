@@ -1,7 +1,7 @@
 # Luna
 Very tiny SW Platform for Web API using C++ and mongoose web server.
 
-## How to build libraris
+## How to build libraries
 ### Linux & OS X
 ```bash
 mkdir build  
