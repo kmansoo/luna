@@ -9,47 +9,77 @@
 
 namespace Luna {
 
-ccWebServer::ccWebServer(const std::string& name, const std::string& ports, const std::string& root_path) :
-    _strName(name),
-    _strHttpPorts(ports),
-    _strWebRootPath(root_path),
-    _pEventListener(NULL)
-{
-    // TODO Auto-generated constructor stub
+    ccWebServer::ccWebServer(const std::string& name, const std::string& ports, const std::string& root_path, std::shared_ptr<ccWebServerPageDirectory> page_directory) :
+        name_(name),
+        httpPorts_(ports),
+        webRootPath_(root_path),
+        eventListener_(NULL),
+        _pageDirectory(page_directory)
+    {
+        // TODO Auto-generated constructor stub
 
-}
+    }
 
-ccWebServer::~ccWebServer()
-{
-    // TODO Auto-generated destructor stub
-}
+    ccWebServer::~ccWebServer()
+    {
+        // TODO Auto-generated destructor stub
+    }
 
-bool ccWebServer::start()
-{
-    return false;
-}
+    bool ccWebServer::start()
+    {
+        return false;
+    }
 
-bool ccWebServer::stop()
-{
-    return false;
-}
+    bool ccWebServer::stop()
+    {
+        return false;
+    }
 
-const std::string&  ccWebServer::getName()
-{
-    return _strName;
-}
+    void ccWebServer::initServer()
+    {
+        if (_pageDirectory)
+            _pageDirectory->init(*this);
+    }
 
-bool ccWebServer::setOption(std::string const& name, std::string const& value)
-{
-    _aOptions.push_back(name);
-    _aOptions.push_back(value);
+    const std::string&  ccWebServer::getName()
+    {
+        return name_;
+    }
 
-    return true;
-}
+    bool ccWebServer::setOption(std::string const& name, std::string const& value)
+    {
+        options_.push_back(name);
+        options_.push_back(value);
 
-void ccWebServer::setListener(ccWebServerEventListener* pListener)
-{
-    _pEventListener = pListener;
-}
+        return true;
+    }
 
+    void ccWebServer::setListener(ccWebServerEventListener* pListener)
+    {
+        eventListener_ = pListener;
+    }
+
+    std::shared_ptr<ccWebServerPage> ccWebServer::findPage(const std::string& uri)
+    {
+        if (!_pageDirectory)
+            return nullptr;
+
+        return _pageDirectory->findPage(uri);
+    }
+
+    std::shared_ptr<ccWebServerFileUploadPage> ccWebServer::findFileUploadPage(const std::string& uri)
+    {
+        if (!_pageDirectory)
+            return nullptr;
+
+        return _pageDirectory->findFileUploadPage(uri);
+    }
+
+    std::shared_ptr<ccWebServerFileDownloadPage> ccWebServer::findFileDownloadPage(const std::string& uri)
+    {
+        if (!_pageDirectory)
+            return nullptr;
+
+        return _pageDirectory->findFileDownloadPage(uri);
+    }
 }

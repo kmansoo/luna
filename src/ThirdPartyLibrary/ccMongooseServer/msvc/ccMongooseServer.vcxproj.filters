@@ -15,7 +15,7 @@
     <Filter Include="API">
       <UniqueIdentifier>{99a109bc-cce0-4571-9395-7299c7a90688}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\mongoose6.1">
+    <Filter Include="src\mongoose_6.5">
       <UniqueIdentifier>{32845a9e-1927-46a9-a617-f45c37b89b79}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -39,7 +39,7 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\src\mongoose\mongoose.h">
-      <Filter>src\mongoose6.1</Filter>
+      <Filter>src\mongoose_6.5</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -59,7 +59,7 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\mongoose\mongoose.c">
-      <Filter>src\mongoose6.1</Filter>
+      <Filter>src\mongoose_6.5</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

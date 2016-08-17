@@ -17,7 +17,7 @@ namespace Luna {
 class ccWebServerObjectFactory
 {
 public:
-    virtual std::shared_ptr<ccWebServer> createWebServer(const std::string& name, const std::string& ports, const std::string& root_path) = 0;
+    virtual std::shared_ptr<ccWebServer> createWebServer(const std::string& name, const std::string& ports, const std::string& root_path, std::shared_ptr<ccWebServerPageDirectory> page_directory = nullptr) = 0;
 };
 
 }
