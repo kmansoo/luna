@@ -19,7 +19,7 @@ public:
     virtual ~ccMongooseWebServerObjectFactory();
 
 public:
-    virtual  std::shared_ptr<ccWebServer> createWebServer(const std::string& name, const std::string& ports, const std::string& root_path);
+    virtual  std::shared_ptr<ccWebServer> createWebServer(const std::string& name, const std::string& ports, const std::string& root_path, std::shared_ptr<ccWebServerPageDirectory> page_directory = nullptr);
 };
 
 }

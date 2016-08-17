@@ -27,22 +27,22 @@ void  ccWebServerManager::attachFactory(std::shared_ptr<ccWebServerObjectFactory
     _pObjFactory = pFactory;
 }
 
-bool ccWebServerManager::createWebServer(const std::string& name, const std::string& ports)
+bool ccWebServerManager::createWebServer(const std::string& name, const std::string& ports, std::shared_ptr<ccWebServerPageDirectory> page_directory)
 {
     if (_pObjFactory == nullptr)
         return false;
 
-    _aWebServers.push_back(_pObjFactory->createWebServer(name, ports, "."));
+    _aWebServers.push_back(_pObjFactory->createWebServer(name, ports, ".", page_directory));
 
     return true;
 }
 
-bool ccWebServerManager::createWebServer(const std::string& name, const std::string& ports, const std::string& root_path)
+bool ccWebServerManager::createWebServer(const std::string& name, const std::string& ports, const std::string& root_path, std::shared_ptr<ccWebServerPageDirectory> page_directory)
 {
     if (_pObjFactory == nullptr)
         return false;
 
-    _aWebServers.push_back(_pObjFactory->createWebServer(name, ports, root_path));
+    _aWebServers.push_back(_pObjFactory->createWebServer(name, ports, root_path, page_directory));
 
     return true;
 }

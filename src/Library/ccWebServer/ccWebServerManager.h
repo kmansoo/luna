@@ -18,6 +18,7 @@
 
 #include "ccRESTfulApi.h"
 #include "ccWebsocketManager.h"
+#include "ccWebServerPageDirectory.h"
 
 namespace Luna {
 
@@ -35,8 +36,8 @@ protected:
 public:
     void    attachFactory(std::shared_ptr<ccWebServerObjectFactory> pFactory);
 
-    bool    createWebServer(const std::string& name, const std::string& ports);
-    bool    createWebServer(const std::string& name, const std::string& ports, const std::string& root_path);
+    bool    createWebServer(const std::string& name, const std::string& ports, std::shared_ptr<ccWebServerPageDirectory> page_directory = nullptr);
+    bool    createWebServer(const std::string& name, const std::string& ports, const std::string& root_path, std::shared_ptr<ccWebServerPageDirectory> page_directory = nullptr);
 
     std::shared_ptr<ccWebServer> getWebServer(const char* strName);
 

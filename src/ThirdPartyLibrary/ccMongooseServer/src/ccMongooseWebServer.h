@@ -19,25 +19,28 @@ namespace Luna {
 class ccMongooseWebServer : public ccWebServer
 {
 public:
-    ccMongooseWebServer(const std::string& name, const std::string& ports, const std::string& root_path);
+    ccMongooseWebServer(const std::string& name, const std::string& ports, const std::string& root_path, std::shared_ptr<ccWebServerPageDirectory> page_directory = nullptr);
     virtual ~ccMongooseWebServer();
 
 public:
     virtual bool start();
     virtual bool stop();
+    virtual void setUploadEvent(const std::string& path);
 
 private:
     static void ev_handler(struct mg_connection *nc, int ev, void *p);
+    static void ev_handler_upload(struct mg_connection *nc, int ev, void *p);
 
 private:
     void    doRunThread();
 
 private:
-    bool                    _bIsStopThread;
+    bool                    isStopThread_;
 
-    std::thread*            _pPollThread;
-    struct mg_mgr*          _mgr;
-    struct mg_connection*   _con;
+    std::string             last_multipart_request_uri_;
+    std::thread*            pollThread_;
+    struct mg_mgr*          mgr_;
+    struct mg_connection*   con_;
 };
 
 }

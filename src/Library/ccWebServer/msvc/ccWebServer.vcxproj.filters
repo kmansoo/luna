@@ -56,6 +56,18 @@
     <ClInclude Include="..\ccWebsocketManager.h">
       <Filter>API</Filter>
     </ClInclude>
+    <ClInclude Include="..\ccWebServerPageDirectory.h">
+      <Filter>API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccWebServerFileDownloadPage.h">
+      <Filter>API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccWebServerFileUploadPage.h">
+      <Filter>API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccWebServerPage.h">
+      <Filter>API</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -83,6 +95,12 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ccWebsocketManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccWebServerPageDirectory.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccWebServerFileUploadPage.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

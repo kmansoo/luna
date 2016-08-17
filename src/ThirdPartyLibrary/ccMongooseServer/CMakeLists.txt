@@ -7,6 +7,11 @@ PROJECT(ccMongooseServer)
 # Configuration
 #
 
+add_definitions(
+	-DMG_DISABLE_CGI
+	-DMG_ENABLE_HTTP_STREAMING_MULTIPART
+)
+
 include_directories( ./ ../../Library ../../FossLibrary ../../ThirdPartyLibrary)
 
 file(GLOB SRC_FILES 

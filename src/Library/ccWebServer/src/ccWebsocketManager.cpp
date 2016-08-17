@@ -25,7 +25,7 @@ bool ccWebsocketManager::addWebsocket(std::shared_ptr<ccWebsocket> pNewWS)
         it->second->add(pNewWS);
     else
     {
-        std::shared_ptr<ccWebsocketGroup> newGroup(new ccWebsocketGroup(pNewWS->getUri()));
+        auto newGroup = std::make_shared<ccWebsocketGroup>(pNewWS->getUri());
         _aWSGList[pNewWS->getUri()] = newGroup;
 
         newGroup->add(pNewWS);

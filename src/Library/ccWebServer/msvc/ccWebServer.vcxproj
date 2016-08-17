@@ -98,8 +98,12 @@
     <ClInclude Include="..\ccRESTfulApi.h" />
     <ClInclude Include="..\ccWebServer.h" />
     <ClInclude Include="..\ccWebServerEventListener.h" />
+    <ClInclude Include="..\ccWebServerFileDownloadPage.h" />
+    <ClInclude Include="..\ccWebServerFileUploadPage.h" />
     <ClInclude Include="..\ccWebServerManager.h" />
     <ClInclude Include="..\ccWebServerObjectFactory.h" />
+    <ClInclude Include="..\ccWebServerPage.h" />
+    <ClInclude Include="..\ccWebServerPageDirectory.h" />
     <ClInclude Include="..\ccWebServerRequest.h" />
     <ClInclude Include="..\ccWebServerResponse.h" />
     <ClInclude Include="..\ccWebsocket.h" />
@@ -111,7 +115,9 @@
   <ItemGroup>
     <ClCompile Include="..\src\ccRESTfulApi.cpp" />
     <ClCompile Include="..\src\ccWebServer.cpp" />
+    <ClCompile Include="..\src\ccWebServerFileUploadPage.cpp" />
     <ClCompile Include="..\src\ccWebServerManager.cpp" />
+    <ClCompile Include="..\src\ccWebServerPageDirectory.cpp" />
     <ClCompile Include="..\src\ccWebServerRequest.cpp" />
     <ClCompile Include="..\src\ccWebServerResponse.cpp" />
     <ClCompile Include="..\src\ccWebsocket.cpp" />
