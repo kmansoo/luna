@@ -12,7 +12,7 @@ namespace Luna {
 
     // class ccWebServerFileUploadAgent
     ccWebServerFileUploadAgent::ccWebServerFileUploadAgent(std::uint32_t id, std::string localFilePath, ccWebServerFileUploadPage* parent)
-        : id_(id), localFilePath_(localFilePath), parent_(parent) 
+        : id_(id), parent_(parent), localFilePath_(localFilePath)
     {
         uploadFileLength_ = 0;
         receivedDataLength_ = 0;
@@ -66,7 +66,7 @@ namespace Luna {
     }
 
     ccWebServerFileUploadPage::ccWebServerFileUploadPage(const std::string& path, const std::string& local_file_path, bool singleAgent) :
-        ccWebServerPage(path), localFilePath_(local_file_path), generate_id_(0x00)
+        ccWebServerPage(path), generate_id_(0x00), localFilePath_(local_file_path)
     {
     }
 

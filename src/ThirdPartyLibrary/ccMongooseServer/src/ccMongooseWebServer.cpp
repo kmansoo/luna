@@ -241,7 +241,7 @@ namespace Luna {
                 "Content-Type: text/plain\r\n"
                 "Connection: close\r\n\r\n"
                 "Written %ld of POST data to a temp file\n\n",
-                100);
+                100l);
             nc->flags |= MG_F_SEND_AND_CLOSE;
             break;
         }
