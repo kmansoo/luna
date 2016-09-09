@@ -30,7 +30,7 @@ public:
     virtual bool    open(const std::string& uri);
     virtual bool    close();
 
-    virtual std::int32_t    getInstance();  // It may be a Socket ID. 
+    virtual std::int32_t    get_instance();  // It may be a Socket ID. 
     virtual bool            send(const std::string& message);
     virtual bool            send_binary(const void* buffer, std::size_t size);
 

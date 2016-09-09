@@ -48,7 +48,7 @@ bool ccEasyWebsocketClient::close() {
     return true;
 }
 
-std::int32_t ccEasyWebsocketClient::getInstance()  // It may be a Socket ID. 
+std::int32_t ccEasyWebsocketClient::get_instance()  // It may be a Socket ID. 
 {
     if (websocket_ == NULL)
         return -1;
