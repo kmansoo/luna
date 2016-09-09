@@ -27,151 +27,130 @@
 
 namespace Luna {
 
-ccNetworkManager::ccNetworkManager()
-{
-    // TODO Auto-generated constructor stub
-
-    _bIsInitNetwork = false;
+ccNetworkManager::ccNetworkManager() {
+    is_init_network_ = false;
 }
 
-ccNetworkManager::~ccNetworkManager()
-{
-    // TODO Auto-generated destructor stub
+ccNetworkManager::~ccNetworkManager() {
     shutdown();
 }
 
-bool ccNetworkManager::init()
-{
-    if (_bIsInitNetwork)
+bool ccNetworkManager::init() {
+    if (is_init_network_)
         return true;
 
 #if defined(WIN32)
-    WORD wVersionRequested = MAKEWORD( 2, 2 );
-    WSADATA wsaData;
+    WORD version_requested = MAKEWORD(2, 2);
+    WSADATA wsa_data;
     int err;
 
-    err = WSAStartup( wVersionRequested, &wsaData );
+    err = WSAStartup(version_requested, &wsa_data);
 
-    if ( err != 0 )
-    {
+    if (err != 0) {
         //// could not find a usable WinSock DLL
         ////cerr << "Could not load winsock" << endl;
-        //assert(0); // is this is failing, try a different version that 2.2, 1.0 or later will likely work
-        //exit(1);
-    }
-    else
-        _bIsInitNetwork = true;
+        // assert(0); // is this is failing, try a different version that 2.2, 1.0
+        // or later will likely work
+        // exit(1);
+    } else
+        is_init_network_ = true;
 #endif
 
     return true;
 }
 
-
-void ccNetworkManager::shutdown()
-{
+void ccNetworkManager::shutdown() {
 #if defined(WIN32)
-    if (_bIsInitNetwork)
-    {
+    if (is_init_network_) {
         WSACleanup();
 
-        _bIsInitNetwork = false;
+        is_init_network_ = false;
     }
 #endif
 }
 
-bool ccNetworkManager::getHostName(std::string& strName)
-{
-    char szBuffer[1024];
+bool ccNetworkManager::get_host_name(std::string& strName) {
+    char buffer[1024];
 
-    if (::gethostname(szBuffer, sizeof(szBuffer)) == SOCKET_ERROR)
+    if (::gethostname(buffer, sizeof(buffer)) == SOCKET_ERROR)
         return false;
 
-    strName = szBuffer;
+    strName = buffer;
 
     return true;
 }
 
+bool ccNetworkManager::get_local_ip(std::string& ip) {
+    std::string host_name;
 
-bool ccNetworkManager::getLocalIP(std::string& strIP)
-{
-    std::string strHostName;
-
-    if (getHostName(strHostName) == false)
+    if (get_host_name(host_name) == false)
         return false;
 
-    struct hostent *host = ::gethostbyname((char*)strHostName.c_str());
+    struct hostent* host = ::gethostbyname((char*)host_name.c_str());
 
     if (host == NULL)
         return false;
 
     //  Obtain the computer's IP
 #if defined(WIN32)
-    ccString::format(strIP, 
-        "%d.%d.%d.%d",
-        ((struct in_addr *)(host->h_addr))->S_un.S_un_b.s_b1,
-        ((struct in_addr *)(host->h_addr))->S_un.S_un_b.s_b2,
-        ((struct in_addr *)(host->h_addr))->S_un.S_un_b.s_b3,
-        ((struct in_addr *)(host->h_addr))->S_un.S_un_b.s_b4);
+    ccString::format(ip, "%d.%d.%d.%d",
+                     ((struct in_addr*)(host->h_addr))->S_un.S_un_b.s_b1,
+                     ((struct in_addr*)(host->h_addr))->S_un.S_un_b.s_b2,
+                     ((struct in_addr*)(host->h_addr))->S_un.S_un_b.s_b3,
+                     ((struct in_addr*)(host->h_addr))->S_un.S_un_b.s_b4);
 #else
-    strIP = inet_ntoa(*(struct in_addr *)*host->h_addr_list);
+    ip = inet_ntoa(*(struct in_addr*)*host->h_addr_list);
 #endif
 
     return true;
 }
 
-bool ccNetworkManager::getNetMaskIP(std::string& strIP)
-{
+bool ccNetworkManager::get_subnet_mask(std::string& ip) {
     return false;
 }
 
-bool ccNetworkManager::getGatewayIP(std::string& strIP)
-{
-    char strHoneName[80];
-    
-    if (::gethostname(strHoneName, sizeof(strHoneName)) == SOCKET_ERROR)
+bool ccNetworkManager::get_gateway_ip(std::string& ip) {
+    char host_name[80];
+
+    if (::gethostname(host_name, sizeof(host_name)) == SOCKET_ERROR)
         return false;
 
-    struct hostent *pHostInfo = ::gethostbyname(strHoneName);
+    struct hostent* host_info = ::gethostbyname(host_name);
 
-    if (pHostInfo == 0)
-    {
+    if (host_info == 0) {
         //  std::cout << "Yow! Bad host lookup." << std::endl;
         return false;
     }
 
-    for (int nIndex = 0; pHostInfo->h_addr_list[nIndex] != 0; ++nIndex)
-    {
+    for (int nIndex = 0; host_info->h_addr_list[nIndex] != 0; ++nIndex) {
         struct in_addr addr;
-        memcpy(&addr, pHostInfo->h_addr_list[nIndex], sizeof(struct in_addr));
+        memcpy(&addr, host_info->h_addr_list[nIndex], sizeof(struct in_addr));
 
-        strIP = inet_ntoa(addr);
+        ip = inet_ntoa(addr);
 
         break;
-        //  std::cout << "Address " << nIndex << ": " << inet_ntoa(addr) << std::endl;
+        //  std::cout << "Address " << nIndex << ": " << inet_ntoa(addr) <<
+        //  std::endl;
     }
 
     return true;
 }
 
+std::uint32_t ccNetworkManager::convert_ip_to_int(const std::string& ip) {
+    std::uint32_t converted_ip = 0;
+    static const char digits[] = "0123456789";
 
-std::uint32_t ccNetworkManager::convertIP2Int(const std::string& strIP)
-{
-    std::uint32_t       uConvertIP = 0;
-    static const char   digits[] = "0123456789";
-
-    std::uint8_t    tmp[4];
-    std::uint8_t    *tp = NULL;
+    std::uint8_t tmp[4];
+    std::uint8_t* tp = NULL;
 
     int saw_digit = 0;
     int octets = 0;
     *(tp = tmp) = 0;
 
-    for (auto item : strIP)
-    {
-        const char *pch;
+    for (auto item : ip) {
+        const char* pch;
 
-        if ((pch = strchr(digits, item)) != NULL)
-        {
+        if ((pch = strchr(digits, item)) != NULL) {
             std::uint32_t newVal = *tp * 10 + (pch - digits);
 
             if (newVal > 255)
@@ -179,25 +158,20 @@ std::uint32_t ccNetworkManager::convertIP2Int(const std::string& strIP)
 
             *tp = newVal;
 
-            if (!saw_digit)
-            {
+            if (!saw_digit) {
                 if (++octets > 4)
                     return (0);
 
                 saw_digit = 1;
             }
-        }
-        else
-        {
-            if (item == '.' && saw_digit)
-            {
+        } else {
+            if (item == '.' && saw_digit) {
                 if (octets == 4)
                     return (0);
 
                 *++tp = 0;
                 saw_digit = 0;
-            }
-            else
+            } else
                 return (0);
         }
     }
@@ -205,46 +179,42 @@ std::uint32_t ccNetworkManager::convertIP2Int(const std::string& strIP)
     if (octets < 4)
         return (0);
 
-    uConvertIP = (((std::uint32_t)tmp[0] << 24) & 0xFF000000);
-    uConvertIP |= (((std::uint32_t)tmp[1] << 16) & 0x00FF0000);
-    uConvertIP |= (((std::uint32_t)tmp[2] << 8) & 0x0000FF00);
-    uConvertIP |= (tmp[3] & 0xFF);
+    converted_ip = (((std::uint32_t)tmp[0] << 24) & 0xFF000000);
+    converted_ip |= (((std::uint32_t)tmp[1] << 16) & 0x00FF0000);
+    converted_ip |= (((std::uint32_t)tmp[2] << 8) & 0x0000FF00);
+    converted_ip |= (tmp[3] & 0xFF);
 
-    return uConvertIP;
+    return converted_ip;
 }
 
-bool ccNetworkManager::convertInt2IP(std::uint32_t uIP, std::string& strIP)
-{
-    ccString::format(strIP, "%d.%d.%d.%d", (uIP >> 24) & 0xFF, (uIP >> 16) & 0xFF, (uIP >> 8) & 0xFF, uIP & 0xFF);
+bool ccNetworkManager::convert_int_to_ip(std::uint32_t uIP, std::string& ip) {
+    ccString::format(ip, "%d.%d.%d.%d", (uIP >> 24) & 0xFF, (uIP >> 16) & 0xFF,
+                     (uIP >> 8) & 0xFF, uIP & 0xFF);
 
     return true;
 }
 
-bool ccNetworkManager::isPublicIP(const std::string& strIP)
-{
-    char szNum[3];
+bool ccNetworkManager::is_public_ip(const std::string& ip) {
+    char number[3];
 
-    if (strIP.length() > 0)
-    {
-        //  HSPLog("[NetInf] IsPublicIP : %s", strIP.c_str());
+    if (ip.length() > 0) {
+        //  HSPLog("[NetInf] IsPublicIP : %s", ip.c_str());
     }
 
-    if (strIP.find("10.") == 0 || strIP.find("192.168.") == 0)
+    if (ip.find("10.") == 0 || ip.find("192.168.") == 0)
         return false;
-    else
-    {
-        if (strIP.find("172.") == 0)
-        {
-            strncpy(szNum, strIP.c_str() + 4, 3);
+    else {
+        if (ip.find("172.") == 0) {
+            strncpy(number, ip.c_str() + 4, 3);
 
-            if (szNum[2] != '.')
+            if (number[2] != '.')
                 return true;
 
-            szNum[2] = 0x00;
+            number[2] = 0x00;
 
-            int nValue = atoi(szNum);
+            int int_value = atoi(number);
 
-            if (nValue >= 16 && nValue <= 31)
+            if (int_value >= 16 && int_value <= 31)
                 return false;
         }
     }

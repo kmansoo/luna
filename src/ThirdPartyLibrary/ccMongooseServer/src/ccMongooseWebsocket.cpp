@@ -9,53 +9,50 @@
 
 namespace Luna {
 
-ccMongooseWebsocket::ccMongooseWebsocket(const std::string& strUri, struct mg_connection* con) :
-    ccWebsocket(strUri),
-    _pMgConnection(con)
-{
-    // TODO Auto-generated constructor stub
-
+ccMongooseWebsocket::ccMongooseWebsocket(const std::string& uri, struct mg_connection* connection) :
+    ccWebsocket(uri),
+    mg_connection_(connection) {
 }
 
-ccMongooseWebsocket::~ccMongooseWebsocket()
-{
-    // TODO Auto-generated destructor stub
+ccMongooseWebsocket::ccMongooseWebsocket(const char* uri, std::size_t size, struct mg_connection* connection) :
+    ccWebsocket(std::string(uri, size)),
+    mg_connection_(connection) {
 }
 
-bool ccMongooseWebsocket::open(const std::string& strUri)
-{
+
+ccMongooseWebsocket::~ccMongooseWebsocket() {
+}
+
+bool ccMongooseWebsocket::open(const std::string& uri) {
     return false;
 }
 
-bool ccMongooseWebsocket::close()
-{
+bool ccMongooseWebsocket::close() {
     return false;
 }
 
-std::int32_t ccMongooseWebsocket::getInstance()  // It may be a Socket ID. 
+std::int32_t ccMongooseWebsocket::get_instance()  // It may be a Socket ID. 
 {
-    if (_pMgConnection == NULL)
+    if (mg_connection_ == NULL)
         return -1;
 
-    return _pMgConnection->sock;
+    return mg_connection_->sock;
 }
 
-bool ccMongooseWebsocket::send(const std::string& strMessage)
-{
-    if (_pMgConnection == NULL)
+bool ccMongooseWebsocket::send(const std::string& message) {
+    if (mg_connection_ == NULL)
         return false;
 
-    mg_send_websocket_frame(_pMgConnection, WEBSOCKET_OP_TEXT, strMessage.c_str(), strMessage.length());
+    mg_send_websocket_frame(mg_connection_, WEBSOCKET_OP_TEXT, message.c_str(), message.length());
 
     return true;
 }
 
-bool ccMongooseWebsocket::sendBinary(const void* pBuffer, std::size_t size)
-{
-    if (_pMgConnection == NULL)
+bool ccMongooseWebsocket::send_binary(const void* buffer, std::size_t size) {
+    if (mg_connection_ == NULL)
         return false;
 
-    mg_send_websocket_frame(_pMgConnection, WEBSOCKET_OP_BINARY, pBuffer, size);
+    mg_send_websocket_frame(mg_connection_, WEBSOCKET_OP_BINARY, buffer, size);
 
     return true;
 }

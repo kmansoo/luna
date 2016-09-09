@@ -10,85 +10,76 @@
 
 namespace Luna {
 
-    ccWebServerPageDirectory::ccWebServerPageDirectory()
-    {
-        // TODO Auto-generated constructor stub
+ccWebServerPageDirectory::ccWebServerPageDirectory() {
+    // TODO Auto-generated constructor stub
 
+}
+
+ccWebServerPageDirectory::~ccWebServerPageDirectory() {
+    // TODO Auto-generated destructor stub
+}
+
+void ccWebServerPageDirectory::init(ccWebServer& server) {
+    for (auto it : pages_) {
+        if (it.second->is_upload_page())
+            server.set_upload_event(it.second->get_path());
     }
+}
 
-    ccWebServerPageDirectory::~ccWebServerPageDirectory()
-    {
-        // TODO Auto-generated destructor stub
-    }
-
-    void ccWebServerPageDirectory::init(ccWebServer& server)
-    {
-        for (auto it : pages_)
-        {
-            if (it.second->isUploadPage())
-                server.setUploadEvent(it.second->getPath());
-        }
-    }
-
-    bool ccWebServerPageDirectory::registerPage(std::shared_ptr<ccWebServerPage> page)
-    {
-        if (page == nullptr)
-            return false;
-
-        auto item = pages_.find(page->getPath());
-
-        if (item != pages_.end())
-            return false;
-
-        pages_[page->getPath()] = page;
-
-        return true;
-    }
-
-    bool ccWebServerPageDirectory::unregisterPage(const std::string& path)
-    {
-        auto item = pages_.find(path);
-
-        if (item == pages_.end())
-            return false;
-
-        pages_.erase(path);
-
-        return true;
-    }
-
-    bool ccWebServerPageDirectory::processRequest(std::shared_ptr<ccWebServerRequest> request, std::shared_ptr<ccWebServerResponse> response)
-    {
+bool ccWebServerPageDirectory::register_page(std::shared_ptr<ccWebServerPage> page) {
+    if (page == nullptr)
         return false;
-    }
 
-    std::shared_ptr<ccWebServerPage> ccWebServerPageDirectory::findPage(const std::string& uri)
-    {
-        auto item = pages_.find(uri);
+    auto item = pages_.find(page->get_path());
 
-        if (item == pages_.end())
-            return nullptr;
+    if (item != pages_.end())
+        return false;
 
-        return item->second;
-    }
+    pages_[page->get_path()] = page;
 
-    std::shared_ptr<ccWebServerFileUploadPage> ccWebServerPageDirectory::findFileUploadPage(const std::string& uri)
-    {
-        auto item = pages_.find(uri);
+    return true;
+}
 
-        if (item == pages_.end())
-            return nullptr;
+bool ccWebServerPageDirectory::unregister_page(const std::string& path) {
+    auto item = pages_.find(path);
 
-        return  std::dynamic_pointer_cast<ccWebServerFileUploadPage>(item->second);
-    }
+    if (item == pages_.end())
+        return false;
 
-    std::shared_ptr<ccWebServerFileDownloadPage> ccWebServerPageDirectory::findFileDownloadPage(const std::string& uri)
-    {
-        auto item = pages_.find(uri);
+    pages_.erase(path);
 
-        if (item == pages_.end())
-            return nullptr;
+    return true;
+}
 
-        return std::dynamic_pointer_cast<ccWebServerFileDownloadPage>(item->second);
-    }
+bool ccWebServerPageDirectory::process_request(std::shared_ptr<ccWebServerRequest> request, std::shared_ptr<ccWebServerResponse> response) {
+    return false;
+}
+
+std::shared_ptr<ccWebServerPage> ccWebServerPageDirectory::find_page(const std::string& uri) {
+    auto item = pages_.find(uri);
+
+    if (item == pages_.end())
+        return nullptr;
+
+    return item->second;
+}
+
+std::shared_ptr<ccWebServerFileUploadPage> ccWebServerPageDirectory::find_file_upload_page(const std::string& uri) {
+    auto item = pages_.find(uri);
+
+    if (item == pages_.end())
+        return nullptr;
+
+    return  std::dynamic_pointer_cast<ccWebServerFileUploadPage>(item->second);
+}
+
+std::shared_ptr<ccWebServerFileDownloadPage> ccWebServerPageDirectory::find_file_downalod_page(const std::string& uri) {
+    auto item = pages_.find(uri);
+
+    if (item == pages_.end())
+        return nullptr;
+
+    return std::dynamic_pointer_cast<ccWebServerFileDownloadPage>(item->second);
+}
+
 }

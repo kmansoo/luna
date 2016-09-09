@@ -5,266 +5,273 @@
 
 namespace Luna {
 
-ccWin32WebApiHelper::ccWin32WebApiHelper(void) :
-    _strDestIP(_T("192.168.0.1")),
-    _uDestPort(80),
-    _bIsStopThread(false)
-{
-    _bIsStopThread = false;
+ccWin32WebApiHelper::ccWin32WebApiHelper(void)
+    : dest_ip_(_T("192.168.0.1")), dest_port_(80), is_stop_thread_(false) {
+    is_stop_thread_ = false;
 
-    _oPollThread = std::thread(std::bind(&ccWin32WebApiHelper::doRunThread, this));
+    polling_thread_ =
+        std::thread(std::bind(&ccWin32WebApiHelper::run_thread, this));
 }
 
-ccWin32WebApiHelper::~ccWin32WebApiHelper(void)
-{
-    _bIsStopThread = true;
-    _oPollThread.join();
+ccWin32WebApiHelper::~ccWin32WebApiHelper(void) {
+    is_stop_thread_ = true;
+    polling_thread_.join();
 }
 
-std::shared_ptr<ccWin32WebApiHelper> ccWin32WebApiHelper::getInstance()
-{
-    static std::shared_ptr<ccWin32WebApiHelper>  s_singleInstance;
+std::shared_ptr<ccWin32WebApiHelper> ccWin32WebApiHelper::get_instance() {
+    static std::shared_ptr<ccWin32WebApiHelper> s_singleInstance;
 
-    if (s_singleInstance == NULL)
-    {
-        std::shared_ptr<ccWin32WebApiHelper> newInstance(new ccWin32WebApiHelper);
+    if (s_singleInstance == NULL) {
+        std::shared_ptr<ccWin32WebApiHelper> new_instance(new ccWin32WebApiHelper);
 
-        s_singleInstance = newInstance;
+        s_singleInstance = new_instance;
     }
 
     return s_singleInstance;
 }
 
-void ccWin32WebApiHelper::setConnectionInfo(const std::string& strIP, UINT uPort)
-{
-    _strDestIP  =   strIP;
-    _uDestPort  =   uPort;
+void ccWin32WebApiHelper::setConnectionInfo(const std::string& strIP,
+                                            UINT uPort) {
+    dest_ip_ = strIP;
+    dest_port_ = uPort;
 }
 
-std::uint16_t ccWin32WebApiHelper::requestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, std::string& strResponse)
-{
-    return doSendRequestAPI(eMethod, strWebAPI, "", strResponse);
+std::uint16_t ccWin32WebApiHelper::request_api(
+    ccWebServerRequest::HttpMethod method,
+    const std::string& web_api,
+    std::string& response) {
+    return send_request_api(method, web_api, "", response);
 }
 
-std::uint16_t ccWin32WebApiHelper::requestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, Json::Value& oParams, std::string& strResponse)
-{
+std::uint16_t ccWin32WebApiHelper::request_api(
+    ccWebServerRequest::HttpMethod method,
+    const std::string& web_api,
+    Json::Value& params,
+    std::string& response) {
     Json::StyledWriter writer;
 
-    return doSendRequestAPI(eMethod, strWebAPI, writer.write(oParams), strResponse);
+    return send_request_api(method, web_api, writer.write(params), response);
 }
 
-bool ccWin32WebApiHelper::asyncRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, ccWin32RgWebApiTransactionNotifier *pNotifier)
-{
-    Json::Value oParams;
+bool ccWin32WebApiHelper::async_request_api(
+    ccWebServerRequest::HttpMethod method,
+    const std::string& web_api,
+    ccWin32RgWebApiTransactionNotifier* notifier) {
+    Json::Value params;
 
-    return asyncRequestAPI(eMethod, strWebAPI, oParams, pNotifier);
+    return async_request_api(method, web_api, params, notifier);
 }
 
-bool ccWin32WebApiHelper::asyncRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, Json::Value& oParams, ccWin32RgWebApiTransactionNotifier *pNotifier)
-{
-    if (pNotifier == NULL)
+bool ccWin32WebApiHelper::async_request_api(
+    ccWebServerRequest::HttpMethod method,
+    const std::string& web_api,
+    Json::Value& params,
+    ccWin32RgWebApiTransactionNotifier* notifier) {
+    if (notifier == NULL)
         return false;
 
-    std::shared_ptr<XTransactionInfo> pNewTransaction(std::make_shared<XTransactionInfo>());
+    std::shared_ptr<XTransactionInfo> new_transaction(
+        std::make_shared<XTransactionInfo>());
 
-    pNewTransaction->_eMethod   = eMethod;
-    pNewTransaction->_pNotifier = pNotifier;
+    new_transaction->method_ = method;
+    new_transaction->notifier_ = notifier;
 
-    pNewTransaction->_strWebAPI         = strWebAPI;
+    new_transaction->web_api_ = web_api;
 
     Json::StyledWriter writer;
-    pNewTransaction->_strRequestData = writer.write(oParams);
+    new_transaction->request_data_ = writer.write(params);
 
-    _mutex.lock();
+    mutex_.lock();
 
     bool bExist = false;
 
-    for (auto tr : _aTransactionInfos)
-    {
-        if (tr->_pNotifier == pNotifier)
-        {
+    for (auto tr : transaction_info_list_) {
+        if (tr->notifier_ == notifier) {
             bExist = true;
             break;
         }
     }
 
     if (!bExist)
-        _aTransactionInfos.push_back(pNewTransaction);
+        transaction_info_list_.push_back(new_transaction);
 
-    _mutex.unlock();
+    mutex_.unlock();
 
     return true;
 }
 
-std::uint16_t ccWin32WebApiHelper::doSendRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, const std::string& strRequestData, std::string& strResponse)
-{
-    USES_CONVERSION;  
+std::uint16_t ccWin32WebApiHelper::send_request_api(
+    ccWebServerRequest::HttpMethod method,
+    const std::string& web_api,
+    const std::string& request,
+    std::string& response) {
+    USES_CONVERSION;
 
-    std::uint16_t       uStatusCode = 0;
+    std::uint16_t status_code = 0;
 
-    CInternetSession    oSession(_T("MySession"));  
+    CInternetSession session(_T("MySession"));
 
-    CHttpFile*          pHttpFile   = NULL;  
-    CHttpConnection*    pHttpConn   = NULL;  
-    CString             sURL        = _T("");
-    DWORD               dwSvcType   = 0;  
-    DWORD               dwFlags     = INTERNET_FLAG_EXISTING_CONNECT;
+    CHttpFile* http_file = NULL;
+    CHttpConnection* http_connection = NULL;
+    CString uri = _T("");
+    DWORD svc_type = 0;
+    DWORD option_flags = INTERNET_FLAG_EXISTING_CONNECT;
 
-    sURL.Format(__T("http://%s:%d%s"), _strDestIP.c_str(), _uDestPort, strWebAPI.c_str());
+    uri.Format(__T("http://%s:%d%s"), dest_ip_.c_str(), dest_port_,
+               web_api.c_str());
 
-    CString             strSendData;
-    CString             sServer;
-    CString             sObject;
-    CString             sReqHdr;
-    CString             strResultString;
+    CString send_data;
+    CString server;
+    CString object;
+    CString request_header;
+    CString request_data;
 
-    INTERNET_PORT       nPort = 0;  
+    INTERNET_PORT port = 0;
 
-    if (AfxParseURL(sURL, dwSvcType, sServer, sObject, nPort) == false)
-        return uStatusCode;
+    if (AfxParseURL(uri, svc_type, server, object, port) == false)
+        return status_code;
 
     try {
-        oSession.SetOption(INTERNET_OPTION_CONNECT_TIMEOUT, 5000);
-        pHttpConn = oSession.GetHttpConnection(sServer, nPort);
+        session.SetOption(INTERNET_OPTION_CONNECT_TIMEOUT, 5000);
+        http_connection = session.GetHttpConnection(server, port);
 
-        if (pHttpConn == NULL)
+        if (http_connection == NULL)
             goto clearVariabls;
 
-        switch (eMethod)
-        {
+        switch (method) {
         case ccWebServerRequest::HttpMethod_Get:
-            pHttpFile = pHttpConn->OpenRequest(CHttpConnection::HTTP_VERB_GET, sObject, NULL, 1, NULL, NULL, dwFlags);
+            http_file =
+                http_connection->OpenRequest(CHttpConnection::HTTP_VERB_GET, object,
+                                             NULL, 1, NULL, NULL, option_flags);
             break;
 
         case ccWebServerRequest::HttpMethod_Post:
-            pHttpFile = pHttpConn->OpenRequest(CHttpConnection::HTTP_VERB_POST, sObject, NULL, 1, NULL, NULL, dwFlags);
+            http_file = http_connection->OpenRequest(
+                CHttpConnection::HTTP_VERB_POST, object, NULL, 1, NULL, NULL,
+                option_flags);
             break;
-        
+
         case ccWebServerRequest::HttpMethod_Put:
-            pHttpFile = pHttpConn->OpenRequest(CHttpConnection::HTTP_VERB_PUT, sObject, NULL, 1, NULL, NULL, dwFlags);
+            http_file =
+                http_connection->OpenRequest(CHttpConnection::HTTP_VERB_PUT, object,
+                                             NULL, 1, NULL, NULL, option_flags);
             break;
-        
+
         case ccWebServerRequest::HttpMethod_Delete:
-            pHttpFile = pHttpConn->OpenRequest(CHttpConnection::HTTP_VERB_DELETE, sObject, NULL, 1, NULL, NULL, dwFlags);
+            http_file = http_connection->OpenRequest(
+                CHttpConnection::HTTP_VERB_DELETE, object, NULL, 1, NULL, NULL,
+                option_flags);
             break;
         }
 
-        if (pHttpFile == NULL)
+        if (http_file == NULL)
             goto clearVariabls;
 
-        pHttpFile->SetReadBufferSize(4096);
-    }
-    catch (CInternetException* e)
-    {
-        TCHAR szError[255];
+        http_file->SetReadBufferSize(4096);
+    } catch (CInternetException* e) {
+        TCHAR error_buffer[255];
 
-        e->GetErrorMessage(szError,255);
+        e->GetErrorMessage(error_buffer, 255);
         e->Delete();
 
         goto clearVariabls;
     }
-
 
     //  Request
-    strResultString = _T("");
+    request_data = _T("");
 
-    BOOL bRet = false;
-    char szResponse[5000];  
+    BOOL ret_value = false;
+    char response_buffer[5000];
 
     try {
-        if (strRequestData.size() > 0)
-        {
-            sReqHdr.Format(_T("Content-Type: application/javascript"));
-            pHttpFile->AddRequestHeaders(sReqHdr);
+        if (request.size() > 0) {
+            request_header.Format(_T("Content-Type: application/javascript"));
+            http_file->AddRequestHeaders(request_header);
 
-            bRet = pHttpFile->SendRequestEx(strRequestData.length(), HSR_ASYNC | HSR_INITIATE);
+            ret_value = http_file->SendRequestEx(request.length(),
+                                                 HSR_ASYNC | HSR_INITIATE);
 
-            pHttpFile->Write(CT2A(strRequestData.c_str()), strRequestData.length());
+            http_file->Write(CT2A(request.c_str()), request.length());
 
-            bRet = pHttpFile->EndRequest(HSR_ASYNC);
+            ret_value = http_file->EndRequest(HSR_ASYNC);
+        } else {
+            CString strHeaders =
+                _T("Content-Type: application/x-www-form-urlencoded");
+            ret_value = http_file->SendRequest(strHeaders);
         }
-        else
-        {
-            CString strHeaders = _T("Content-Type: application/x-www-form-urlencoded");
-            bRet = pHttpFile->SendRequest(strHeaders);
+
+        DWORD result;
+        http_file->QueryInfoStatusCode(result);
+
+        status_code = (std::uint16_t)result;
+
+        ULONGLONG dwResponseLength = http_file->GetLength();
+
+        while (0 != dwResponseLength) {
+            int nRead = http_file->Read(response_buffer, 4096);
+
+            response_buffer[nRead] = 0;
+
+            request_data += response_buffer;
+
+            dwResponseLength = http_file->GetLength();
         }
+    } catch (CInternetException* e) {
+        TCHAR error_buffer[255];
 
-        DWORD dwRet;
-        pHttpFile->QueryInfoStatusCode(dwRet);
-
-        uStatusCode = (std::uint16_t)dwRet;
-
-        ULONGLONG dwResponseLength = pHttpFile->GetLength();  
-
-        while (0 != dwResponseLength)
-        {
-            int nRead = pHttpFile->Read(szResponse, 4096);
-
-            szResponse[nRead] = 0;
-
-            strResultString += szResponse;
-
-            dwResponseLength = pHttpFile->GetLength();
-        }
-    }
-    catch (CInternetException* e)
-    {
-        TCHAR szError[255];
-
-        e->GetErrorMessage(szError,255);
+        e->GetErrorMessage(error_buffer, 255);
         e->Delete();
 
-        TRACE(_T("Error : '%s' \n"), CString(szError));
+        TRACE(_T("Error : '%s' \n"), CString(error_buffer));
 
         goto clearVariabls;
     }
 
-    strResultString.Replace(_T("\n"), _T("\r\n"));
+    request_data.Replace(_T("\n"), _T("\r\n"));
 
-    strResponse = strResultString;
+    response = request_data;
 
-    //  TRACE(_T("strResponse = '%s'\n"), strResponse);
+    //  TRACE(_T("response = '%s'\n"), response);
 
 clearVariabls:
-    if (pHttpFile)
-        pHttpFile->Close();
+    if (http_file)
+        http_file->Close();
 
-    if (pHttpConn)
-        pHttpConn->Close();
+    if (http_connection)
+        http_connection->Close();
 
-    if (pHttpFile)
-        delete pHttpFile;
+    if (http_file)
+        delete http_file;
 
-    if (pHttpConn)
-        delete pHttpConn;
+    if (http_connection)
+        delete http_connection;
 
-    oSession.Close();
+    session.Close();
 
-    return uStatusCode;
+    return status_code;
 }
 
-void ccWin32WebApiHelper::doRunThread()
-{
-    while (_bIsStopThread == false)
-    {
-        if (_aTransactionInfos.size() > 0)
-        {
-            std::string                         strResponse;
-            std::shared_ptr<XTransactionInfo>   pWorkTransction;
+void ccWin32WebApiHelper::run_thread() {
+    while (is_stop_thread_ == false) {
+        if (transaction_info_list_.size() > 0) {
+            std::string response;
+            std::shared_ptr<XTransactionInfo> work_transaction;
 
-            _mutex.lock();
-            pWorkTransction = _aTransactionInfos[0];
-            _aTransactionInfos.erase(_aTransactionInfos.begin());
-            _mutex.unlock();
+            mutex_.lock();
+            work_transaction = transaction_info_list_[0];
+            transaction_info_list_.erase(transaction_info_list_.begin());
+            mutex_.unlock();
 
-            if (pWorkTransction->_pNotifier)
-            {
-                std::uint16_t uStatusCode = doSendRequestAPI(pWorkTransction->_eMethod, pWorkTransction->_strWebAPI, pWorkTransction->_strRequestData, strResponse);
+            if (work_transaction->notifier_) {
+                std::uint16_t status_code = send_request_api(
+                    work_transaction->method_, work_transaction->web_api_,
+                    work_transaction->request_data_, response);
 
-                if (uStatusCode == 0)
-                    pWorkTransction->_pNotifier->onTransactionRecveResponse(uStatusCode, strResponse);
+                if (status_code == 0)
+                    work_transaction->notifier_->onTransactionRecveResponse(status_code,
+                                                                            response);
                 else
-                    pWorkTransction->_pNotifier->onTransactionRequestTimeout();
+                    work_transaction->notifier_->onTransactionRequestTimeout();
             }
         }
 
@@ -272,44 +279,15 @@ void ccWin32WebApiHelper::doRunThread()
     }
 }
 
+bool ccWin32WebApiHelper::get_value_string(Json::Value& json_value,
+                                           const std::string& name,
+                                           std::string& value,
+                                           std::string default_value) {
+    value = default_value;
 
-//void ccWin32WebApiHelper::OnHSTimer(EtDWORD uIDEvent)
-//{
-//    switch (uIDEvent)
-//    {
-//    case TID_CHECK_TRANSACTION:
-//        if (_aTransactionInfos.size() > 0)
-//        {
-//            std::string                         strResponse;
-//            std::shared_ptr<XTransactionInfo>   pWorkTransction;
-//
-//            _mutex.lock();
-//            pWorkTransction = _aTransactionInfos[0];
-//            _aTransactionInfos.erase(_aTransactionInfos.begin());
-//            _mutex.unlock();
-//
-//            if (pWorkTransction->_pNotifier)
-//            {
-//                if (DoSendRequestAPI(pWorkTransction->_strAPI, strResponse))
-//                    pWorkTransction->_pNotifier->OnTransactionRecveResponse(strResponse);
-//                else
-//                    pWorkTransction->_pNotifier->OnTransactionRequestTimeout();
-//            }
-//        }
-//        break;
-//    }
-//}
-
-
-bool ccWin32WebApiHelper::get_value_string(Json::Value& oValue, const std::string& strName, std::string& strValue, std::string strDefaultValue)
-{
-    strValue = strDefaultValue;
-
-    if (oValue.isMember(strName))
-    {
-        if (oValue[strName].isString())
-        {
-            strValue = oValue[strName].asString();
+    if (json_value.isMember(name)) {
+        if (json_value[name].isString()) {
+            value = json_value[name].asString();
 
             return true;
         }
@@ -318,15 +296,15 @@ bool ccWin32WebApiHelper::get_value_string(Json::Value& oValue, const std::strin
     return false;
 }
 
-bool ccWin32WebApiHelper::get_value_int(Json::Value& oValue, const std::string& strName, int& nValue, int nDefaultValue)
-{
-    nValue = nDefaultValue;
+bool ccWin32WebApiHelper::get_value_int(Json::Value& json_value,
+                                        const std::string& name,
+                                        int& nValue,
+                                        int default_value) {
+    nValue = default_value;
 
-    if (oValue.isMember(strName))
-    {
-        if (oValue[strName].isInt())
-        {
-            nValue = oValue[strName].asInt();
+    if (json_value.isMember(name)) {
+        if (json_value[name].isInt()) {
+            nValue = json_value[name].asInt();
 
             return true;
         }
@@ -334,5 +312,4 @@ bool ccWin32WebApiHelper::get_value_int(Json::Value& oValue, const std::string& 
 
     return false;
 }
-
 }

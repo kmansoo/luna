@@ -10,182 +10,160 @@
 namespace Luna {
 
 ccMongooseWebServerRequest::ccMongooseWebServerRequest(struct mg_connection* con, struct http_message* http_msg)
-    : _pMgConnection(con),
-      _pMgHttpMessage(http_msg),
-      _pPathPos(NULL),
-      _pathEnd(NULL)
-{
-    if (_pMgHttpMessage != NULL)
-    {
-        _strMethod.assign(_pMgHttpMessage->method.p, _pMgHttpMessage->method.len);
-        _strUri.assign(_pMgHttpMessage->uri.p, _pMgHttpMessage->uri.len);
+    : mg_connection_(con),
+    mg_http_message_(http_msg),
+    path_pos_(NULL),
+    path_end_(NULL) {
+    if (mg_http_message_ != NULL) {
+        method_.assign(mg_http_message_->method.p, mg_http_message_->method.len);
+        uri_.assign(mg_http_message_->uri.p, mg_http_message_->uri.len);
     }
 }
 
-ccMongooseWebServerRequest::~ccMongooseWebServerRequest()
-{
+ccMongooseWebServerRequest::~ccMongooseWebServerRequest() {
     // TODO Auto-generated destructor stub
 }
 
-std::string ccMongooseWebServerRequest::getQueryString()
-{
-    if (_pMgHttpMessage == NULL)
-        return _strNullData;
+std::string ccMongooseWebServerRequest::get_query_string() {
+    if (mg_http_message_ == NULL)
+        return blank_string_data_;
 
-    std::string strQuery(_pMgHttpMessage->query_string.p, _pMgHttpMessage->query_string.len);
+    std::string strQuery(mg_http_message_->query_string.p, mg_http_message_->query_string.len);
 
     return strQuery;
 }
 
-std::string ccMongooseWebServerRequest::getPath()
-{
-    if (_pMgHttpMessage == NULL)
-        return _strNullData;
+std::string ccMongooseWebServerRequest::get_path() {
+    if (mg_http_message_ == NULL)
+        return blank_string_data_;
 
-    doSplitePathPos();
+    splite_path_pos();
 
-    std::string strPath = _strUri;
+    std::string strPath = uri_;
 
-    if (_pPathPos != NULL)
-        strPath += _pPathPos;
+    if (path_pos_ != NULL)
+        strPath += path_pos_;
 
     return strPath;
 }
 
-std::string ccMongooseWebServerRequest::getResource()
-{
-    if (_pMgConnection == NULL)
-        return _strNullData;
+std::string ccMongooseWebServerRequest::get_resource() {
+    if (mg_connection_ == NULL)
+        return blank_string_data_;
 
-    doSplitePathPos();
+    splite_path_pos();
 
-    return std::string(_pPathPos, _pathEnd);
+    return std::string(path_pos_, path_end_);
 }
 
-bool ccMongooseWebServerRequest::hasVar(const std::string& name) const
-{
-    return doHasVarInConnection(name);
+bool ccMongooseWebServerRequest::has_variable(const std::string& name) const {
+    return has_variable_connection(name);
 }
 
 
-std::string ccMongooseWebServerRequest::getVar(const std::string& name)
-{
-    return doGetVarInConnection(name);
+std::string ccMongooseWebServerRequest::get_variable(const std::string& name) {
+    return get_variable_connection(name);
 }
 
-std::string ccMongooseWebServerRequest::getHeader(const std::string& name)
-{
-    if (_pMgHttpMessage == NULL)
-        return _strNullData;
+std::string ccMongooseWebServerRequest::get_header(const std::string& name) {
+    if (mg_http_message_ == NULL)
+        return blank_string_data_;
 
-    struct mg_str* pResult = mg_get_http_header(_pMgHttpMessage, name.c_str());
+    struct mg_str* pResult = mg_get_http_header(mg_http_message_, name.c_str());
 
     if (pResult == NULL)
-        return _strNullData;
+        return blank_string_data_;
 
-    std::string strHeader(pResult->p, pResult->len);
-
-    return strHeader;
+    return std::string(pResult->p, pResult->len);
 }
 
-std::string ccMongooseWebServerRequest::getContentType()
-{
-    return getHeader("Content-Type");
+std::string ccMongooseWebServerRequest::get_content_type() {
+    return get_header("Content-Type");
 }
 
-unsigned long ccMongooseWebServerRequest::getContentLength()
-{
-    std::string strContentLength = getHeader("Content-Length");
+unsigned long ccMongooseWebServerRequest::get_content_length() {
+    std::string strContentLength = get_header("Content-Length");
 
     return atol(strContentLength.c_str());
 }
 
 // Retrieve info for the server interface that was connected with the remote device.
-long ccMongooseWebServerRequest::getServerIp() const
-{
+long ccMongooseWebServerRequest::get_server_ip() const {
     return 0;
 }
 
-unsigned short  ccMongooseWebServerRequest::getServerPort() const
-{
+unsigned short  ccMongooseWebServerRequest::get_server_port() const {
     return 0;
 }
 
-long ccMongooseWebServerRequest::getRemoteIp() const
-{
+long ccMongooseWebServerRequest::get_remote_ip() const {
     return 0;
 }
 
-long ccMongooseWebServerRequest::getContentBody(std::string& strBody)
-{
-    if (_pMgHttpMessage == NULL)
+long ccMongooseWebServerRequest::get_content_body(std::string& strBody) {
+    if (mg_http_message_ == NULL)
         return 0;
 
-    strBody.append(_pMgHttpMessage->body.p, _pMgHttpMessage->body.len);
+    strBody.append(mg_http_message_->body.p, mg_http_message_->body.len);
 
-    return _pMgHttpMessage->body.len;
+    return mg_http_message_->body.len;
 }
 
-long ccMongooseWebServerRequest::getContentBody(char* pBuf, std::size_t size)
-{
-    if (_pMgHttpMessage == NULL || pBuf == NULL)
+long ccMongooseWebServerRequest::get_content_body(char* pBuf, std::size_t size) {
+    if (mg_http_message_ == NULL || pBuf == NULL)
         return 0;
 
-    std::size_t copy_size = (size > _pMgHttpMessage->body.len) ? _pMgHttpMessage->body.len : size;
+    std::size_t copy_size = (size > mg_http_message_->body.len) ? mg_http_message_->body.len : size;
 
-    memcpy(pBuf, _pMgHttpMessage->body.p, copy_size);
+    memcpy(pBuf, mg_http_message_->body.p, copy_size);
 
     return copy_size;
 }
 
 //  private method
-void ccMongooseWebServerRequest::doSplitePathPos() const
-{
-    if (_pPathPos || _pMgHttpMessage == NULL)
+void ccMongooseWebServerRequest::splite_path_pos() const {
+    if (path_pos_ || mg_http_message_ == NULL)
         return;
 
     char const * slash = 0;
-    char const * it = _pMgHttpMessage->uri.p;
+    char const * it = mg_http_message_->uri.p;
 
-    for (std::size_t nIndex = 0; nIndex < _pMgHttpMessage->uri.len; nIndex++)
-    {
+    for (std::size_t nIndex = 0; nIndex < mg_http_message_->uri.len; nIndex++) {
         if (*it == '/')
             slash = it;
 
         ++it;
     }
 
-    _pathEnd    = it;
-    _pPathPos   = slash == 0 ? _pathEnd : slash + 1;
+    path_end_ = it;
+    path_pos_ = slash == 0 ? path_end_ : slash + 1;
 }
 
-bool ccMongooseWebServerRequest::doHasVarInConnection(const std::string& name) const
-{
-    if (_pMgHttpMessage == NULL)
+bool ccMongooseWebServerRequest::has_variable_connection(const std::string& name) const {
+    if (mg_http_message_ == NULL)
         return false;
 
     char outbuf[CV_MAXGETSIZE];
 
-    return mg_get_http_var(&_pMgHttpMessage->body, name.c_str(), &outbuf[0], CV_MAXGETSIZE) > 0;
+    return mg_get_http_var(&mg_http_message_->body, name.c_str(), &outbuf[0], CV_MAXGETSIZE) > 0;
 }
 
-std::string ccMongooseWebServerRequest::doGetVarInConnection(const std::string& name)
-{
-    std::string strGetData;
+std::string ccMongooseWebServerRequest::get_variable_connection(const std::string& name) {
+    std::string variable_data;
 
-    strGetData.resize(CV_MAXGETSIZE);
+    variable_data.resize(CV_MAXGETSIZE);
 
     int sz = -1;
-    
-    if (_pMgHttpMessage != NULL)
-        sz = mg_get_http_var(&_pMgHttpMessage->query_string, name.c_str(), &strGetData[0], strGetData.size());
+
+    if (mg_http_message_ != NULL)
+        sz = mg_get_http_var(&mg_http_message_->query_string, name.c_str(), &variable_data[0], variable_data.size());
 
     if (sz == -1)
-        return _strNullData;
+        return blank_string_data_;
 
-    strGetData.resize(sz);
+    variable_data.resize(sz);
 
-    return strGetData;
+    return variable_data;
 }
 
 }

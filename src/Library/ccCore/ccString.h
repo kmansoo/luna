@@ -12,8 +12,7 @@
 
 namespace Luna {
 
-class ccString : public std::string
-{
+class ccString : public std::string {
 public:
     ccString();
     ccString(const char* strInitData);
@@ -23,45 +22,41 @@ public:
     virtual ~ccString();
 
 public:
-    ccString& operator=(const ccString& _Right)
-    {   // assign _Right
+    ccString& operator=(const ccString& _Right) {   // assign _Right
         std::string::assign(_Right.c_str());
 
         return *this;
     }
 
-    ccString& operator=(const std::string& _Right)
-    {   // assign _Right
+    ccString& operator=(const std::string& _Right) {   // assign _Right
         std::string::assign(_Right.c_str());
 
         return *this;
     }
 
-    ccString& operator=(const char *_Ptr)
-    {   // assign [_Ptr, <null>)
+    ccString& operator=(const char *_Ptr) {   // assign [_Ptr, <null>)
         std::string::assign(_Ptr);
 
         return *this;
     }
 
-    ccString& operator=(char _Ch)
-    {   // assign 1 * _Ch
+    ccString& operator=(char _Ch) {   // assign 1 * _Ch
         std::string::assign(1, _Ch);
 
         return *this;
     }
 
 public:
-    void            replaceStringInPlace(const ccString& search, const ccString& replace);
+    void            replace_string_in_place(const ccString& search, const ccString& replace);
 
-    void            makeUpper();
-    void            makeLower();
+    void            make_upper();
+    void            make_lower();
 
     void            trim();
-    void            trimLeft();
-    void            trimRight();
+    void            trim_left();
+    void            trim_right();
 
-    unsigned long   decodeHex(int *length = NULL);
+    unsigned long   decode_hex(int *length = NULL);
 
 public:
     // Supports up to 512 bytes
@@ -73,9 +68,8 @@ public:
     static  bool    decode_base64(std::string& destStr, std::string& src);
 
 private:
-    enum CONST_VALUE
-    {
-        CV_MAX_FORMAT_BUFFER_SIZE = 512
+    enum CONST_VALUE {
+        kMaxFormatBufferSize = 512
     };
 };
 

@@ -14,245 +14,218 @@
 namespace Luna {
 
 ccWebServerResponse::ccWebServerResponse() :
-    _uStatudCode(100),
-    _bStatusSet(false),
-    _bContentTypeSet(false),
-    _bContentLengthSet(false),
-    _bHeadersSent(false)
-{
+    status_code_(100),
+    is_status_set_(false),
+    is_content_type_set_(false),
+    is_content_length_set_(false),
+    is_haders_sent_(false) {
     // TODO Auto-generated constructor stub
 
 }
 
-ccWebServerResponse::~ccWebServerResponse()
-{
+ccWebServerResponse::~ccWebServerResponse() {
     // TODO Auto-generated destructor stub
 }
 
-void ccWebServerResponse::status(unsigned int code, const std::string& strStatusText, bool bNoContent)
-{
-    if (_bStatusSet)
+void ccWebServerResponse::send_status(unsigned int code, const std::string& strStatusText, bool bNoContent) {
+    if (is_status_set_)
         return;
 
     if (code == 200)
-        doPrintf("HTTP/1.1 %d OK\r\n", code);
-    else
-    {
+        send_formatted_content_impl("HTTP/1.1 %d OK\r\n", code);
+    else {
         if (strStatusText.length() == 0)
-            doPrintf("HTTP/1.1 %d\r\n", code);
+            send_formatted_content_impl("HTTP/1.1 %d\r\n", code);
         else
-            doPrintf("HTTP/1.1 %d %s\r\n", code, strStatusText.c_str());
+            send_formatted_content_impl("HTTP/1.1 %d %s\r\n", code, strStatusText.c_str());
     }
 
-    _bStatusSet = true;
+    is_status_set_ = true;
 
     if (bNoContent)
-        closeeWithoutContent();
+        close_without_content();
 }
 
-void ccWebServerResponse::status(unsigned int code, const std::string& strStatusText, const std::string& strExtInfo)
-{
-    if (_bStatusSet)
+void ccWebServerResponse::send_status(unsigned int code, const std::string& strStatusText, const std::string& strExtInfo) {
+    if (is_status_set_)
         return;
 
-    if (code == 200 || strStatusText.length() == 0 || strExtInfo.length() == 0)
-    {
-        status(code, strStatusText, true);
+    if (code == 200 || strStatusText.length() == 0 || strExtInfo.length() == 0) {
+        send_status(code, strStatusText, true);
         return;
     }
 
-    doPrintf(
+    send_formatted_content_impl(
         "HTTP/1.1 %d %s\r\n"
         "%s\r\n",
         code,
         strStatusText.c_str(),
         strExtInfo.c_str());
 
-    _bStatusSet = true;
+    is_status_set_ = true;
 }
 
-void ccWebServerResponse::contentType(const std::string& type, bool bInsertSeparator)
-{
-    contentType(type, 0, bInsertSeparator);
+void ccWebServerResponse::send_content_type(const std::string& type, bool bInsertSeparator) {
+    send_content_type(type, 0, bInsertSeparator);
 }
 
-void ccWebServerResponse::contentType(const std::string& type, size_t size, bool bInsertSeparator)
-{
-    if (_bContentTypeSet)
+void ccWebServerResponse::send_content_type(const std::string& type, size_t size, bool bInsertSeparator) {
+    if (is_content_type_set_)
         return;
 
-    std::string strHeaderInfo;
-    std::string strContentType = type;
+    std::string header_info;
+    std::string content_type = type;
 
-    if (strContentType.length() == 0)
-        strContentType = "text/plain";
+    if (content_type.length() == 0)
+        content_type = "text/plain";
 
-    if (!_bStatusSet)
-    {
+    if (!is_status_set_) {
         ccString::format(
-            strHeaderInfo,
+            header_info,
             "HTTP/1.1 200 OK\r\n"
             "Content-Type: %s\r\n"
             "Content-Length: %d\r\n"        // Always set Content-Length
             "Connection: close\r\n",
-            strContentType.c_str(),
+            content_type.c_str(),
             size);
-    }
-    else
-    {
+    } else {
         ccString::format(
-            strHeaderInfo,
+            header_info,
             "Content-Type: %s\r\n"
             "Content-Length: %d\r\n"        // Always set Content-Length
             "Connection: close\r\n",
-            strContentType.c_str(),
+            content_type.c_str(),
             size);
     }
 
     if (bInsertSeparator)
-        strHeaderInfo += "\r\n";
+        header_info += "\r\n";
 
-    doWriteContentToConnector(strHeaderInfo.c_str(), strHeaderInfo.length());
+    write_content_to_connector(header_info.c_str(), header_info.length());
 
-    _bContentTypeSet = true;
+    is_content_type_set_ = true;
 }
 
-void ccWebServerResponse::headerInfo(const std::string& type, size_t size, std::string& strExtInfo, bool bInsertSeparator)
-{
-    if (_bContentTypeSet)
+void ccWebServerResponse::header_info(const std::string& type, size_t size, std::string& strExtInfo, bool bInsertSeparator) {
+    if (is_content_type_set_)
         return;
 
-    std::string strContentType = type;
+    std::string content_type = type;
 
-    if (strContentType.length() == 0)
-        strContentType = "text/plain";
+    if (content_type.length() == 0)
+        content_type = "text/plain";
 
-    std::string strHeaderInfo;
+    std::string header_info;
 
-    if (!_bStatusSet)
-    {
+    if (!is_status_set_) {
         ccString::format(
-            strHeaderInfo,
+            header_info,
             "HTTP/1.1 200 OK\r\n"
             "Content-Type: %s\r\n"
             "Content-Length: %d\r\n"        // Always set Content-Length
             "Connection: close\r\n"
             "%s\r\n",
-            strContentType.c_str(),
+            content_type.c_str(),
             size,
             strExtInfo.c_str());
-    }
-    else
-    {
+    } else {
         ccString::format(
-            strHeaderInfo,
+            header_info,
             "Content-Type: %s\r\n"
             "Content-Length: %d\r\n"        // Always set Content-Length
             "Connection: close\r\n"
             "%s\r\n",
-            strContentType.c_str(),
+            content_type.c_str(),
             size,
             strExtInfo.c_str());
     }
 
     if (bInsertSeparator)
-        strHeaderInfo += "\r\n";
+        header_info += "\r\n";
 
-    doWriteContentToConnector(strHeaderInfo.c_str(), strHeaderInfo.length());
+    write_content_to_connector(header_info.c_str(), header_info.length());
 
-    _bContentTypeSet = true;
+    is_content_type_set_ = true;
 }
 
 
-size_t ccWebServerResponse::printf(const char *fmt, ...)
-{
-    doCheckHeadersSent();
+size_t ccWebServerResponse::send_formatted_content(const char *fmt, ...) {
+    check_header_sent();
 
     va_list ap;
     va_start(ap, fmt);
 
-    int result = vprintf(fmt,ap);
+    int result = vprintf(fmt, ap);
     va_end(ap);
 
     return result;
 }
 
-size_t ccWebServerResponse::vprintf(const char *fmt, va_list ap)
-{
+size_t ccWebServerResponse::send_formatted_content_ex(const char *fmt, va_list ap) {
     char buf[kMaxBufferSize];
 
-    int nCalculatedSize = 0;
+    int calculated_size = 0;
 
     if (kMaxBufferSize == 0)
         return 0;
 
 #ifdef  WIN32
-    nCalculatedSize = vsnprintf_s(buf, kMaxBufferSize, fmt, ap);
+    calculated_size = vsnprintf_s(buf, kMaxBufferSize, fmt, ap);
 #else
-    nCalculatedSize = vsnprintf(buf, kMaxBufferSize, fmt, ap);
+    calculated_size = vsnprintf(buf, kMaxBufferSize, fmt, ap);
 #endif
 
-    if (nCalculatedSize < 0)
-    {
+    if (calculated_size < 0) {
         printf("vsnprintf error");
-        nCalculatedSize = 0;
-    }
-    else
-    {
-        if (nCalculatedSize >= (int) kMaxBufferSize)
-        {
-            printf("truncating vsnprintf buffer: [%.*s]",  nCalculatedSize > 200 ? 200 : nCalculatedSize, buf);
-            nCalculatedSize = (int) kMaxBufferSize - 1;
+        calculated_size = 0;
+    } else {
+        if (calculated_size >= (int)kMaxBufferSize) {
+            printf("truncating vsnprintf buffer: [%.*s]", calculated_size > 200 ? 200 : calculated_size, buf);
+            calculated_size = (int)kMaxBufferSize - 1;
         }
     }
 
-    buf[nCalculatedSize] = '\0';
+    buf[calculated_size] = '\0';
 
-    return doWriteContentToConnector((const char*)buf, nCalculatedSize);
+    return write_content_to_connector((const char*)buf, calculated_size);
 }
 
-size_t ccWebServerResponse::write(const std::string& buf)
-{
-    doCheckHeadersSent();
+size_t ccWebServerResponse::send_content(const std::string& buf) {
+    check_header_sent();
 
-    return doWriteContentToConnector(buf.c_str(), buf.length());
+    return write_content_to_connector(buf.c_str(), buf.length());
 }
 
-size_t ccWebServerResponse::write(const char* strBuf, size_t size)
-{
-    return doWriteContentToConnector(strBuf, size);
+size_t ccWebServerResponse::send_content(const char* strBuf, size_t size) {
+    return write_content_to_connector(strBuf, size);
 }
 
-size_t ccWebServerResponse::write(std::istream & is)
-{
-    size_t  uSentSize = 0;
+size_t ccWebServerResponse::send_content(std::istream & is) {
+    size_t  sent_size = 0;
     char    buf[kMaxBufferSize];
 
-    while (is)
-    {
+    while (is) {
         is.read(&buf[0], kMaxBufferSize);
 
-        uSentSize += doWriteContentToConnector((const char*)&buf[0], (size_t)is.gcount());
+        sent_size += write_content_to_connector((const char*)&buf[0], (size_t)is.gcount());
     }
 
-    return uSentSize;
+    return sent_size;
 }
 
-void ccWebServerResponse::closeeWithoutContent()
-{
-    if (!_bStatusSet)
+void ccWebServerResponse::close_without_content() {
+    if (!is_status_set_)
         return;
 
-    if (!_bContentTypeSet)
-        contentType(std::string(""));
+    if (!is_content_type_set_)
+        send_content_type(std::string(""));
 }
 
-bool ccWebServerResponse::notFoundFile(const std::string& strURI)
-{
-    std::string strContent;
+bool ccWebServerResponse::not_found_file(const std::string& strURI) {
+    std::string content;
 
     ccString::format(
-        strContent,
+        content,
         "<!DOCTYPE html>\r\n"
         "<html lang=en>\r\n"
         "<head>\r\n"
@@ -267,35 +240,31 @@ bool ccWebServerResponse::notFoundFile(const std::string& strURI)
         "</html>\r\n",
         strURI.c_str());
 
-    status(404, "Not Found", false);
-    contentType("text/html", strContent.length());
+    send_status(404, "Not Found", false);
+    send_content_type("text/html", content.length());
 
-    doWriteContentToConnector(strContent.c_str(), strContent.length());
+    write_content_to_connector(content.c_str(), content.length());
 
     return true;
 }
 
-
-void ccWebServerResponse::doCheckHeadersSent()
-{
-    if (_bHeadersSent)
+void ccWebServerResponse::check_header_sent() {
+    if (is_haders_sent_)
         return;
 
-    if (!_bContentTypeSet)
-        contentType("text/plain");
+    if (!is_content_type_set_)
+        send_content_type("text/plain");
 
-    _bHeadersSent = true;
+    is_haders_sent_ = true;
 }
 
-size_t ccWebServerResponse::doPrintf(const char *fmt, ...)
-{
+size_t ccWebServerResponse::send_formatted_content_impl(const char *fmt, ...) {
     va_list ap;
     va_start(ap, fmt);
 
     size_t result = vprintf(fmt, ap);
 
     va_end(ap);
-
 
     return result;
 }

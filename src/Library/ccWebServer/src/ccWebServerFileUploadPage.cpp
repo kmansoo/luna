@@ -9,86 +9,87 @@
 
 namespace Luna {
 
+// class ccWebServerFileUploadAgent
+ccWebServerFileUploadAgent::ccWebServerFileUploadAgent(
+    std::uint32_t id,
+    std::string local_file_path,
+    ccWebServerFileUploadPage* parent)
+    : id_(id), parent_(parent), local_file_path_(local_file_path) {
+    upload_file_length_ = 0;
+    received_data_length_ = 0;
+}
 
-    // class ccWebServerFileUploadAgent
-    ccWebServerFileUploadAgent::ccWebServerFileUploadAgent(std::uint32_t id, std::string localFilePath, ccWebServerFileUploadPage* parent)
-        : id_(id), parent_(parent), localFilePath_(localFilePath)
-    {
-        uploadFileLength_ = 0;
-        receivedDataLength_ = 0;
+ccWebServerFileUploadAgent::~ccWebServerFileUploadAgent() {
+    on_finish_upload();
+}
+
+bool ccWebServerFileUploadAgent::on_file_info(const std::string& file_name, size_t file_size) {
+    std::string open_file_name = file_name;
+
+    if (open_file_name.length() == 0) {
+        open_file_name = local_file_path_;
+
+        if (open_file_name.length() == 0)
+            open_file_name = "noname_uploadfile.dat";
     }
 
-    ccWebServerFileUploadAgent::~ccWebServerFileUploadAgent() 
-    {
-        onFinishUpload();
-    }
+    upload_file_.open(open_file_name, std::ios_base::binary);
 
-    bool ccWebServerFileUploadAgent::onFileInfo(const std::string& filename, size_t file_size)
-    {
-        std::string open_filename = filename;
+    return upload_file_.is_open();
+}
 
-        if (open_filename.length() == 0)
-        {
-            open_filename = localFilePath_;
+bool ccWebServerFileUploadAgent::on_receive_data(const char* data, size_t size) {
+    if (!upload_file_.is_open())
+        return false;
 
-            if (open_filename.length() == 0)
-                open_filename = "noname_uploadfile.dat";
-        }
+    upload_file_.write(data, size);
 
-        uploadFile_.open(open_filename, std::ios_base::binary);
+    return true;
+}
 
-        return uploadFile_.is_open();
-    }
+bool ccWebServerFileUploadAgent::on_finish_upload() {
+    if (!upload_file_.is_open())
+        return false;
 
-    bool ccWebServerFileUploadAgent::onReceiveData(const char* data, size_t size)
-    {
-        if (!uploadFile_.is_open())
-            return false;
+    upload_file_.close();
 
-        uploadFile_.write(data, size);
+    return true;
+}
 
-        return true;
-    }
+// class ccWebServerFileUploadPage
+ccWebServerFileUploadPage::ccWebServerFileUploadPage(const std::string& path, bool single_agent)
+    : ccWebServerPage(path), generate_id_(0x00) {
+}
 
-    bool ccWebServerFileUploadAgent::onFinishUpload()
-    {
-        if (!uploadFile_.is_open())
-            return false;
+ccWebServerFileUploadPage::ccWebServerFileUploadPage(
+    const std::string& path,
+    const std::string& local_file_path,
+    bool single_agent)
+    : ccWebServerPage(path),
+    generate_id_(0x00),
+    local_file_path_(local_file_path) {
+}
 
-        uploadFile_.close();
+ccWebServerFileUploadAgent* ccWebServerFileUploadPage::create_file_upload_agent() {
+    if (single_agent_ && agents_.size() != 0)
+        return nullptr;
 
-        return true;
-    }
+    mtx_.lock();
+    generate_id_++;
+    mtx_.unlock();
 
-    // class ccWebServerFileUploadPage
-    ccWebServerFileUploadPage::ccWebServerFileUploadPage(const std::string& path, bool singleAgent) : ccWebServerPage(path), generate_id_(0x00)
-    {
-    }
+    std::shared_ptr<ccWebServerFileUploadAgent> new_agent =
+        std::make_shared<ccWebServerFileUploadAgent>(generate_id_, local_file_path_,
+                                                     this);
 
-    ccWebServerFileUploadPage::ccWebServerFileUploadPage(const std::string& path, const std::string& local_file_path, bool singleAgent) :
-        ccWebServerPage(path), generate_id_(0x00), localFilePath_(local_file_path)
-    {
-    }
+    agents_[generate_id_] = new_agent;
 
-    ccWebServerFileUploadAgent* ccWebServerFileUploadPage::creteFileUploadAgent()
-    {
-        if (singleAgent_ && agents_.size() != 0)
-            return nullptr;
+    return new_agent.get();
+}
 
-        mtx_.lock();
-        generate_id_++;
-        mtx_.unlock();
+void ccWebServerFileUploadPage::destroy_file_upload_agent(ccWebServerFileUploadAgent* agent) {
+    if (agent)
+        agents_.erase(agent->get_id());
+}
 
-        std::shared_ptr<ccWebServerFileUploadAgent> newAgent = std::make_shared<ccWebServerFileUploadAgent>(generate_id_, localFilePath_, this);
-
-        agents_[generate_id_] = newAgent;
-
-        return newAgent.get();
-    }
-
-    void ccWebServerFileUploadPage::destroyFileUploadAgent(ccWebServerFileUploadAgent* agent)
-    {
-        if (agent)
-            agents_.erase(agent->getID());
-    }
 }

@@ -117,8 +117,8 @@ class _DummyWebSocket : public easywsclient::WebSocket
   public:
     void poll(int timeout) { }
     void send(const std::string& message) { }
-    void sendBinary(const std::string& message) { }
-    void sendBinary(const std::vector<uint8_t>& message) { }
+    void send_binary(const std::string& message) { }
+    void send_binary(const std::vector<uint8_t>& message) { }
     void sendPing() { }
     void close() { } 
     readyStateValues getReadyState() const { return CLOSED; }
@@ -454,11 +454,11 @@ class _RealWebSocket : public easywsclient::WebSocket
         sendData(wsheader_type::TEXT_FRAME, message.size(), message.begin(), message.end());
     }
 
-    void sendBinary(const std::string& message) {
+    void send_binary(const std::string& message) {
         sendData(wsheader_type::BINARY_FRAME, message.size(), message.begin(), message.end());
     }
 
-    void sendBinary(const std::vector<uint8_t>& message) {
+    void send_binary(const std::vector<uint8_t>& message) {
         sendData(wsheader_type::BINARY_FRAME, message.size(), message.begin(), message.end());
     }
 
@@ -605,6 +605,7 @@ easywsclient::WebSocket::pointer from_url(const std::string& url, bool useMask, 
     fcntl(sockfd, F_SETFL, O_NONBLOCK);
 #endif
     fprintf(stderr, "Connected to: %s\n", url.c_str());
+
     return easywsclient::WebSocket::pointer(new _RealWebSocket(sockfd, useMask));
 }
 

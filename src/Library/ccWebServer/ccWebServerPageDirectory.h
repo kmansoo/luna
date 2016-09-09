@@ -17,29 +17,29 @@
 #include "ccWebServerFileDownloadPage.h"
 
 namespace Luna {
-    class ccWebServer;
+class ccWebServer;
 
-    class ccWebServerPageDirectory
-    {
-    public:
-        ccWebServerPageDirectory();
-        virtual ~ccWebServerPageDirectory();
+class ccWebServerPageDirectory {
+public:
+    ccWebServerPageDirectory();
+    virtual ~ccWebServerPageDirectory();
 
-    public:
-        void    init(ccWebServer& server);
+public:
+    void    init(ccWebServer& server);
 
-        bool    registerPage(std::shared_ptr<ccWebServerPage> page);
-        bool    unregisterPage(const std::string& path);
+    bool    register_page(std::shared_ptr<ccWebServerPage> page);
+    bool    unregister_page(const std::string& path);
 
-        bool    processRequest(std::shared_ptr<ccWebServerRequest> request, std::shared_ptr<ccWebServerResponse> response);
+    bool    process_request(std::shared_ptr<ccWebServerRequest> request, std::shared_ptr<ccWebServerResponse> response);
 
-        std::shared_ptr<ccWebServerPage> findPage(const std::string& uri);
-        std::shared_ptr<ccWebServerFileUploadPage> findFileUploadPage(const std::string& uri);
-        std::shared_ptr<ccWebServerFileDownloadPage> findFileDownloadPage(const std::string& uri);
+    std::shared_ptr<ccWebServerPage> find_page(const std::string& uri);
+    std::shared_ptr<ccWebServerFileUploadPage> find_file_upload_page(const std::string& uri);
+    std::shared_ptr<ccWebServerFileDownloadPage> find_file_downalod_page(const std::string& uri);
 
-    private:
-        std::unordered_map<std::string, std::shared_ptr<ccWebServerPage>>   pages_;
-    };
+private:
+    std::unordered_map<std::string, std::shared_ptr<ccWebServerPage>>   pages_;
+};
+
 }
 
 #endif /* CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVERPAGEDIRECTORY_H_ */

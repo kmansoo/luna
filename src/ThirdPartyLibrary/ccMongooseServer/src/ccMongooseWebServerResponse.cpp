@@ -10,20 +10,15 @@
 namespace Luna {
 
 ccMongooseWebServerResponse::ccMongooseWebServerResponse(struct mg_connection* con) :
-    _pMgConnection(con)
-{
-    // TODO Auto-generated constructor stub
-
+    mg_connection_(con) {
 }
 
-ccMongooseWebServerResponse::~ccMongooseWebServerResponse()
-{
+ccMongooseWebServerResponse::~ccMongooseWebServerResponse() {
     // TODO Auto-generated destructor stub
 }
 
-size_t ccMongooseWebServerResponse::doWriteContentToConnector(const char* strBuf, size_t size)
-{
-    mg_send(_pMgConnection, strBuf, size);
+size_t ccMongooseWebServerResponse::doWriteContentToConnector(const char* strBuf, size_t size) {
+    mg_send(mg_connection_, strBuf, size);
 
     return size;
 }

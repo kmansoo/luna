@@ -9,34 +9,26 @@
 
 namespace Luna {
 
-ccRESTfulApi::ccRESTfulApi()
-{
-}
+ccRESTfulApi::ccRESTfulApi() {}
 
+ccRESTfulApi::~ccRESTfulApi() {}
 
-ccRESTfulApi::~ccRESTfulApi()
-{
-}
+bool ccRESTfulApi::has_api(const std::string& uri) {
+    auto it = api_map_.find(uri);
 
-bool ccRESTfulApi::hasAPI(const std::string& strUri)
-{
-    auto it = _aAPIs.find(strUri);
-
-    if (it == _aAPIs.end())
-    {
+    if (it == api_map_.end()) {
         //  '/xxx/xxx/*' 패턴을 찾음
-        std::string strTemp = strUri;
+        std::string tempuri_ = uri;
 
-        int nPos = strTemp.rfind("/");
+        int nPos = tempuri_.rfind("/");
 
-        if (nPos >= 0)
-        {
-            strTemp.erase(nPos + 1, (strTemp.length() - nPos) - 1);
+        if (nPos >= 0) {
+            tempuri_.erase(nPos + 1, (tempuri_.length() - nPos) - 1);
 
-            strTemp += "*";
-            it = _aAPIs.find(strTemp);
+            tempuri_ += "*";
+            it = api_map_.find(tempuri_);
 
-            if (it == _aAPIs.end())
+            if (it == api_map_.end())
                 return false;
         }
     }
@@ -44,37 +36,39 @@ bool ccRESTfulApi::hasAPI(const std::string& strUri)
     return true;
 }
 
-bool ccRESTfulApi::performAPI(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)
-{
-    std::string strUri = pRequest->getURI();
+bool ccRESTfulApi::perform_api(
+    std::shared_ptr<ccWebServerRequest> request,
+    std::shared_ptr<ccWebServerResponse> response) {
 
-    auto it = _aAPIs.find(strUri);
+    std::string uri = request->geturi_();
 
-    if (it == _aAPIs.end())
-    {
+    auto it = api_map_.find(uri);
+
+    if (it == api_map_.end()) {
         //  '/xxx/xxx/*' 패턴을 찾음
-        std::string strTemp = strUri;
+        std::string tempuri_ = uri;
 
-        int nPos = strTemp.rfind("/");
+        int nPos = tempuri_.rfind("/");
 
-        if (nPos >= 0)
-        {
-            strTemp.erase(nPos + 1, (strTemp.length() - nPos) - 1);
+        if (nPos >= 0) {
+            tempuri_.erase(nPos + 1, (tempuri_.length() - nPos) - 1);
 
-            strTemp += "*";
-            it = _aAPIs.find(strTemp);
+            tempuri_ += "*";
+            it = api_map_.find(tempuri_);
 
-            if (it == _aAPIs.end())
+            if (it == api_map_.end())
                 return false;
         }
     }
 
-    return it->second(pRequest, pResponse);
+    return it->second(request, response);
 }
 
-bool ccRESTfulApi::addAPI(const std::string& strUri, std::function<bool(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)> f)
-{
-    _aAPIs[strUri] = f;
+bool ccRESTfulApi::addAPI(
+    const std::string& uri,
+    std::function<bool(std::shared_ptr<ccWebServerRequest> request,
+                       std::shared_ptr<ccWebServerResponse> response)> f) {
+    api_map_[uri] = f;
 
     return true;
 }

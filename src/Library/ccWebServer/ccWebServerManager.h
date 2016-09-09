@@ -22,10 +22,8 @@
 
 namespace Luna {
 
-class ccWebServerManager : 
-    public ccSingletonT<ccWebServerManager>,
-    public ccWebServerEventListener
-{
+class ccWebServerManager : public ccSingletonT<ccWebServerManager>,
+    public ccWebServerEventListener {
 public:
     virtual ~ccWebServerManager();
 
@@ -34,44 +32,56 @@ protected:
     friend class ccSingletonT<ccWebServerManager>;
 
 public:
-    void    attachFactory(std::shared_ptr<ccWebServerObjectFactory> pFactory);
+    void attach_factory(std::shared_ptr<ccWebServerObjectFactory> pFactory);
 
-    bool    createWebServer(const std::string& name, const std::string& ports, std::shared_ptr<ccWebServerPageDirectory> page_directory = nullptr);
-    bool    createWebServer(const std::string& name, const std::string& ports, const std::string& root_path, std::shared_ptr<ccWebServerPageDirectory> page_directory = nullptr);
+    bool create_web_server(
+        const std::string& name,
+        const std::string& ports,
+        std::shared_ptr<ccWebServerPageDirectory> page_directory = nullptr);
 
-    std::shared_ptr<ccWebServer> getWebServer(const char* strName);
+    bool create_web_server(
+        const std::string& name,
+        const std::string& ports,
+        const std::string& root_path,
+        std::shared_ptr<ccWebServerPageDirectory> page_directory = nullptr);
 
-    void    start();
-    void    stop();
+    std::shared_ptr<ccWebServer> get_web_server(const char* strName);
 
-    bool    addRESTfulApi(std::shared_ptr<ccRESTfulApi> pNewAPI);
-    bool    removeRESTfulApi(std::shared_ptr<ccRESTfulApi> pNewAPI);
-    bool    removeAllRESTfulApi();
+    void start();
+    void stop();
 
-    bool    addWebsocketManager(std::shared_ptr<ccWebsocketManager> pNewWSGM);
-    bool    removeWebsocketManager(std::shared_ptr<ccWebsocketManager> pNewWSGM);
-    bool    removeAllWebsocketManager();
+    bool add_restful_api(std::shared_ptr<ccRESTfulApi> new_api);
+    bool remove_restful_api(std::shared_ptr<ccRESTfulApi> new_api);
+    bool remove_all_restful_api();
+
+    bool add_websocket_manager(std::shared_ptr<ccWebsocketManager> new_websocket_manager);
+    bool remove_websocket_manager(std::shared_ptr<ccWebsocketManager> new_websocket_manager);
+    bool remove_all_websocket_manager();
 
 protected:
-    virtual bool    onWebServerRequest(std::shared_ptr<ccWebServerRequest> request, std::shared_ptr<ccWebServerResponse> response);
+    virtual bool on_web_request(
+        std::shared_ptr<ccWebServerRequest> request,
+        std::shared_ptr<ccWebServerResponse> response);
 
-    virtual bool    onNewWebsocketRequest(const std::string& strWebsocketUri);
-    virtual void    onWebsocketCreated(std::shared_ptr<ccWebsocket> newWebsocket);
-    virtual void    onWebsocketConnected(std::int32_t socketID);
-    virtual void    onWebsocketReceivedData(std::int32_t socketID, const std::string& strData);
-    virtual void    onWebsocketDisconnected(std::int32_t socketID);
+    virtual bool on_new_websocket_request(const std::string& websocketuri_);
+    virtual void on_websocket_created(std::shared_ptr<ccWebsocket> new_websocket);
+    virtual void on_websocket_connected(std::int32_t socket_id);
+    virtual void on_websocket_received_data(std::int32_t socket_id, const std::string& data);
+    virtual void on_websocket_disconnected(std::int32_t socket_id);
 
 protected:
-    void    doPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent eEvent, std::int32_t socketID, const std::string& strData);
+    void doPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent event,
+                                 std::int32_t socket_id,
+                                 const std::string& data);
 
 private:
-    std::shared_ptr<ccWebServerObjectFactory>       _pObjFactory;
-    std::vector< std::shared_ptr<ccWebServer> >     _aWebServers;
+    std::shared_ptr<ccWebServerObjectFactory> obj_factory_;
+    std::vector<std::shared_ptr<ccWebServer> > web_server_list_;
 
-    std::vector< std::shared_ptr<ccRESTfulApi> >        _aWebAPIs;
-    std::vector<std::shared_ptr<ccWebsocketManager> >   _aWSMs;
+    std::vector<std::shared_ptr<ccRESTfulApi> > web_api_list_;
+    std::vector<std::shared_ptr<ccWebsocketManager> > websocket_manager_list_;
 
-    const std::string                                   _strNoData;
+    const std::string blank_string_;
 };
 
 }

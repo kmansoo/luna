@@ -14,8 +14,7 @@
 
 namespace Luna {
 
-class ccNetworkManager : public ccSingletonT<ccNetworkManager>
-{
+class ccNetworkManager : public ccSingletonT<ccNetworkManager> {
 public:
     virtual ~ccNetworkManager();
 
@@ -27,18 +26,18 @@ public:
     bool    init();
     void    shutdown();
 
-    bool    getLocalIP(std::string& strIP);
-    bool    getNetMaskIP(std::string& strIP);
-    bool    getGatewayIP(std::string& strIP);
+    bool    get_local_ip(std::string& ip);
+    bool    get_subnet_mask(std::string& mask);
+    bool    get_gateway_ip(std::string& ip);
 
-    std::uint32_t   convertIP2Int(const std::string& strIP);
-    bool            convertInt2IP(std::uint32_t uIP, std::string& strIP);
-    bool            isPublicIP(const std::string& strIP);
+    std::uint32_t   convert_ip_to_int(const std::string& ip);
+    bool            convert_int_to_ip(std::uint32_t uIP, std::string& ip);
+    bool            is_public_ip(const std::string& ip);
 
-    bool            getHostName(std::string& strName);
+    bool            get_host_name(std::string& strName);
 
 private:
-    bool    _bIsInitNetwork;
+    bool    is_init_network_;
 };
 
 }

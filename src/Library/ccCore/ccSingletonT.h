@@ -11,11 +11,9 @@
 namespace Luna {
 
     template<typename T>
-    class ccSingletonT
-    {
+    class ccSingletonT {
     public:
-        static T& getInstance()
-        {
+        static T& instance() {
             static T me;
             return me;
         }

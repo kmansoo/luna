@@ -18,21 +18,28 @@
 
 namespace Luna {
 
-class ccRESTfulApi
-{
+class ccRESTfulApi {
 public:
     ccRESTfulApi();
     virtual ~ccRESTfulApi();
 
 public:
-    virtual bool    hasAPI(const std::string& strUri);
-    virtual bool    performAPI(const std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse);
+    virtual bool has_api(const std::string& uri);
+    virtual bool perform_api(
+        const std::shared_ptr<ccWebServerRequest> request,
+        std::shared_ptr<ccWebServerResponse> response);
 
 public:
-    bool    addAPI(const std::string& strUri, std::function<bool(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)> f);
+    bool addAPI(const std::string& uri,
+                std::function<bool(
+                    std::shared_ptr<ccWebServerRequest> request,
+                    std::shared_ptr<ccWebServerResponse> response)> f);
 
 protected:
-    std::map < std::string, std::function<bool(std::shared_ptr<ccWebServerRequest> pRequest, std::shared_ptr<ccWebServerResponse> pResponse)>> _aAPIs;
+    std::map < std::string,
+        std::function<bool(
+            std::shared_ptr<ccWebServerRequest> request,
+            std::shared_ptr<ccWebServerResponse> response) >> api_map_;
 };
 
 }

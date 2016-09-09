@@ -14,23 +14,22 @@
 
 namespace Luna {
 
-class ccMongooseWebsocket : public ccWebsocket
-{
+class ccMongooseWebsocket : public ccWebsocket {
 public:
-    ccMongooseWebsocket(const std::string& strUri, struct mg_connection* con);
-    ccMongooseWebsocket(const char* pUri, std::size_t size, struct mg_connection* con);
+    ccMongooseWebsocket(const std::string& uri, struct mg_connection* con);
+    ccMongooseWebsocket(const char* uri, std::size_t size, struct mg_connection* connection);
 
     virtual ~ccMongooseWebsocket();
 
 public:
-    virtual bool            open(const std::string& strUri);
+    virtual bool            open(const std::string& uri);
     virtual bool            close();
-    virtual std::int32_t    getInstance();  // It may be a Socket ID. 
-    virtual bool            send(const std::string& strMessage);
-    virtual bool            sendBinary(const void* pBuffer, std::size_t size);
+    virtual std::int32_t    get_instance();  // It may be a Socket ID. 
+    virtual bool            send(const std::string& message);
+    virtual bool            send_binary(const void* buffer, std::size_t size);
 
 private:
-    struct mg_connection*   _pMgConnection;
+    struct mg_connection*   mg_connection_;
 };
 
 }

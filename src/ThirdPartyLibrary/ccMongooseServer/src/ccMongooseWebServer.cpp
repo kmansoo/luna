@@ -69,7 +69,7 @@ namespace Luna {
 
         pollThread_ = new std::thread(std::bind(&ccMongooseWebServer::doRunThread, this));
 
-        initServer();
+        init_server();
 
         return true;
     }
@@ -120,7 +120,7 @@ namespace Luna {
                 auto pRequest = std::make_shared<ccMongooseWebServerRequest>(nc, (http_message *)p);
                 auto pResponse = std::make_shared<ccMongooseWebServerResponse>(nc);
 
-                bIsBuiltinProcess = !pServer->eventListener_->onWebServerRequest(pRequest, pResponse);
+                bIsBuiltinProcess = !pServer->eventListener_->on_web_request(pRequest, pResponse);
             }
 
             if (bIsBuiltinProcess)
@@ -140,13 +140,13 @@ namespace Luna {
         {
             struct http_message *hm = (struct http_message *)p;
 
-            std::string strRequestUri(hm->uri.p, hm->uri.len);
+            std::string request_uri(hm->uri.p, hm->uri.len);
 
-            if (pServer->eventListener_->onNewWebsocketRequest(strRequestUri) == true)
+            if (pServer->eventListener_->on_new_websocket_request(request_uri) == true)
             {
-                auto pNewWS = std::make_shared<ccMongooseWebsocket>(strRequestUri, nc);
+                auto pNewWS = std::make_shared<ccMongooseWebsocket>(request_uri, nc);
 
-                pServer->eventListener_->onWebsocketCreated(pNewWS);
+                pServer->eventListener_->on_websocket_created(pNewWS);
             }
             else
                 nc->flags |= MG_F_CLOSE_IMMEDIATELY;
@@ -154,16 +154,16 @@ namespace Luna {
         break;
 
         case MG_EV_WEBSOCKET_HANDSHAKE_DONE:    /* NULL */
-            pServer->eventListener_->onWebsocketConnected(nc->sock);
+            pServer->eventListener_->on_websocket_connected(nc->sock);
             break;
 
         case MG_EV_WEBSOCKET_FRAME:             /* struct websocket_message * */
         {
             struct websocket_message *wm = (struct websocket_message *) p;
 
-            std::string strData((const char*)wm->data, wm->size);
+            std::string data((const char*)wm->data, wm->size);
 
-            pServer->eventListener_->onWebsocketReceivedData(nc->sock, strData);
+            pServer->eventListener_->on_websocket_received_data(nc->sock, data);
         }
         break;
 
@@ -173,7 +173,7 @@ namespace Luna {
         case MG_EV_CLOSE:
             //  is websocket ?
             if (nc->flags & MG_F_IS_WEBSOCKET)
-                pServer->eventListener_->onWebsocketDisconnected(nc->sock);
+                pServer->eventListener_->on_websocket_disconnected(nc->sock);
 
             break;
         }
@@ -194,12 +194,12 @@ namespace Luna {
         }
 
         case MG_EV_HTTP_PART_BEGIN: {
-            std::shared_ptr<ccWebServerFileUploadPage> page = pServer->findFileUploadPage(pServer->last_multipart_request_uri_);
+            std::shared_ptr<ccWebServerFileUploadPage> page = pServer->find_file_upload_page(pServer->last_multipart_request_uri_);
 
             ccWebServerFileUploadAgent* agent = NULL;
 
             if (page != NULL)
-                agent = page->creteFileUploadAgent();
+                agent = page->create_file_upload_agent();
 
             if (agent == NULL)
             {
@@ -213,7 +213,7 @@ namespace Luna {
             }
             
             mp->user_data = (void*)agent;
-            agent->onFileInfo(mp->file_name, mp->data.len);
+            agent->on_file_info(mp->file_name, mp->data.len);
             break;
         }
 
@@ -221,7 +221,7 @@ namespace Luna {
             ccWebServerFileUploadAgent* agent = (ccWebServerFileUploadAgent*)mp->user_data;
 
             if (agent)
-                agent->onReceiveData(mp->data.p, mp->data.len);
+                agent->on_receive_data(mp->data.p, mp->data.len);
             break;
         }
 
@@ -230,10 +230,10 @@ namespace Luna {
 
             if (agent)
             {
-                agent->onFinishUpload();
+                agent->on_finish_upload();
 
-                if (agent->getParent())
-                    agent->getParent()->destroyFileUploadAgent(agent);
+                if (agent->get_parent())
+                    agent->get_parent()->destroy_file_upload_agent(agent);
             }
 
             mg_printf(nc,

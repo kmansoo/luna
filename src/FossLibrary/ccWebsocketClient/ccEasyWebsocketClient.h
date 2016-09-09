@@ -20,30 +20,29 @@
 
 namespace Luna {
 
-class ccEasyWebsocketClient : public ccWebsocket
-{
+class ccEasyWebsocketClient : public ccWebsocket {
 public:
     ccEasyWebsocketClient();
-    ccEasyWebsocketClient(const std::string& strUri);
+    ccEasyWebsocketClient(const std::string& uri);
     ~ccEasyWebsocketClient();
 
 public:
-    virtual bool    open(const std::string& strUri);
+    virtual bool    open(const std::string& uri);
     virtual bool    close();
 
     virtual std::int32_t    getInstance();  // It may be a Socket ID. 
-    virtual bool            send(const std::string& strMessage);
-    virtual bool            sendBinary(const void* pBuffer, std::size_t size);
+    virtual bool            send(const std::string& message);
+    virtual bool            send_binary(const void* buffer, std::size_t size);
 
 private:
-    void    doPoll();
-    void    doReceive(const std::string& message);
+    void    poll();
+    void    receive(const std::string& message);
 
 private:
-    std::shared_ptr<easywsclient::WebSocket> _pWorkWS;
-    std::thread             _oPollThread;
-    bool                    _bIsStopThread;
-    const std::string       _oNullData;
+    std::shared_ptr<easywsclient::WebSocket> websocket_;
+    std::thread             polling_thread_;
+    bool                    is_stop_thread_;
+    const std::string       blank_string_data_;
 };
 
 }

@@ -7,68 +7,18 @@
 #include "ccWebServer/ccWebServerManager.h"
 
 #include "ccMongooseServer/ccMongooseWebServerObjectFactory.h"
-#include "ccRESTfulChatting/ccRESTfulChatting.h"
-
 #include "ccWebServer/ccWebsocketManager.h"
 
 #include "ccWebsocketClient/ccEasyWebsocketClient.h"
 
-class ccChattingWSManager : public Luna::ccWebsocketManager
-{
-public:
-    ccChattingWSManager()
-    {
-        this->addFunction("/ws", std::bind(&ccChattingWSManager::ws_chat, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-        this->addFunction("/ws_chat", std::bind(&ccChattingWSManager::ws_chat, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-    }
-
-public:
-    bool ws_chat(Luna::ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<Luna::ccWebsocket> pWS, const std::string strData)
-    {
-        switch ((int)eEvent)
-        {
-        case Luna::ccWebsocket::ccWebSocketEvent_Connected:
-            {
-                std::string strMessage;
-
-                Luna::ccString::format(strMessage, "%08x: Join", pWS->getInstance());
-
-                pWS->getGroup()->broadcast(strMessage);
-            }
-            break;
-
-        case Luna::ccWebsocket::ccWebSocketEvent_ReceivedData:
-            {
-                std::string strBroadcastMsg;
-                std::string strMessage(strData);
-
-                Luna::ccString::format(strBroadcastMsg, "%08x: %s", pWS->getInstance(), strMessage.c_str());
-
-                pWS->getGroup()->broadcast(strBroadcastMsg);
-            }
-            break;
-
-        case Luna::ccWebsocket::ccWebSocketEvent_Disconnected:
-            {
-                std::string strMessage;
-
-                Luna::ccString::format(strMessage, "%08x: Leave", pWS->getInstance());
-
-                pWS->getGroup()->broadcast(strMessage);
-            }
-            break;
-        }
-        return true;
-    }
-
-};
+#include "ChattingWSManager.h"
+#include "RESTfulChattingApiManager.h"
 
 #ifdef WIN32
 #   include <Winsock2.h>
 #endif
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]) {
 #ifdef WIN32
     WORD wVersionRequested = MAKEWORD(2, 2);
     WSADATA wsaData;
@@ -76,31 +26,35 @@ int main(int argc, char* argv[])
 
     err = WSAStartup(wVersionRequested, &wsaData);
 
-    if (err != 0)
-    {
-        //// could not find a usable WinSock DLL
-        ////cerr << "Could not load winsock" << endl;
-        //assert(0); // is this is failing, try a different version that 2.2, 1.0 or later will likely work
-        //exit(1);
+    if (err != 0) {
+        // could not find a usable WinSock DLL
+        //cerr << "Could not load winsock" << endl;
+        // is this is failing, try a different version that 2.2, 1.0 or later will likely work
+        exit(1);
     }
 #endif
 
     //  choose a Web Server : Abstract Factory Design Pattern
+    std::string html_path = ".";
 
-    Luna::ccWebServerManager::getInstance().attachFactory(std::make_shared<Luna::ccMongooseWebServerObjectFactory>());
-    //oManager.AttachFactory(std::make_shared<ccBoostWebServerObjectFactory>());
+    if (argc >= 2)
+        html_path = argv[1];;
 
-    std::shared_ptr<ccRESTfulChatting>      pChattingApi(new ccRESTfulChatting);
-    std::shared_ptr<Luna::ccWebsocketManager>     pChattingWSM(new ccChattingWSManager);
+    Luna::ccWebServerManager::instance().attach_factory(std::make_shared<Luna::ccMongooseWebServerObjectFactory>());
 
-    Luna::ccWebServerManager::getInstance().createWebServer("WebServer #1", "8000", ".");
+    std::shared_ptr<RESTfulChattingApiManager>  restful_api_and_ws_manager = std::make_shared<RESTfulChattingApiManager>();
+    std::shared_ptr<ChattingWSManager>  only_ws_chat_manager = std::make_shared<ChattingWSManager>();
 
-    Luna::ccWebServerManager::getInstance().addRESTfulApi(pChattingApi);
-    Luna::ccWebServerManager::getInstance().addWebsocketManager(pChattingApi);
+    Luna::ccWebServerManager::instance().create_web_server("WebServer #1", "8000", html_path);
 
-    Luna::ccWebServerManager::getInstance().addWebsocketManager(pChattingWSM);
+    Luna::ccWebServerManager::instance().add_restful_api(restful_api_and_ws_manager);
 
-    Luna::ccWebServerManager::getInstance().start();
+    // We are making two websocket managers. 
+    // The only_ws_chat_manager that instanced of ChattingWSManager is based on mongoose server example.
+    Luna::ccWebServerManager::instance().add_websocket_manager(restful_api_and_ws_manager);
+    Luna::ccWebServerManager::instance().add_websocket_manager(only_ws_chat_manager);
+
+    Luna::ccWebServerManager::instance().start();
 
     while (1)
         Luna::sleep(100);

@@ -9,10 +9,11 @@ include_directories( ./ ../../Library ../../FossLibrary ../../ThirdPartyLibrary 
 
 add_executable (WebServerTest
     src/main.cpp
+	src/ChattingWSManager.cpp
+	src/RESTfulChattingApiManager.cpp
 )
 
 TARGET_LINK_LIBRARIES(WebServerTest
-	ccRESTfulChatting
 	ccMongooseServer
 	ccWebsocketClient
 	ccJsonParser

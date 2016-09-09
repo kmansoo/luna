@@ -17,31 +17,30 @@
 
 namespace Luna {
 
-class ccWebsocketGroup
-{
+class ccWebsocketGroup {
 public:
-    ccWebsocketGroup(const std::string& strUri);
+    ccWebsocketGroup(const std::string& uri);
 
     virtual ~ccWebsocketGroup();
 
 public:
-    const std::string&  getUri();
-    const std::size_t   getCount() const;
+    const std::string&  get_uri();
+    const std::size_t   get_count() const;
 
-    bool    add(std::shared_ptr<ccWebsocket> pNewWS);
-    bool    remove(std::shared_ptr<ccWebsocket> pNewWS);
-    bool    removeAll();
+    bool    add(std::shared_ptr<ccWebsocket> new_websocket);
+    bool    remove(std::shared_ptr<ccWebsocket> new_websocket);
+    bool    remove_all();
 
-    bool    getWebsocket(std::int32_t nInstance, std::shared_ptr<ccWebsocket>& pSocket);
+    bool    get_websocket(std::int32_t instance, std::shared_ptr<ccWebsocket>& socket);
 
     void    broadcast(const std::string& strMessage);
-    void    broadcastEx(const std::string& strMessage, std::shared_ptr<ccWebsocket>& pExceptSocket);
+    void    broadcast_ex(const std::string& strMessage, std::shared_ptr<ccWebsocket>& excepted_socket);
 
 private:
-    std::mutex      _mtx;
-    std::string     _strUri;
+    std::mutex      mtx_;
+    std::string     uri_;
 
-    std::map< std::int32_t, std::shared_ptr<ccWebsocket> >  _aWSList;
+    std::map< std::int32_t, std::shared_ptr<ccWebsocket> >  websocket_list_;
 };
 
 }

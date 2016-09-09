@@ -18,33 +18,32 @@
 
 namespace Luna {
 
-class ccWebsocketManager
-{
+class ccWebsocketManager {
 public:
     ccWebsocketManager();
     virtual ~ccWebsocketManager();
 
 public:
-    bool    addWebsocket(std::shared_ptr<ccWebsocket> pNewWS);
-    bool    removeWebsocket(std::shared_ptr<ccWebsocket> pNewWS);
-    bool    removeAllWebsocket();
+    bool    add_websocket(std::shared_ptr<ccWebsocket> new_websocket);
+    bool    remove_websocket(std::shared_ptr<ccWebsocket> new_websocket);
+    bool    remove_all_websocket();
 
-    bool    getWebsocket(std::int32_t nInstance, std::shared_ptr<ccWebsocket>& pSocket);
-    bool    getWebsocket(const std::string& strUri, std::int32_t nInstance, std::shared_ptr<ccWebsocket>& pSocket);
-    bool    getGroup(const std::string& strUri, std::shared_ptr<ccWebsocketGroup>& pGroup);
+    bool    get_websocket(std::int32_t instance, std::shared_ptr<ccWebsocket>& socket);
+    bool    get_websocket(const std::string& uri, std::int32_t instance, std::shared_ptr<ccWebsocket>& socket);
+    bool    get_group(const std::string& uri, std::shared_ptr<ccWebsocketGroup>& group);
 
 public:
-    virtual bool    hasUri(const std::string& strUri);
-    virtual bool    addFunction(const std::string& strUri, std::function<bool(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const std::string& strData)> f);
-    virtual bool    removeFunction(const std::string& strUri);
-    virtual bool    performWebsocketEvent(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const std::string& strData);
+    virtual bool    has_uri(const std::string& uri);
+    virtual bool    add_function(const std::string& uri, std::function<bool(ccWebsocket::ccWebSocketEvent ws_event, std::shared_ptr<ccWebsocket> websocket, const std::string& data)> f);
+    virtual bool    remove_function(const std::string& uri);
+    virtual bool    perform_websocket_event(ccWebsocket::ccWebSocketEvent ws_event, std::shared_ptr<ccWebsocket> websocket, const std::string& data);
 
 protected:
-    std::mutex      _mtx;
-    std::mutex      _mtxFunction;
+    std::mutex      mtx_;
+    std::mutex      mtx_Function;
 
-    std::map<std::string, std::shared_ptr<ccWebsocketGroup>>    _aWSGList;
-    std::map<std::string, std::function<bool(ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<ccWebsocket> pWS, const std::string& strData)>> _aFunctions;
+    std::map<std::string, std::shared_ptr<ccWebsocketGroup>>    websocket_group_map_;
+    std::map<std::string, std::function<bool(ccWebsocket::ccWebSocketEvent ws_event, std::shared_ptr<ccWebsocket> websocket, const std::string& data)>> function_map_;
 };
 
 }

@@ -12,15 +12,15 @@
 
 namespace Luna {
 
-    class ccWebServerFileDownloadPage : public ccWebServerPage
-    {
-    public:
-        ccWebServerFileDownloadPage(const std::string& path) : ccWebServerPage(path) {}
-        virtual ~ccWebServerFileDownloadPage() {}
+class ccWebServerFileDownloadPage : public ccWebServerPage {
+public:
+    ccWebServerFileDownloadPage(const std::string& path) : ccWebServerPage(path) {}
+    virtual ~ccWebServerFileDownloadPage() {}
 
-    public:
-        virtual bool        isDownloadPage() { return true; }
-    };
+public:
+    virtual bool        is_download_page() { return true; }
+};
+
 }
 
 #endif /* CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVERFILEDOWNLOADPAGE_H_ */

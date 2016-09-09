@@ -12,13 +12,6 @@
 
 namespace Luna {
 
-// simulation of Windows GetTickCount()
-static unsigned long long GetChronoTickCount()
-{
-    using namespace std::chrono;
-    return duration_cast<milliseconds>(steady_clock::now().time_since_epoch()).count();
-}
-
 //
 //  I'll use following code!
 //
@@ -38,19 +31,17 @@ static unsigned long long GetChronoTickCount()
 //};
 
 
-void    sleep(int milliseconds)
-{
+void    sleep(int milliseconds) {
     std::this_thread::sleep_for(std::chrono::milliseconds{ milliseconds });
 }
 
-void    usleep(int microseconds)
-{
+void    usleep(int microseconds) {
     std::this_thread::sleep_for(std::chrono::microseconds{ microseconds });
 }
 
-unsigned long long getTickCount()
-{
-    return GetChronoTickCount();
+unsigned long long get_tick_count() {
+    using namespace std::chrono;
+    return duration_cast<milliseconds>(steady_clock::now().time_since_epoch()).count();
 }
 
 }

@@ -123,8 +123,8 @@ protected:
     virtual void            readFromDevice();
 
 private:
-    std::thread _oPollThread;
-    bool        _bIsStopThread;
+    std::thread polling_thread_;
+    bool        is_stop_thread_;
 
     BOOL 	    _bOpenPort;
     BOOL 	    _bActiveThread;

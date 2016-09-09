@@ -11,8 +11,7 @@
 
 namespace Luna {
 
-class ccWin32WebApiHelper
-{
+class ccWin32WebApiHelper {
 protected:
     ccWin32WebApiHelper(void);
 
@@ -20,49 +19,68 @@ public:
     virtual ~ccWin32WebApiHelper(void);
 
 public:
-    static std::shared_ptr<ccWin32WebApiHelper> getInstance();
+    static std::shared_ptr<ccWin32WebApiHelper> get_instance();
 
 public:
-    void    setConnectionInfo(const std::string& strIP, UINT uPort);
+    void setConnectionInfo(const std::string& strIP, UINT uPort);
 
-    std::uint16_t   requestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, std::string& strResponse);
-    std::uint16_t   requestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, Json::Value& oParams, std::string& strResponse);
+    std::uint16_t request_api(ccWebServerRequest::HttpMethod method,
+                              const std::string& web_api,
+                              std::string& response);
+    std::uint16_t request_api(ccWebServerRequest::HttpMethod method,
+                              const std::string& web_api,
+                              Json::Value& params,
+                              std::string& response);
 
-    bool            asyncRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, ccWin32RgWebApiTransactionNotifier *pNotifier = NULL);
-    bool            asyncRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, Json::Value& oParams, ccWin32RgWebApiTransactionNotifier *pNotifier = NULL);
+    bool async_request_api(ccWebServerRequest::HttpMethod method,
+                           const std::string& web_api,
+                           ccWin32RgWebApiTransactionNotifier* notifier = NULL);
+    bool async_request_api(ccWebServerRequest::HttpMethod method,
+                           const std::string& web_api,
+                           Json::Value& params,
+                           ccWin32RgWebApiTransactionNotifier* notifier = NULL);
 
 public:
-    static bool get_value_string(Json::Value& oValue, const std::string& strName, std::string& strValue, std::string strDefaultValue = _T(""));
-    static bool get_value_int(Json::Value& oValue, const std::string& strName, int& nValue, int nDefaultValue = 0);
+    static bool get_value_string(Json::Value& json_value,
+                                 const std::string& name,
+                                 std::string& value,
+                                 std::string default_value = _T(""));
+
+    static bool get_value_int(Json::Value& json_value,
+                              const std::string& name,
+                              int& nValue,
+                              int default_value = 0);
 
 private:
-    std::uint16_t   doSendRequestAPI(ccWebServerRequest::HttpMethod eMethod, const std::string& strWebAPI, const std::string& strRequestData, std::string& strResponse);
-    void            doRunThread();
+    std::uint16_t send_request_api(ccWebServerRequest::HttpMethod method,
+                                   const std::string& web_api,
+                                   const std::string& request,
+                                   std::string& response);
+    void run_thread();
 
 private:
-    class   XTransactionInfo
-    {
+    class XTransactionInfo {
     public:
-        XTransactionInfo() {_pNotifier = NULL;}
+        XTransactionInfo() { notifier_ = NULL; }
         virtual ~XTransactionInfo() {}
 
     public:
-        ccWebServerRequest::HttpMethod  _eMethod;
-        std::string                     _strWebAPI;
-        std::string                     _strRequestData;
+        ccWebServerRequest::HttpMethod method_;
+        std::string web_api_;
+        std::string request_data_;
 
-        ccWin32RgWebApiTransactionNotifier* _pNotifier;
+        ccWin32RgWebApiTransactionNotifier* notifier_;
     };
 
 private:
-    std::string     _strDestIP;
-    UINT            _uDestPort;
-    std::mutex      _mutex;
-    
-    std::thread     _oPollThread;
-    bool            _bIsStopThread;
+    std::string dest_ip_;
+    UINT dest_port_;
+    std::mutex mutex_;
 
-    std::vector<std::shared_ptr<XTransactionInfo>>   _aTransactionInfos;
+    std::thread polling_thread_;
+    bool is_stop_thread_;
+
+    std::vector<std::shared_ptr<XTransactionInfo>> transaction_info_list_;
 };
 
 }

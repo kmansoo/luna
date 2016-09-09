@@ -15,11 +15,10 @@ namespace Luna {
 
 class ccWebsocketGroup;
 
-class ccWebsocket
-{
+class ccWebsocket {
 public:
     ccWebsocket() {};
-    ccWebsocket(const std::string& strUri);
+    ccWebsocket(const std::string& uri);
     virtual ~ccWebsocket();
 
 public:
@@ -30,27 +29,27 @@ public:
     };
 
 public:
-    typedef std::function<void(ccWebSocketEvent eEvent, const std::string& message)> WebSocketEventFunction;
+    typedef std::function<void(ccWebSocketEvent event, const std::string& message)> WebSocketEventFunction;
 
 public:
-    virtual bool            open(const std::string& strUri) = 0;
+    virtual bool            open(const std::string& uri) = 0;
     virtual bool            close() = 0;
 
-    virtual std::int32_t    getInstance() = 0;  // It may be a Socket ID. 
+    virtual std::int32_t    get_instance() = 0;  // It may be a Socket ID. 
     virtual bool            send(const std::string& strMessage) = 0;
-    virtual bool            sendBinary(const void* pBuffer, std::size_t size) = 0;
+    virtual bool            send_binary(const void* pBuffer, std::size_t size) = 0;
 
 public:
-    void                    setEventListener(WebSocketEventFunction f);
+    void                    set_event_listener(WebSocketEventFunction f);
 
-    const std::string       getUri();
-    void                    setGroup(ccWebsocketGroup* pGroup);
-    ccWebsocketGroup*       getGroup();
+    const std::string       get_uri();
+    void                    set_group(ccWebsocketGroup* group);
+    ccWebsocketGroup*       get_group();
 
 protected:
-    std::string             _strUri;
-    ccWebsocketGroup*       _pMyGroup;
-    WebSocketEventFunction  _oEventListener;
+    std::string             uri_;
+    ccWebsocketGroup*       my_group_;
+    WebSocketEventFunction  event_listener_;
 };
 
 }

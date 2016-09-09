@@ -2,6 +2,8 @@ build/
 **/build/
 **/Debug/
 **/Release/
+**/.vs/
 src/.cproject
 .project
 .cproject
+\.vscode/

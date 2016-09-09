@@ -336,8 +336,8 @@ BOOL ccWin32SerialPortHelper::StartPollThread()
     if (!CreateRWEvent()) 
         return FALSE;
 
-    _bIsStopThread = false;
-    _oPollThread = std::thread(std::bind(&ccWin32SerialPortHelper::DoPoll, this));
+    is_stop_thread_ = false;
+    polling_thread_ = std::thread(std::bind(&ccWin32SerialPortHelper::DoPoll, this));
 
 
     HSWatchCommProcParam *pWTParemeter	= new HSWatchCommProcParam;

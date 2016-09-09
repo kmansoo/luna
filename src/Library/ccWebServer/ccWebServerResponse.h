@@ -15,53 +15,51 @@
 
 namespace Luna {
 
-class ccWebServerResponse
-{
+class ccWebServerResponse {
 public:
     ccWebServerResponse();
     virtual ~ccWebServerResponse();
 
 public:
     enum ConstValue {
-        kMaxBufferSize  =   8192
+        kMaxBufferSize = 8192
     };
 
 protected:
-    virtual size_t doWriteContentToConnector(const char* strBuf, size_t size) {return 0;}
+    virtual size_t write_content_to_connector(const char* strBuf, size_t size) { return 0; }
 
 protected:
-    void    doCheckHeadersSent();
-    size_t  doPrintf(const char *fmt, ...);
+    void    check_header_sent();
+    size_t  send_formatted_content_impl(const char *fmt, ...);
 
 public:
-    void    status(unsigned int code, const std::string& strStatusText, bool bNoContent = false);
-    void    status(unsigned int code, const std::string& strStatusText, const std::string& strExtInfo);
+    void    send_status(unsigned int code, const std::string& strStatusText, bool bNoContent = false);
+    void    send_status(unsigned int code, const std::string& strStatusText, const std::string& strExtInfo);
 
-    void    contentType(const std::string& type, bool bInsertSeparator = true);
-    void    contentType(const std::string& type, size_t size, bool bInsertSeparator = true);
+    void    send_content_type(const std::string& type, bool bInsertSeparator = true);
+    void    send_content_type(const std::string& type, size_t size, bool bInsertSeparator = true);
 
-    void    headerInfo(const std::string& type, size_t size, std::string& strExtInfo, bool bInsertSeparator = true);
+    void    header_info(const std::string& type, size_t size, std::string& strExtInfo, bool bInsertSeparator = true);
 
-    size_t  printf(const char *fmt, ...);
-    size_t  vprintf(const char *fmt, va_list ap);
-    size_t  write(const std::string& buf);
-    size_t  write(const char* strBuf, size_t size);
-    size_t  write(std::istream& is);
+    size_t  send_formatted_content(const char *fmt, ...);   // printf
+    size_t  send_formatted_content_ex(const char *fmt, va_list ap); //  vprintf
+    size_t  send_content(const std::string& buf);
+    size_t  send_content(const char* strBuf, size_t size);
+    size_t  send_content(std::istream& is);
 
-    void    closeeWithoutContent();
+    void    close_without_content();
 
-    bool    notFoundFile(const std::string& strURI);
-
-protected:
-    unsigned int    _uStatudCode;
-    std::string     _strStatusText;
-    std::string     _strExtInfo;
+    bool    not_found_file(const std::string& strURI);
 
 protected:
-    bool    _bStatusSet;
-    bool    _bContentTypeSet;
-    bool    _bContentLengthSet;
-    bool    _bHeadersSent;
+    unsigned int    status_code_;
+    std::string     status_text_;
+    std::string     ext_info_;
+
+    bool    is_status_set_;
+    bool    is_content_type_set_;
+    bool    is_content_length_set_;
+    bool    is_haders_sent_;
 
 };
 

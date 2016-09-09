@@ -4,134 +4,127 @@
 
 namespace Luna {
 
-ccEasyWebsocketClient::ccEasyWebsocketClient()
-{
-    _bIsStopThread = false;
+ccEasyWebsocketClient::ccEasyWebsocketClient() {
+    is_stop_thread_ = false;
 }
 
-ccEasyWebsocketClient::~ccEasyWebsocketClient()
-{
+ccEasyWebsocketClient::ccEasyWebsocketClient(const std::string& uri) {
+    open(uri);
+}
+
+
+ccEasyWebsocketClient::~ccEasyWebsocketClient() {
     close();
 }
 
-bool ccEasyWebsocketClient::open(const std::string& strUri)
-{
-    if (_pWorkWS != NULL)
+bool ccEasyWebsocketClient::open(const std::string& uri) {
+    if (websocket_ != NULL)
         return false;
 
-    _pWorkWS.reset(easywsclient::WebSocket::from_url(strUri));
-    
-    if (_pWorkWS == NULL)
+    websocket_.reset(easywsclient::WebSocket::from_url(uri));
+
+    if (websocket_ == NULL)
         return false;
-    
-    _bIsStopThread = false;
-    _oPollThread = std::thread(std::bind(&ccEasyWebsocketClient::doPoll, this));
-    
+
+    is_stop_thread_ = false;
+    polling_thread_ = std::thread(std::bind(&ccEasyWebsocketClient::poll, this));
+
     return true;
 }
 
-bool ccEasyWebsocketClient::close()
-{
-    if (_bIsStopThread == true)
+bool ccEasyWebsocketClient::close() {
+    if (is_stop_thread_ == true)
         return false;
 
-    if (_pWorkWS == NULL)
+    if (websocket_ == NULL)
         return false;
 
-    _bIsStopThread = true;
-    _oPollThread.join();
+    is_stop_thread_ = true;
+    polling_thread_.join();
 
-    _pWorkWS->close();
-    _pWorkWS.reset();
+    websocket_->close();
+    websocket_.reset();
 
     return true;
 }
 
 std::int32_t ccEasyWebsocketClient::getInstance()  // It may be a Socket ID. 
 {
-    if (_pWorkWS == NULL)
+    if (websocket_ == NULL)
         return -1;
 
-    return _pWorkWS->getInstance();
+    return websocket_->getInstance();
 }
 
 
-bool ccEasyWebsocketClient::send(const std::string& strMessage)
-{
-    if (_pWorkWS == NULL)
+bool ccEasyWebsocketClient::send(const std::string& message) {
+    if (websocket_ == NULL)
         return false;
 
-    _pWorkWS->send(strMessage);
+    websocket_->send(message);
 
     return true;
 }
 
-bool ccEasyWebsocketClient::sendBinary(const void* pBuffer, std::size_t size)
-{
-    if (_pWorkWS == NULL)
+bool ccEasyWebsocketClient::send_binary(const void* buffer, std::size_t size) {
+    if (websocket_ == NULL)
         return false;
 
-    std::vector<uint8_t> aSendData;
+    std::vector<uint8_t> send_data;
 
     for (std::size_t nIndex = 0; nIndex < size; nIndex++)
-        aSendData.push_back(((uint8_t*)pBuffer)[nIndex]);
+        send_data.push_back(((uint8_t*)buffer)[nIndex]);
 
-    _pWorkWS->sendBinary(aSendData);
+    websocket_->send_binary(send_data);
 
     return true;
 }
 
-void ccEasyWebsocketClient::doReceive(const std::string& message)
-{
-    if (!_oEventListener)
+void ccEasyWebsocketClient::receive(const std::string& message) {
+    if (!event_listener_)
         std::cout << "RECV: " << message << std::endl;
     else
-        _oEventListener(ccWebSocketEvent_ReceivedData, message);
+        event_listener_(ccWebSocketEvent_ReceivedData, message);
 }
 
-void ccEasyWebsocketClient::doPoll()
-{
-    easywsclient::WebSocket::readyStateValues eConnectStatus = _pWorkWS->getReadyState();
+void ccEasyWebsocketClient::poll() {
+    easywsclient::WebSocket::readyStateValues connect_status = websocket_->getReadyState();
 
-    while (_bIsStopThread == false)
-    {
-        if (_bIsStopThread == true)
+    while (is_stop_thread_ == false) {
+        if (is_stop_thread_ == true)
             std::this_thread::sleep_for(std::chrono::microseconds{ 10 });
 
-        if (_pWorkWS == NULL)
+        if (websocket_ == NULL)
             break;
 
-        if (_pWorkWS->getReadyState() != eConnectStatus)
-        {
-            switch (_pWorkWS->getReadyState())
-            {
+        if (websocket_->getReadyState() != connect_status) {
+            switch (websocket_->getReadyState()) {
             case easywsclient::WebSocket::OPEN:
-                if (!_oEventListener)
+                if (!event_listener_)
                     std::cout << "easywsclient::WebSocket::OPEN " << std::endl;
                 else
-                    _oEventListener(ccWebSocketEvent_Connected, _oNullData);
+                    event_listener_(ccWebSocketEvent_Connected, blank_string_data_);
                 break;
 
             case easywsclient::WebSocket::CLOSED:
-                _bIsStopThread = false;
+                is_stop_thread_ = false;
 
-                if (!_oEventListener)
+                if (!event_listener_)
                     std::cout << "easywsclient::WebSocket::CLOSED " << std::endl;
                 else
-                    _oEventListener(ccWebSocketEvent_Disconnected, _oNullData);
+                    event_listener_(ccWebSocketEvent_Disconnected, blank_string_data_);
                 break;
 
             default:
                 break;
             }
 
-            eConnectStatus = _pWorkWS->getReadyState();
+            connect_status = websocket_->getReadyState();
         }
 
-        if (_pWorkWS->getReadyState() != easywsclient::WebSocket::CLOSED)
-        {
-            _pWorkWS->poll(100);
-            _pWorkWS->dispatch(std::bind(&ccEasyWebsocketClient::doReceive, this, std::placeholders::_1));
+        if (websocket_->getReadyState() != easywsclient::WebSocket::CLOSED) {
+            websocket_->poll(100);
+            websocket_->dispatch(std::bind(&ccEasyWebsocketClient::receive, this, std::placeholders::_1));
         }
     }
 }
