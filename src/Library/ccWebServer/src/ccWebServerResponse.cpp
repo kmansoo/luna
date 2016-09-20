@@ -155,7 +155,7 @@ size_t ccWebServerResponse::send_formatted_content(const char *fmt, ...) {
     va_list ap;
     va_start(ap, fmt);
 
-    int result = vprintf(fmt, ap);
+    int result = send_formatted_content_ex(fmt, ap);
     va_end(ap);
 
     return result;
@@ -262,7 +262,7 @@ size_t ccWebServerResponse::send_formatted_content_impl(const char *fmt, ...) {
     va_list ap;
     va_start(ap, fmt);
 
-    size_t result = vprintf(fmt, ap);
+    size_t result = send_formatted_content_ex(fmt, ap);
 
     va_end(ap);
 

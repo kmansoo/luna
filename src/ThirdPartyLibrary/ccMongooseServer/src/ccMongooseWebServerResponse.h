@@ -20,7 +20,7 @@ public:
     virtual ~ccMongooseWebServerResponse();
 
 protected:
-    virtual size_t doWriteContentToConnector(const char* strBuf, size_t size);
+    virtual size_t write_content_to_connector(const char* strBuf, size_t size);
 
 private:
     struct mg_connection*   mg_connection_;

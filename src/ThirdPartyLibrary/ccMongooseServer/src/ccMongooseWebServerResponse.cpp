@@ -17,7 +17,7 @@ ccMongooseWebServerResponse::~ccMongooseWebServerResponse() {
     // TODO Auto-generated destructor stub
 }
 
-size_t ccMongooseWebServerResponse::doWriteContentToConnector(const char* strBuf, size_t size) {
+size_t ccMongooseWebServerResponse::write_content_to_connector(const char* strBuf, size_t size) {
     mg_send(mg_connection_, strBuf, size);
 
     return size;
