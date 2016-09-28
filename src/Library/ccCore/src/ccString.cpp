@@ -35,6 +35,8 @@ ccString::ccString(const char* first, const char* last) {
 
 ccString::ccString(const ccString& _Right) { std::string::append(_Right); }
 
+ccString::ccString(const std::string& _Right) { std::string::append(_Right); }
+
 ccString::~ccString() {
     // TODO Auto-generated destructor stub
 }

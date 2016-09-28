@@ -65,6 +65,9 @@
     <ClInclude Include="..\json\writer.h">
       <Filter>API\json</Filter>
     </ClInclude>
+    <ClInclude Include="..\json\allocator.h">
+      <Filter>API\json</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
