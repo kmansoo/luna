@@ -6,7 +6,10 @@ PROJECT(ccJsonParser)
 
 # Configuration
 
-include_directories( ./ ../../Library ../../FossLibrary)
+include_directories(
+	./include
+	../../Library/ccCore/include
+)
 
 file(GLOB SRC_FILES 
 	src/lib_json/*.cpp

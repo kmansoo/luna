@@ -8,7 +8,7 @@ PROJECT(ccCore)
 #
 # Configuration
 
-include_directories( ./ )
+include_directories( ./include)
 
 # add_library(<name> [STATIC | SHARED | MODULE]
 #             [EXCLUDE_FROM_ALL]

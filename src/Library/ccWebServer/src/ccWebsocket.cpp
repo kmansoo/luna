@@ -5,9 +5,8 @@
 *      Author: kmansoo
 */
 
-#include "ccWebsocketGroup.h"
-
-#include "ccWebsocket.h"
+#include "ccWebServer/ccWebsocketGroup.h"
+#include "ccWebServer/ccWebsocket.h"
 
 namespace Luna {
 

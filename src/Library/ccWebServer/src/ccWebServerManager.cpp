@@ -7,7 +7,7 @@
 
 #include <algorithm>
 
-#include "../ccWebServerManager.h"
+#include "ccWebServer/ccWebServerManager.h"
 
 namespace Luna {
 

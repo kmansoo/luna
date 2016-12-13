@@ -12,7 +12,11 @@ add_definitions(
 	-DMG_ENABLE_HTTP_STREAMING_MULTIPART
 )
 
-include_directories( ./ ../../Library ../../FossLibrary ../../ThirdPartyLibrary)
+include_directories( 
+	./include 
+	../../Library/ccCore/include
+	../../Library/ccWebServer/include
+)
 
 file(GLOB SRC_FILES 
 	src/*.cpp

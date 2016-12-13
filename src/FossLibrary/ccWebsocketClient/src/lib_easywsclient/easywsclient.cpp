@@ -72,7 +72,7 @@
 #include <vector>
 #include <string>
 
-#include "easywsclient/easywsclient.hpp"
+#include "ccWebsocketClient/easywsclient/easywsclient.hpp"
 
 #if (__cplusplus > 199711L) || defined(WIN32)
 using easywsclient::Callback_Imp;

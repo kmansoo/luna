@@ -6,7 +6,10 @@ PROJECT(ccWebServer)
 
 # Configuration
 
-include_directories( ./ ../../Library)
+include_directories(
+	./include
+	../../Library/ccCore/include
+	../../Library/ccNetwork/include)
 
 file(GLOB SRC_FILES 
 	src/*.cpp

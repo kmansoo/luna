@@ -43,17 +43,15 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
-    <UseOfMfc>Static</UseOfMfc>
+    <UseOfMfc>false</UseOfMfc>
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
-    <UseOfMfc>Static</UseOfMfc>
+    <UseOfMfc>false</UseOfMfc>
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -79,7 +77,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>LUNA_PLATFORM_WIN32;WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..;../build;../../../Library;../../../ThirdPartyLibrary;../../../ProductLibrary;../../../FossLibrary</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;../../../Library/ccCore/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -100,7 +98,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>LUNA_PLATFORM_WIN32;WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..;../build;../../../Library;../../../ThirdPartyLibrary;../../../ProductLibrary;../../../FossLibrary</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;../../../Library/ccCore/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -120,11 +118,9 @@
       <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>LUNA_PLATFORM_WIN32;WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..;../build;../../../Library;../../../ThirdPartyLibrary;../../../ProductLibrary;../../../FossLibrary</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>../include;../../../Library/ccCore/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -143,14 +139,9 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>LUNA_PLATFORM_WIN32;WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..;../build;../../../Library;../../../ThirdPartyLibrary;../../../ProductLibrary;../../../FossLibrary</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>../include;../../../Library/ccCore/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -171,22 +162,20 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\ccRESTfulApi.h" />
-    <ClInclude Include="..\ccWebServer.h" />
-    <ClInclude Include="..\ccWebServerEventListener.h" />
-    <ClInclude Include="..\ccWebServerFileDownloadPage.h" />
-    <ClInclude Include="..\ccWebServerFileUploadPage.h" />
-    <ClInclude Include="..\ccWebServerManager.h" />
-    <ClInclude Include="..\ccWebServerObjectFactory.h" />
-    <ClInclude Include="..\ccWebServerPage.h" />
-    <ClInclude Include="..\ccWebServerPageDirectory.h" />
-    <ClInclude Include="..\ccWebServerRequest.h" />
-    <ClInclude Include="..\ccWebServerResponse.h" />
-    <ClInclude Include="..\ccWebsocket.h" />
-    <ClInclude Include="..\ccWebsocketGroup.h" />
-    <ClInclude Include="..\ccWebsocketManager.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
+    <ClInclude Include="..\include\ccWebServer\ccRESTfulApi.h" />
+    <ClInclude Include="..\include\ccWebServer\ccWebServer.h" />
+    <ClInclude Include="..\include\ccWebServer\ccWebServerEventListener.h" />
+    <ClInclude Include="..\include\ccWebServer\ccWebServerFileDownloadPage.h" />
+    <ClInclude Include="..\include\ccWebServer\ccWebServerFileUploadPage.h" />
+    <ClInclude Include="..\include\ccWebServer\ccWebServerManager.h" />
+    <ClInclude Include="..\include\ccWebServer\ccWebServerObjectFactory.h" />
+    <ClInclude Include="..\include\ccWebServer\ccWebServerPage.h" />
+    <ClInclude Include="..\include\ccWebServer\ccWebServerPageDirectory.h" />
+    <ClInclude Include="..\include\ccWebServer\ccWebServerRequest.h" />
+    <ClInclude Include="..\include\ccWebServer\ccWebServerResponse.h" />
+    <ClInclude Include="..\include\ccWebServer\ccWebsocket.h" />
+    <ClInclude Include="..\include\ccWebServer\ccWebsocketGroup.h" />
+    <ClInclude Include="..\include\ccWebServer\ccWebsocketManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\ccRESTfulApi.cpp" />
@@ -199,12 +188,6 @@
     <ClCompile Include="..\src\ccWebsocket.cpp" />
     <ClCompile Include="..\src\ccWebsocketGroup.cpp" />
     <ClCompile Include="..\src\ccWebsocketManager.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

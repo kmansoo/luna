@@ -9,7 +9,7 @@
 
 #include "ccCore/ccString.h"
 
-#include "ccWebServerResponse.h"
+#include "ccWebServer/ccWebServerResponse.h"
 
 namespace Luna {
 

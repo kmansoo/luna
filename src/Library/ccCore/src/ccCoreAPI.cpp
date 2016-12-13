@@ -8,7 +8,7 @@
 #include <thread>
 #include <chrono>
 
-#include "ccCoreAPI.h"
+#include "ccCore/ccCoreAPI.h"
 
 namespace Luna {
 

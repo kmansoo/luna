@@ -27,14 +27,14 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseOfMfc>Static</UseOfMfc>
+    <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseOfMfc>Static</UseOfMfc>
+    <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <PlatformToolset>v140</PlatformToolset>
@@ -47,7 +47,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseOfMfc>Dynamic</UseOfMfc>
+    <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
@@ -89,7 +89,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..;../build;../../../Library;../../../ThirdPartyLibrary;../../../ProductLibrary;../../../FossLibrary</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;../../../Library/ccCore/include;../../../Library/ccWebServer/include;../../../FossLibrary/ccJsonParser/include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>LUNA_PLATFORM_WIN32;WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -112,7 +112,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..;../build;../../../Library;../../../ThirdPartyLibrary;../../../ProductLibrary;../../../FossLibrary</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;../../../Library/ccCore/include;../../../Library/ccWebServer/include;../../../FossLibrary/ccJsonParser/include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>LUNA_PLATFORM_WIN32;WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -133,7 +133,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..;../build;../../../Library;../../../ThirdPartyLibrary;../../../ProductLibrary;../../../FossLibrary</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;../../../Library/ccCore/include;../../../Library/ccWebServer/include;../../../FossLibrary/ccJsonParser/include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>LUNA_PLATFORM_WIN32;WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -143,20 +143,20 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
     </ClCompile>
     <PostBuildEvent>
-      <Command>xcopy .\include\*.h* ..\..\..\..\include\$(ProjectName) /I /Y /E</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <Lib>
       <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
     </Lib>
     <PreLinkEvent>
-      <Command>mkdir ..\..\..\..\include\$(ProjectName)
-del ..\..\..\..\include\$(ProjectName)*.* /Q
-</Command>
+      <Command>
+      </Command>
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..;../build;../../../Library;../../../ThirdPartyLibrary;../../../ProductLibrary;../../../FossLibrary</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;../../../Library/ccCore/include;../../../Library/ccWebServer/include;../../../FossLibrary/ccJsonParser/include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>LUNA_PLATFORM_WIN32;WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -166,15 +166,15 @@ del ..\..\..\..\include\$(ProjectName)*.* /Q
       <FunctionLevelLinking>true</FunctionLevelLinking>
     </ClCompile>
     <PostBuildEvent>
-      <Command>xcopy .\include\*.h* ..\..\..\..\include\$(ProjectName) /I /Y /E</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <Lib>
       <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
     </Lib>
     <PreLinkEvent>
-      <Command>mkdir ..\..\..\..\include\$(ProjectName)
-del ..\..\..\..\include\$(ProjectName)*.* /Q
-</Command>
+      <Command>
+      </Command>
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -182,6 +182,8 @@ del ..\..\..\..\include\$(ProjectName)*.* /Q
     <ClCompile Include="..\src\ccWin32SerialPortHelper.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -191,12 +193,9 @@ del ..\..\..\..\include\$(ProjectName)*.* /Q
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\ccWin32WebApiHelper.h" />
-    <ClInclude Include="..\ccWin32RgWebApiTransactionNotifier.h" />
-    <ClInclude Include="..\ccWin32SerialPortHelper.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="..\include\ccWin32Core\ccWin32RgWebApiTransactionNotifier.h" />
+    <ClInclude Include="..\include\ccWin32Core\ccWin32SerialPortHelper.h" />
+    <ClInclude Include="..\include\ccWin32Core\ccWin32WebApiHelper.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>

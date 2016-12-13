@@ -15,9 +15,9 @@
 
 #include "ccCore/ccString.h"
 
-#include "ccJsonParser/json/value.h"
-#include "ccJsonParser/json/writer.h"
-#include "ccJsonParser/json/reader.h"
+#include "json/value.h"
+#include "json/writer.h"
+#include "json/reader.h"
 
 #include "RESTfulChattingApiManager.h"
 

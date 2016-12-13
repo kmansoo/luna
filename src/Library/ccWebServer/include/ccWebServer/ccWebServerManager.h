@@ -10,7 +10,7 @@
 
 #include <memory>
 
-#include "ccCore/ccSingletonT.h"
+#include "ccCore/ccSingleton.h"
 
 #include "ccWebServer.h"
 #include "ccWebServerObjectFactory.h"
@@ -22,14 +22,14 @@
 
 namespace Luna {
 
-class ccWebServerManager : public ccSingletonT<ccWebServerManager>,
+class ccWebServerManager : 
+    public Luna::ccSingleton<ccWebServerManager>,
     public ccWebServerEventListener {
 public:
+    ccWebServerManager();
     virtual ~ccWebServerManager();
 
-protected:
-    ccWebServerManager();
-    friend class ccSingletonT<ccWebServerManager>;
+    friend class ccSingleton<ccWebServerManager>;
 
 public:
     void attach_factory(std::shared_ptr<ccWebServerObjectFactory> pFactory);

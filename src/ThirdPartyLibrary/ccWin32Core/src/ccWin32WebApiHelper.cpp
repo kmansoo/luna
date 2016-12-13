@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "afxinet.h"
-#include "ccWin32WebApiHelper.h"
+#include "ccWin32Core/ccWin32WebApiHelper.h"
 
 namespace Luna {
 

@@ -6,7 +6,9 @@ PROJECT(ccNetwork)
 
 # Configuration
 
-include_directories( ./ ../../Library)
+include_directories( 
+	./include
+	../../Library/ccCore/include)
 
 file(GLOB SRC_FILES 
 	src/*.cpp

@@ -5,7 +5,7 @@
  *      Author: kmansoo
  */
 
-#include "../ccWebServerRequest.h"
+#include "ccWebServer/ccWebServerRequest.h"
 
 namespace Luna {
 

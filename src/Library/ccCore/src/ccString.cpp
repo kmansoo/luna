@@ -10,7 +10,7 @@
 #include <ctype.h>
 #include <string.h>
 
-#include "../ccString.h"
+#include "ccCore/ccString.h"
 
 namespace Luna {
 

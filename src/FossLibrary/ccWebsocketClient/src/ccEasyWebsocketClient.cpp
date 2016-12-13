@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "ccEasyWebsocketClient.h"
+#include "ccWebsocketClient/ccEasyWebsocketClient.h"
 
 namespace Luna {
 

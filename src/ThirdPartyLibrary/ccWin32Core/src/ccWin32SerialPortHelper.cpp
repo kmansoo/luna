@@ -6,7 +6,7 @@
 
 #include "ccCore/ccString.h"
 
-#include "ccWin32SerialPortHelper.h"
+#include "ccWin32Core/ccWin32SerialPortHelper.h"
 
 namespace Luna {
 

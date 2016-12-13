@@ -5,8 +5,8 @@
  *      Author: kmansoo
  */
 
-#include "../ccWebServerPageDirectory.h"
-#include "../ccWebServer.h"
+#include "ccWebServer/ccWebServerPageDirectory.h"
+#include "ccWebServer/ccWebServer.h"
 
 namespace Luna {
 

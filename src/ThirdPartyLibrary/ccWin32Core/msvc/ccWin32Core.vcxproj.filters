@@ -12,8 +12,11 @@
     <Filter Include="src">
       <UniqueIdentifier>{f3735389-d487-407f-94a3-6b622cafeba9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="API">
-      <UniqueIdentifier>{bd3488b3-1d28-4209-9263-6d44e1173d3f}</UniqueIdentifier>
+    <Filter Include="include">
+      <UniqueIdentifier>{4c958737-2706-4c60-8306-11ffc78753eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\ccWin32Core">
+      <UniqueIdentifier>{29845537-30e1-4904-acc5-c19456384c28}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -31,14 +34,14 @@
     <ClInclude Include="stdafx.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\ccWin32WebApiHelper.h">
-      <Filter>API</Filter>
+    <ClInclude Include="..\include\ccWin32Core\ccWin32RgWebApiTransactionNotifier.h">
+      <Filter>include\ccWin32Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\ccWin32RgWebApiTransactionNotifier.h">
-      <Filter>API</Filter>
+    <ClInclude Include="..\include\ccWin32Core\ccWin32SerialPortHelper.h">
+      <Filter>include\ccWin32Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\ccWin32SerialPortHelper.h">
-      <Filter>API</Filter>
+    <ClInclude Include="..\include\ccWin32Core\ccWin32WebApiHelper.h">
+      <Filter>include\ccWin32Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

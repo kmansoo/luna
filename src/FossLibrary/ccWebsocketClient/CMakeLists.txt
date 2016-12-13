@@ -6,7 +6,12 @@ PROJECT(ccWebsocketClient)
 
 # Configuration
 
-include_directories( ./ ../../Library ../../FossLibrary)
+include_directories(
+	./include
+	./include/ccWebsocketClient
+    ../../Library/ccCore/include
+    ../../Library/ccWebServer/include
+)
 
 file(GLOB SRC_FILES 
 	src/*.cpp

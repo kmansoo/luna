@@ -4,6 +4,8 @@
 #include "ccCore/ccCoreAPI.h"
 #include "ccCore/ccString.h"
 
+#include "ccNetwork/ccNetworkManager.h"
+
 #include "ccWebServer/ccWebServerManager.h"
 
 #include "ccMongooseServer/ccMongooseWebServerObjectFactory.h"
@@ -14,25 +16,9 @@
 #include "ChattingWSManager.h"
 #include "RESTfulChattingApiManager.h"
 
-#ifdef WIN32
-#   include <Winsock2.h>
-#endif
-
 int main(int argc, char* argv[]) {
-#ifdef WIN32
-    WORD wVersionRequested = MAKEWORD(2, 2);
-    WSADATA wsaData;
-    int err;
 
-    err = WSAStartup(wVersionRequested, &wsaData);
-
-    if (err != 0) {
-        // could not find a usable WinSock DLL
-        //cerr << "Could not load winsock" << endl;
-        // is this is failing, try a different version that 2.2, 1.0 or later will likely work
-        exit(1);
-    }
-#endif
+    Luna::ccNetworkManager::instance().init();
 
     //  choose a Web Server : Abstract Factory Design Pattern
     std::string html_path = ".";

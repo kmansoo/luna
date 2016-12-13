@@ -23,7 +23,7 @@
 
 #include "ccCore/ccString.h"
 
-#include "ccNetworkManager.h"
+#include "ccNetwork/ccNetworkManager.h"
 
 namespace Luna {
 

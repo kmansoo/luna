@@ -5,7 +5,7 @@
  *      Author: kmansoo
  */
 
-#include "../ccRESTfulApi.h"
+#include "ccWebServer/ccRESTfulApi.h"
 
 namespace Luna {
 
@@ -17,7 +17,7 @@ bool ccRESTfulApi::has_api(const std::string& uri) {
     auto it = api_map_.find(uri);
 
     if (it == api_map_.end()) {
-        //  '/xxx/xxx/*' ÆÐÅÏÀ» Ã£À½
+        //  '/xxx/xxx/*' ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½
         std::string tempuri_ = uri;
 
         int nPos = tempuri_.rfind("/");
@@ -45,7 +45,7 @@ bool ccRESTfulApi::perform_api(
     auto it = api_map_.find(uri);
 
     if (it == api_map_.end()) {
-        //  '/xxx/xxx/*' ÆÐÅÏÀ» Ã£À½
+        //  '/xxx/xxx/*' ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½
         std::string tempuri_ = uri;
 
         int nPos = tempuri_.rfind("/");

@@ -10,17 +10,14 @@
 
 #include <string>
 
-#include "ccCore/ccSingletonT.h"
+#include "ccCore/ccSingleton.h"
 
 namespace Luna {
 
-class ccNetworkManager : public ccSingletonT<ccNetworkManager> {
+class ccNetworkManager : public ccSingleton<ccNetworkManager> {
 public:
-    virtual ~ccNetworkManager();
-
-protected:
-    friend class ccSingletonT<ccNetworkManager>;
     ccNetworkManager();
+    virtual ~ccNetworkManager();
 
 public:
     bool    init();

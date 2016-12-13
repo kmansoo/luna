@@ -7,7 +7,7 @@
 
 #include "ccMongooseWebServer.h"
 
-#include "../ccMongooseWebServerObjectFactory.h"
+#include "ccMongooseServer/ccMongooseWebServerObjectFactory.h"
 
 namespace Luna {
 
