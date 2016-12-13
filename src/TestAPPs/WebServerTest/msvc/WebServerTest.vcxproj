@@ -183,9 +183,6 @@
     <ProjectReference Include="..\..\..\ThirdPartyLibrary\ccMongooseServer\msvc\ccMongooseServer.vcxproj">
       <Project>{e3fcc667-3505-4635-a78b-ea15e73d4755}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\ThirdPartyLibrary\ccWin32Core\msvc\ccWin32Core.vcxproj">
-      <Project>{5f76776d-8695-43d9-b134-d0e24fa685c8}</Project>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\ChattingWSManager.h" />

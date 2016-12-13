@@ -1,150 +1,69 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-<<<<<<< Updated upstream
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="src">
-      <UniqueIdentifier>{0fbe46bb-315d-4bf1-b355-340a46ed4d59}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="API">
-      <UniqueIdentifier>{99a109bc-cce0-4571-9395-7299c7a90688}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="API\json">
-      <UniqueIdentifier>{11114c46-2fe3-4ce1-951f-c910fc6302e2}</UniqueIdentifier>
-=======
-    <Filter Include="src">
-      <UniqueIdentifier>{0fbe46bb-315d-4bf1-b355-340a46ed4d59}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="include">
-      <UniqueIdentifier>{c6158110-b259-4dc7-8c82-ca51b645628b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="include\json">
-      <UniqueIdentifier>{98a3264c-75b2-49c7-9d18-b3d811095d88}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\lib_json">
-      <UniqueIdentifier>{d0bf2e0e-a67b-414e-92f0-9831fd7592de}</UniqueIdentifier>
->>>>>>> Stashed changes
-    </Filter>
+    <ClCompile Include="..\src\lib_json\json_reader.cpp">
+      <Filter>src\lib_json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lib_json\json_value.cpp">
+      <Filter>src\lib_json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lib_json\json_writer.cpp">
+      <Filter>src\lib_json</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
     <None Include="..\src\lib_json\json_valueiterator.inl">
-<<<<<<< Updated upstream
-      <Filter>src</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\lib_json\json_tool.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\json\assertions.h">
-      <Filter>API\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\json\autolink.h">
-      <Filter>API\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\json\config.h">
-      <Filter>API\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\json\features.h">
-      <Filter>API\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\json\forwards.h">
-      <Filter>API\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\json\json.h">
-      <Filter>API\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\json\reader.h">
-      <Filter>API\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\json\value.h">
-      <Filter>API\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\json\version.h">
-      <Filter>API\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\json\writer.h">
-      <Filter>API\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\json\allocator.h">
-      <Filter>API\json</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\lib_json\json_writer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\lib_json\json_reader.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\lib_json\json_value.cpp">
-      <Filter>src</Filter>
-=======
       <Filter>src\lib_json</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\ccJsonParser\json\assertions.h">
-      <Filter>include\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ccJsonParser\json\autolink.h">
-      <Filter>include\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ccJsonParser\json\config.h">
-      <Filter>include\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ccJsonParser\json\features.h">
-      <Filter>include\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ccJsonParser\json\forwards.h">
-      <Filter>include\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ccJsonParser\json\json.h">
-      <Filter>include\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ccJsonParser\json\reader.h">
-      <Filter>include\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ccJsonParser\json\value.h">
-      <Filter>include\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ccJsonParser\json\version.h">
-      <Filter>include\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ccJsonParser\json\writer.h">
-      <Filter>include\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\lib_json\json_tool.h">
-      <Filter>src\lib_json</Filter>
-    </ClInclude>
+    <Filter Include="include">
+      <UniqueIdentifier>{f71f40db-4828-4cc5-89fe-955f041fce99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\json">
+      <UniqueIdentifier>{38c5341f-5e60-4f28-84c4-515825181dd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{9a4d59ba-ca52-46c3-a545-3cb197c0e9fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\lib_json">
+      <UniqueIdentifier>{4e46b798-1351-4914-b957-be794f16263f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\lib_json\json_reader.cpp">
-      <Filter>src\lib_json</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\lib_json\json_value.cpp">
-      <Filter>src\lib_json</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\lib_json\json_writer.cpp">
-      <Filter>src\lib_json</Filter>
->>>>>>> Stashed changes
-    </ClCompile>
+    <ClInclude Include="..\include\json\allocator.h">
+      <Filter>include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\json\assertions.h">
+      <Filter>include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\json\autolink.h">
+      <Filter>include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\json\config.h">
+      <Filter>include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\json\features.h">
+      <Filter>include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\json\forwards.h">
+      <Filter>include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\json\json.h">
+      <Filter>include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\json\reader.h">
+      <Filter>include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\json\value.h">
+      <Filter>include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\json\version.h">
+      <Filter>include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\json\writer.h">
+      <Filter>include\json</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -163,31 +163,17 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< Updated upstream
-    <ClInclude Include="..\json\allocator.h" />
-    <ClInclude Include="..\json\assertions.h" />
-    <ClInclude Include="..\json\autolink.h" />
-    <ClInclude Include="..\json\config.h" />
-    <ClInclude Include="..\json\features.h" />
-    <ClInclude Include="..\json\forwards.h" />
-    <ClInclude Include="..\json\json.h" />
-    <ClInclude Include="..\json\reader.h" />
-    <ClInclude Include="..\json\value.h" />
-    <ClInclude Include="..\json\version.h" />
-    <ClInclude Include="..\json\writer.h" />
-=======
-    <ClInclude Include="..\include\ccJsonParser\json\assertions.h" />
-    <ClInclude Include="..\include\ccJsonParser\json\autolink.h" />
-    <ClInclude Include="..\include\ccJsonParser\json\config.h" />
-    <ClInclude Include="..\include\ccJsonParser\json\features.h" />
-    <ClInclude Include="..\include\ccJsonParser\json\forwards.h" />
-    <ClInclude Include="..\include\ccJsonParser\json\json.h" />
-    <ClInclude Include="..\include\ccJsonParser\json\reader.h" />
-    <ClInclude Include="..\include\ccJsonParser\json\value.h" />
-    <ClInclude Include="..\include\ccJsonParser\json\version.h" />
-    <ClInclude Include="..\include\ccJsonParser\json\writer.h" />
->>>>>>> Stashed changes
-    <ClInclude Include="..\src\lib_json\json_tool.h" />
+    <ClInclude Include="..\include\json\allocator.h" />
+    <ClInclude Include="..\include\json\assertions.h" />
+    <ClInclude Include="..\include\json\autolink.h" />
+    <ClInclude Include="..\include\json\config.h" />
+    <ClInclude Include="..\include\json\features.h" />
+    <ClInclude Include="..\include\json\forwards.h" />
+    <ClInclude Include="..\include\json\json.h" />
+    <ClInclude Include="..\include\json\reader.h" />
+    <ClInclude Include="..\include\json\value.h" />
+    <ClInclude Include="..\include\json\version.h" />
+    <ClInclude Include="..\include\json\writer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\lib_json\json_reader.cpp" />

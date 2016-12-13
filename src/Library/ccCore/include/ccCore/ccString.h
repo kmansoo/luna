@@ -18,6 +18,7 @@ public:
     ccString(const char* strInitData);
     ccString(const char* strFirst, const char* strLast);
     ccString(const ccString& _Right);
+    ccString(const std::string& _Right);
 
     virtual ~ccString();
 
