@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{0fbe46bb-315d-4bf1-b355-340a46ed4d59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\lib_easywsclient">
+      <UniqueIdentifier>{b96852a1-595e-4533-b863-0a294029d9a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{99546a7a-e4fa-4fda-b4d4-0e9783602249}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\ccWebsocketClient">
+      <UniqueIdentifier>{caf26726-c3d5-4355-bbc5-667be2789cde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\easywsclient">
+      <UniqueIdentifier>{e06064b7-19c4-4c6f-b4d6-d64a886f968b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\lib_easywsclient\easywsclient.cpp">
+      <Filter>src\lib_easywsclient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccEasyWebsocketClient.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\ccWebsocketClient\ccEasyWebsocketClient.h">
+      <Filter>include\ccWebsocketClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccWebsocketClient\easywsclient\easywsclient.hpp">
+      <Filter>include\easywsclient</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
