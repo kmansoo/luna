@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{0fbe46bb-315d-4bf1-b355-340a46ed4d59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{99a109bc-cce0-4571-9395-7299c7a90688}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\ccCore">
+      <UniqueIdentifier>{0e6d6a24-f48b-4b3f-96ba-d23443840e30}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\ccCore\ccCoreAPI.h">
+      <Filter>include\ccCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccCore\ccSingleton.h">
+      <Filter>include\ccCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccCore\ccString.h">
+      <Filter>include\ccCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccCore\ccTimer.h">
+      <Filter>include\ccCore</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\ccString.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccCoreAPI.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

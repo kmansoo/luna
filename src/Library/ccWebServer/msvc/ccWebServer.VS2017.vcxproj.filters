@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{0fbe46bb-315d-4bf1-b355-340a46ed4d59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{cf29fc95-15fb-46e8-9982-8a68fe7b3ba3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\ccWebServer">
+      <UniqueIdentifier>{560c79c7-209b-4d64-9345-9a5867991773}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\ccWebServer\ccRESTfulApi.h">
+      <Filter>include\ccWebServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccWebServer\ccWebServer.h">
+      <Filter>include\ccWebServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccWebServer\ccWebServerEventListener.h">
+      <Filter>include\ccWebServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccWebServer\ccWebServerFileDownloadPage.h">
+      <Filter>include\ccWebServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccWebServer\ccWebServerFileUploadPage.h">
+      <Filter>include\ccWebServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccWebServer\ccWebServerManager.h">
+      <Filter>include\ccWebServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccWebServer\ccWebServerObjectFactory.h">
+      <Filter>include\ccWebServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccWebServer\ccWebServerPage.h">
+      <Filter>include\ccWebServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccWebServer\ccWebServerPageDirectory.h">
+      <Filter>include\ccWebServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccWebServer\ccWebServerRequest.h">
+      <Filter>include\ccWebServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccWebServer\ccWebServerResponse.h">
+      <Filter>include\ccWebServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccWebServer\ccWebsocket.h">
+      <Filter>include\ccWebServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccWebServer\ccWebsocketGroup.h">
+      <Filter>include\ccWebServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccWebServer\ccWebsocketManager.h">
+      <Filter>include\ccWebServer</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\ccWebServerResponse.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccWebServer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccWebServerManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccWebServerRequest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccRESTfulApi.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccWebsocket.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccWebsocketGroup.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccWebsocketManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccWebServerPageDirectory.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccWebServerFileUploadPage.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
