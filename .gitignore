@@ -8,3 +8,4 @@ src/.cproject
 .cproject
 \.vscode/
 **/.DS_Store
+*.user
