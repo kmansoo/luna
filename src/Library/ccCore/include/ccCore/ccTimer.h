@@ -2,7 +2,7 @@
  * ccTimer.h
  *
  *  Created on: 2016. 1. 29.
- *      Author: kmansoo
+ *      Author: Mansoo Kim(kmansoo@gmail.com)
  */
 
 #ifndef LIBRARY_CCCOREAPI_CCTIMER_H_

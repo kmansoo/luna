@@ -2,7 +2,7 @@
  * ccCoreAPI.cpp
  *
  *  Created on: 2016. 1. 26.
- *      Author: kmansoo
+ *      Author: Mansoo Kim(kmansoo@gmail.com)
  */
 
 #include <thread>

@@ -2,7 +2,7 @@
  * ccString.cpp
  *
  *  Created on: 2015. 11. 8.
- *      Author: kmansoo
+ *      Author: Mansoo Kim(kmansoo@gmail.com)
  */
 
 #include <stdio.h>

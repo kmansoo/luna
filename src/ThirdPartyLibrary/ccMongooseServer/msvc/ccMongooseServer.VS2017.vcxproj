@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E3FCC667-3505-4635-A78B-EA15E73D4755}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>HS</RootNamespace>
+    <RootNamespace>Luna</RootNamespace>
     <ProjectName>ccMongooseServer</ProjectName>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>

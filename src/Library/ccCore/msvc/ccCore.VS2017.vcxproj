@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B3B6750E-2ACD-4362-845A-2A79AB52FBD1}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>HS</RootNamespace>
+    <RootNamespace>Luna</RootNamespace>
     <ProjectName>ccCore</ProjectName>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -163,13 +163,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\ccCore\ccCoreAPI.h" />
+    <ClInclude Include="..\include\ccCore\ccSelectEventObserver.h" />
     <ClInclude Include="..\include\ccCore\ccSingleton.h" />
     <ClInclude Include="..\include\ccCore\ccString.h" />
+    <ClInclude Include="..\include\ccCore\ccThread.h" />
     <ClInclude Include="..\include\ccCore\ccTimer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\ccCoreAPI.cpp" />
+    <ClCompile Include="..\src\ccSelectEventObserver.cpp" />
     <ClCompile Include="..\src\ccString.cpp" />
+    <ClCompile Include="..\src\ccThread.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

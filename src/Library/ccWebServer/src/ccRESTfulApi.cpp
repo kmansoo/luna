@@ -17,7 +17,6 @@ bool ccRESTfulApi::has_api(const std::string& uri) {
     auto it = api_map_.find(uri);
 
     if (it == api_map_.end()) {
-        //  '/xxx/xxx/*' ������ ã��
         std::string tempuri_ = uri;
 
         int nPos = tempuri_.rfind("/");
@@ -45,7 +44,6 @@ bool ccRESTfulApi::perform_api(
     auto it = api_map_.find(uri);
 
     if (it == api_map_.end()) {
-        //  '/xxx/xxx/*' ������ ã��
         std::string tempuri_ = uri;
 
         int nPos = tempuri_.rfind("/");

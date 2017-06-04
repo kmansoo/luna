@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{4B237A6F-F4D9-4BBF-9D63-6460DDF8B984}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>CommonControl</RootNamespace>
+    <RootNamespace>Luna</RootNamespace>
     <ProjectName>ccWebServer</ProjectName>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>

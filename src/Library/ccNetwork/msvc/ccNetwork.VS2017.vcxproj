@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{22622606-5D5B-499C-8F3D-BAD302A10950}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>HS</RootNamespace>
+    <RootNamespace>Luna</RootNamespace>
     <ProjectName>ccNetwork</ProjectName>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
