@@ -59,9 +59,7 @@ bool ccSelectEventObserver::removeEvent(int fd) {
 }
 
 void ccSelectEventObserver::poll() {
-    int             size = 0;
     int             maxFd = 0;
-    int             nIndex;
     fd_set          read_fds, write_fds, except_fds;
     struct timeval  tv;
 
