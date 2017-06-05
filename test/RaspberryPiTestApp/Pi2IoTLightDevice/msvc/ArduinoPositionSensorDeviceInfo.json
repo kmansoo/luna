@@ -1,0 +1,9 @@
+{
+    "IoTDeviceSpecification" : {
+        "Type" : "Seonsor",
+        "Name" : "Arduino Position Sensor",
+        "Description" : "Gathering Position Data",
+        "Manufacture" : "Mansoo"
+    },
+    "IoTDeviceMasterUri" : "ws://localhost:8000/ws_iot_deivce"
+}
