@@ -1,0 +1,6 @@
+[submodule "dependency/curl"]
+	path = dependency/curl
+	url = https://github.com/curl/curl.git
+[submodule "dependency/mbedtls"]
+	path = dependency/mbedtls
+	url = https://github.com/ARMmbed/mbedtls.git

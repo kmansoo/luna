@@ -15,7 +15,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccWebsocketClient", "..\..\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccNetwork", "..\..\..\src\Library\ccNetwork\msvc\ccNetwork.VS2017.vcxproj", "{22622606-5D5B-499C-8F3D-BAD302A10950}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebServerTest.VS2017", "..\..\..\test\WebServerTest\msvc\WebServerTest.VS2017.vcxproj", "{54761A10-7565-4CF4-934C-8AE984255207}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebServerTest.VS2017", "..\..\WebServerTest\msvc\WebServerTest.VS2017.vcxproj", "{54761A10-7565-4CF4-934C-8AE984255207}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -20,8 +20,14 @@ namespace Luna {
 class ccThread {
 public:
     template <class callable, class... arguments>
-    ccThread(bool release, callable&& f, arguments&&... args) {
+    ccThread(bool release, callable&& f, arguments&&... args) : is_stop_thread_(false) {
 
+    }
+
+    bool setStop() {
+        is_stop_thread_ = true;
+
+        return true;
     }
 
 private:
