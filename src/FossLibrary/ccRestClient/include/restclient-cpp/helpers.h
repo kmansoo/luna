@@ -9,6 +9,7 @@
 #ifndef INCLUDE_RESTCLIENT_CPP_HELPERS_H_
 #define INCLUDE_RESTCLIENT_CPP_HELPERS_H_
 
+#include <cctype>   //  2017.6.23, by Mansoo, To fix compile errors thar are 'error: C2039: 'isspace' : is not a member of 'std', but std::isspace ...'
 #include <string>
 #include <algorithm>
 #include <functional>

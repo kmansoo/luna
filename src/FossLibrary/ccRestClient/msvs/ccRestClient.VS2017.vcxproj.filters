@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{f71f40db-4828-4cc5-89fe-955f041fce99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{9a4d59ba-ca52-46c3-a545-3cb197c0e9fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\restclient-cpp">
+      <UniqueIdentifier>{38c5341f-5e60-4f28-84c4-515825181dd4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\restclient-cpp\restclient.h">
+      <Filter>include\restclient-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\restclient-cpp\version.h">
+      <Filter>include\restclient-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\restclient-cpp\connection.h">
+      <Filter>include\restclient-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\restclient-cpp\helpers.h">
+      <Filter>include\restclient-cpp</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\connection.cc">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\helpers.cc">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\restclient.cc">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

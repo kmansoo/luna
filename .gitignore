@@ -3,6 +3,7 @@ build/
 **/Debug/
 **/Release/
 **/.vs/
+**/x64/LIB*
 src/.cproject
 .project
 .cproject
