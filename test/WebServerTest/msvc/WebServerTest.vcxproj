@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{54761A10-7565-4CF4-934C-8AE984255207}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>WebServerTest</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <RootNamespace>Luna</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -40,7 +40,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -101,7 +101,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../include;../../../Library/ccCore/include;../../../Library/ccNetwork/include;../../../Library/ccWebServer/include;../../../FossLibrary/ccJsonParser/include;../../../FossLibrary/ccWebsocketClient/include;../../../ThirdPartyLibrary/ccMongooseServer/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;../../../src/Library/ccCore/include;../../../src/Library/ccNetwork/include;../../../src/Library/ccWebServer/include;../../../src/FossLibrary/ccJsonParser/include;../../../src/FossLibrary/ccWebsocketClient/include;../../../src/ThirdPartyLibrary/ccMongooseServer/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -176,6 +176,24 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\ProductLibrary\ccRESTfulChatting\build\ccRESTfulChatting.vcxproj">
       <Project>{cec6dc46-192c-4a85-8fc9-b745c87a0c95}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\FossLibrary\ccJsonParser\msvc\ccJsonParser.VS2017.vcxproj">
+      <Project>{e7bfc6a3-98b0-4103-a3ba-de08105f2db3}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\FossLibrary\ccWebsocketClient\msvc\ccWebsocketClient.VS2017.vcxproj">
+      <Project>{0e86ffb0-57e1-4a9e-a12d-8a07ca1c5708}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Library\ccCore\msvc\ccCore.VS2017.vcxproj">
+      <Project>{b3b6750e-2acd-4362-845a-2a79ab52fbd1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Library\ccNetwork\msvc\ccNetwork.VS2017.vcxproj">
+      <Project>{22622606-5d5b-499c-8f3d-bad302a10950}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Library\ccWebServer\msvc\ccWebServer.VS2017.vcxproj">
+      <Project>{4b237a6f-f4d9-4bbf-9d63-6460ddf8b984}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\ThirdPartyLibrary\ccMongooseServer\msvc\ccMongooseServer.VS2017.vcxproj">
+      <Project>{e3fcc667-3505-4635-a78b-ea15e73d4755}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\ThirdPartyLibrary\ccMongooseServer\build\ccMongooseServer.vcxproj">
       <Project>{e3fcc667-3505-4635-a78b-ea15e73d4755}</Project>

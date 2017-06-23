@@ -169,7 +169,7 @@ size_t ccWebServerResponse::send_formatted_content_ex(const char *fmt, va_list a
     if (kMaxBufferSize == 0)
         return 0;
 
-#ifdef  WIN32
+#ifdef  _WINDOWS
     calculated_size = vsnprintf_s(buf, kMaxBufferSize, fmt, ap);
 #else
     calculated_size = vsnprintf(buf, kMaxBufferSize, fmt, ap);

@@ -13,7 +13,7 @@
 
 namespace easywsclient {
 
-#if __cplusplus > 199711L || defined(WIN32)   //  supports std++ 11
+#if __cplusplus > 199711L || defined(_WINDOWS)   //  supports std++ 11
     struct Callback_Imp { virtual void operator()(const std::string& message) = 0; };
     struct BytesCallback_Imp { virtual void operator()(const std::vector<uint8_t>& message) = 0; };
 #else
@@ -217,7 +217,7 @@ class WebSocket {
     virtual readyStateValues getReadyState() const = 0;
     virtual std::int32_t    getInstance() const = 0;
 
-#if __cplusplus > 199711L || defined(WIN32)
+#if __cplusplus > 199711L || defined(_WINDOWS)
     template<class Callable>
     void dispatch(Callable callable)
         // For callbacks that accept a string argument.
@@ -257,7 +257,7 @@ class WebSocket {
 
   protected:
 
-#if __cplusplus > 199711L || defined(WIN32)
+#if __cplusplus > 199711L || defined(_WINDOWS)
       virtual void _dispatch(Callback_Imp& callable) = 0;
       virtual void _dispatchBinary(BytesCallback_Imp& callable) = 0;
 #else

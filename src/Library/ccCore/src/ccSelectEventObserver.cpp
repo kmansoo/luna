@@ -7,7 +7,7 @@
 
 #include "ccCore/ccSelectEventObserver.h"
 
-#ifndef WIN32
+#ifndef _WINDOWS
 #   include <sys/select.h>
 #else
 #   include <WinSock2.h>

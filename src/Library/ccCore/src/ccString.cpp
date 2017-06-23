@@ -140,7 +140,7 @@ void ccString::format(std::string& destStr, const char* format, ...) {
 
     format_buffer[0] = '\0';
 
-#ifdef _WIN32
+#ifdef _WINDOWS
     alloc_size = _vsnprintf(format_buffer, size, format, args);
 #else
     alloc_size = vsnprintf(format_buffer, size, format, args);

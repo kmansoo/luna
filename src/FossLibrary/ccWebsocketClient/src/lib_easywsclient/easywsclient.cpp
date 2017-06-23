@@ -1,5 +1,5 @@
 
-#ifdef _WIN32
+#ifdef _WINDOWS
     #if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
         #define _CRT_SECURE_NO_WARNINGS // _CRT_SECURE_NO_WARNINGS for sscanf errors in MSVC2013 Express
     #endif
@@ -74,7 +74,7 @@
 
 #include "ccWebsocketClient/easywsclient/easywsclient.hpp"
 
-#if (__cplusplus > 199711L) || defined(WIN32)
+#if (__cplusplus > 199711L) || defined(_WINDOWS)
 using easywsclient::Callback_Imp;
 using easywsclient::BytesCallback_Imp;
 #endif
@@ -125,7 +125,7 @@ class _DummyWebSocket : public easywsclient::WebSocket
     virtual std::int32_t    getInstance() const { return -1; }
 
 
-#if __cplusplus > 199711L || defined(WIN32)
+#if __cplusplus > 199711L || defined(_WINDOWS)
     void _dispatch(Callback_Imp & callable) { }
     void _dispatchBinary(BytesCallback_Imp& callable) { }
 #else
@@ -262,7 +262,7 @@ class _RealWebSocket : public easywsclient::WebSocket
     //template<class Callable>
     //void dispatch(Callable callable)
 
-#if __cplusplus > 199711L || defined(WIN32)  //  supports std++ 11
+#if __cplusplus > 199711L || defined(_WINDOWS)  //  supports std++ 11
     virtual void _dispatch(Callback_Imp & callable) {
         struct CallbackAdapter : public BytesCallback_Imp
             // Adapt void(const std::string<uint8_t>&) to void(const std::string&)
@@ -598,7 +598,7 @@ easywsclient::WebSocket::pointer from_url(const std::string& url, bool useMask, 
     }
     int flag = 1;
     setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, (char*) &flag, sizeof(flag)); // Disable Nagle's algorithm
-#ifdef _WIN32
+#ifdef _WINDOWS
     u_long on = 1;
     ioctlsocket(sockfd, FIONBIO, &on);
 #else

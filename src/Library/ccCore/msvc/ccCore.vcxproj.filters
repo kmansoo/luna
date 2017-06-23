@@ -27,12 +27,24 @@
     <ClInclude Include="..\include\ccCore\ccTimer.h">
       <Filter>include\ccCore</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\ccCore\ccSelectEventObserver.h">
+      <Filter>include\ccCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccCore\ccThread.h">
+      <Filter>include\ccCore</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\ccString.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ccCoreAPI.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccSelectEventObserver.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccThread.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

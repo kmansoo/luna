@@ -7,7 +7,7 @@
 #include <iostream>
 #include <string.h>
 
-#if defined(WIN32)
+#if defined(_WINDOWS)
 #   include <Winsock2.h>
 #   include <IPHlpApi.h>
 #   pragma comment(lib, "ws2_32.lib")
@@ -39,7 +39,7 @@ bool ccNetworkManager::init() {
     if (is_init_network_)
         return true;
 
-#if defined(WIN32)
+#if defined(_WINDOWS)
     WORD version_requested = MAKEWORD(2, 2);
     WSADATA wsa_data;
     int err;
@@ -60,7 +60,7 @@ bool ccNetworkManager::init() {
 }
 
 void ccNetworkManager::shutdown() {
-#if defined(WIN32)
+#if defined(_WINDOWS)
     if (is_init_network_) {
         WSACleanup();
 
@@ -92,7 +92,7 @@ bool ccNetworkManager::get_local_ip(std::string& ip) {
         return false;
 
     //  Obtain the computer's IP
-#if defined(WIN32)
+#if defined(_WINDOWS)
     ccString::format(ip, "%d.%d.%d.%d",
                      ((struct in_addr*)(host->h_addr))->S_un.S_un_b.s_b1,
                      ((struct in_addr*)(host->h_addr))->S_un.S_un_b.s_b2,
