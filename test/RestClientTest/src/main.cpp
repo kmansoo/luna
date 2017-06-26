@@ -16,8 +16,9 @@ int main(int argc, char* argv[]) {
     // initialize RestClient
     RestClient::init();
 
-    /*
-    RestClient::Connection* conn = new RestClient::Connection("http://220.120.109.11:4500");
+    //  Now, I'm going to test with COMMAX Wallpad Emulator
+    //
+    RestClient::Connection* conn = new RestClient::Connection("http://localhost:8000");
 
     // set connection timeout to 5s
     conn->SetTimeout(5);
@@ -38,8 +39,19 @@ int main(int argc, char* argv[]) {
     Json::Value  result;
     Json::StyledWriter writer;
 
-    //RestClient::Response exist_response = conn->get(checkIDAPI); // 테스트 서버
-    //RestClient::Response post = conn->post("/cmx/register", writer.write(request)); // 테스트 서버
-    */
+    RestClient::Response response = conn->get("/v1/accessory/lightbulb");
+
+    reader.parse(response.body, result);
+
+    std::string control =
+        R"(
+            {
+              "power_status": false,
+              "bright_level": 100
+            }
+        )";   
+    
+    RestClient::Response post = conn->put("/v1/accessory/lightbulb/lightbulb1", control);
+
     return 0;
 }
