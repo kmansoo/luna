@@ -35,6 +35,9 @@ RestClient::Connection::Connection(const std::string& baseUrl)
   this->timeout = 0;
   this->followRedirects = false;
   this->noSignal = false;
+
+  // 2017.6.27, added the variable by mansoo.kim@icloud.com
+  this->noVerifyPeer = false;
 }
 
 RestClient::Connection::~Connection() {
@@ -369,6 +372,9 @@ RestClient::Connection::performCurlRequest(const std::string& uri) {
     curl_easy_setopt(this->curlHandle, CURLOPT_HTTPPROXYTUNNEL,
                      1L);
   }
+
+  // 2017.6.27, added code by mansoo.kim@icloud.com
+  curl_easy_setopt(this->curlHandle, CURLOPT_SSL_VERIFYPEER, !this->noVerifyPeer);
 
   res = curl_easy_perform(this->curlHandle);
   if (res != CURLE_OK) {

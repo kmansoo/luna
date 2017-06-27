@@ -161,6 +161,12 @@ class Connection {
     // set CURLOPT_PROXY
     void SetProxy(const std::string& uriProxy);
 
+    // 2017.6.27, added the method by mansoo.kim@icloud.com
+    // set CURLOPT_SSL_VERIFYPEER
+    void SetSSLVerifyPeer(bool verifyPeer) {
+        this->noVerifyPeer = !verifyPeer;         
+    }
+
     std::string GetUserAgent();
 
     RestClient::Connection::Info GetInfo();
@@ -205,6 +211,9 @@ class Connection {
     std::string keyPassword;
     std::string uriProxy;
     RestClient::Response performCurlRequest(const std::string& uri);
+
+    // 2017.6.27, added the variable by mansoo.kim@icloud.com
+    bool noVerifyPeer;
 };
 };  // namespace RestClient
 

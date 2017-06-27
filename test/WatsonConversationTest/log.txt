@@ -1,0 +1,33 @@
+[***] 27-06-2017 14-39-51: {"intents":[],"entities":[],"input":{},"output":{"text":[],"nodes_visited":["Start And Initialize Context"],"log_messages":[]},"context":{"conversation_id":"6a41d97a-9168-4824-a4b2-4ed4705bc287","system":{"dialog_stack":[{"dialog_node":"root"}],"dialog_turn_counter":1,"dialog_request_counter":1,"branch_exited":true,"branch_exited_reason":"completed"},"nlu":0,"validation":0,"currenttime":"2017-06-27 05:39:50","commaxaction":"","dialogreturn":0,"newdevicename":"","newdevicecount":0,"newdeviceplace":"","devicefullarray":[],"weathercondition":""}}
+[REQ] 27-06-2017 14-39-56: I have a new device
+[REQ] 27-06-2017 14-39-56: {
+   "context" : {
+      "commaxaction" : "",
+      "conversation_id" : "6a41d97a-9168-4824-a4b2-4ed4705bc287",
+      "currenttime" : "2017-06-27 05:39:50",
+      "devicefullarray" : [],
+      "dialogreturn" : 0,
+      "newdevicecount" : 0,
+      "newdevicename" : "",
+      "newdeviceplace" : "",
+      "nlu" : 0,
+      "system" : {
+         "branch_exited" : true,
+         "branch_exited_reason" : "completed",
+         "dialog_request_counter" : 1,
+         "dialog_stack" : [
+            {
+               "dialog_node" : "root"
+            }
+         ],
+         "dialog_turn_counter" : 1
+      },
+      "validation" : 0,
+      "weathercondition" : ""
+   },
+   "input" : {
+      "text" : "I have a new device"
+   }
+}
+
+[***] 27-06-2017 14-39-56: {"intents":[{"intent":"SERACH_DEVICE","confidence":0.9160508513450623}],"entities":[],"input":{"text":"I have a new device"},"output":{"text":["I'll search new device for you."],"nodes_visited":["SearchDevice"],"log_messages":[]},"context":{"commaxaction":"NEWSEARCH","conversation_id":"6a41d97a-9168-4824-a4b2-4ed4705bc287","currenttime":"2017-06-27 05:39:50","devicefullarray":[],"dialogreturn":1,"newdevicecount":0,"newdevicename":"","newdeviceplace":"","nlu":0,"system":{"dialog_request_counter":2,"dialog_stack":[{"dialog_node":"SearchDevice"}],"dialog_turn_counter":2,"_node_output_map":{"SearchDevice":[0]}},"validation":0,"weathercondition":""}}
