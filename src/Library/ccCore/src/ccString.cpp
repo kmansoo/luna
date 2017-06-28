@@ -250,6 +250,29 @@ bool ccString::decode_base64(std::string& dest, std::string& src) {
     return true;
 }
 
+std::vector<std::string> ccString::splitToken(const std::string& source, char token_char) {
+    auto end = source.cend();
+    auto start = end;
+
+    std::vector<std::string> tokens;
+
+    for (auto it = source.cbegin(); it != end; ++it) {
+        if (*it != token_char) {
+            if (start == end)
+                start = it;
+            continue;
+        }
+        if (start != end) {
+            tokens.emplace_back(start, it);
+            start = end;
+        }
+    }
+    if (start != end)
+        tokens.emplace_back(start, end);
+
+    return tokens;
+}
+
 /**
     * @fn static char b64_encode(unsigned char u)
     * @brief Base64 encode one byte

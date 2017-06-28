@@ -9,6 +9,7 @@
 #define CCLIBRARY_CCCOREAPI_CCSTRING_H_
 
 #include <string>
+#include <vector>
 
 namespace Luna {
 
@@ -67,6 +68,9 @@ public:
     static  long    decode_string_to_hex(const char* strVal, int nLength = -1, int* pConvertedSize = NULL);
     static  bool    encode_base64(std::string& destStr, std::string& src);
     static  bool    decode_base64(std::string& destStr, std::string& src);
+
+    // 2017.6.28, Mansoo(mansoo.kim@icloud.com), Added this method to support spliting string using token
+    static std::vector<std::string> splitToken(const std::string& source, char token_char);
 
 private:
     enum CONST_VALUE {
