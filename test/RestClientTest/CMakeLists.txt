@@ -26,13 +26,13 @@ add_executable (RestClientTest
 )
 
 TARGET_LINK_LIBRARIES(RestClientTest
-    mbedcrypto
-    mbedx509
-    mbedtls
-    curl    
-	ccRestClient
+ 	ccRestClient
 	ccJsonParser
 	ccNetwork
 	ccCore
+    curl
+    mbedtls
+    mbedcrypto
+    mbedx509	
 	pthread
 ) 

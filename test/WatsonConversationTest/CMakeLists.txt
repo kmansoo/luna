@@ -27,13 +27,13 @@ add_executable (WatsonConversationTest
 )
 
 TARGET_LINK_LIBRARIES(WatsonConversationTest
+    ccRestClient
+    ccJsonParser
+    ccNetwork
+    ccCore
+    curl
+    mbedtls
     mbedcrypto
     mbedx509
-    mbedtls
-    curl    
-	ccRestClient
-	ccJsonParser
-	ccNetwork
-	ccCore
-	pthread
+    pthread
 ) 

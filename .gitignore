@@ -11,3 +11,4 @@ src/.cproject
 \.vscode/
 **/.DS_Store
 *.user
+env.json
