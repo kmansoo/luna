@@ -28,7 +28,8 @@ ConversationClient::ConversationClient()
     rest_conn_->SetUserAgent("Luna/IoTPlatform");
     rest_conn_->SetSSLVerifyPeer(false);
 
-    getEnvironment();
+    env_.getEnvironment();
+
     getToken();
     createNewConversation();
 }
@@ -37,54 +38,12 @@ ConversationClient::~ConversationClient()
 {
 }
 
-bool ConversationClient::getEnvironment() {
-
-    std::string     line;
-    std::string     json_data;
-    std::ifstream   env_file("env.json");
-
-    if (env_file.is_open()) {
-        while (env_file.good()) {
-            std::getline(env_file, line);
-
-            json_data += line;
-        }
-
-        env_file.close();
-
-        Json::Reader    json_reader;
-        Json::Value     environment_info;
-
-        try {
-            json_reader.parse(json_data, environment_info);
-
-            if (!environment_info["WORKSPACE_ID"].isNull())
-                this->workspace_id_ = environment_info["WORKSPACE_ID"].asCString();
-
-            if (!environment_info["CONVERSATION_USERNAME"].isNull())
-                this->conversation_username_ = environment_info["CONVERSATION_USERNAME"].asCString();
-
-            if (!environment_info["CONVERSATION_PASSWORD"].isNull())
-                this->conversation_password_ = environment_info["CONVERSATION_PASSWORD"].asCString();
-        } 
-        catch (...) {
-            return false;
-        }
-    }
-    else {
-        std::cout << "Unable to open file: env.json";
-
-        return false;
-    }
-
-    return true;
-}
 
 bool ConversationClient::getToken() {
 
-    if (workspace_id_.length() == 0 ||
-        conversation_username_.length() == 0 ||
-        conversation_password_.length() == 0) {
+    if (env_.workspace_id_.length() == 0 ||
+        env_.conversation_username_.length() == 0 ||
+        env_.conversation_password_.length() == 0) {
 
         std::cout << "There is not enough information to get the Token.";
         return false;
@@ -96,7 +55,7 @@ bool ConversationClient::getToken() {
     conn->SetTimeout(5);
     conn->SetSSLVerifyPeer(false);
 
-    conn->SetBasicAuth(conversation_username_, conversation_password_);
+    conn->SetBasicAuth(env_.conversation_username_, env_.conversation_password_);
     conn->SetUserAgent("Luna/IoTPlatform");
 
     RestClient::Response response = conn->get("/authorization/api/v1/token?url=https://gateway.watsonplatform.net/conversation/api");
@@ -125,7 +84,7 @@ bool ConversationClient::createNewConversation() {
 
     rest_conn_->SetHeaders(headers);
 
-    std::string req_uri = "/conversation/api/v1/workspaces/" + workspace_id_ + "/message?version=2017-05-26";
+    std::string req_uri = "/conversation/api/v1/workspaces/" + env_.workspace_id_ + "/message?version=2017-05-26";
 
     RestClient::Response response = rest_conn_->post(req_uri, "");
 
@@ -155,13 +114,13 @@ bool ConversationClient::createNewConversation() {
     return true;
 }
 
-std::string ConversationClient::sendText(const std::string message) {
+int ConversationClient::sendText(const std::string& message, std::string& output_text, std::string& intent, std::string& body) {
 
     addLog(true, message);
 
     if (conversation_id_.length() == 0) {
         std::cout << "There is no Conversation ID to talk with Watson";
-        return "";
+        return -1;
     }
 
     RestClient::HeaderFields headers;
@@ -171,7 +130,7 @@ std::string ConversationClient::sendText(const std::string message) {
 
     rest_conn_->SetHeaders(headers);
 
-    std::string req_uri = "/conversation/api/v1/workspaces/" + workspace_id_ + "/message?version=2017-05-26";
+    std::string req_uri = "/conversation/api/v1/workspaces/" + env_.workspace_id_ + "/message?version=2017-05-26";
     std::string req_body;
 
     auto t = std::time(nullptr);
@@ -198,14 +157,15 @@ std::string ConversationClient::sendText(const std::string message) {
 
     if (response.code != 200) {
         std::cout << "Response:" << std::endl << response.code << std::endl << response.body << std::endl;
-        return "";
+        return response.code;
     }
 
-    std::string     output_text;
     Json::Reader    json_reader;
     Json::Value     session_info;
 
     try {
+        body = response.body;
+
         json_reader.parse(response.body, session_info);
 
         if (!session_info["output"].isNull()) {
@@ -219,12 +179,20 @@ std::string ConversationClient::sendText(const std::string message) {
                 output_text = session_info["output"]["text"].asString();
         }
 
+        if (!session_info["intents"].isNull()) {
+            if (session_info["intents"].isArray()) {
+                for (int index = 0; index < session_info["intents"].size(); index++) {
+                    intent += session_info["intents"][index]["intent"].asString();
+                }
+            }
+        }
+
     }
     catch (...) {
-        return response.body;
+        return response.code;
     }
 
-    return output_text;
+    return response.code;
 }
 
 void ConversationClient::addLog(bool isReq, const std::string& log) {

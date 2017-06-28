@@ -187,10 +187,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\ConversationClient.cpp" />
+    <ClCompile Include="..\src\EnvironmentInfo.cpp" />
     <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\STTClient.cpp" />
+    <ClCompile Include="..\src\TTSClient.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\ConversationClient.h" />
+    <ClInclude Include="..\src\EnvironmentInfo.h" />
+    <ClInclude Include="..\src\STTClient.h" />
+    <ClInclude Include="..\src\TTSClient.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

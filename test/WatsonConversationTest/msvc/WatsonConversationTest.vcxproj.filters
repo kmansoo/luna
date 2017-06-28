@@ -16,9 +16,27 @@
     <ClCompile Include="..\src\ConversationClient.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\STTClient.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\EnvironmentInfo.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TTSClient.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\ConversationClient.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\STTClient.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\EnvironmentInfo.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TTSClient.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

@@ -4,30 +4,30 @@
 #include <memory>
 #include <fstream>
 
+#include "EnvironmentInfo.h"
+
 #include "json/value.h"
 #include "restclient-cpp/connection.h"
 
-#include "EnvironmentInfo.h"
+// 2017.6.28, Mansoo(mansoo.kim@icloud.com), I'll implement it as soon as possible.
 
-class ConversationClient
+class TTSClient
 {
 public:
-    ConversationClient();
-    ~ConversationClient();
+    TTSClient();
+    ~TTSClient();
 
 public:
-    int sendText(const std::string& message, std::string& output_text, std::string& intent, std::string& body);
+    bool convert(const std::string& text);
 
 private:
     bool getToken();
-    bool createNewConversation();
     void addLog(bool isReq, const std::string& log);
 
 private:
     EnvironmentInfo env_;
 
     std::string token_;
-    std::string conversation_id_;
     Json::Value context_;
 
     std::ofstream log_file_;
