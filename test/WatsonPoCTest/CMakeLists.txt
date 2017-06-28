@@ -23,7 +23,10 @@ link_directories(
 
 add_executable (WatsonPoCTest
     src/main.cpp
-	src/ConversationClient.cpp
+    src/ConversationClient.cpp
+    src/EnvironmentInfo.cpp
+    src/STTClient.cpp
+    src/TTSClient.cpp
 )
 
 TARGET_LINK_LIBRARIES(WatsonPoCTest
