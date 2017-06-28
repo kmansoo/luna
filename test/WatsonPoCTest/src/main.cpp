@@ -10,6 +10,7 @@
 
 void testConversation() {
     ConversationClient  client;
+    TTSClient           tts_client;
     std::string         text;
     std::string         output_text, intent, body;
 
@@ -44,8 +45,11 @@ void testConversation() {
 
 send_text:
             client.sendText(text, output_text, intent, body);
+            
+            tts_client.convert(output_text);
 
             std::cout << "Watson> " << output_text << "(" << intent << ")" << std::endl;
+            system("cvlc --play-and-exit tts.ogg");
 
             IntentStatus current_intent_status = kIntentStatus_NORMAL;
             CommaxActionStatus current_commax_action_status = kCommaxAction_NORMAL;
@@ -188,6 +192,7 @@ int main(int argc, char* argv[]) {
     Luna::ccNetworkManager::instance().init();
 
     testConversation();
+    // testTextToSpeech();
 
     return 0;
 }
