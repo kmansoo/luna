@@ -1,4 +1,4 @@
-FIND_PACKAGE(PythonInterp 2.6)
+FIND_PACKAGE(PythonInterp 3.8)
 
 ADD_EXECUTABLE(jsontestrunner_exe
                main.cpp

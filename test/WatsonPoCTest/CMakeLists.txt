@@ -1,5 +1,5 @@
 # CMake Version
-CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
+CMAKE_MINIMUM_REQUIRED (VERSION 3.8)
 
 # Project Name
 PROJECT(WatsonPoCTest)
@@ -10,15 +10,16 @@ SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 SET(CMAKE_CXX_FLAGS "-std=c++11")
 
 include_directories(
-	./ 
-	${LUNA_SW_PLATFORM}/src/Library/ccCore/include
-	${LUNA_SW_PLATFORM}/src/Library/ccNetwork/include
-	${LUNA_SW_PLATFORM}/src/FossLibrary/ccJsonParser/include
-	${LUNA_SW_PLATFORM}/src/FossLibrary/ccRestClient/include
+    ./ 
+    ${LUNA_SW_PLATFORM}/src/Library/ccCore/include
+    ${LUNA_SW_PLATFORM}/src/Library/ccNetwork/include
+    ${LUNA_SW_PLATFORM}/src/FossLibrary/ccJsonParser/include
+    ${LUNA_SW_PLATFORM}/src/FossLibrary/ccRestClient/include
+    ${LUNA_SW_PLATFORM}/dependency/curl/include
 )
 
 link_directories(
-	${LUNA_SW_PLATFORM}/build/lib
+    ${LUNA_SW_PLATFORM}/build/lib
 )
 
 add_executable (WatsonPoCTest
