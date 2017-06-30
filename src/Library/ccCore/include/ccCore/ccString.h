@@ -61,7 +61,7 @@ public:
     unsigned long   decode_hex(int *length = NULL);
 
 public:
-    // Supports up to 512 bytes
+    // Supports up to 2048 bytes
     static  void    format(std::string& destStr, const char* format, ...);
     static void     replace(std::string& destStr, const ccString& search, const ccString& replace);
 
@@ -74,7 +74,7 @@ public:
 
 private:
     enum CONST_VALUE {
-        kMaxFormatBufferSize = 512
+        kMaxFormatBufferSize = 2048
     };
 };
 

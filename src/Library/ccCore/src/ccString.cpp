@@ -127,7 +127,7 @@ long ccString::decode_string_to_hex(const char* value, int value_length,
     return result;
 }
 
-//  Supports up to 512 bytes
+//  Supports up to 2048 bytes
 void ccString::format(std::string& destStr, const char* format, ...) {
     char format_buffer[kMaxFormatBufferSize];
 
@@ -135,7 +135,7 @@ void ccString::format(std::string& destStr, const char* format, ...) {
 
     va_start(args, format);
 
-    //  Guess we need no more than CV_MAX_FORMAT_BUFFER_SIZE bytes.
+    //  Guess we need no more than kMaxFormatBufferSize bytes.
     int alloc_size, size = kMaxFormatBufferSize;
 
     format_buffer[0] = '\0';
