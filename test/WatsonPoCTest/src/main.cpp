@@ -62,9 +62,9 @@ void testConversationWithController() {
                 break;
 
         send_text:
-            client.sendText(text, output_text, intent, body);
+            int rep_code = client.sendText(text, output_text, intent, body);
 
-            std::cout << "Watson> " << output_text << "<Intent: " << intent << ">" << std::endl;
+            std::cout << "Watson> " << output_text << "<Intent: " << intent << "/ commax_action: " << client.getContext()["commaxaction"].asString() << ">" << std::endl;
 
             if (output_text.length() > 0) {
                 tts_client.convert(output_text);
@@ -74,6 +74,10 @@ void testConversationWithController() {
                 //  system("cvlc --play-and-exit tts.ogg");
 #endif // !WIN32
             }
+
+            if (rep_code != 200) {
+                continue;
+            }            
 
             IntentStatus current_intent_status = kIntentStatus_NORMAL;
             CommaxActionStatus current_commax_action_status = kCommaxAction_NORMAL;
@@ -133,6 +137,12 @@ void testConversationWithController() {
 
             case kIntentStatus_REGISTER_DEVICE:
                 switch (commax_action_status) {
+                case kCommaxAction_NEWREGISTER:
+                    client.getContext()["validation"] = 1;
+                    text = "";
+                    goto send_text;
+                    break;
+
                 case kCommaxAction_ENDREGISTER:
                     intent_status = kIntentStatus_NORMAL;
                     break;
