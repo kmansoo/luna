@@ -1,4 +1,5 @@
-#include "ConversationClient.h"
+#include "ConversationClientWithController.h"
+
 
 #include <iostream>
 
@@ -11,12 +12,12 @@
 #include "json/writer.h"
 #include "json/reader.h"
 
-ConversationClient::ConversationClient()
+ConversationClientWithController::ConversationClientWithController()
 {
     // initialize RestClient
     RestClient::init();
 
-    rest_conn_ = std::make_shared<RestClient::Connection>("https://gateway.watsonplatform.net");
+    rest_conn_ = std::make_shared<RestClient::Connection>("https://commax-poc.mybluemix.net");
 
     // set connection timeout to 5s
     rest_conn_->SetTimeout(5);
@@ -25,80 +26,34 @@ ConversationClient::ConversationClient()
 
     env_.getEnvironment();
 
-    getToken();
     createNewConversation();
 }
 
-ConversationClient::~ConversationClient()
+ConversationClientWithController::~ConversationClientWithController()
 {
 }
 
 
-bool ConversationClient::getToken() {
-
-    if (env_.workspace_id_.length() == 0 ||
-        env_.conversation_username_.length() == 0 ||
-        env_.conversation_password_.length() == 0) {
-
-        std::cout << "There is not enough information to get the Token.";
-        return false;
-    }
-
-    std::shared_ptr<RestClient::Connection> conn = std::make_shared<RestClient::Connection>("https://gateway.watsonplatform.net");
-
-    // set connection timeout to 5s
-    conn->SetTimeout(5);
-    conn->SetSSLVerifyPeer(false);
-
-    conn->SetBasicAuth(env_.conversation_username_, env_.conversation_password_);
-    conn->SetUserAgent("Luna/IoTPlatform");
-
-    RestClient::Response response = conn->get("/authorization/api/v1/token?url=https://gateway.watsonplatform.net/conversation/api");
-
-    if (response.code != 200) {
-        token_ = "";
-        return false;
-    }
-
-    token_ = response.body;
-
-    return true;
-}
-
-bool ConversationClient::createNewConversation() {
-    if (token_.length() == 0) {
-
-        std::cout << "There is no Token to get the Conversation ID.";
-        return false;
-    }
-
+bool ConversationClientWithController::createNewConversation() {
     RestClient::HeaderFields headers;
-    headers["X-Watson-Authorization-Token"] = token_;
     headers["Accept"] = "application/json";
     headers["Content-Type"] = "application/json";
 
     rest_conn_->SetHeaders(headers);
 
-    std::string req_uri = "/conversation/api/v1/workspaces/" + env_.workspace_id_ + "/message?version=2017-05-26";
+    std::string req_uri = "/api/message";
 
     RestClient::Response response = rest_conn_->post(req_uri, "");
 
     if (response.code != 200) {
-        std::string error_text;
-
-        Luna::ccString::format(error_text, "Response CODE: %d\n Body: {\n%s\n}", response.code, response.body);
-
-        LogManager::instance().addLog("CCWC", false, error_text);
-
-        std::cout << error_text << std::endl;
-
+        std::cout << "Response:" << std::endl << response.code << std::endl << response.body << std::endl;
         return false;
     }
 
     Json::Reader    json_reader;
     Json::Value     new_session_info;
 
-    LogManager::instance().addLog("CC", false, response.body);
+    LogManager::instance().addLog("CCWC", false, response.body);
 
     try {
         json_reader.parse(response.body, new_session_info);
@@ -116,13 +71,12 @@ bool ConversationClient::createNewConversation() {
     return true;
 }
 
-int ConversationClient::sendText(const std::string& message, std::string& output_text, std::string& intent, std::string& body) {
-
+int ConversationClientWithController::sendText(const std::string& message, std::string& output_text, std::string& intent, std::string& body) {
     output_text = "";
     intent = "";
     body = "";
 
-    LogManager::instance().addLog("CC", true, message);
+    LogManager::instance().addLog("CCWC", true, message);
 
     if (conversation_id_.length() == 0) {
         std::cout << "There is no Conversation ID to talk with Watson";
@@ -130,13 +84,12 @@ int ConversationClient::sendText(const std::string& message, std::string& output
     }
 
     RestClient::HeaderFields headers;
-    headers["X-Watson-Authorization-Token"] = token_;
     headers["Accept"] = "application/json";
     headers["Content-Type"] = "application/json";
 
     rest_conn_->SetHeaders(headers);
 
-    std::string req_uri = "/conversation/api/v1/workspaces/" + env_.workspace_id_ + "/message?version=2017-05-26";
+    std::string req_uri = "/api/message";
     std::string req_body;
 
     Json::StyledWriter writer;
@@ -149,14 +102,16 @@ int ConversationClient::sendText(const std::string& message, std::string& output
 
     req_body = writer.write(req_json);
 
-    LogManager::instance().addLog("CC", true, req_body);
+    //  std::cout << "req_body: " << req_body << std::endl;
+    LogManager::instance().addLog("CCWC", true, req_body);
 
     RestClient::Response response = rest_conn_->post(req_uri, req_body);
 
-    LogManager::instance().addLog("CC", false, response.body);
+    LogManager::instance().addLog("CCWC", false, response.body);
 
     if (response.code != 200) {
-        std::cout << "Response:" << std::endl << response.code << std::endl << response.body << std::endl;
+        std::cout << response.body << std::endl;
+
         return response.code;
     }
 

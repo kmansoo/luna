@@ -2,7 +2,6 @@
 
 #include <string>
 #include <memory>
-#include <fstream>
 
 #include "EnvironmentInfo.h"
 
@@ -21,7 +20,6 @@ public:
 
 private:
     bool getToken();
-    void addLog(bool isReq, const std::string& log);
 
 private:
     EnvironmentInfo env_;
@@ -29,8 +27,6 @@ private:
     std::string token_;
     std::string conversation_id_;
     Json::Value context_;
-
-    std::ofstream log_file_;
 
     std::shared_ptr<RestClient::Connection> rest_conn_;
 };

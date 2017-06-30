@@ -25,6 +25,12 @@
     <ClCompile Include="..\src\TTSClient.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ConversationClientWithController.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\LogManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\ConversationClient.h">
@@ -37,6 +43,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\src\TTSClient.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ConversationClientWithController.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\LogManager.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

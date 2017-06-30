@@ -2,10 +2,8 @@
 
 
 #include <iostream>
-#include <fstream>
-#include <ctime>
-#include <iomanip>
-#include <sstream> // stringstream
+
+#include "LogManager.h"
 
 #include "ccCore/ccString.h"
 #include "restclient-cpp/restclient.h"
@@ -20,8 +18,6 @@ STTClient::STTClient()
 {
     // initialize RestClient
     RestClient::init();
-
-    log_file_.open("log.txt");
 
     rest_conn_ = std::make_shared<RestClient::Connection>("https://stream.watsonplatform.net");
 
@@ -67,17 +63,4 @@ bool STTClient::getToken() {
     token_ = response.body;
 
     return true;
-}
-
-
-void STTClient::addLog(bool isReq, const std::string& log) {
-    auto t = std::time(nullptr);
-    auto tm = *std::localtime(&t);
-
-    if (isReq)
-        log_file_ << "[REQ] ";
-    else
-        log_file_ << "[***] ";
-
-    log_file_ << std::put_time(&tm, "%d-%m-%Y %H-%M-%S: ") << log << std::endl;
 }

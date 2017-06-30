@@ -187,14 +187,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\ConversationClient.cpp" />
+    <ClCompile Include="..\src\ConversationClientWithController.cpp" />
     <ClCompile Include="..\src\EnvironmentInfo.cpp" />
+    <ClCompile Include="..\src\LogManager.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\STTClient.cpp" />
     <ClCompile Include="..\src\TTSClient.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\ConversationClient.h" />
+    <ClInclude Include="..\src\ConversationClientWithController.h" />
     <ClInclude Include="..\src\EnvironmentInfo.h" />
+    <ClInclude Include="..\src\LogManager.h" />
     <ClInclude Include="..\src\STTClient.h" />
     <ClInclude Include="..\src\TTSClient.h" />
   </ItemGroup>

@@ -2,10 +2,8 @@
 
 
 #include <iostream>
-#include <fstream>
-#include <ctime>
-#include <iomanip>
-#include <sstream> // stringstream
+
+#include "LogManager.h"
 
 #include "ccCore/ccString.h"
 #include "restclient-cpp/restclient.h"
@@ -20,8 +18,6 @@ TTSClient::TTSClient()
 {
     // initialize RestClient
     RestClient::init();
-
-    log_file_.open("log.txt");
 
     rest_conn_ = std::make_shared<RestClient::Connection>("https://stream.watsonplatform.net");
 
@@ -81,9 +77,6 @@ bool TTSClient::convert(const std::string& text) {
     std::string req_uri = "/text-to-speech/api/v1/synthesize";
     std::string req_body;
 
-    auto t = std::time(nullptr);
-    auto tm = *std::localtime(&t);
-
     Json::StyledWriter writer;
     Json::Value req_json;
 
@@ -91,11 +84,9 @@ bool TTSClient::convert(const std::string& text) {
 
     req_body = writer.write(req_json);
 
-    addLog(true, req_body);
+    LogManager::instance().addLog("TTSClient", true, req_body);
 
     RestClient::Response response = rest_conn_->post(req_uri, req_body);
-
-    addLog(false, response.body);
 
     if (response.code != 200) {
         std::cout << "Response:" << std::endl << response.code << std::endl << response.body << std::endl;
@@ -108,17 +99,4 @@ bool TTSClient::convert(const std::string& text) {
     wav_file.write(response.body.c_str(), response.body.length());
 
     return true;
-}
-
-
-void TTSClient::addLog(bool isReq, const std::string& log) {
-    auto t = std::time(nullptr);
-    auto tm = *std::localtime(&t);
-
-    if (isReq)
-        log_file_ << "[REQ] ";
-    else
-        log_file_ << "[***] ";
-
-    log_file_ << std::put_time(&tm, "%d-%m-%Y %H-%M-%S: ") << log << std::endl;
 }

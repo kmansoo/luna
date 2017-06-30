@@ -8,24 +8,22 @@
 
 #include "EnvironmentInfo.h"
 
-class ConversationClient
+class ConversationClientWithController
 {
 public:
-    ConversationClient();
-    ~ConversationClient();
+    ConversationClientWithController();
+    ~ConversationClientWithController();
 
 public:
     int sendText(const std::string& message, std::string& output_text, std::string& intent, std::string& body);
     Json::Value& getContext() { return context_; }
 
 private:
-    bool getToken();
     bool createNewConversation();
 
 private:
     EnvironmentInfo env_;
 
-    std::string token_;
     std::string conversation_id_;
     Json::Value context_;
 
