@@ -84,13 +84,9 @@ bool ConversationClient::createNewConversation() {
     RestClient::Response response = rest_conn_->post(req_uri, "");
 
     if (response.code != 200) {
-        std::string error_text;
+        LogManager::instance().addLog("CC", false, response.body);
 
-        Luna::ccString::format(error_text, "Response CODE: %d\n Body: {\n%s\n}", response.code, response.body);
-
-        LogManager::instance().addLog("CCWC", false, error_text);
-
-        std::cout << error_text << std::endl;
+        std::cout << response.body << std::endl;
 
         return false;
     }

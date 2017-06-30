@@ -64,3 +64,41 @@ bool STTClient::getToken() {
 
     return true;
 }
+
+bool STTClient::convert(const std::string& filename) {
+    RestClient::HeaderFields headers;
+    headers["X-Watson-Authorization-Token"] = token_;
+    headers["Accept"] = "application/json";
+    headers["Content-Type"] = "audio/ogg;codecs=opus";
+
+    rest_conn_->SetHeaders(headers);
+
+    std::string req_uri = "/speech-to-text/api/v1/recognize";
+    std::string req_body;
+
+    std::ifstream   audio_file(filename.c_str());
+
+    if (audio_file.is_open()) { 
+        while (audio_file.good()) {
+            std::string line;
+
+            std::getline(audio_file, line);
+
+            std::cout << line << std::endl;
+
+            req_body += line;
+        }
+    }
+
+    //  LogManager::instance().addLog("STTClient", true, req_body);
+    RestClient::Response response = rest_conn_->post(req_uri, req_body);
+
+    LogManager::instance().addLog("STTClient", false, response.body);
+
+    if (response.code != 200) {
+        std::cout << "Response:" << std::endl << response.code << std::endl << response.body << std::endl;
+        return "";
+    }
+
+    return true;
+}

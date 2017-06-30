@@ -17,7 +17,8 @@ public:
     ~STTClient();
 
 public:
-
+    bool convert(const std::string& filename);
+    
 private:
     bool getToken();
 

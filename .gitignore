@@ -5,6 +5,7 @@ build/
 **/.vs/
 **/x64/LIB*
 **/msvc/LIB *
+extlibs/lib/*
 src/.cproject
 .project
 .cproject

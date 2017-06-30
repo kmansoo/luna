@@ -69,7 +69,7 @@ bool TTSClient::getToken() {
 bool TTSClient::convert(const std::string& text) {
     RestClient::HeaderFields headers;
     headers["X-Watson-Authorization-Token"] = token_;
-    headers["Accept"] = "audio/ogg";
+    headers["Accept"] = "audio/ogg;codecs=opus";
     headers["Content-Type"] = "application/json";
 
     rest_conn_->SetHeaders(headers);
@@ -95,7 +95,7 @@ bool TTSClient::convert(const std::string& text) {
 
     std::ofstream wav_file;
 
-    wav_file.open("tts.ogg", std::ios::out | std::ios::binary);
+    wav_file.open("tts.opus", std::ios::out | std::ios::binary);
     wav_file.write(response.body.c_str(), response.body.length());
 
     return true;
