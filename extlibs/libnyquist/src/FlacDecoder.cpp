@@ -23,9 +23,11 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include <memory.h>
+
 #include "FlacDecoder.h"
-#include "flac/all.h"
-#include "flac/stream_decoder.h"
+#include "FLAC/all.h"
+#include "FLAC/stream_decoder.h"
 
 #include "AudioDecoder.h"
 

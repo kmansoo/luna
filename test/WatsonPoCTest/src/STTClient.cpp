@@ -77,7 +77,7 @@ bool STTClient::convert(const std::string& filename) {
     std::string req_body;
 
     std::ifstream   audio_file(filename.c_str());
-
+/*
     if (audio_file.is_open()) { 
         while (audio_file.good()) {
             std::string line;
@@ -89,7 +89,7 @@ bool STTClient::convert(const std::string& filename) {
             req_body += line;
         }
     }
-
+*/
     //  LogManager::instance().addLog("STTClient", true, req_body);
     RestClient::Response response = rest_conn_->post(req_uri, req_body);
 

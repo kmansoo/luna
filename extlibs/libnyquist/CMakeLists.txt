@@ -13,8 +13,8 @@ include_directories(
 	./include
 	./include/libnyquist
 	./third_party
-	./third_party/flac
-	./third_party/flac/src/include
+	./third_party/FLAC
+	./third_party/FLAC/src/include
 	./third_party/libmodplug
 	./third_party/libogg/include
 	./third_party/libvorbis/include
@@ -66,6 +66,9 @@ elseif (UNIX AND NOT APPLE)
         add_definitions(-D__LINUX_ALSA__)
         message(STATUS "Using Linux ALSA")
     endif (AUDIO_LINUX_ALSA)
+
+    ADD_DEFINITIONS(-DHAVE_STDINT_H -DHAVE_SETENV)
+
 endif ()
 
 if (APPLE)

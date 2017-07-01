@@ -7,7 +7,7 @@
 
 class AudioManager {
 public:
-    AudioManager();
+    AudioManager(int device_id, int channel = 2);
 
 public:
     bool    play(const std::string& filename);

@@ -40,7 +40,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#ifndef WIN32
+#ifndef assert
 #   define assert(t)
 #endif
 

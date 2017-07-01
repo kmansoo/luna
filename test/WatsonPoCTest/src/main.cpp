@@ -8,348 +8,353 @@
 #include "ConversationClient.h"
 #include "ConversationClientWithController.h"
 
-#include "TTSClient.h"
 #include "STTClient.h"
+#include "TTSClient.h"
 
 #include "AudioManager/AudioManager.h"
 
 void testConversationWithController() {
-    ConversationClientWithController client;
-    AudioManager        tts_player, stt_recorder;
+  ConversationClientWithController client;
+  AudioManager tts_player(-1);
 
-    TTSClient           tts_client;
-    STTClient           stt_client;
-    std::string         text;
-    std::string         output_text, intent, body;
+  TTSClient tts_client;
+  STTClient stt_client;
+  std::string text;
+  std::string output_text, intent, body;
 
-    std::cout << "Start conversation with Controller talks " << std::endl << std::endl;
+  std::cout << "Start conversation with Controller talks " << std::endl
+            << std::endl;
 
-    enum IntentStatus {
-        kIntentStatus_NORMAL = 0,
-        kIntentStatus_SERACH_DEVICE,
-        kIntentStatus_REGISTER_DEVICE,
-        kIntentStatus_OUT_OF_HOME,
-    };
+  enum IntentStatus {
+    kIntentStatus_NORMAL = 0,
+    kIntentStatus_SERACH_DEVICE,
+    kIntentStatus_REGISTER_DEVICE,
+    kIntentStatus_OUT_OF_HOME,
+  };
 
-    enum CommaxActionStatus {
-        kCommaxAction_NORMAL = 0,
-        kCommaxAction_NEWSEARCH,
-        kCommaxAction_STARTREGISTER,
-        kCommaxAction_NEWREGISTER,
-        kCommaxAction_ENDREGISTER,
-    };
+  enum CommaxActionStatus {
+    kCommaxAction_NORMAL = 0,
+    kCommaxAction_NEWSEARCH,
+    kCommaxAction_STARTREGISTER,
+    kCommaxAction_NEWREGISTER,
+    kCommaxAction_ENDREGISTER,
+  };
 
-    IntentStatus intent_status = kIntentStatus_NORMAL;
-    CommaxActionStatus commax_action_status = kCommaxAction_NORMAL;
+  IntentStatus intent_status = kIntentStatus_NORMAL;
+  CommaxActionStatus commax_action_status = kCommaxAction_NORMAL;
 
-    while (true) {
-        std::cin.clear();
-        std::cout << "You> ";
+  while (true) {
+    std::cin.clear();
+    std::cout << "You> ";
 
-        std::getline(std::cin, text);
-        
-        if (text.size() > 0) {
-            if (text == "/") {
-                std::cout << " ... {I'm listening... to record your voice!}" << std::endl;
-                stt_recorder.record("stt.opus", 3);
+    std::getline(std::cin, text);
 
-                stt_client.convert("stt.opus");
-                //  tts_player.play("stt.opus");
-                continue;
-            }
+    if (text.size() > 0) {
+      if (text == "/") {
+        std::cout << " ... {I'm listening... to record your voice!}"
+                  << std::endl;
+        tts_player.record("stt.opus", 5);
 
-            if (text == "q")
-                break;
+        stt_client.convert("stt.opus");
+        tts_player.play("stt.opus");
+        continue;
+      }
 
-        send_text:
-            int rep_code = client.sendText(text, output_text, intent, body);
+      if (text == "q")
+        break;
 
-            std::cout << "Watson> " << output_text << "<Intent: " << intent << "/ commax_action: " << client.getContext()["commaxaction"].asString() << ">" << std::endl;
+    send_text:
+      int rep_code = client.sendText(text, output_text, intent, body);
 
-            if (output_text.length() > 0) {
-                tts_client.convert(output_text);
+      std::cout << "Watson> " << output_text << "<Intent: " << intent
+                << "/ commax_action: "
+                << client.getContext()["commaxaction"].asString() << ">"
+                << std::endl;
 
-                tts_player.play("tts.opus");
+      if (output_text.length() > 0) {
+        tts_client.convert(output_text);
+
+        tts_player.play("tts.opus");
 #ifndef WIN32
-                //  system("cvlc --play-and-exit tts.ogg");
+//  system("cvlc --play-and-exit tts.ogg");
 #endif // !WIN32
-            }
+      }
 
-            if (rep_code != 200) {
-                continue;
-            }            
+      if (rep_code != 200) {
+        continue;
+      }
 
-            IntentStatus current_intent_status = kIntentStatus_NORMAL;
-            CommaxActionStatus current_commax_action_status = kCommaxAction_NORMAL;
+      IntentStatus current_intent_status = kIntentStatus_NORMAL;
+      CommaxActionStatus current_commax_action_status = kCommaxAction_NORMAL;
 
-            //  for intent
-            if (intent == "SERACH_DEVICE")
-                current_intent_status = kIntentStatus_SERACH_DEVICE;
+      //  for intent
+      if (intent == "SERACH_DEVICE")
+        current_intent_status = kIntentStatus_SERACH_DEVICE;
 
-            if (intent == "REGISTER_DEVICE")
-                current_intent_status = kIntentStatus_REGISTER_DEVICE;
+      if (intent == "REGISTER_DEVICE")
+        current_intent_status = kIntentStatus_REGISTER_DEVICE;
 
-            if (intent == "OUT_OF_HOME")
-                current_intent_status = kIntentStatus_OUT_OF_HOME;
+      if (intent == "OUT_OF_HOME")
+        current_intent_status = kIntentStatus_OUT_OF_HOME;
 
-            //  for commaxaction
-            if (client.getContext()["commaxaction"].asString() == "NEWSEARCH")
-                current_commax_action_status = kCommaxAction_NEWSEARCH;
+      //  for commaxaction
+      if (client.getContext()["commaxaction"].asString() == "NEWSEARCH")
+        current_commax_action_status = kCommaxAction_NEWSEARCH;
 
-            if (client.getContext()["commaxaction"].asString() == "STARTREGISTER")
-                current_commax_action_status = kCommaxAction_STARTREGISTER;
+      if (client.getContext()["commaxaction"].asString() == "STARTREGISTER")
+        current_commax_action_status = kCommaxAction_STARTREGISTER;
 
-            if (client.getContext()["commaxaction"].asString() == "NEWREGISTER")
-                current_commax_action_status = kCommaxAction_NEWREGISTER;
+      if (client.getContext()["commaxaction"].asString() == "NEWREGISTER")
+        current_commax_action_status = kCommaxAction_NEWREGISTER;
 
-            if (client.getContext()["commaxaction"].asString() == "ENDREGISTER")
-                current_commax_action_status = kCommaxAction_ENDREGISTER;
+      if (client.getContext()["commaxaction"].asString() == "ENDREGISTER")
+        current_commax_action_status = kCommaxAction_ENDREGISTER;
 
-            // change states
-            if (current_intent_status != kIntentStatus_NORMAL) {
-                intent_status = current_intent_status;
-                commax_action_status = kCommaxAction_NORMAL;
-            }
+      // change states
+      if (current_intent_status != kIntentStatus_NORMAL) {
+        intent_status = current_intent_status;
+        commax_action_status = kCommaxAction_NORMAL;
+      }
 
-            //if (current_commax_action_status != kCommaxAction_NORMAL)
-            commax_action_status = current_commax_action_status;
+      // if (current_commax_action_status != kCommaxAction_NORMAL)
+      commax_action_status = current_commax_action_status;
 
-            switch (intent_status) {
-            case kIntentStatus_NORMAL:
-                break;
+      switch (intent_status) {
+      case kIntentStatus_NORMAL:
+        break;
 
-            case kIntentStatus_SERACH_DEVICE:
-                switch (commax_action_status) {
-                case kCommaxAction_NEWSEARCH:
-                    std::cin.clear();
-                    std::cout << std::endl;
-                    std::cout << "BOT> How many devices did you find? ";
-                    std::getline(std::cin, text);
-                    std::cout << std::endl;
+      case kIntentStatus_SERACH_DEVICE:
+        switch (commax_action_status) {
+        case kCommaxAction_NEWSEARCH:
+          std::cin.clear();
+          std::cout << std::endl;
+          std::cout << "BOT> How many devices did you find? ";
+          std::getline(std::cin, text);
+          std::cout << std::endl;
 
-                    intent_status = kIntentStatus_REGISTER_DEVICE;
+          intent_status = kIntentStatus_REGISTER_DEVICE;
 
-                    client.getContext()["newdevicecount"] = atoi(text.c_str());
-                    text = "";
-                    goto send_text;
-                    break;
-                }
-
-            case kIntentStatus_REGISTER_DEVICE:
-                switch (commax_action_status) {
-                case kCommaxAction_NEWREGISTER:
-                    client.getContext()["validation"] = 1;
-                    text = "";
-                    goto send_text;
-                    break;
-
-                case kCommaxAction_ENDREGISTER:
-                    intent_status = kIntentStatus_NORMAL;
-                    break;
-                }
-
-            case kIntentStatus_OUT_OF_HOME:
-                break;
-            }
-
-            Luna::sleep(10);
+          client.getContext()["newdevicecount"] = atoi(text.c_str());
+          text = "";
+          goto send_text;
+          break;
         }
 
-        std::cout << std::endl;
+      case kIntentStatus_REGISTER_DEVICE:
+        switch (commax_action_status) {
+        case kCommaxAction_NEWREGISTER:
+          client.getContext()["validation"] = 1;
+          text = "";
+          goto send_text;
+          break;
 
-        text = "";
+        case kCommaxAction_ENDREGISTER:
+          intent_status = kIntentStatus_NORMAL;
+          break;
+        }
+
+      case kIntentStatus_OUT_OF_HOME:
+        break;
+      }
+
+      Luna::sleep(10);
     }
+
+    std::cout << std::endl;
+
+    text = "";
+  }
 }
 
 void testConversation() {
-    ConversationClient  client;
-    AudioManager        audio_manager;
+  ConversationClient client;
+  AudioManager audio_manager(0);
 
-    TTSClient           tts_client;
-    std::string         text;
-    std::string         output_text, intent, body;
+  TTSClient tts_client;
+  std::string text;
+  std::string output_text, intent, body;
 
-    std::cout << "Start conversation with Watson" << std::endl << std::endl;
+  std::cout << "Start conversation with Watson" << std::endl << std::endl;
 
-    enum IntentStatus {
-        kIntentStatus_NORMAL = 0,
-        kIntentStatus_SERACH_DEVICE,
-        kIntentStatus_REGISTER_DEVICE,
-        kIntentStatus_OUT_OF_HOME,
-    };
+  enum IntentStatus {
+    kIntentStatus_NORMAL = 0,
+    kIntentStatus_SERACH_DEVICE,
+    kIntentStatus_REGISTER_DEVICE,
+    kIntentStatus_OUT_OF_HOME,
+  };
 
-    enum CommaxActionStatus {
-        kCommaxAction_NORMAL = 0,
-        kCommaxAction_NEWSEARCH,
-        kCommaxAction_STARTREGISTER,
-        kCommaxAction_NEWREGISTER,
-        kCommaxAction_ENDREGISTER,
-    };
+  enum CommaxActionStatus {
+    kCommaxAction_NORMAL = 0,
+    kCommaxAction_NEWSEARCH,
+    kCommaxAction_STARTREGISTER,
+    kCommaxAction_NEWREGISTER,
+    kCommaxAction_ENDREGISTER,
+  };
 
-    IntentStatus intent_status = kIntentStatus_NORMAL;
-    CommaxActionStatus commax_action_status = kCommaxAction_NORMAL;
+  IntentStatus intent_status = kIntentStatus_NORMAL;
+  CommaxActionStatus commax_action_status = kCommaxAction_NORMAL;
 
-    while (true) {
-        std::cin.clear();
-        std::cout << "You> ";
-        std::getline(std::cin, text);
+  while (true) {
+    std::cin.clear();
+    std::cout << "You> ";
+    std::getline(std::cin, text);
 
-        if (text.size() > 0) {
-            if (text == "q")
-                break;
+    if (text.size() > 0) {
+      if (text == "q")
+        break;
 
-send_text:
-            client.sendText(text, output_text, intent, body);
-            
-            tts_client.convert(output_text);
+    send_text:
+      client.sendText(text, output_text, intent, body);
 
-            std::cout << "Watson> " << output_text << "(" << intent << ")" << std::endl;
-            audio_manager.play("tts.ogg");
+      tts_client.convert(output_text);
 
-            //  system("cvlc --play-and-exit tts.ogg");
+      std::cout << "Watson> " << output_text << "(" << intent << ")"
+                << std::endl;
+      audio_manager.play("tts.ogg");
 
-            IntentStatus current_intent_status = kIntentStatus_NORMAL;
-            CommaxActionStatus current_commax_action_status = kCommaxAction_NORMAL;
+      //  system("cvlc --play-and-exit tts.ogg");
 
-            //  for intent
-            if (intent == "SERACH_DEVICE")
-                current_intent_status = kIntentStatus_SERACH_DEVICE;
+      IntentStatus current_intent_status = kIntentStatus_NORMAL;
+      CommaxActionStatus current_commax_action_status = kCommaxAction_NORMAL;
 
-            if (intent == "REGISTER_DEVICE")
-                current_intent_status = kIntentStatus_REGISTER_DEVICE;
+      //  for intent
+      if (intent == "SERACH_DEVICE")
+        current_intent_status = kIntentStatus_SERACH_DEVICE;
 
-            if (intent == "OUT_OF_HOME")
-                current_intent_status = kIntentStatus_OUT_OF_HOME;
+      if (intent == "REGISTER_DEVICE")
+        current_intent_status = kIntentStatus_REGISTER_DEVICE;
 
-            //  for commaxaction
-            if (client.getContext()["commaxaction"].asString() == "NEWSEARCH")
-                current_commax_action_status = kCommaxAction_NEWSEARCH;
+      if (intent == "OUT_OF_HOME")
+        current_intent_status = kIntentStatus_OUT_OF_HOME;
 
-            if (client.getContext()["commaxaction"].asString() == "STARTREGISTER")
-                current_commax_action_status = kCommaxAction_STARTREGISTER;
+      //  for commaxaction
+      if (client.getContext()["commaxaction"].asString() == "NEWSEARCH")
+        current_commax_action_status = kCommaxAction_NEWSEARCH;
 
-            if (client.getContext()["commaxaction"].asString() == "NEWREGISTER")
-                current_commax_action_status = kCommaxAction_NEWREGISTER;
+      if (client.getContext()["commaxaction"].asString() == "STARTREGISTER")
+        current_commax_action_status = kCommaxAction_STARTREGISTER;
 
-            if (client.getContext()["commaxaction"].asString() == "ENDREGISTER")
-                current_commax_action_status = kCommaxAction_ENDREGISTER;
+      if (client.getContext()["commaxaction"].asString() == "NEWREGISTER")
+        current_commax_action_status = kCommaxAction_NEWREGISTER;
 
-            // change states
-            if (current_intent_status != kIntentStatus_NORMAL) {
-                intent_status = current_intent_status;
-                commax_action_status = kCommaxAction_NORMAL;
-            }
+      if (client.getContext()["commaxaction"].asString() == "ENDREGISTER")
+        current_commax_action_status = kCommaxAction_ENDREGISTER;
 
-            //if (current_commax_action_status != kCommaxAction_NORMAL)
-                commax_action_status = current_commax_action_status;
+      // change states
+      if (current_intent_status != kIntentStatus_NORMAL) {
+        intent_status = current_intent_status;
+        commax_action_status = kCommaxAction_NORMAL;
+      }
 
-            switch (intent_status) {
-            case kIntentStatus_NORMAL:
-                break;
+      // if (current_commax_action_status != kCommaxAction_NORMAL)
+      commax_action_status = current_commax_action_status;
 
-            case kIntentStatus_SERACH_DEVICE:
-                switch (commax_action_status) {
-                case kCommaxAction_NEWSEARCH:
-                    std::cin.clear();
-                    std::cout << std::endl;
-                    std::cout << "BOT> How many devices did you find? ";
-                    std::getline(std::cin, text);
-                    std::cout << std::endl;
+      switch (intent_status) {
+      case kIntentStatus_NORMAL:
+        break;
 
-                    intent_status = kIntentStatus_REGISTER_DEVICE;
+      case kIntentStatus_SERACH_DEVICE:
+        switch (commax_action_status) {
+        case kCommaxAction_NEWSEARCH:
+          std::cin.clear();
+          std::cout << std::endl;
+          std::cout << "BOT> How many devices did you find? ";
+          std::getline(std::cin, text);
+          std::cout << std::endl;
 
-                    client.getContext()["newdevicecount"] = atoi(text.c_str());
-                    text = "";
-                    goto send_text;
-                    break;
-                break;
-                }
+          intent_status = kIntentStatus_REGISTER_DEVICE;
 
-            case kIntentStatus_REGISTER_DEVICE:
-                switch (commax_action_status) {
-                case kCommaxAction_ENDREGISTER:
-                    intent_status = kIntentStatus_NORMAL;
-                    break;
-
-                case kCommaxAction_NORMAL:
-                case kCommaxAction_STARTREGISTER:
-                case kCommaxAction_NEWREGISTER:
-                {
-                    std::vector<std::string> infos;
-
-                    while (true) {
-                        std::cin.clear();
-                        std::cout << std::endl;
-                        std::cout << "BOT> Where do you want to install and what is the device name (place, name) ? ";
-                        std::getline(std::cin, text);
-                        std::cout << std::endl;
-
-                        infos = Luna::ccString::splitToken(text, ',');
-
-                        if (infos.size() > 0)
-                            break;
-                    }
-
-                    client.getContext()["newdeviceplace"] = infos[0];
-
-                    if (infos.size() >= 2)
-                        client.getContext()["newdevicename"] = infos[1];
-
-                    client.getContext()["validation"] = 1;
-
-                    text = "install";
-                    client.sendText(text, output_text, intent, body);
-                    goto send_text;
-                    break;
-                }
-                break;
-                }
-
-            case kIntentStatus_OUT_OF_HOME:
-                break;
-            }
-
-            Luna::sleep(10);
+          client.getContext()["newdevicecount"] = atoi(text.c_str());
+          text = "";
+          goto send_text;
+          break;
+          break;
         }
 
-        std::cout << std::endl;
+      case kIntentStatus_REGISTER_DEVICE:
+        switch (commax_action_status) {
+        case kCommaxAction_ENDREGISTER:
+          intent_status = kIntentStatus_NORMAL;
+          break;
 
-        text = "";
+        case kCommaxAction_NORMAL:
+        case kCommaxAction_STARTREGISTER:
+        case kCommaxAction_NEWREGISTER: {
+          std::vector<std::string> infos;
+
+          while (true) {
+            std::cin.clear();
+            std::cout << std::endl;
+            std::cout << "BOT> Where do you want to install and what is the "
+                         "device name (place, name) ? ";
+            std::getline(std::cin, text);
+            std::cout << std::endl;
+
+            infos = Luna::ccString::splitToken(text, ',');
+
+            if (infos.size() > 0)
+              break;
+          }
+
+          client.getContext()["newdeviceplace"] = infos[0];
+
+          if (infos.size() >= 2)
+            client.getContext()["newdevicename"] = infos[1];
+
+          client.getContext()["validation"] = 1;
+
+          text = "install";
+          client.sendText(text, output_text, intent, body);
+          goto send_text;
+          break;
+        } break;
+        }
+
+      case kIntentStatus_OUT_OF_HOME:
+        break;
+      }
+
+      Luna::sleep(10);
     }
+
+    std::cout << std::endl;
+
+    text = "";
+  }
 }
 
 void testTextToSpeech() {
-    TTSClient  client;
-    std::string         text;
+  TTSClient client;
+  std::string text;
 
-    std::cout << "Start Text to Speech using Watson" << std::endl << std::endl;
+  std::cout << "Start Text to Speech using Watson" << std::endl << std::endl;
 
-    while (true) {
-        std::cin.clear();
-        std::cout << "You> ";
-        std::getline(std::cin, text);
+  while (true) {
+    std::cin.clear();
+    std::cout << "You> ";
+    std::getline(std::cin, text);
 
-        if (text.size() > 0) {
-            if (text == "q")
-                break;
+    if (text.size() > 0) {
+      if (text == "q")
+        break;
 
-            std::cout << "Watson> " << client.convert(text) << std::endl;
+      std::cout << "Watson> " << client.convert(text) << std::endl;
 
-            Luna::sleep(10);
-        }
-
-        std::cout << std::endl;
-
-        text = "";
+      Luna::sleep(10);
     }
+
+    std::cout << std::endl;
+
+    text = "";
+  }
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
 
-    Luna::ccNetworkManager::instance().init();
+  Luna::ccNetworkManager::instance().init();
 
-    testConversationWithController();
-    // testTextToSpeech();
+  testConversationWithController();
+  // testTextToSpeech();
 
-    return 0;
+  return 0;
 }

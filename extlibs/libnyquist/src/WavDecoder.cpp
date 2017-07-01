@@ -27,6 +27,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "RiffUtils.h"
 #include "IMA4Util.h"
 
+#include <memory.h>
+
 #ifndef WIN32
 #   define assert(t)
 #endif
