@@ -24,7 +24,7 @@ int desiredSampleRate = 44100;
 AudioManager::AudioManager(int device_id, int channel) {
   AudioDevice::ListAudioDevices();
 
-  my_device_ = std::make_shared<AudioDevice>(2, desiredSampleRate, device_id);
+  my_device_ = std::make_shared<AudioDevice>(channel, desiredSampleRate, device_id);
   my_device_->Open(my_device_->info.id);
 }
 

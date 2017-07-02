@@ -35,7 +35,7 @@ static RingBufferT<float> record_buffer(BUFFER_LENGTH / 2);
 
 static int rt_callback(void *output_buffer, void *input_buffer,
                        uint32_t num_bufferframes, double stream_time,
-                       RtAudioStreamStatus status, void *user_data) {
+                       RtAudioStreamStatus status, void *user_data) { 
   if (status)
     std::cerr << "[rtaudio] buffer over or underflow" << std::endl;
 

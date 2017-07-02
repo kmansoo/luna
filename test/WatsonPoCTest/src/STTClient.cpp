@@ -2,6 +2,9 @@
 
 
 #include <iostream>
+#include <fstream>
+#include <iterator>
+#include <vector>
 
 #include "LogManager.h"
 
@@ -22,7 +25,7 @@ STTClient::STTClient()
     rest_conn_ = std::make_shared<RestClient::Connection>("https://stream.watsonplatform.net");
 
     // set connection timeout to 5s
-    rest_conn_->SetTimeout(5);
+    rest_conn_->SetTimeout(30);
     rest_conn_->SetUserAgent("Luna/IoTPlatform");
     rest_conn_->SetSSLVerifyPeer(false);
 
@@ -73,27 +76,27 @@ bool STTClient::convert(const std::string& filename) {
 
     rest_conn_->SetHeaders(headers);
 
-    std::string req_uri = "/speech-to-text/api/v1/recognize";
-    std::string req_body;
+    std::vector<unsigned char> binary_buffer;
 
-    std::ifstream   audio_file(filename.c_str());
-/*
-    if (audio_file.is_open()) { 
-        while (audio_file.good()) {
-            std::string line;
+    std::ifstream in_file(filename, std::ios_base::binary | std::ios_base::in);
+    std::istream_iterator<unsigned char> end_of_file;
+    std::istream_iterator<unsigned char> in_file_iter(in_file);
 
-            std::getline(audio_file, line);
-
-            std::cout << line << std::endl;
-
-            req_body += line;
-        }
+    while (in_file_iter != end_of_file) {
+        binary_buffer.push_back(*in_file_iter++);
     }
-*/
+
+    std::string req_uri = "/speech-to-text/api/v1/recognize?model=en-US_BroadbandModel&inactivity_timeout=30&max_alternatives=1&word_confidence=false&timestamps=false&profanity_filter=true&smart_formatting=false&speaker_labels=false";
+    std::string req_body(binary_buffer.begin(), binary_buffer.end());
+
+    std::cout << "Request: req_body.length() = " << req_body.length() << std::endl;
+
     //  LogManager::instance().addLog("STTClient", true, req_body);
     RestClient::Response response = rest_conn_->post(req_uri, req_body);
 
     LogManager::instance().addLog("STTClient", false, response.body);
+
+    std::cout << "Response:" << std::endl << response.code << std::endl << response.body << std::endl;
 
     if (response.code != 200) {
         std::cout << "Response:" << std::endl << response.code << std::endl << response.body << std::endl;

@@ -15,7 +15,7 @@
 
 void testConversationWithController() {
   ConversationClientWithController client;
-  AudioManager tts_player(-1);
+  AudioManager audio_manager(-1);
 
   TTSClient tts_client;
   STTClient stt_client;
@@ -53,10 +53,9 @@ void testConversationWithController() {
       if (text == "/") {
         std::cout << " ... {I'm listening... to record your voice!}"
                   << std::endl;
-        tts_player.record("stt.opus", 5);
-
+                  
+        audio_manager.record("stt.opus", 5);
         stt_client.convert("stt.opus");
-        tts_player.play("stt.opus");
         continue;
       }
 
@@ -74,7 +73,7 @@ void testConversationWithController() {
       if (output_text.length() > 0) {
         tts_client.convert(output_text);
 
-        tts_player.play("tts.opus");
+        audio_manager.play("tts.opus");
 #ifndef WIN32
 //  system("cvlc --play-and-exit tts.ogg");
 #endif // !WIN32

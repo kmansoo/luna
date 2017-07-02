@@ -30,5 +30,8 @@ private:
     Json::Value context_;
 
     std::shared_ptr<RestClient::Connection> rest_conn_;
+
+    #define kMaxBufferSize 102400
+    char buffer[kMaxBufferSize];
 };
 
