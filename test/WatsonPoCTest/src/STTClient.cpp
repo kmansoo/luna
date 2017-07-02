@@ -1,5 +1,6 @@
 #include "STTClient.h"
 
+#include <stdio.h>
 
 #include <iostream>
 #include <fstream>
@@ -68,7 +69,9 @@ bool STTClient::getToken() {
     return true;
 }
 
-bool STTClient::convert(const std::string& filename) {
+bool STTClient::convert(const std::string& filename, std::vector<std::string>& converted_text_list) {
+    converted_text_list.clear();
+
     RestClient::HeaderFields headers;
     headers["X-Watson-Authorization-Token"] = token_;
     headers["Accept"] = "application/json";
@@ -82,14 +85,23 @@ bool STTClient::convert(const std::string& filename) {
     std::istream_iterator<unsigned char> end_of_file;
     std::istream_iterator<unsigned char> in_file_iter(in_file);
 
-    while (in_file_iter != end_of_file) {
-        binary_buffer.push_back(*in_file_iter++);
-    }
+    FILE* fp = fopen(filename.c_str(), "rb");
+
+    while (!feof(fp))
+        binary_buffer.push_back(fgetc(fp));
+
+    fclose(fp);
+
+    /*
+        while (in_file_iter != end_of_file) {
+            binary_buffer.push_back(*in_file_iter++);
+
+            read_count++;
+        }
+    */
 
     std::string req_uri = "/speech-to-text/api/v1/recognize?model=en-US_BroadbandModel&inactivity_timeout=30&max_alternatives=1&word_confidence=false&timestamps=false&profanity_filter=true&smart_formatting=false&speaker_labels=false";
     std::string req_body(binary_buffer.begin(), binary_buffer.end());
-
-    std::cout << "Request: req_body.length() = " << req_body.length() << std::endl;
 
     //  LogManager::instance().addLog("STTClient", true, req_body);
     RestClient::Response response = rest_conn_->post(req_uri, req_body);
@@ -102,6 +114,22 @@ bool STTClient::convert(const std::string& filename) {
         std::cout << "Response:" << std::endl << response.code << std::endl << response.body << std::endl;
         return "";
     }
+
+    try {
+        Json::Reader    json_reader;
+        Json::Value     converted_result_info;
+
+        json_reader.parse(response.body, converted_result_info);
+
+        if (!converted_result_info["results"].isNull()) {
+            for (int index = 0; index < converted_result_info["results"].size(); index++) {
+                converted_text_list.push_back(converted_result_info["results"][index]["alternatives"][0]["transcript"].asString());
+            }
+        }
+    }
+    catch (...) {
+        return false;
+    }    
 
     return true;
 }

@@ -51,12 +51,16 @@ void testConversationWithController() {
 
     if (text.size() > 0) {
       if (text == "/") {
-        std::cout << " ... {I'm listening... to record your voice!}"
+        std::cout << "{I'm listening... to record your voice!}"
                   << std::endl;
                   
-        audio_manager.record("stt.opus", 5);
-        stt_client.convert("stt.opus");
-        continue;
+        audio_manager.record("stt.opus", 2);
+        
+        std::vector<std::string> converted_text_list;
+        stt_client.convert("stt.opus", converted_text_list);
+
+        if (converted_text_list.size() > 0)
+          text = converted_text_list[0];
       }
 
       if (text == "q")

@@ -14,5 +14,7 @@ public:
     bool    record(const std::string& filename, int seconds);
 
 private:
+    #define SHOW_LOG    0
+
     std::shared_ptr<AudioDevice> my_device_;
 };

@@ -19,7 +19,7 @@
 
 using namespace nqr;
 
-int desiredSampleRate = 44100;
+int desiredSampleRate = 48000;
 
 AudioManager::AudioManager(int device_id, int channel) {
   AudioDevice::ListAudioDevices();
@@ -46,24 +46,34 @@ bool AudioManager::play(const std::string &filename) {
   // Resample
   std::vector<float> outputBuffer;
   outputBuffer.reserve(fileData->samples.size());
-  linear_resample(44100.0 / 48000.0, fileData->samples, outputBuffer,
+  linear_resample(desiredSampleRate / 48000.0, fileData->samples, outputBuffer,
                   fileData->samples.size());
 
+#if (LUNA_SHOW_DEBUG_LOG == 1)
   std::cout << "Input Samples: " << fileData->samples.size() << std::endl;
   std::cout << "Output Samples: " << outputBuffer.size() << std::endl;
+#endif
 
   // Convert mono to stereo for testing playback
   if (fileData->channelCount == 1) {
+
+#if (LUNA_SHOW_DEBUG_LOG == 1)
     std::cout << "Playing MONO for: " << fileData->lengthSeconds
               << " seconds..." << std::endl;
+#endif
+
     std::vector<float> stereoCopy(fileData->samples.size() * 2);
     MonoToStereo(fileData->samples.data(), stereoCopy.data(),
                  fileData->samples.size());
 
     my_device_->Play(stereoCopy);
-  } else {
+  } 
+  else {
+#if (LUNA_SHOW_DEBUG_LOG == 1)
     std::cout << "Playing for: " << fileData->lengthSeconds << " seconds..."
               << std::endl;
+#endif
+
     my_device_->Play(fileData->samples);
   }
 
@@ -96,34 +106,46 @@ bool AudioManager::record(const std::string &filename, int seconds) {
   NyquistIO loader;
 
   // Circular libnyquist testing
-  fileData->samples.reserve(44100 * 5);
+  fileData->samples.reserve(desiredSampleRate * 5);
   fileData->channelCount = 1;
   fileData->frameSize = 32;
   fileData->lengthSeconds = (float)seconds;
-  fileData->sampleRate = 44100;
+  fileData->sampleRate = desiredSampleRate;
+
+#if (LUNA_SHOW_DEBUG_LOG == 1)
   std::cout << "Starting recording ..." << std::endl;
+#endif
+
   my_device_->Record(fileData->sampleRate * fileData->lengthSeconds,
                      fileData->samples);
 
   if (fileData->sampleRate != desiredSampleRate) {
+#if (LUNA_SHOW_DEBUG_LOG == 1)
     std::cout << "[Warning - Sample Rate Mismatch] - file is sampled at "
               << fileData->sampleRate << " and output is " << desiredSampleRate
               << std::endl;
+#endif
   }
 
   // Resample
   std::vector<float> outputBuffer;
   outputBuffer.reserve(fileData->samples.size());
-  linear_resample(44100.0 / 48000.0, fileData->samples, outputBuffer,
+  linear_resample(desiredSampleRate / 48000.0, fileData->samples, outputBuffer,
                   fileData->samples.size());
 
+#if (LUNA_SHOW_DEBUG_LOG == 1)
   std::cout << "Input Samples: " << fileData->samples.size() << std::endl;
   std::cout << "Output Samples: " << outputBuffer.size() << std::endl;
+#endif
 
   fileData->samples = outputBuffer;
+
   int encoderStatus = OggOpusEncoder::WriteFile(
       {1, PCM_FLT, DITHER_NONE}, fileData.get(), filename.c_str());
+
+#if (LUNA_SHOW_DEBUG_LOG == 1)
   std::cout << "Encoder Status: " << encoderStatus << std::endl;
+#endif
 
   return EXIT_SUCCESS;
 }

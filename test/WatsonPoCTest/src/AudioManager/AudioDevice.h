@@ -34,6 +34,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <memory>
 #include <cstring>
 
+#define LUNA_SHOW_DEBUG_LOG    0
+
 static const uint32_t FRAME_SIZE = 512;
 static const int32_t CHANNELS = 2;
 static const int32_t BUFFER_LENGTH = FRAME_SIZE * CHANNELS;

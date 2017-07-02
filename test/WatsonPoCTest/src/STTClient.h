@@ -17,7 +17,7 @@ public:
     ~STTClient();
 
 public:
-    bool convert(const std::string& filename);
+    bool convert(const std::string& filename, std::vector<std::string>& converted_text_list);
     
 private:
     bool getToken();
@@ -34,4 +34,3 @@ private:
     #define kMaxBufferSize 102400
     char buffer[kMaxBufferSize];
 };
-
