@@ -15,7 +15,7 @@
 
 void testConversationWithController() {
   ConversationClientWithController client;
-  AudioManager audio_manager(-1);
+  AudioManager audio_manager(0, 2);
 
   TTSClient tts_client;
   STTClient stt_client;
@@ -51,10 +51,10 @@ void testConversationWithController() {
 
     if (text.size() > 0) {
       if (text == "/") {
-        std::cout << "{I'm listening... to record your voice!}"
+        std::cout << "{I am listening for 4 seconds to record your voice.!}"
                   << std::endl;
                   
-        audio_manager.record("stt.opus", 2);
+        audio_manager.record("stt.opus", 4);
         
         std::vector<std::string> converted_text_list;
         stt_client.convert("stt.opus", converted_text_list);
@@ -171,7 +171,7 @@ void testConversationWithController() {
 
 void testConversation() {
   ConversationClient client;
-  AudioManager audio_manager(0);
+  AudioManager audio_manager(0, 1);
 
   TTSClient tts_client;
   std::string text;

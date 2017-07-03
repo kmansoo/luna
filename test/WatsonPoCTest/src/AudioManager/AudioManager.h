@@ -7,7 +7,7 @@
 
 class AudioManager {
 public:
-    AudioManager(int device_id, int channel = 2);
+    AudioManager(int spk_device_id, int mic_device_id, int channel = 2);
 
 public:
     bool    play(const std::string& filename);

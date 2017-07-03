@@ -69,7 +69,7 @@ AudioDevice::~AudioDevice() {
   }
 }
 
-bool AudioDevice::Open(const int deviceId) {
+bool AudioDevice::Open(const int mic_deviceId, const int spk_deviceId) {
   if (!rtaudio)
     throw std::runtime_error("rtaudio not created yet");
 
@@ -79,7 +79,7 @@ bool AudioDevice::Open(const int deviceId) {
   outputParams.firstChannel = 0;
 
   RtAudio::StreamParameters inputParams;
-  inputParams.deviceId = rtaudio->getDefaultInputDevice();
+  inputParams.deviceId = spk_deviceId; //rtaudio->getDefaultInputDevice();
   inputParams.nChannels = 1;
   inputParams.firstChannel = 0;
 

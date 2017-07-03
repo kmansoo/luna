@@ -60,7 +60,7 @@ public:
 	AudioDevice(int numChannels, int sampleRate, int deviceId = -1);
 	~AudioDevice();
 	static void ListAudioDevices();
-	bool Open(const int deviceId);
+	bool Open(const int spk_deviceId, const int mic_deviceId);
 	bool Play(const std::vector<float> & data);
 	bool Record(const uint32_t lengthInSamples, std::vector<float> & recordingBuffer);
 };

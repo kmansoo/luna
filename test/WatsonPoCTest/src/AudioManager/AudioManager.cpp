@@ -21,11 +21,11 @@ using namespace nqr;
 
 int desiredSampleRate = 48000;
 
-AudioManager::AudioManager(int device_id, int channel) {
+AudioManager::AudioManager(int spk_device_id, int mic_device_id, int channel) {
   AudioDevice::ListAudioDevices();
 
-  my_device_ = std::make_shared<AudioDevice>(channel, desiredSampleRate, device_id);
-  my_device_->Open(my_device_->info.id);
+  my_device_ = std::make_shared<AudioDevice>(channel, desiredSampleRate, spk_device_id);
+  my_device_->Open(my_device_->info.id, mic_device_id);
 }
 
 bool AudioManager::play(const std::string &filename) {
