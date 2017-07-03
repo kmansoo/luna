@@ -52,9 +52,10 @@ static int rt_callback(void *output_buffer, void *input_buffer,
   return 0;
 }
 
-AudioDevice::AudioDevice(int numChannels, int sampleRate, int deviceId) {
+AudioDevice::AudioDevice(int numChannels, int sampleRate) {
   rtaudio = std::unique_ptr<RtAudio>(new RtAudio);
-  info.id = (deviceId != -1) ? deviceId : rtaudio->getDefaultOutputDevice();
+  
+  info.id = rtaudio->getDefaultOutputDevice();
   info.numChannels = numChannels;
   info.sampleRate = sampleRate;
   info.frameSize = FRAME_SIZE;
@@ -69,9 +70,12 @@ AudioDevice::~AudioDevice() {
   }
 }
 
-bool AudioDevice::Open(const int mic_deviceId, const int spk_deviceId) {
+bool AudioDevice::Open(const int output_device_id, const int input_device_id) {
   if (!rtaudio)
     throw std::runtime_error("rtaudio not created yet");
+
+  if (output_device_id != -1)
+     info.id = output_device_id;
 
   RtAudio::StreamParameters outputParams;
   outputParams.deviceId = info.id;
@@ -79,7 +83,7 @@ bool AudioDevice::Open(const int mic_deviceId, const int spk_deviceId) {
   outputParams.firstChannel = 0;
 
   RtAudio::StreamParameters inputParams;
-  inputParams.deviceId = spk_deviceId; //rtaudio->getDefaultInputDevice();
+  inputParams.deviceId = (input_device_id != -1) ? input_device_id : rtaudio->getDefaultInputDevice();
   inputParams.nChannels = 1;
   inputParams.firstChannel = 0;
 

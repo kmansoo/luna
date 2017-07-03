@@ -57,10 +57,10 @@ protected:
 	AudioDevice & operator = (const AudioDevice& r) = delete;
 public:
 	AudioDeviceInfo info;
-	AudioDevice(int numChannels, int sampleRate, int deviceId = -1);
+	AudioDevice(int numChannels, int sampleRate);
 	~AudioDevice();
 	static void ListAudioDevices();
-	bool Open(const int spk_deviceId, const int mic_deviceId);
+	bool Open(const int output_device_id, const int input_device_id);
 	bool Play(const std::vector<float> & data);
 	bool Record(const uint32_t lengthInSamples, std::vector<float> & recordingBuffer);
 };

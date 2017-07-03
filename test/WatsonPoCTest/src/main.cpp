@@ -15,7 +15,7 @@
 
 void testConversationWithController() {
   ConversationClientWithController client;
-  AudioManager audio_manager(0, 2);
+  AudioManager audio_manager(-1, -1);
 
   TTSClient tts_client;
   STTClient stt_client;
@@ -33,15 +33,17 @@ void testConversationWithController() {
   };
 
   enum CommaxActionStatus {
-    kCommaxAction_NORMAL = 0,
-    kCommaxAction_NEWSEARCH,
-    kCommaxAction_STARTREGISTER,
-    kCommaxAction_NEWREGISTER,
-    kCommaxAction_ENDREGISTER,
+    kCommaxAction_READY = 0,
+    kCommaxAction_SEARCH_DEVICE,
+    kCommaxAction_REGISTER_DEVICE_START,
+    kCommaxAction_GET_DEVICE_INSTALL_INFO,
+    kCommaxAction_REGISTER_DEVICE_RUN,
+    kCommaxAction_CHECK_DEVICE_COUNT,
+    kCommaxAction_REGISTER_DEVICE_END
   };
 
   IntentStatus intent_status = kIntentStatus_NORMAL;
-  CommaxActionStatus commax_action_status = kCommaxAction_NORMAL;
+  CommaxActionStatus commax_action_status = kCommaxAction_READY;
 
   while (true) {
     std::cin.clear();
@@ -88,7 +90,7 @@ void testConversationWithController() {
       }
 
       IntentStatus current_intent_status = kIntentStatus_NORMAL;
-      CommaxActionStatus current_commax_action_status = kCommaxAction_NORMAL;
+      CommaxActionStatus current_commax_action_status = kCommaxAction_READY;
 
       //  for intent
       if (intent == "SERACH_DEVICE")
@@ -101,34 +103,41 @@ void testConversationWithController() {
         current_intent_status = kIntentStatus_OUT_OF_HOME;
 
       //  for commaxaction
-      if (client.getContext()["commaxaction"].asString() == "NEWSEARCH")
-        current_commax_action_status = kCommaxAction_NEWSEARCH;
+      if (client.getContext()["commaxaction"].asString() == "SEARCH_DEVICE")
+        current_commax_action_status = kCommaxAction_SEARCH_DEVICE;
 
-      if (client.getContext()["commaxaction"].asString() == "STARTREGISTER")
-        current_commax_action_status = kCommaxAction_STARTREGISTER;
+      if (client.getContext()["commaxaction"].asString() == "REGISTER_DEVICE_START")
+        current_commax_action_status = kCommaxAction_REGISTER_DEVICE_START;
 
-      if (client.getContext()["commaxaction"].asString() == "NEWREGISTER")
-        current_commax_action_status = kCommaxAction_NEWREGISTER;
+      if (client.getContext()["commaxaction"].asString() == "GET_DEVICE_INSTALL_INFO")
+        current_commax_action_status = kCommaxAction_GET_DEVICE_INSTALL_INFO;
 
-      if (client.getContext()["commaxaction"].asString() == "ENDREGISTER")
-        current_commax_action_status = kCommaxAction_ENDREGISTER;
+      if (client.getContext()["commaxaction"].asString() == "REGISTER_DEVICE_RUN")
+        current_commax_action_status = kCommaxAction_REGISTER_DEVICE_RUN;
+
+      if (client.getContext()["commaxaction"].asString() == "CHECK_DEVICE_COUNT")
+        current_commax_action_status = kCommaxAction_CHECK_DEVICE_COUNT;
+
+      if (client.getContext()["commaxaction"].asString() == "REGISTER_DEVICE_END")
+        current_commax_action_status = kCommaxAction_REGISTER_DEVICE_END;
 
       // change states
       if (current_intent_status != kIntentStatus_NORMAL) {
         intent_status = current_intent_status;
-        commax_action_status = kCommaxAction_NORMAL;
+        commax_action_status = kCommaxAction_READY;
       }
 
       // if (current_commax_action_status != kCommaxAction_NORMAL)
       commax_action_status = current_commax_action_status;
 
-      switch (intent_status) {
+      switch ((int)intent_status) {
       case kIntentStatus_NORMAL:
         break;
 
       case kIntentStatus_SERACH_DEVICE:
-        switch (commax_action_status) {
-        case kCommaxAction_NEWSEARCH:
+      case kIntentStatus_REGISTER_DEVICE:
+        switch ((int)commax_action_status) {
+        case kCommaxAction_SEARCH_DEVICE:
           std::cin.clear();
           std::cout << std::endl;
           std::cout << "BOT> How many devices did you find? ";
@@ -141,17 +150,14 @@ void testConversationWithController() {
           text = "";
           goto send_text;
           break;
-        }
 
-      case kIntentStatus_REGISTER_DEVICE:
-        switch (commax_action_status) {
-        case kCommaxAction_NEWREGISTER:
+        case kCommaxAction_REGISTER_DEVICE_RUN:
           client.getContext()["validation"] = 1;
           text = "";
           goto send_text;
           break;
 
-        case kCommaxAction_ENDREGISTER:
+        case kCommaxAction_REGISTER_DEVICE_END:
           intent_status = kIntentStatus_NORMAL;
           break;
         }
@@ -171,7 +177,7 @@ void testConversationWithController() {
 
 void testConversation() {
   ConversationClient client;
-  AudioManager audio_manager(0, 1);
+  AudioManager audio_manager(-1, -1);
 
   TTSClient tts_client;
   std::string text;
@@ -252,12 +258,12 @@ void testConversation() {
       // if (current_commax_action_status != kCommaxAction_NORMAL)
       commax_action_status = current_commax_action_status;
 
-      switch (intent_status) {
+      switch ((int)intent_status) {
       case kIntentStatus_NORMAL:
         break;
 
       case kIntentStatus_SERACH_DEVICE:
-        switch (commax_action_status) {
+        switch ((int)commax_action_status) {
         case kCommaxAction_NEWSEARCH:
           std::cin.clear();
           std::cout << std::endl;
@@ -275,7 +281,7 @@ void testConversation() {
         }
 
       case kIntentStatus_REGISTER_DEVICE:
-        switch (commax_action_status) {
+        switch ((int)commax_action_status) {
         case kCommaxAction_ENDREGISTER:
           intent_status = kIntentStatus_NORMAL;
           break;
