@@ -1,0 +1,741 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{fa1a198b-81a2-4916-bb2c-30d65a156193}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\libnyquist">
+      <UniqueIdentifier>{428717e0-d027-474c-b2c7-9b22f55b0eda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{74fade48-868e-41a9-8937-0be69ee06746}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party">
+      <UniqueIdentifier>{71326b3a-793c-4ba2-979c-9482102cd8d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\catch">
+      <UniqueIdentifier>{cae39027-9eba-4c57-b1ca-7a20570259a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\FLAC">
+      <UniqueIdentifier>{ccdd4030-2f1a-404e-a1ad-4cd8709a2c6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\libmodplug">
+      <UniqueIdentifier>{84077101-732f-4390-bc7b-6f3c4dca2f1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\libogg">
+      <UniqueIdentifier>{fff3e151-d46c-4c38-b0e3-62c21c85a39f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\libvorbis">
+      <UniqueIdentifier>{5111ebe7-cac1-42e0-b354-785024795ea0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\musepack">
+      <UniqueIdentifier>{495d2539-0fc6-4330-8b7f-35628254d3ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\opus">
+      <UniqueIdentifier>{429ac18c-a2a7-4255-8159-0a09fc772f5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\wavpack">
+      <UniqueIdentifier>{9233165e-1960-4846-935f-17def3cd78d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\FLAC\src">
+      <UniqueIdentifier>{baedb7f9-de34-458c-a0e4-d768f43ac3a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\FLAC\src\include">
+      <UniqueIdentifier>{1dfc6ea5-676c-4bdd-92f2-d6dd3161a956}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\FLAC\src\include\private">
+      <UniqueIdentifier>{f44889cb-3e93-4560-b3d6-29a4126b1fd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\FLAC\src\include\protected">
+      <UniqueIdentifier>{91f093bf-93b3-4714-b5a3-a83f5f1b1492}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\FLAC\src\include\share">
+      <UniqueIdentifier>{5a0998b9-af77-4d31-b9b1-ed503defd44b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\libmodplug\src">
+      <UniqueIdentifier>{ca637d0c-ac98-4ca6-82b8-5b97cc711e6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\libogg\include">
+      <UniqueIdentifier>{a62caaaf-f333-4be2-9f7e-c9526696ba7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\libogg\src">
+      <UniqueIdentifier>{dd7798f2-5f17-4145-ba24-b02bebc08377}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\libogg\include\ogg">
+      <UniqueIdentifier>{189ee047-9063-4920-b580-c6cfa8962528}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\libvorbis\include">
+      <UniqueIdentifier>{7a238a1c-4a5d-4bd9-934b-a2221ca4cc59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\libvorbis\include\vorbis">
+      <UniqueIdentifier>{2d18b020-0195-4a66-8cff-71a3079538bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\libvorbis\src">
+      <UniqueIdentifier>{81a9f20f-f382-4f14-b0f4-bf3b6e6fd8a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\libvorbis\src\modes">
+      <UniqueIdentifier>{624cf226-a8a3-4f83-a4e6-2ea4df0a758f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\libnyquist\AudioDecoder.h">
+      <Filter>include\libnyquist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\libnyquist\CafDecoder.h">
+      <Filter>include\libnyquist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\libnyquist\Common.h">
+      <Filter>include\libnyquist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\libnyquist\Dither.h">
+      <Filter>include\libnyquist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\libnyquist\FlacDecoder.h">
+      <Filter>include\libnyquist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\libnyquist\IMA4Util.h">
+      <Filter>include\libnyquist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\libnyquist\ModplugDecoder.h">
+      <Filter>include\libnyquist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\libnyquist\MusepackDecoder.h">
+      <Filter>include\libnyquist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\libnyquist\OpusDecoder.h">
+      <Filter>include\libnyquist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\libnyquist\PostProcess.h">
+      <Filter>include\libnyquist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\libnyquist\RiffUtils.h">
+      <Filter>include\libnyquist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\libnyquist\VorbisDecoder.h">
+      <Filter>include\libnyquist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\libnyquist\WavDecoder.h">
+      <Filter>include\libnyquist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\libnyquist\WavEncoder.h">
+      <Filter>include\libnyquist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\libnyquist\WavPackDecoder.h">
+      <Filter>include\libnyquist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\catch\catch.hpp">
+      <Filter>third_party\catch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\all.h">
+      <Filter>third_party\FLAC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\assert.h">
+      <Filter>third_party\FLAC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\callback.h">
+      <Filter>third_party\FLAC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\export.h">
+      <Filter>third_party\FLAC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\format.h">
+      <Filter>third_party\FLAC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\metadata.h">
+      <Filter>third_party\FLAC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\ordinals.h">
+      <Filter>third_party\FLAC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\stream_decoder.h">
+      <Filter>third_party\FLAC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\stream_encoder.h">
+      <Filter>third_party\FLAC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\private\bitwriter.h">
+      <Filter>third_party\FLAC\src\include\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\private\cpu.h">
+      <Filter>third_party\FLAC\src\include\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\private\crc.h">
+      <Filter>third_party\FLAC\src\include\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\private\fixed.h">
+      <Filter>third_party\FLAC\src\include\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\private\float.h">
+      <Filter>third_party\FLAC\src\include\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\private\format.h">
+      <Filter>third_party\FLAC\src\include\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\private\lpc.h">
+      <Filter>third_party\FLAC\src\include\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\private\macros.h">
+      <Filter>third_party\FLAC\src\include\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\private\md5.h">
+      <Filter>third_party\FLAC\src\include\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\private\memory.h">
+      <Filter>third_party\FLAC\src\include\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\private\metadata.h">
+      <Filter>third_party\FLAC\src\include\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\private\ogg_decoder_aspect.h">
+      <Filter>third_party\FLAC\src\include\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\private\ogg_encoder_aspect.h">
+      <Filter>third_party\FLAC\src\include\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\private\ogg_helper.h">
+      <Filter>third_party\FLAC\src\include\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\private\ogg_mapping.h">
+      <Filter>third_party\FLAC\src\include\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\private\stream_encoder.h">
+      <Filter>third_party\FLAC\src\include\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\private\stream_encoder_framing.h">
+      <Filter>third_party\FLAC\src\include\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\private\window.h">
+      <Filter>third_party\FLAC\src\include\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\private\all.h">
+      <Filter>third_party\FLAC\src\include\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\private\bitmath.h">
+      <Filter>third_party\FLAC\src\include\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\private\bitreader.h">
+      <Filter>third_party\FLAC\src\include\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\protected\all.h">
+      <Filter>third_party\FLAC\src\include\protected</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\protected\stream_decoder.h">
+      <Filter>third_party\FLAC\src\include\protected</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\protected\stream_encoder.h">
+      <Filter>third_party\FLAC\src\include\protected</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\share\endswap.h">
+      <Filter>third_party\FLAC\src\include\share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\share\getopt.h">
+      <Filter>third_party\FLAC\src\include\share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\share\macros.h">
+      <Filter>third_party\FLAC\src\include\share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\share\private.h">
+      <Filter>third_party\FLAC\src\include\share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\share\safe_str.h">
+      <Filter>third_party\FLAC\src\include\share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\share\utf8.h">
+      <Filter>third_party\FLAC\src\include\share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\share\win_utf8_io.h">
+      <Filter>third_party\FLAC\src\include\share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\share\alloc.h">
+      <Filter>third_party\FLAC\src\include\share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\FLAC\src\include\share\compat.h">
+      <Filter>third_party\FLAC\src\include\share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libmodplug\src\it_defs.h">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libmodplug\src\load_pat.h">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libmodplug\src\modplug.h">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libmodplug\src\sndfile.h">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libmodplug\src\stdafx.h">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libmodplug\src\tables.h">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libogg\include\ogg\config_types.h">
+      <Filter>third_party\libogg\include\ogg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libogg\include\ogg\ogg.h">
+      <Filter>third_party\libogg\include\ogg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libogg\include\ogg\os_types.h">
+      <Filter>third_party\libogg\include\ogg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\include\vorbis\codec.h">
+      <Filter>third_party\libvorbis\include\vorbis</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\include\vorbis\vorbisenc.h">
+      <Filter>third_party\libvorbis\include\vorbis</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\include\vorbis\vorbisfile.h">
+      <Filter>third_party\libvorbis\include\vorbis</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\smallft.h">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\window.h">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\backends.h">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\bitrate.h">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\codebook.h">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\codec_internal.h">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\envelope.h">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\highlevel.h">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\lookup.h">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\lookup_data.h">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\lpc.h">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\lsp.h">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\masking.h">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\mdct.h">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\misc.h">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\os.h">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\psy.h">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\registry.h">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\scales.h">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\modes\floor_all.h">
+      <Filter>third_party\libvorbis\src\modes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\modes\psych_8.h">
+      <Filter>third_party\libvorbis\src\modes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\modes\psych_11.h">
+      <Filter>third_party\libvorbis\src\modes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\modes\psych_16.h">
+      <Filter>third_party\libvorbis\src\modes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\modes\psych_44.h">
+      <Filter>third_party\libvorbis\src\modes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\modes\residue_8.h">
+      <Filter>third_party\libvorbis\src\modes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\modes\residue_16.h">
+      <Filter>third_party\libvorbis\src\modes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\modes\residue_44.h">
+      <Filter>third_party\libvorbis\src\modes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\modes\residue_44p51.h">
+      <Filter>third_party\libvorbis\src\modes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\modes\residue_44u.h">
+      <Filter>third_party\libvorbis\src\modes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\modes\setup_8.h">
+      <Filter>third_party\libvorbis\src\modes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\modes\setup_11.h">
+      <Filter>third_party\libvorbis\src\modes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\modes\setup_16.h">
+      <Filter>third_party\libvorbis\src\modes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\modes\setup_22.h">
+      <Filter>third_party\libvorbis\src\modes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\modes\setup_32.h">
+      <Filter>third_party\libvorbis\src\modes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\modes\setup_44.h">
+      <Filter>third_party\libvorbis\src\modes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\modes\setup_44p51.h">
+      <Filter>third_party\libvorbis\src\modes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\modes\setup_44u.h">
+      <Filter>third_party\libvorbis\src\modes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\libvorbis\src\modes\setup_X.h">
+      <Filter>third_party\libvorbis\src\modes</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\AudioDecoder.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CafDecoder.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Common.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FlacDecoder.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FlacDependencies.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ModplugDecoder.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ModplugDependencies.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MusepackDecoder.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MusepackDependencies.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OpusDecoder.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OpusDependencies.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\RiffUtils.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\VorbisDecoder.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\VorbisDependencies.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WavDecoder.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WavEncoder.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WavPackDecoder.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WavPackDependencies.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\memory.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\metadata_iterators.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\metadata_object.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\ogg_decoder_aspect.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\ogg_encoder_aspect.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\ogg_helper.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\ogg_mapping.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\stream_decoder.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\stream_encoder.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\stream_encoder_framing.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\stream_encoder_intrin_avx2.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\stream_encoder_intrin_sse2.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\stream_encoder_intrin_ssse3.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\win_utf8_io.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\window.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\bitmath.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\bitreader.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\bitwriter.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\cpu.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\crc.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\fixed.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\fixed_intrin_sse2.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\fixed_intrin_ssse3.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\float.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\format.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\lpc.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\lpc_intrin_avx2.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\lpc_intrin_sse.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\lpc_intrin_sse2.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\lpc_intrin_sse41.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\FLAC\src\md5.c">
+      <Filter>third_party\FLAC\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\fastmix.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_669.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_abc.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_amf.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_ams.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_dbm.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_dmf.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_dsm.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_far.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_it.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_j2b.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_mdl.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_med.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_mid.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_mod.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_mt2.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_mtm.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_okt.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_pat.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_psm.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_ptm.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_s3m.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_stm.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_ult.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_umx.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_wav.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\load_xm.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\mmcmp.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\modplug.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\snd_dsp.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\snd_flt.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\snd_fx.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\sndfile.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libmodplug\src\sndmix.cpp">
+      <Filter>third_party\libmodplug\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libogg\src\bitwise.c">
+      <Filter>third_party\libogg\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libogg\src\framing.c">
+      <Filter>third_party\libogg\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\smallft.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\synthesis.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\tone.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\vorbisenc.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\vorbisfile.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\window.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\analysis.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\barkmel.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\bitrate.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\block.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\codebook.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\envelope.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\floor0.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\floor1.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\info.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\lookup.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\lpc.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\lsp.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\mapping0.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\mdct.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\psy.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\psytune.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\registry.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\res0.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\libvorbis\src\sharedbook.c">
+      <Filter>third_party\libvorbis\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

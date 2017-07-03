@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{9b6fbb51-d9fb-4333-8d40-8e485156b269}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{ce3129e6-a4e2-4df8-bf80-4606c7e6bd3c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\include\asio.cpp">
+      <Filter>include</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\asiodrivers.cpp">
+      <Filter>include</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\asiolist.cpp">
+      <Filter>include</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\iasiothiscallresolver.cpp">
+      <Filter>include</Filter>
+    </ClCompile>
+    <ClCompile Include="..\RtAudio.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\asio.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\asiodrivers.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\asiodrvr.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\asiolist.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\asiosys.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\dsound.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FunctionDiscoveryKeys_devpkey.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ginclude.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\iasiodrv.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\iasiothiscallresolver.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\soundcard.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RtAudio.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -8,6 +8,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="src\AudioManager">
+      <UniqueIdentifier>{b10e6791-b7d8-427f-8e72-21b71ec0b78d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -31,6 +34,12 @@
     <ClCompile Include="..\src\LogManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\AudioManager\AudioDevice.cpp">
+      <Filter>src\AudioManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\AudioManager\AudioManager.cpp">
+      <Filter>src\AudioManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\ConversationClient.h">
@@ -50,6 +59,15 @@
     </ClInclude>
     <ClInclude Include="..\src\LogManager.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\AudioManager\AudioDevice.h">
+      <Filter>src\AudioManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\AudioManager\AudioManager.h">
+      <Filter>src\AudioManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\AudioManager\RingBuffer.h">
+      <Filter>src\AudioManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
