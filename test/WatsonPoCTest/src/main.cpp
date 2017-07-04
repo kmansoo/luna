@@ -22,6 +22,9 @@ void testConversationWithController() {
     std::string text;
     std::string output_text, intent, body;
 
+    std::string current_latitude = "37.3247140";
+    std::string current_longitude = "127.1073318";
+
     std::cout << "Start conversation with Controller talks " << std::endl
         << std::endl;
 
@@ -84,6 +87,7 @@ void testConversationWithController() {
 
     while (true) {
         std::cin.clear();
+        std::cout << "Usage: '/': record your voice, '*': detect an event on camera, '!': set latitude and longitude" << std::endl;
         std::cout << "You> ";
 
         std::getline(std::cin, text);
@@ -106,29 +110,37 @@ void testConversationWithController() {
             if (text == "q")
                 break;
 
-            if (text == "*") {
-                client.getContext()["gooutsignal"] = 1;
-
+            if (text == "!") {
                 std::cin.clear();
                 std::cout << std::endl;
-                std::cout << "BOT> Latitude: "; 
-                std::getline(std::cin, text);  
+                std::cout << "BOT> Latitude: ";
+                std::getline(std::cin, text);
 
                 if (text == "")
                     text = "34.96";
 
-                client.getContext()["latitude"] = text;
-                
-                std::cout << "BOT> Longitude: "; 
+                current_latitude = text;
+
+                std::cout << "BOT> Longitude: ";
                 std::getline(std::cin, text);
-                
+
                 if (text == "")
                     text = "127.7277803";
 
-                client.getContext()["longitude"] = text;
+                current_longitude = text;
                 std::cout << std::endl;
+                continue;
+            }
+
+            if (text == "*") {
+                client.getContext()["gooutsignal"] = 1;
+                client.getContext()["latitude"] = current_latitude;
+                client.getContext()["longitude"] = current_longitude;
 
                 client.getContext()["objectarray"].clear();
+
+                std::cin.clear();
+                std::cout << std::endl;
 
                 std::cout << "BOT> Do you have a umbrella? (0 = no, 1 = yes) ";
                 std::getline(std::cin, text);
