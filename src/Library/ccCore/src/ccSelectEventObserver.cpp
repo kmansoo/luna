@@ -34,12 +34,12 @@ void ccSelectEventObserver::shutdown() {
     polling_thread_.join();
 }
 
-bool ccSelectEventObserver::addEvent(int fd, std::function<bool(int eventType, int fd)> f, int mode) {
+bool ccSelectEventObserver::add_event(int fd, std::function<bool(int eventType, int fd)> f, int mode) {
 
     auto new_event = std::make_shared<XProbeEventInfo>();
 
     new_event->handle_ = fd;
-    new_event->selectMode_ = mode;
+    new_event->select_mode_ = mode;
     new_event->callback_func_ = f;
 
     std::lock_guard<std::mutex> lock(mtx_);
@@ -49,7 +49,7 @@ bool ccSelectEventObserver::addEvent(int fd, std::function<bool(int eventType, i
     return true;
 }
 
-bool ccSelectEventObserver::removeEvent(int fd) {
+bool ccSelectEventObserver::remove_event(int fd) {
 
     std::lock_guard<std::mutex> lock(mtx_);
 
@@ -64,7 +64,7 @@ void ccSelectEventObserver::poll() {
     struct timeval  tv;
 
     while (is_stop_thread_ == false) {
-        manageEvents();
+        manage_events();
 
         if (watching_event_list_.size() == 0) {
             std::this_thread::sleep_for(std::chrono::microseconds{ 10 });
@@ -84,25 +84,25 @@ void ccSelectEventObserver::poll() {
             if (it->handle_ < 0)
                 continue;
  
-            if ((it->selectMode_ & kLunaSelectEventRead) == kLunaSelectEventRead) {
+            if ((it->select_mode_ & kLunaSelectEventRead) == kLunaSelectEventRead) {
                 if (maxFd <= it->handle_)
                     maxFd = it->handle_ + 1;
 
                 FD_SET(it->handle_, &read_fds);
             }
 
-            if ((it->selectMode_ & kLunaSelectEventWrite) == kLunaSelectEventWrite) {
+            if ((it->select_mode_ & kLunaSelectEventWrite) == kLunaSelectEventWrite) {
                 if (maxFd <= it->handle_)
                     maxFd = it->handle_ + 1;
 
                 FD_SET(it->handle_, &write_fds);
             }
 
-            if ((it->selectMode_ & kLunaSelectEventException) == kLunaSelectEventException) {
+            if ((it->select_mode_ & kLunaSelectEventException) == kLunaSelectEventException) {
                 if (maxFd <= it->handle_)
                     maxFd = it->handle_ + 1;
 
-                FD_SET(it->selectMode_, &except_fds);
+                FD_SET(it->select_mode_, &except_fds);
             }
         }
 
@@ -115,7 +115,7 @@ void ccSelectEventObserver::poll() {
 
         if (nResult > 0)
         {
-            manageEvents();
+            manage_events();
 
             for (auto it : watching_event_list_) {
                 if (FD_ISSET(it->handle_, &read_fds)) {
@@ -143,7 +143,7 @@ void ccSelectEventObserver::poll() {
     }
 }
 
-void ccSelectEventObserver::manageEvents()
+void ccSelectEventObserver::manage_events()
 {
     mtx_.lock();
 

@@ -30,23 +30,18 @@ ccIoTDeviceSpecification::ccIoTDeviceSpecification(const ccIoTDeviceSpecificatio
     description_ = other.description_;
 }
 
-
-ccIoTDeviceSpecification::ccIoTDeviceSpecification(ccIoTDeviceSpecification&& other) {
-    *this = std::move(other);
-}
-
 ccIoTDeviceSpecification::~ccIoTDeviceSpecification() {
     // TODO Auto-generated destructor stub
 }
 
-const std::string& ccIoTDeviceSpecification::getTypeNameString(IoTDeviceType device_type) {
+const std::string& ccIoTDeviceSpecification::get_type_name_string(IoTDeviceType device_type) {
     if ((std::uint16_t)device_type >= kDeviceType_Max)
         return s_device_type_name_list[0];
 
     return s_device_type_name_list[device_type];
 }
 
-ccIoTDeviceSpecification::IoTDeviceType ccIoTDeviceSpecification::getType(const std::string& name) {
+ccIoTDeviceSpecification::IoTDeviceType ccIoTDeviceSpecification::get_type(const std::string& name) {
     for (int index = 0; index < kDeviceType_Max; index++) {
         if (name == s_device_type_name_list[index])
             return (IoTDeviceType)index;
@@ -55,22 +50,38 @@ ccIoTDeviceSpecification::IoTDeviceType ccIoTDeviceSpecification::getType(const 
     return kDeviceType_Unknown;
 }
 
-ccIoTDeviceSpecification& ccIoTDeviceSpecification::operator=(ccIoTDeviceSpecification&& other) {
+ccIoTDeviceSpecification& ccIoTDeviceSpecification::operator=(ccIoTDeviceSpecification& other) {
     if (this == &other)
         return *this;
 
     device_type_ = other.device_type_;
-    name_ = std::move(other.name_);
-    description_ = std::move(other.description_);
+    name_ = other.name_;
+    description_ = other.description_;
 
     return *this;
 }
 
 const std::string& ccIoTDeviceSpecification::get_type_name() {
-    return getTypeNameString(device_type_);
+    return get_type_name_string(device_type_);
+}
+
+const std::string ccIoTDeviceSpecification::get_item_text(const std::string& key) {
+
+    if (specfication_.isObject() == false)
+        return std::string("");
+
+    if (specfication_[key].isNull())
+        return std::string("");
+
+    return specfication_[key].asString();
 }
 
 bool ccIoTDeviceSpecification::parse(const Json::Value& info) {
+    specfication_ = info;
+
+    if (specfication_.isObject() == false)
+        specfication_ = info;
+
     if (info.isObject() == false)
         return false;
 
@@ -80,7 +91,7 @@ bool ccIoTDeviceSpecification::parse(const Json::Value& info) {
     if (info["Name"].isNull())
         return false;
 
-    device_type_ = getType(info["Type"].asString());
+    device_type_ = get_type(info["Type"].asString());
     name_ = info["Name"].asCString();
 
     if (!info["Description"].isNull())
@@ -94,10 +105,9 @@ bool ccIoTDeviceSpecification::parse(const Json::Value& info) {
 
 bool ccIoTDeviceSpecification::parse(const std::string& info) {
     Json::Reader    json_reader;
-    Json::Value     root_value;
 
-    if (!json_reader.parse(info, root_value))
+    if (!json_reader.parse(info, specfication_))
         return false;
 
-    return parse(root_value);
+    return parse(specfication_);
 }

@@ -31,7 +31,7 @@ public:
 
     bool    parse(const std::string& data);
 
-protected:
+public:
     bool    parser_register_command(const Json::Value& ext_info);
     bool    parser_deregister_command(const Json::Value& ext_info);
     bool    parser_set_device_command(const Json::Value& ext_info);
@@ -65,7 +65,7 @@ public:
     std::uint32_t   device_control_;
 
     //  Registration
-    ccIoTDeviceSpecificationList    specification_info_list_;            //  Device Specfication
+    ccIoTDeviceSpecificationList    specification_list_list_;            //  Device Specfication
     std::string                     iot_device_master_uri_;
 
 private:

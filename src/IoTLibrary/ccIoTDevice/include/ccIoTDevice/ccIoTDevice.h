@@ -28,11 +28,18 @@ public:
     virtual ~ccIoTDevice();
 
 public:
+    ccIoTDeviceInfo& get_info() { return this->my_device_info_; }
+
     bool            attach_factory(std::shared_ptr<ccIoTDeviceTransportFactory> factory);
+
     virtual bool    start();
     virtual bool    stop();
 
     virtual bool    send(ccIoTDeviceProtocol& protocol);
+
+    virtual bool    is_registered() {
+        return is_connected_;
+    }
 
 public:
     bool    has_device(ccIoTDeviceSpecification::IoTDeviceType device_type);

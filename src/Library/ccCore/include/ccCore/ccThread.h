@@ -24,7 +24,7 @@ public:
 
     }
 
-    bool setStop() {
+    bool set_stop() {
         is_stop_thread_ = true;
 
         return true;

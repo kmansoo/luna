@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{5B033BAA-E21A-4E31-8418-EC3224EE0D6A}</ProjectGuid>
-    <RootNamespace>IoTDeviceWithUITest</RootNamespace>
+    <RootNamespace>Luna</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
     <Keyword>MFCProj</Keyword>
   </PropertyGroup>
@@ -93,6 +93,8 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../../src/Library/ccCore/include;../../../src/Library/ccNetwork/include;../../../src/Library/ccWebServer/include;../../../src/FossLibrary/ccJsonParser/include;../../../src/FossLibrary/ccWebsocketClient/include;../../../src/ThirdPartyLibrary/ccMongooseServer/include;../../../src/IoTLibrary/ccIoTDevice/include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -115,6 +117,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../../src/Library/ccCore/include;../../../src/Library/ccNetwork/include;../../../src/Library/ccWebServer/include;../../../src/FossLibrary/ccJsonParser/include;../../../src/FossLibrary/ccWebsocketClient/include;../../../src/ThirdPartyLibrary/ccMongooseServer/include;../../../src/IoTLibrary/ccIoTDevice/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -139,6 +142,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../../src/Library/ccCore/include;../../../src/Library/ccNetwork/include;../../../src/Library/ccWebServer/include;../../../src/FossLibrary/ccJsonParser/include;../../../src/FossLibrary/ccWebsocketClient/include;../../../src/ThirdPartyLibrary/ccMongooseServer/include;../../../src/IoTLibrary/ccIoTDevice/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -165,6 +169,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../../src/Library/ccCore/include;../../../src/Library/ccNetwork/include;../../../src/Library/ccWebServer/include;../../../src/FossLibrary/ccJsonParser/include;../../../src/FossLibrary/ccWebsocketClient/include;../../../src/ThirdPartyLibrary/ccMongooseServer/include;../../../src/IoTLibrary/ccIoTDevice/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -191,6 +196,9 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="UIControl\UIColorEdit.h" />
+    <ClInclude Include="UIControl\UIColorStaticST.h" />
+    <ClInclude Include="UIControl\UILightDeiceStatusCtrl.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IoTDeviceWithUITest.cpp" />
@@ -201,15 +209,39 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="UIControl\UIColorEdit.cpp" />
+    <ClCompile Include="UIControl\UIColorStaticST.cpp" />
+    <ClCompile Include="UIControl\UILightDeiceStatusCtrl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="IoTDeviceWithUITest.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="LightDeviceInfo.json" />
     <None Include="res\IoTDeviceWithUITest.rc2" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\IoTDeviceWithUITest.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\FossLibrary\ccJsonParser\msvc\ccJsonParser.vcxproj">
+      <Project>{e7bfc6a3-98b0-4103-a3ba-de08105f2db3}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\FossLibrary\ccWebsocketClient\msvc\ccWebsocketClient.vcxproj">
+      <Project>{0e86ffb0-57e1-4a9e-a12d-8a07ca1c5708}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\IoTLibrary\ccIoTDevice\msvc\ccIoTDeviceAPI.vcxproj">
+      <Project>{6fceedd0-c893-4c4e-b85a-10fbd1d36387}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Library\ccCore\msvc\ccCore.vcxproj">
+      <Project>{b3b6750e-2acd-4362-845a-2a79ab52fbd1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Library\ccNetwork\msvc\ccNetwork.vcxproj">
+      <Project>{22622606-5d5b-499c-8f3d-bad302a10950}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Library\ccWebServer\msvc\ccWebServer.vcxproj">
+      <Project>{4b237a6f-f4d9-4bbf-9d63-6460ddf8b984}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

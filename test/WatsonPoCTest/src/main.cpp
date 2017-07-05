@@ -1,6 +1,8 @@
 
 #include <iostream>
 
+#include "ccIoTDevice/ccIoTDeviceManager.h"
+
 #include "ccCore/ccCoreAPI.h"
 #include "ccCore/ccString.h"
 #include "ccNetwork/ccNetworkManager.h"
@@ -14,6 +16,8 @@
 #include "AudioManager/AudioManager.h"
 
 void testConversationWithController() {
+    ccIoTDeviceManager  manager;
+
     ConversationClientWithController client;
     AudioManager audio_manager(-1, -1);
 
@@ -154,14 +158,6 @@ void testConversationWithController() {
                 if (text == "1")
                     client.getContext()["objectarray"][client.getContext()["objectarray"].size()] = "sunglasses";
 
-                //  client.getContext()["latitude"] = "37.3247140";
-                //  client.getContext()["longitude"] = "127.1073318";
-
-                //client.getContext()["latitude"] = "34.96";
-                //  client.getContext()["longitude"] = "127.7277803";
-
-                //  Japan, 31.5867850, 131.3959840
-
                 client.getContext()["umbrella"] = 0;
 
                 text = "weather";
@@ -220,20 +216,38 @@ void testConversationWithController() {
             case kIntentStatus_REGISTER_DEVICE:
                 switch ((int)commax_action_status) {
                 case kCommaxAction_SEARCH_DEVICE:
+                {
+                    std::cout << "BOT> I'm waiting for about 10 seconds for IoT devices to be registered." << std::endl;
+
+                    for (int count = 0; count < 10; count++) {
+                        std::cout << (count + 1)  << ".";
+                        Luna::sleep(1 * 1000);
+                    }
+
+                    std::cout << std::endl;
+
+                    /*
                     std::cin.clear();
                     std::cout << std::endl;
                     std::cout << "BOT> How many devices did you find? ";
                     std::getline(std::cin, text);
                     std::cout << std::endl;
-
+                    */
                     intent_status = kIntentStatus_REGISTER_DEVICE;
 
-                    client.getContext()["newdevicecount"] = atoi(text.c_str());
+                    client.getContext()["newdevicecount"] = (int)manager.get_device_count();
                     text = "";
                     goto send_text;
+                }
+                break;
+
+                case kCommaxAction_REGISTER_DEVICE_START:
+                    manager.sendControlCommand(0, "blink_start");
                     break;
 
                 case kCommaxAction_REGISTER_DEVICE_RUN:
+                    manager.sendControlCommand(0, "blink_stop");
+
                     client.getContext()["validation"] = 1;
                     text = "";
                     goto send_text;

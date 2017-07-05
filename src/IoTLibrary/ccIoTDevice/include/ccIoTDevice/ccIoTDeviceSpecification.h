@@ -16,7 +16,6 @@ class ccIoTDeviceSpecification {
 public:
     ccIoTDeviceSpecification();
     ccIoTDeviceSpecification(const ccIoTDeviceSpecification& other);
-    ccIoTDeviceSpecification(ccIoTDeviceSpecification&& other);
 
     virtual ~ccIoTDeviceSpecification();
 
@@ -37,17 +36,21 @@ public:
     };
 
 public:
-    static const std::string&   getTypeNameString(IoTDeviceType device_type);
-    static IoTDeviceType        getType(const std::string& name);
+    static const std::string&   get_type_name_string(IoTDeviceType device_type);
+    static IoTDeviceType        get_type(const std::string& name);
 
 public:
-    ccIoTDeviceSpecification& operator=(ccIoTDeviceSpecification&& other);
+    ccIoTDeviceSpecification& operator=(ccIoTDeviceSpecification& other);
+
+    const Json::Value&  get_specification() { return specfication_; }
 
     const IoTDeviceType get_type() { return device_type_; }
     const std::string& get_type_name();
     const std::string& get_name() { return name_; }
     const std::string& get_description() { return description_; }
     const std::string& get_manufacture() { return manufacture_; }
+
+    const std::string get_item_text(const std::string& key);
 
 protected:
     //  Example
@@ -80,6 +83,8 @@ protected:
     //      ]
     //  }
     //
+    Json::Value     specfication_;
+
     IoTDeviceType   device_type_;
     std::string     name_;
     std::string     description_;

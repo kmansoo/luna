@@ -23,38 +23,6 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\ccIoTDevice.h">
-      <Filter>include\ccIoTDevice</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ccIoTDeviceInfo.h">
-      <Filter>include\ccIoTDevice</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceManager.h">
-      <Filter>include\ccIoTDevice</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceProtocol.h">
-      <Filter>include\ccIoTDevice</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceSpecification.h">
-      <Filter>include\ccIoTDevice</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceSpecificationList.h">
-      <Filter>include\ccIoTDevice</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ccIoTDevice\ccIotDeviceSyncProtocol.h">
-      <Filter>include\ccIoTDevice</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceTransport.h">
-      <Filter>include\ccIoTDevice</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceTransportFactory.h">
-      <Filter>include\ccIoTDevice</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceAgent.h">
-      <Filter>include\ccIoTDevice</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\src\ccIoTDevice.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -85,5 +53,37 @@
     <ClCompile Include="..\src\ccIoTDeviceTransportFactory.cpp">
       <Filter>src</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\ccIoTDevice\ccIoTDevice.h">
+      <Filter>include\ccIoTDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceAgent.h">
+      <Filter>include\ccIoTDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceInfo.h">
+      <Filter>include\ccIoTDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceManager.h">
+      <Filter>include\ccIoTDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceProtocol.h">
+      <Filter>include\ccIoTDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceSpecification.h">
+      <Filter>include\ccIoTDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceSpecificationList.h">
+      <Filter>include\ccIoTDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccIoTDevice\ccIotDeviceSyncProtocol.h">
+      <Filter>include\ccIoTDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceTransport.h">
+      <Filter>include\ccIoTDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceTransportFactory.h">
+      <Filter>include\ccIoTDevice</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

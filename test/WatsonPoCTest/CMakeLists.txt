@@ -102,8 +102,12 @@ include_directories(
     ./ 
     ${LUNA_SW_PLATFORM}/src/Library/ccCore/include
     ${LUNA_SW_PLATFORM}/src/Library/ccNetwork/include
+    ${LUNA_SW_PLATFORM}/src/Library/ccWebServer/include
     ${LUNA_SW_PLATFORM}/src/FossLibrary/ccJsonParser/include
+    ${LUNA_SW_PLATFORM}/src/FossLibrary/ccWebsocketClient/include
     ${LUNA_SW_PLATFORM}/src/FossLibrary/ccRestClient/include
+    ${LUNA_SW_PLATFORM}/src/IoTLibrary/ccIoTDevice/include
+    ${LUNA_SW_PLATFORM}/src/ThirdPartyLibrary/ccMongooseServer/include
     ${LUNA_SW_PLATFORM}/dependency/curl/include
     ${LUNA_SW_PLATFORM}/extlibs/libnyquist/include
     ${LUNA_SW_PLATFORM}/extlibs
@@ -129,6 +133,10 @@ add_executable (WatsonPoCTest
 TARGET_LINK_LIBRARIES(WatsonPoCTest
     nyquist
     rtaudio
+	ccIoTDevice
+	ccMongooseServer
+	ccWebsocketClient
+    ccWebServer    
     ccRestClient
     ccJsonParser
     ccNetwork

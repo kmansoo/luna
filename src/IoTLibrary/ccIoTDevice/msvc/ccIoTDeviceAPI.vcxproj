@@ -21,9 +21,9 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6FCEEDD0-C893-4C4E-B85A-10FBD1D36387}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>CommonControl</RootNamespace>
+    <RootNamespace>Luna</RootNamespace>
     <ProjectName>ccIoTDevice</ProjectName>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.10240.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -80,6 +80,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>LUNA_PLATFORM_WIN32;WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..;../../;../../../../dependency/Luna/src/Library;../../../../dependency/Luna/src/FossLibrary;../../../../dependency/Luna/src/ThirdPartyLibrary;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -101,6 +102,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>LUNA_PLATFORM_WIN32;WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>../include;../../../Library/ccCore/include;../../../FossLibrary/ccJsonParser/include;../../../FossLibrary/ccWebsocketClient/include;../../../Library/ccWebServer/include;../../../ThirdPartyLibrary/ccMongooseServer/include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -145,10 +147,9 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <Optimization>MaxSpeed</Optimization>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>LUNA_PLATFORM_WIN32;WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>../include;../../../Library/ccCore/include;../../../FossLibrary/ccJsonParser/include;../../../FossLibrary/ccWebsocketClient/include;../../../Library/ccWebServer/include;../../../ThirdPartyLibrary/ccMongooseServer/include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -169,18 +170,6 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\ccIoTDevice.h" />
-    <ClInclude Include="..\ccIoTDeviceInfo.h" />
-    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceAgent.h" />
-    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceManager.h" />
-    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceProtocol.h" />
-    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceSpecification.h" />
-    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceSpecificationList.h" />
-    <ClInclude Include="..\include\ccIoTDevice\ccIotDeviceSyncProtocol.h" />
-    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceTransport.h" />
-    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceTransportFactory.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\src\ccIoTDevice.cpp" />
     <ClCompile Include="..\src\ccIoTDeviceAgent.cpp" />
     <ClCompile Include="..\src\ccIoTDeviceInfo.cpp" />
@@ -191,6 +180,18 @@
     <ClCompile Include="..\src\ccIotDeviceSyncProtocol.cpp" />
     <ClCompile Include="..\src\ccIoTDeviceTransport.cpp" />
     <ClCompile Include="..\src\ccIoTDeviceTransportFactory.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\ccIoTDevice\ccIoTDevice.h" />
+    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceAgent.h" />
+    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceInfo.h" />
+    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceManager.h" />
+    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceProtocol.h" />
+    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceSpecification.h" />
+    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceSpecificationList.h" />
+    <ClInclude Include="..\include\ccIoTDevice\ccIotDeviceSyncProtocol.h" />
+    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceTransport.h" />
+    <ClInclude Include="..\include\ccIoTDevice\ccIoTDeviceTransportFactory.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

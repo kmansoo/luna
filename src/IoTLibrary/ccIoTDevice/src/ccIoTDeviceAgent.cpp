@@ -11,10 +11,10 @@
 
 using namespace Luna;
 
-ccIoTDeviceAgent::ccIoTDeviceAgent(std::shared_ptr<ccWebsocket> websocket, ccIoTDeviceSpecificationList&& spec_info) {
+ccIoTDeviceAgent::ccIoTDeviceAgent(std::shared_ptr<ccWebsocket> websocket, ccIoTDeviceSpecificationList& spec_info) {
     websocket_ = websocket;
 
-    device_spec_info_ = std::move(spec_info);
+    device_spec_info_ = spec_info;
 }
 
 ccIoTDeviceAgent::~ccIoTDeviceAgent() {
@@ -29,8 +29,8 @@ bool ccIoTDeviceAgent::has_device(const std::string& device_name) {
     return device_spec_info_.has_device(device_name);
 }
 
-int ccIoTDeviceAgent::get_device_index(ccIoTDeviceSpecification::IoTDeviceType device_type) {
-    return device_spec_info_.get_device_index(device_type);
+int ccIoTDeviceAgent::get_device_Index(ccIoTDeviceSpecification::IoTDeviceType device_type) {
+    return device_spec_info_.get_device_Index(device_type);
 }
 
 ccIoTDeviceSpecification& ccIoTDeviceAgent::get_device_spec(std::size_t nIndex) {

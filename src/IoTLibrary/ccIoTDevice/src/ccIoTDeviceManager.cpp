@@ -69,6 +69,30 @@ void ccIoTDeviceManager::show() {
     }
 }
 
+bool ccIoTDeviceManager::sendControlCommand(int index, const std::string command) {
+    std::lock_guard<std::mutex> lock(mtx_);
+
+    ccIoTDeviceProtocol control_protocol;
+
+    Json::Value ext_info;
+
+    ext_info["DeviceType"] = "Light";
+    ext_info["Control"] = command;
+
+    int count = 0;
+
+    for (auto it : agent_map_) {
+        if (count == index) {
+            control_protocol.send(it.second->getWebsocket().get(), true, "SetDevice", ext_info);
+            return true;
+        }
+
+        count++;
+    }
+
+    return false;
+}
+
 void ccIoTDeviceManager::control_all_switches(bool on) {
     std::lock_guard<std::mutex> lock(mtx_);
 
@@ -85,7 +109,7 @@ void ccIoTDeviceManager::control_all_switches(bool on) {
 
     for (auto it : agent_map_) {
         if (it.second->has_device(ccIoTDeviceSpecification::kDeviceType_Switch))
-            control_protocol.send(it.second->get_websocket().get(), true, "SetDevice", ext_info);
+            control_protocol.send(it.second->getWebsocket().get(), true, "SetDevice", ext_info);
     }
 }
 
@@ -105,7 +129,7 @@ void ccIoTDeviceManager::control_all_lights(bool on) {
 
     for (auto it : agent_map_) {
         if (it.second->has_device(ccIoTDeviceSpecification::kDeviceType_Light))
-            control_protocol.send(it.second->get_websocket().get(), true, "SetDevice", ext_info);
+            control_protocol.send(it.second->getWebsocket().get(), true, "SetDevice", ext_info);
     }
 }
 
@@ -125,7 +149,7 @@ void ccIoTDeviceManager::control_all_locks(bool open) {
 
     for (auto it : agent_map_) {
         if (it.second->has_device(ccIoTDeviceSpecification::kDeviceType_Lock))
-            control_protocol.send(it.second->get_websocket().get(), true, "SetDevice", ext_info);
+            control_protocol.send(it.second->getWebsocket().get(), true, "SetDevice", ext_info);
     }
 }
 
@@ -154,7 +178,7 @@ bool ccIoTDeviceManager::devices(std::shared_ptr<ccWebServerRequest> request, st
         for (auto it : agent_map_) {
             Json::Value oDeviceInfo;
 
-            oDeviceInfo = it.second->get_device_spec_info().to_json();
+            oDeviceInfo = it.second->get_device_specInfo().to_json();
             oDeviceInfo["ID"] = it.second->get_id();
 
             device_list["device"][nIndex++] = oDeviceInfo;
@@ -194,7 +218,7 @@ bool ccIoTDeviceManager::devices_device(std::shared_ptr<ccWebServerRequest> requ
 
     case ccWebServerRequest::HttpMethod_Get:    //  Read
     {
-        std::string strID = std::move(request->get_variable("ID"));
+        std::string strID = request->get_variable("ID");
 
         int device_id = std::stoi(strID);
 
@@ -212,7 +236,7 @@ bool ccIoTDeviceManager::devices_device(std::shared_ptr<ccWebServerRequest> requ
 
         Json::Value oDeviceInfo;
 
-        oDeviceInfo = it->second->get_device_spec_info().to_json();
+        oDeviceInfo = it->second->get_device_specInfo().to_json();
         oDeviceInfo["ID"] = it->second->get_id();
 
         response_json_data["device"] = oDeviceInfo;
@@ -245,7 +269,7 @@ bool ccIoTDeviceManager::devices_device(std::shared_ptr<ccWebServerRequest> requ
 
         ccIoTDeviceProtocol control_protocol;
         control_protocol.parse(strControlData);
-        control_protocol.send(it->second->get_websocket().get());
+        control_protocol.send(it->second->getWebsocket().get());
 
         response->send_content("");
         return true;
@@ -320,7 +344,7 @@ bool ccIoTDeviceManager::register_command(std::shared_ptr<ccWebsocket> websocket
     if (protocol.is_request_ == false)
         return false;
 
-    std::shared_ptr<ccIoTDeviceAgent> pNewDeviceAgent(new ccIoTDeviceAgent(websocket, std::move(protocol.specification_info_list_)));
+    std::shared_ptr<ccIoTDeviceAgent> pNewDeviceAgent(new ccIoTDeviceAgent(websocket, protocol.specification_list_list_));
 
     std::lock_guard<std::mutex> lock(mtx_);
 
@@ -331,7 +355,7 @@ bool ccIoTDeviceManager::register_command(std::shared_ptr<ccWebsocket> websocket
 
     agent_map_[websocket->get_instance()] = pNewDeviceAgent;
 
-    std::cout << "Registerd: " << pNewDeviceAgent->get_type_name() << ", " << pNewDeviceAgent->get_name() << std::endl;
+    //  std::cout << "Registerd: " << pNewDeviceAgent->get_type_name() << ", " << pNewDeviceAgent->get_name() << std::endl;
 
     return true;
 }
@@ -347,7 +371,7 @@ bool ccIoTDeviceManager::deregister_command(std::shared_ptr<ccWebsocket> websock
     if (it == std::end(agent_map_))
         return false;
 
-    std::cout << "DeRegisterd: " << it->second->get_type_name() << ", " << it->second->get_name() << std::endl;
+    //  std::cout << "DeRegisterd: " << it->second->get_type_name() << ", " << it->second->get_name() << std::endl;
 
     agent_map_.erase(it);
 

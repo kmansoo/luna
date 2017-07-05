@@ -15,24 +15,20 @@ ccIoTDeviceInfo::ccIoTDeviceInfo() {
 }
 
 ccIoTDeviceInfo::ccIoTDeviceInfo(const ccIoTDeviceInfo& other) :
-    specification_info_(other.specification_info_),
+    specification_list_(other.specification_list_),
     iot_device_master_uri_(other.iot_device_master_uri_) {
-}
-
-ccIoTDeviceInfo::ccIoTDeviceInfo(ccIoTDeviceInfo&& other) {
-    *this = std::move(other);
 }
 
 ccIoTDeviceInfo::~ccIoTDeviceInfo() {
     // TODO Auto-generated destructor stub
 }
 
-ccIoTDeviceInfo& ccIoTDeviceInfo::operator=(ccIoTDeviceInfo&& other) {
+ccIoTDeviceInfo& ccIoTDeviceInfo::operator=(ccIoTDeviceInfo& other) {
     if (this == &other)
         return *this;
 
-    specification_info_ = std::move(other.specification_info_);
-    iot_device_master_uri_ = std::move(other.iot_device_master_uri_);
+    specification_list_ = other.specification_list_;
+    iot_device_master_uri_ = other.iot_device_master_uri_;
 
     return *this;
 }
@@ -59,7 +55,7 @@ bool ccIoTDeviceInfo::parse(const Json::Value& info) {
     if (info["IoTDeviceMasterUri"].isNull())
         return false;
 
-    specification_info_.parse(info["IoTDeviceSpecification"]);
+    specification_list_.parse(info["IoTDeviceSpecification"]);
     iot_device_master_uri_ = info["IoTDeviceMasterUri"].asString();
 
     return true;
@@ -67,10 +63,9 @@ bool ccIoTDeviceInfo::parse(const Json::Value& info) {
 
 bool ccIoTDeviceInfo::parse(const std::string& info) {
     Json::Reader    json_reader;
-    Json::Value     root_value;
 
-    if (!json_reader.parse(info, root_value))
+    if (!json_reader.parse(info, root_value_))
         return false;
 
-    return parse(root_value);
+    return parse(root_value_);
 }

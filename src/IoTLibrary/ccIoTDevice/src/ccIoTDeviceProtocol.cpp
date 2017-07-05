@@ -159,7 +159,7 @@ bool ccIoTDeviceProtocol::parser_register_command(const Json::Value& ext_info) {
     if (ext_info["IoTDeviceSpecification"].isNull())
         return false;
 
-    return specification_info_list_.parse(ext_info["IoTDeviceSpecification"]);
+    return specification_list_list_.parse(ext_info["IoTDeviceSpecification"]);
 }
 
 bool ccIoTDeviceProtocol::parser_deregister_command(const Json::Value& ext_info) {

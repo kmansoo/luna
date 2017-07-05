@@ -34,24 +34,24 @@ public:
 public:
     void  shutdown();
 
-    bool  addEvent(int fd, std::function<bool(int eventType, int fd)> f, int mode = kLunaSelectEventRead);
-    bool  removeEvent(int fd);
+    bool  add_event(int fd, std::function<bool(int eventType, int fd)> f, int mode = kLunaSelectEventRead);
+    bool  remove_event(int fd);
 
 private:
     void poll();
-    void manageEvents();
+    void manage_events();
 
 protected:
     class XProbeEventInfo
     {
     public:
         XProbeEventInfo() {
-            selectMode_ = 0x00;
+            select_mode_ = 0x00;
             handle_ = -1;
         }
 
     public:
-        int selectMode_;
+        int select_mode_;
         int handle_;
         std::function<bool(int eventType, int fd)> callback_func_;
     };

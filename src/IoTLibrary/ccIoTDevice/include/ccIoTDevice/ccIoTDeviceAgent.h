@@ -19,23 +19,23 @@
 
 class ccIoTDeviceAgent {
 public:
-    ccIoTDeviceAgent(std::shared_ptr<Luna::ccWebsocket> websocket, ccIoTDeviceSpecificationList&& spec_info);
+    ccIoTDeviceAgent(std::shared_ptr<Luna::ccWebsocket> websocket, ccIoTDeviceSpecificationList& spec_info);
     virtual ~ccIoTDeviceAgent();
 
 public:
     void show();
 
 public:
-    int get_device_count() { return device_spec_info_.size(); }
+    int get_device_count() { return (int)device_spec_info_.size(); }
 
-    ccIoTDeviceSpecificationList& get_device_spec_info() {
+    ccIoTDeviceSpecificationList& get_device_specInfo() {
         return device_spec_info_;
     }  //  for All Device Info
 
     bool has_device(ccIoTDeviceSpecification::IoTDeviceType device_type);
     bool has_device(const std::string& device_name);
 
-    int get_device_index(ccIoTDeviceSpecification::IoTDeviceType device_type);
+    int get_device_Index(ccIoTDeviceSpecification::IoTDeviceType device_type);
 
     ccIoTDeviceSpecification& get_device_spec( std::size_t nIndex = 0);  //  for Specific Device
 
@@ -46,7 +46,7 @@ public:
 
     std::int32_t get_id() { return websocket_->get_instance(); }
 
-    const std::shared_ptr<Luna::ccWebsocket> get_websocket() {
+    const std::shared_ptr<Luna::ccWebsocket> getWebsocket() {
         return websocket_;
     }
 

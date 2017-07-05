@@ -19,7 +19,6 @@ ccIoTDevice::ccIoTDevice(const std::string& strSpecFile) : is_connected_(false),
 
     ws_client_.set_event_listener(std::bind(&ccIoTDevice::recv_data_from_websocket, this, std::placeholders::_1, std::placeholders::_2));
 
-    //  �б�
     if (my_device_info_.load_file(strSpecFile) == false) {
         std::cout << "[Warning!!]" << std::endl;
         std::cout << "  --> Couldn't load the device specification['" << strSpecFile << "'" << std::endl;
@@ -97,7 +96,7 @@ void ccIoTDevice::retry_connect() {
     if (is_stop_by_user_)
         return;
 
-    std::cout << "ccIoTDevice: retry_connect, " << std::endl;
+    std::cout << "ccIoTDevice: retryConnect, " << std::endl;
 
     ws_client_.close();
 
@@ -157,7 +156,7 @@ bool ccIoTDevice::set_device_command(ccIoTDeviceProtocol& protocol) {
     if (protocol.is_request_ == false)
         return false;
 
-    //std::cout << "ccIoTDevice: set_device_command " << std::endl;
+    //std::cout << "ccIoTDevice: setDeviceCommand " << std::endl;
     //ccIoTDeviceProtocol oResponseProtocol;
     //oResponseProtocol.send(&ws_client_, false, protocol.command_);
 
@@ -168,7 +167,7 @@ bool ccIoTDevice::get_device_status_command(ccIoTDeviceProtocol& protocol) {
     if (protocol.is_request_ == false)
         return false;
 
-    //std::cout << "ccIoTDevice: get_device_status_command " << std::endl;
+    //std::cout << "ccIoTDevice: getDeviceStatusCommand " << std::endl;
     //ccIoTDeviceProtocol oResponseProtocol;
     //oResponseProtocol.send(&ws_client_, false, protocol.command_);
 

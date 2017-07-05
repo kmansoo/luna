@@ -87,6 +87,7 @@
       <PreprocessorDefinitions>LUNA_PLATFORM_WIN32;WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../include;../../../src/Library/ccCore/include;../../../src/Library/ccNetwork/include;../../../src/Library/ccWebServer/include;../../../src/FossLibrary/ccJsonParser/include;../../../src/FossLibrary/ccWebsocketClient/include;../../../src/FossLibrary/ccRestClient/include;../../../src/ThirdPartyLibrary/ccMongooseServer/include;../../../dependency/curl/include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -102,6 +103,7 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../include;../../../src/Library/ccCore/include;../../../src/Library/ccNetwork/include;../../../src/Library/ccWebServer/include;../../../src/FossLibrary/ccJsonParser/include;../../../src/FossLibrary/ccWebsocketClient/include;../../../src/FossLibrary/ccRestClient/include;../../../src/ThirdPartyLibrary/ccMongooseServer/include;../../../dependency/curl/include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -119,6 +121,7 @@
       <PreprocessorDefinitions>LUNA_PLATFORM_WINDOWS;WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../include;../../../src/Library/ccCore/include;../../../src/Library/ccNetwork/include;../../../src/Library/ccWebServer/include;../../../src/FossLibrary/ccJsonParser/include;../../../src/FossLibrary/ccWebsocketClient/include;../../../src/FossLibrary/ccRestClient/include;../../../src/ThirdPartyLibrary/ccMongooseServer/include;../../../dependency/curl/include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,6 +136,7 @@
       </PrecompiledHeader>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>../include;../../../src/Library/ccCore/include;../../../src/Library/ccNetwork/include;../../../src/Library/ccWebServer/include;../../../src/FossLibrary/ccJsonParser/include;../../../src/FossLibrary/ccWebsocketClient/include;../../../src/FossLibrary/ccRestClient/include;../../../src/ThirdPartyLibrary/ccMongooseServer/include;../../../dependency/curl/include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

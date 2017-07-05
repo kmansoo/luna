@@ -86,7 +86,8 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_WINDOWS;__WINDOWS_DS__;LUNA_PLATFORM_WIN32;WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../include;../../../src/Library/ccCore/include;../../../src/Library/ccNetwork/include;../../../src/Library/ccWebServer/include;../../../src/FossLibrary/ccJsonParser/include;../../../src/FossLibrary/ccWebsocketClient/include;../../../src/FossLibrary/ccRestClient/include;../../../src/ThirdPartyLibrary/ccMongooseServer/include;../../../dependency/curl/include;../../../extlibs;../../../extlibs/libnyquist;../../../extlibs/libnyquist/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;../../../src/Library/ccCore/include;../../../src/Library/ccNetwork/include;../../../src/Library/ccWebServer/include;../../../src/FossLibrary/ccJsonParser/include;../../../src/FossLibrary/ccWebsocketClient/include;../../../src/FossLibrary/ccRestClient/include;../../../src/ThirdPartyLibrary/ccMongooseServer/include;../../../src/IoTLibrary/ccIoTDevice/include;../../../dependency/curl/include;../../../extlibs;../../../extlibs/libnyquist;../../../extlibs/libnyquist/include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -101,7 +102,8 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_WINDOWS;__WINDOWS_DS__;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../include;../../../src/Library/ccCore/include;../../../src/Library/ccNetwork/include;../../../src/Library/ccWebServer/include;../../../src/FossLibrary/ccJsonParser/include;../../../src/FossLibrary/ccWebsocketClient/include;../../../src/FossLibrary/ccRestClient/include;../../../src/ThirdPartyLibrary/ccMongooseServer/include;../../../dependency/curl/include;../../../extlibs;../../../extlibs/libnyquist;../../../extlibs/libnyquist/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;../../../src/Library/ccCore/include;../../../src/Library/ccNetwork/include;../../../src/Library/ccWebServer/include;../../../src/FossLibrary/ccJsonParser/include;../../../src/FossLibrary/ccWebsocketClient/include;../../../src/FossLibrary/ccRestClient/include;../../../src/ThirdPartyLibrary/ccMongooseServer/include;../../../src/IoTLibrary/ccIoTDevice/include;../../../dependency/curl/include;../../../extlibs;../../../extlibs/libnyquist;../../../extlibs/libnyquist/include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -118,7 +120,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_WINDOWS;__WINDOWS_DS__;LUNA_PLATFORM_WINDOWS;WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../include;../../../src/Library/ccCore/include;../../../src/Library/ccNetwork/include;../../../src/Library/ccWebServer/include;../../../src/FossLibrary/ccJsonParser/include;../../../src/FossLibrary/ccWebsocketClient/include;../../../src/FossLibrary/ccRestClient/include;../../../src/ThirdPartyLibrary/ccMongooseServer/include;../../../dependency/curl/include;../../../extlibs;../../../extlibs/libnyquist;../../../extlibs/libnyquist/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;../../../src/Library/ccCore/include;../../../src/Library/ccNetwork/include;../../../src/Library/ccWebServer/include;../../../src/FossLibrary/ccJsonParser/include;../../../src/FossLibrary/ccWebsocketClient/include;../../../src/FossLibrary/ccRestClient/include;../../../src/ThirdPartyLibrary/ccMongooseServer/include;../../../src/IoTLibrary/ccIoTDevice/include;../../../dependency/curl/include;../../../extlibs;../../../extlibs/libnyquist;../../../extlibs/libnyquist/include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,7 +135,8 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <PreprocessorDefinitions>_WINDOWS;__WINDOWS_DS__;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../include;../../../src/Library/ccCore/include;../../../src/Library/ccNetwork/include;../../../src/Library/ccWebServer/include;../../../src/FossLibrary/ccJsonParser/include;../../../src/FossLibrary/ccWebsocketClient/include;../../../src/FossLibrary/ccRestClient/include;../../../src/ThirdPartyLibrary/ccMongooseServer/include;../../../dependency/curl/include;../../../extlibs;../../../extlibs/libnyquist;../../../extlibs/libnyquist/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;../../../src/Library/ccCore/include;../../../src/Library/ccNetwork/include;../../../src/Library/ccWebServer/include;../../../src/FossLibrary/ccJsonParser/include;../../../src/FossLibrary/ccWebsocketClient/include;../../../src/FossLibrary/ccRestClient/include;../../../src/ThirdPartyLibrary/ccMongooseServer/include;../../../src/IoTLibrary/ccIoTDevice/include;../../../dependency/curl/include;../../../extlibs;../../../extlibs/libnyquist;../../../extlibs/libnyquist/include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -178,11 +182,20 @@
     <ProjectReference Include="..\..\..\src\FossLibrary\ccWebsocketClient\msvc\ccWebsocketClient.VS2017.vcxproj">
       <Project>{0e86ffb0-57e1-4a9e-a12d-8a07ca1c5708}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\src\IoTLibrary\ccIoTDevice\msvc\ccIoTDeviceAPI.vcxproj">
+      <Project>{6fceedd0-c893-4c4e-b85a-10fbd1d36387}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\src\Library\ccCore\msvc\ccCore.vcxproj">
       <Project>{b3b6750e-2acd-4362-845a-2a79ab52fbd1}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\src\Library\ccNetwork\msvc\ccNetwork.vcxproj">
       <Project>{22622606-5d5b-499c-8f3d-bad302a10950}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Library\ccWebServer\msvc\ccWebServer.vcxproj">
+      <Project>{4b237a6f-f4d9-4bbf-9d63-6460ddf8b984}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\ThirdPartyLibrary\ccMongooseServer\msvc\ccMongooseServer.vcxproj">
+      <Project>{e3fcc667-3505-4635-a78b-ea15e73d4755}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\src\ThirdPartyLibrary\ccMongooseServer\msvc\ccMongooseServer.VS2017.vcxproj">
       <Project>{e3fcc667-3505-4635-a78b-ea15e73d4755}</Project>

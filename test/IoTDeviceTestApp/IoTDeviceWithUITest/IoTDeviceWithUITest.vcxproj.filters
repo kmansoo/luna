@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="UIControl">
+      <UniqueIdentifier>{ec1ce00d-196c-42f3-9884-4d775df63a24}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -33,6 +36,15 @@
     <ClInclude Include="Resource.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="UIControl\UIColorEdit.h">
+      <Filter>UIControl</Filter>
+    </ClInclude>
+    <ClInclude Include="UIControl\UIColorStaticST.h">
+      <Filter>UIControl</Filter>
+    </ClInclude>
+    <ClInclude Include="UIControl\UILightDeiceStatusCtrl.h">
+      <Filter>UIControl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IoTDeviceWithUITest.cpp">
@@ -44,6 +56,15 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="UIControl\UIColorEdit.cpp">
+      <Filter>UIControl</Filter>
+    </ClCompile>
+    <ClCompile Include="UIControl\UIColorStaticST.cpp">
+      <Filter>UIControl</Filter>
+    </ClCompile>
+    <ClCompile Include="UIControl\UILightDeiceStatusCtrl.cpp">
+      <Filter>UIControl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="IoTDeviceWithUITest.rc">
@@ -53,6 +74,9 @@
   <ItemGroup>
     <None Include="res\IoTDeviceWithUITest.rc2">
       <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="LightDeviceInfo.json">
+      <Filter>소스 파일</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

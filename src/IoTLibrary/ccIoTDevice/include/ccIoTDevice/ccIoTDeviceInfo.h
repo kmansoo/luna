@@ -17,12 +17,11 @@ class ccIoTDeviceInfo {
 public:
     ccIoTDeviceInfo();
     ccIoTDeviceInfo(const ccIoTDeviceInfo& other);
-    ccIoTDeviceInfo(ccIoTDeviceInfo&& other);
 
     virtual ~ccIoTDeviceInfo();
 
 public:
-    ccIoTDeviceInfo&    operator=(ccIoTDeviceInfo&& other);
+    ccIoTDeviceInfo&    operator=(ccIoTDeviceInfo& other);
 
     bool    load_file(const std::string& file_name);
 
@@ -32,13 +31,14 @@ public:
 public:
     const std::string&            get_master_uri() { return iot_device_master_uri_; }
 
-    ccIoTDeviceSpecificationList& get_specification_info() { return specification_info_; }
+    ccIoTDeviceSpecificationList& get_specification_info() { return specification_list_; }
 
-    int                           get_specification_info_size() { return specification_info_.size(); }
-    ccIoTDeviceSpecification&     get_device_specification(int nIndex) { return specification_info_.get_at(nIndex); }
+    int                           get_specification_infoSize() { return (int)specification_list_.size(); }
+    ccIoTDeviceSpecification&     get_device_specification(int nIndex) { return specification_list_.get_at(nIndex); }
 
 private:
-    ccIoTDeviceSpecificationList  specification_info_;            //  Device Specfication
+    Json::Value                   root_value_;
+    ccIoTDeviceSpecificationList  specification_list_;            //  Device Specfication
     std::string                   iot_device_master_uri_;
 };
 
