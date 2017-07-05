@@ -192,8 +192,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\AudioManager\AudioDevice.cpp" />
     <ClCompile Include="..\src\AudioManager\AudioManager.cpp" />
+    <ClCompile Include="..\src\AudioManager\rtaudio\RtAudioDevice.cpp" />
     <ClCompile Include="..\src\ConversationClient.cpp" />
     <ClCompile Include="..\src\ConversationClientWithController.cpp" />
     <ClCompile Include="..\src\EnvironmentInfo.cpp" />
@@ -203,9 +203,10 @@
     <ClCompile Include="..\src\TTSClient.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\AudioManager\AudioDevice.h" />
     <ClInclude Include="..\src\AudioManager\AudioManager.h" />
-    <ClInclude Include="..\src\AudioManager\RingBuffer.h" />
+    <ClInclude Include="..\src\AudioManager\LunaAudioDevice.h" />
+    <ClInclude Include="..\src\AudioManager\rtaudio\RingBuffer.h" />
+    <ClInclude Include="..\src\AudioManager\rtaudio\RtAudioDevice.h" />
     <ClInclude Include="..\src\ConversationClient.h" />
     <ClInclude Include="..\src\ConversationClientWithController.h" />
     <ClInclude Include="..\src\EnvironmentInfo.h" />

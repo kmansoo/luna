@@ -11,6 +11,9 @@
     <Filter Include="src\AudioManager">
       <UniqueIdentifier>{b10e6791-b7d8-427f-8e72-21b71ec0b78d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\AudioManager\rtaudio">
+      <UniqueIdentifier>{083b0d7d-aefa-4231-9698-8f629cc38b82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -34,11 +37,11 @@
     <ClCompile Include="..\src\LogManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\AudioManager\AudioDevice.cpp">
-      <Filter>src\AudioManager</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\AudioManager\AudioManager.cpp">
       <Filter>src\AudioManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\AudioManager\rtaudio\RtAudioDevice.cpp">
+      <Filter>src\AudioManager\rtaudio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -60,14 +63,17 @@
     <ClInclude Include="..\src\LogManager.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\AudioManager\AudioDevice.h">
-      <Filter>src\AudioManager</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\AudioManager\AudioManager.h">
       <Filter>src\AudioManager</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\AudioManager\RingBuffer.h">
+    <ClInclude Include="..\src\AudioManager\LunaAudioDevice.h">
       <Filter>src\AudioManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\AudioManager\rtaudio\RingBuffer.h">
+      <Filter>src\AudioManager\rtaudio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\AudioManager\rtaudio\RtAudioDevice.h">
+      <Filter>src\AudioManager\rtaudio</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

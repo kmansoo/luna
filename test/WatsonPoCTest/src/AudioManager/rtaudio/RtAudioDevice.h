@@ -28,11 +28,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef AUDIO_DEVICE_H
 #define AUDIO_DEVICE_H
 
-#include "RingBuffer.h"
-#include "rtaudio/RtAudio.h"
+#include "../LunaAudioDevice.h"
+
 #include <vector>
 #include <memory>
 #include <cstring>
+
+#include "RingBuffer.h"
+#include "rtaudio/RtAudio.h"
 
 #define LUNA_SHOW_DEBUG_LOG    0
 
@@ -40,7 +43,7 @@ static const uint32_t FRAME_SIZE = 512;
 static const int32_t CHANNELS = 2;
 static const int32_t BUFFER_LENGTH = FRAME_SIZE * CHANNELS;
 
-struct AudioDeviceInfo
+struct RtAudioDeviceInfo
 {
 	uint32_t id;
 	uint32_t numChannels;
@@ -49,20 +52,23 @@ struct AudioDeviceInfo
 	bool isPlaying = false;
 };
 
-class AudioDevice
+class RtAudioDevice : public LunaAudioDevice
 {
-	std::unique_ptr<RtAudio> rtaudio;
-protected:
-	AudioDevice(const AudioDevice& r) = delete;
-	AudioDevice & operator = (const AudioDevice& r) = delete;
 public:
-	AudioDeviceInfo info;
-	AudioDevice(int numChannels, int sampleRate);
-	~AudioDevice();
-	static void ListAudioDevices();
-	bool Open(const int output_device_id, const int input_device_id);
-	bool Play(const std::vector<float> & data);
-	bool Record(const uint32_t lengthInSamples, std::vector<float> & recordingBuffer);
+	RtAudioDevice(int numChannels, int sampleRate);
+	~RtAudioDevice();
+
+public:
+	virtual bool open(const int output_device_id, const int input_device_id);
+	virtual bool play(const std::vector<float> & data);
+	virtual bool record(const uint32_t lengthInSamples, std::vector<float> & recordingBuffer);
+
+public:
+	static void listAudioDevices();
+
+private:
+	RtAudioDeviceInfo info;
+	std::unique_ptr<RtAudio> rtaudio;
 };
 
 #endif

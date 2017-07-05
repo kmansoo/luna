@@ -11,6 +11,8 @@
 
 #include "AudioManager.h"
 
+#include "./rtaudio/RtAudioDevice.h"
+
 #include "libnyquist/AudioDecoder.h"
 #include "libnyquist/PostProcess.h"
 #include "libnyquist/WavEncoder.h"
@@ -22,10 +24,10 @@ using namespace nqr;
 int desiredSampleRate = 48000;
 
 AudioManager::AudioManager(const int output_device_id, const int input_device_id, const int channel) {
-  AudioDevice::ListAudioDevices();
+  RtAudioDevice::listAudioDevices();
 
-  my_device_ = std::make_shared<AudioDevice>(channel, desiredSampleRate);
-  my_device_->Open(output_device_id, input_device_id);
+  my_device_ = std::make_shared<RtAudioDevice>(channel, desiredSampleRate);
+  my_device_->open(output_device_id, input_device_id);
 }
 
 bool AudioManager::play(const std::string &filename) {
@@ -66,7 +68,7 @@ bool AudioManager::play(const std::string &filename) {
     MonoToStereo(fileData->samples.data(), stereoCopy.data(),
                  fileData->samples.size());
 
-    my_device_->Play(stereoCopy);
+    my_device_->play(stereoCopy);
   } 
   else {
 #if (LUNA_SHOW_DEBUG_LOG == 1)
@@ -74,7 +76,7 @@ bool AudioManager::play(const std::string &filename) {
               << std::endl;
 #endif
 
-    my_device_->Play(fileData->samples);
+    my_device_->play(fileData->samples);
   }
 
   return EXIT_SUCCESS;
@@ -116,7 +118,7 @@ bool AudioManager::record(const std::string &filename, int seconds) {
   std::cout << "Starting recording ..." << std::endl;
 #endif
 
-  my_device_->Record(fileData->sampleRate * fileData->lengthSeconds,
+  my_device_->record(fileData->sampleRate * fileData->lengthSeconds,
                      fileData->samples);
 
   if (fileData->sampleRate != desiredSampleRate) {

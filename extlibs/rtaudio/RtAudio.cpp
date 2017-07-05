@@ -61,6 +61,7 @@ const unsigned int RtApi::SAMPLE_RATES[] = {
   #define MUTEX_UNLOCK(A)     LeaveCriticalSection(A)
 
   #include "tchar.h"
+  #include "AtlBase.h"
 
   static std::string convertCharPointerToStdString(const char *text)
   {
@@ -69,9 +70,13 @@ const unsigned int RtApi::SAMPLE_RATES[] = {
 
   static std::string convertCharPointerToStdString(const wchar_t *text)
   {
+    std::string s = CT2A(text);
+    /*
     int length = WideCharToMultiByte(CP_UTF8, 0, text, -1, NULL, 0, NULL, NULL);
     std::string s( length-1, '\0' );
     WideCharToMultiByte(CP_UTF8, 0, text, -1, &s[0], length, NULL, NULL);
+    */
+
     return s;
   }
 

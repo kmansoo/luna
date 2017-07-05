@@ -119,6 +119,7 @@ link_directories(
 file(GLOB SRC_FILES 
 	src/*.cpp
 	src/AudioManager/*.cpp
+    src/AudioManager/rtaudio/*.cpp
 )
 
 add_executable (WatsonPoCTest

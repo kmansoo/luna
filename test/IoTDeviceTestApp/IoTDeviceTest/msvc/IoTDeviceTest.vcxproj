@@ -29,13 +29,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -170,23 +170,44 @@
     <ProjectReference Include="..\..\..\..\dependency\Luna\src\ThirdPartyLibrary\ccMongooseServer\msvc\ccMongooseServer.vcxproj">
       <Project>{e3fcc667-3505-4635-a78b-ea15e73d4755}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\src\FossLibrary\ccJsonParser\msvc\ccJsonParser.vcxproj">
+      <Project>{e7bfc6a3-98b0-4103-a3ba-de08105f2db3}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\src\FossLibrary\ccJsonParser\msvc\ccJsonParser.VS2017.vcxproj">
       <Project>{e7bfc6a3-98b0-4103-a3ba-de08105f2db3}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\src\FossLibrary\ccWebsocketClient\msvc\ccWebsocketClient.vcxproj">
+      <Project>{0e86ffb0-57e1-4a9e-a12d-8a07ca1c5708}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\src\FossLibrary\ccWebsocketClient\msvc\ccWebsocketClient.VS2017.vcxproj">
       <Project>{0e86ffb0-57e1-4a9e-a12d-8a07ca1c5708}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\src\IoTLibrary\ccIoTDevice\msvc\ccIoTDeviceAPI.vcxproj">
+      <Project>{6fceedd0-c893-4c4e-b85a-10fbd1d36387}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\src\IoTLibrary\ccIoTDevice\msvc\ccIoTDeviceAPI.VS2017.vcxproj">
       <Project>{6fceedd0-c893-4c4e-b85a-10fbd1d36387}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\src\Library\ccCore\msvc\ccCore.vcxproj">
+      <Project>{b3b6750e-2acd-4362-845a-2a79ab52fbd1}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\src\Library\ccCore\msvc\ccCore.VS2017.vcxproj">
       <Project>{b3b6750e-2acd-4362-845a-2a79ab52fbd1}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\src\Library\ccNetwork\msvc\ccNetwork.vcxproj">
+      <Project>{22622606-5d5b-499c-8f3d-bad302a10950}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\src\Library\ccNetwork\msvc\ccNetwork.VS2017.vcxproj">
       <Project>{22622606-5d5b-499c-8f3d-bad302a10950}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\src\Library\ccWebServer\msvc\ccWebServer.vcxproj">
+      <Project>{4b237a6f-f4d9-4bbf-9d63-6460ddf8b984}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\src\Library\ccWebServer\msvc\ccWebServer.VS2017.vcxproj">
       <Project>{4b237a6f-f4d9-4bbf-9d63-6460ddf8b984}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\src\ThirdPartyLibrary\ccMongooseServer\msvc\ccMongooseServer.vcxproj">
+      <Project>{e3fcc667-3505-4635-a78b-ea15e73d4755}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\src\ThirdPartyLibrary\ccMongooseServer\msvc\ccMongooseServer.VS2017.vcxproj">
       <Project>{e3fcc667-3505-4635-a78b-ea15e73d4755}</Project>

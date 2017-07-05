@@ -3,7 +3,7 @@
 #include <string>
 #include <memory>
 
-#include "AudioDevice.h"
+#include "LunaAudioDevice.h"
 
 class AudioManager {
 public:
@@ -16,5 +16,5 @@ public:
 private:
     #define SHOW_LOG    0
 
-    std::shared_ptr<AudioDevice> my_device_;
+    std::shared_ptr<LunaAudioDevice> my_device_;
 };
