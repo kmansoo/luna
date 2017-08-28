@@ -117,6 +117,7 @@ include_directories(
 
 link_directories(
     ${LUNA_SW_PLATFORM}/build/lib
+    ${LUNA_SW_PLATFORM}/dependency/lib
     ${LUNA_SW_PLATFORM}/extlibs/lib
 )
 

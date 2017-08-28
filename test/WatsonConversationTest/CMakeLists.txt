@@ -19,11 +19,15 @@ include_directories(
 
 link_directories(
 	${LUNA_SW_PLATFORM}/build/lib
+    ${LUNA_SW_PLATFORM}/dependency/lib
 )
 
 add_executable (WatsonConversationTest
     src/main.cpp
 	src/ConversationClient.cpp
+    src/EnvironmentInfo.cpp
+    src/STTClient.cpp
+    src/TTSClient.cpp
 )
 
 TARGET_LINK_LIBRARIES(WatsonConversationTest
