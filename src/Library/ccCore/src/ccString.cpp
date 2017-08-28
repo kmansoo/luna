@@ -208,6 +208,42 @@ bool ccString::encode_base64(std::string& dest, std::string& src) {
     return true;
 }
 
+bool ccString::encode_base64(std::string& dest, std::vector<unsigned char>& binary_buffer) {
+    if (binary_buffer.size() == 0) return false;
+    
+    int size = binary_buffer.size();
+
+    dest.clear();
+
+    for (int index = 0; index < size; index += 3) {
+        unsigned char b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0, b7 = 0;
+        b1 = binary_buffer[index];
+
+        if (index + 1 < size) b2 = binary_buffer[index + 1];
+        if (index + 2 < size) b3 = binary_buffer[index + 2];
+
+        b4 = b1 >> 2;
+        b5 = ((b1 & 0x3) << 4) | (b2 >> 4);
+        b6 = ((b2 & 0xf) << 2) | (b3 >> 6);
+        b7 = b3 & 0x3f;
+
+        dest += b64_encode(b4);
+        dest += b64_encode(b5);
+
+        if (index + 1 < size)
+            dest += b64_encode(b6);
+        else
+            dest += '=';
+
+        if (index + 2 < size)
+            dest += b64_encode(b7);
+        else
+            dest += '=';
+    }
+
+    return true;    
+}
+
 /**
     * @fn int base64_decode(unsigned char *dest, const char *src)
     * @brief Decode the base64 encoded string 'src' into the memory pointed to by
