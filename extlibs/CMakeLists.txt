@@ -2,7 +2,7 @@
 CMAKE_MINIMUM_REQUIRED (VERSION 3.5.1)
 
 #
-PROJECT(AudioLibraries)
+PROJECT(ExtendedLibraries)
 
 # Configuration
 #
@@ -16,6 +16,3 @@ SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 #
 # Make Libraries
 #
-ADD_SUBDIRECTORY(libnyquist)
-ADD_SUBDIRECTORY(libsoundio)
-ADD_SUBDIRECTORY(rtaudio)
