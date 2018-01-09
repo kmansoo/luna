@@ -22,16 +22,25 @@ int main(int argc, char* argv[]) {
 
     //  choose a Web Server : Abstract Factory Design Pattern
     std::string html_path = ".";
+    std::string port = "9097";
 
-    if (argc >= 2)
-        html_path = argv[1];;
+    if (argc == 2)
+        html_path = argv[1];
+
+    if (argc == 3) {
+       port = argv[1];
+       html_path = argv[2];
+    }
+
+    std::cout << "port = " << port << ", path = " << html_path << std::endl;
+ 
 
     Luna::ccWebServerManager::instance().attach_factory(std::make_shared<Luna::ccMongooseWebServerObjectFactory>());
 
     std::shared_ptr<RESTfulChattingApiManager>  restful_api_and_ws_manager = std::make_shared<RESTfulChattingApiManager>();
     std::shared_ptr<ChattingWSManager>  only_ws_chat_manager = std::make_shared<ChattingWSManager>();
 
-    Luna::ccWebServerManager::instance().create_web_server("WebServer #1", "8000", html_path);
+    Luna::ccWebServerManager::instance().create_web_server("WebServer #1", port, html_path);
 
     Luna::ccWebServerManager::instance().add_restful_api(restful_api_and_ws_manager);
 
