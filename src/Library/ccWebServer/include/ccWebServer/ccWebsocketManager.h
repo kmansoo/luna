@@ -28,8 +28,9 @@ public:
     bool    remove_websocket(std::shared_ptr<ccWebsocket> new_websocket);
     bool    remove_all_websocket();
 
-    bool    get_websocket(std::int32_t instance, std::shared_ptr<ccWebsocket>& socket);
-    bool    get_websocket(const std::string& uri, std::int32_t instance, std::shared_ptr<ccWebsocket>& socket);
+    bool    get_websocket(std::int32_t instance, std::shared_ptr<ccWebsocket>& websocket);
+    bool    get_websocket(const std::string& uri, std::int32_t instance, std::shared_ptr<ccWebsocket>& websocket);
+    bool    get_websocket(void* connection_info, std::shared_ptr<ccWebsocket>& websocket);
     bool    get_group(const std::string& uri, std::shared_ptr<ccWebsocketGroup>& group);
 
 public:

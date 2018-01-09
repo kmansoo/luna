@@ -31,10 +31,11 @@ public:
     bool    remove(std::shared_ptr<ccWebsocket> new_websocket);
     bool    remove_all();
 
-    bool    get_websocket(std::int32_t instance, std::shared_ptr<ccWebsocket>& socket);
+    bool    get_websocket(std::int32_t instance, std::shared_ptr<ccWebsocket>& websocket);
+    bool    get_websocket(void* connection_info, std::shared_ptr<ccWebsocket>& websocket);
 
-    void    broadcast(const std::string& strMessage);
-    void    broadcast_ex(const std::string& strMessage, std::shared_ptr<ccWebsocket>& excepted_socket);
+    void    broadcast(const std::string& message);
+    void    broadcast_ex(const std::string& message, std::shared_ptr<ccWebsocket>& excepted_websocket);
 
 private:
     std::mutex      mtx_;

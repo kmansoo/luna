@@ -22,12 +22,10 @@ namespace Luna {
         ccWebServer(name, ports, root_path, page_directory),
         isStopThread_(false),
         mgr_(NULL),
-        con_(NULL)
-    {
+        con_(NULL) {
     }
 
-    ccMongooseWebServer::~ccMongooseWebServer()
-    {
+    ccMongooseWebServer::~ccMongooseWebServer() {
         stop();
 
         if (mgr_ != NULL)
@@ -37,16 +35,14 @@ namespace Luna {
         con_ = NULL;
     }
 
-    void ccMongooseWebServer::setUploadEvent(const std::string& path)
-    {
+    void ccMongooseWebServer::setUploadEvent(const std::string& path) {
         if (con_ == NULL)
             return;
 
         mg_register_http_endpoint(con_, path.c_str(), ev_handler_upload);
     }
 
-    bool ccMongooseWebServer::start()
-    {
+    bool ccMongooseWebServer::start() {
         if (mgr_ != NULL)
             return false;
 
@@ -74,10 +70,8 @@ namespace Luna {
         return true;
     }
 
-    bool ccMongooseWebServer::stop()
-    {
-        if (pollThread_)
-        {
+    bool ccMongooseWebServer::stop() {
+        if (pollThread_) {
             isStopThread_ = true;
 
             pollThread_->join();
@@ -98,14 +92,12 @@ namespace Luna {
         return true;
     }
 
-    void ccMongooseWebServer::doRunThread()
-    {
+    void ccMongooseWebServer::doRunThread() {
         while (isStopThread_ == false)
             mg_mgr_poll(mgr_, 200);
     }
 
-    void ccMongooseWebServer::ev_handler(struct mg_connection *nc, int ev, void *p)
-    {
+    void ccMongooseWebServer::ev_handler(struct mg_connection *nc, int ev, void *p) {
         bool bIsBuiltinProcess = true;
 
         ccMongooseWebServer* pServer = (ccMongooseWebServer*)nc->mgr->user_data;
@@ -115,8 +107,7 @@ namespace Luna {
         {
         case MG_EV_HTTP_REQUEST:    /* struct http_message * */
 
-            if (pServer->eventListener_ != NULL)
-            {
+            if (pServer->eventListener_ != NULL) {
                 auto pRequest = std::make_shared<ccMongooseWebServerRequest>(nc, (http_message *)p);
                 auto pResponse = std::make_shared<ccMongooseWebServerResponse>(nc);
 
@@ -136,17 +127,15 @@ namespace Luna {
         case MG_EV_SSI_CALL:        /* char * */
             break;
 
-        case MG_EV_WEBSOCKET_HANDSHAKE_REQUEST: /* NULL */
-        {
+        case MG_EV_WEBSOCKET_HANDSHAKE_REQUEST: { /* NULL */
             struct http_message *hm = (struct http_message *)p;
 
             std::string request_uri(hm->uri.p, hm->uri.len);
 
-            if (pServer->eventListener_->on_new_websocket_request(request_uri) == true)
-            {
-                auto pNewWS = std::make_shared<ccMongooseWebsocket>(request_uri, nc);
+            if (pServer->eventListener_->on_new_websocket_request(request_uri) == true) {
+                auto new_websocket = std::make_shared<ccMongooseWebsocket>(request_uri, nc);
 
-                pServer->eventListener_->on_websocket_created(pNewWS);
+                pServer->eventListener_->on_websocket_created(new_websocket);
             }
             else
                 nc->flags |= MG_F_CLOSE_IMMEDIATELY;
@@ -157,8 +146,7 @@ namespace Luna {
             pServer->eventListener_->on_websocket_connected(nc->sock);
             break;
 
-        case MG_EV_WEBSOCKET_FRAME:             /* struct websocket_message * */
-        {
+        case MG_EV_WEBSOCKET_FRAME: {            /* struct websocket_message * */
             struct websocket_message *wm = (struct websocket_message *) p;
 
             std::string data((const char*)wm->data, wm->size);
@@ -172,15 +160,19 @@ namespace Luna {
 
         case MG_EV_CLOSE:
             //  is websocket ?
-            if (nc->flags & MG_F_IS_WEBSOCKET)
-                pServer->eventListener_->on_websocket_disconnected(nc->sock);
+            if (nc->flags & MG_F_IS_WEBSOCKET) {
+                int sock = nc->sock;
 
+                if (sock == -1)
+                   sock = pServer->eventListener_->on_websocket_check_instance(nc);
+                
+                pServer->eventListener_->on_websocket_disconnected(sock);
+            }
             break;
         }
     }
 
-    void ccMongooseWebServer::ev_handler_upload(struct mg_connection *nc, int ev, void *p)
-    {
+    void ccMongooseWebServer::ev_handler_upload(struct mg_connection *nc, int ev, void *p) {
         ccMongooseWebServer* pServer = (ccMongooseWebServer*)nc->mgr->user_data;
 
         struct mg_http_multipart_part *mp = (struct mg_http_multipart_part *) p;
@@ -201,8 +193,7 @@ namespace Luna {
             if (page != NULL)
                 agent = page->create_file_upload_agent();
 
-            if (agent == NULL)
-            {
+            if (agent == NULL) {
                 mg_printf(nc,
                     "HTTP/1.1 403 Forbidden\r\n"
                     "Content-Type: text/plain\r\n"
@@ -228,8 +219,7 @@ namespace Luna {
         case MG_EV_HTTP_PART_END: {       
             ccWebServerFileUploadAgent* agent = (ccWebServerFileUploadAgent*)mp->user_data;
 
-            if (agent)
-            {
+            if (agent) {
                 agent->on_finish_upload();
 
                 if (agent->get_parent())

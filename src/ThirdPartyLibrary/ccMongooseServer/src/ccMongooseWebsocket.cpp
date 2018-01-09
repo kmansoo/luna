@@ -12,13 +12,18 @@ namespace Luna {
 ccMongooseWebsocket::ccMongooseWebsocket(const std::string& uri, struct mg_connection* connection) :
     ccWebsocket(uri),
     mg_connection_(connection) {
+
+    if (mg_connection_)
+        socket_id_ = mg_connection_->sock;        
 }
 
 ccMongooseWebsocket::ccMongooseWebsocket(const char* uri, std::size_t size, struct mg_connection* connection) :
     ccWebsocket(std::string(uri, size)),
     mg_connection_(connection) {
-}
 
+    if (mg_connection_)
+        socket_id_ = mg_connection_->sock;
+}
 
 ccMongooseWebsocket::~ccMongooseWebsocket() {
 }
@@ -36,7 +41,12 @@ std::int32_t ccMongooseWebsocket::get_instance()  // It may be a Socket ID.
     if (mg_connection_ == NULL)
         return -1;
 
-    return mg_connection_->sock;
+    return socket_id_;
+}
+
+void* ccMongooseWebsocket::get_connection_info()
+{
+    return mg_connection_;
 }
 
 bool ccMongooseWebsocket::send(const std::string& message) {

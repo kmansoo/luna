@@ -35,7 +35,7 @@ ccWebsocketGroup* ccWebsocket::get_group() {
     return my_group_;
 }
 
-bool ccWebsocket::send(const std::string& strMessage) {
+bool ccWebsocket::send(const std::string& message) {
     return false;
 }
 

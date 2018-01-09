@@ -56,7 +56,7 @@ bool ccWebsocketGroup::remove_all() {
     return true;
 }
 
-bool ccWebsocketGroup::get_websocket(std::int32_t instance, std::shared_ptr<ccWebsocket>& socket) {
+bool ccWebsocketGroup::get_websocket(std::int32_t instance, std::shared_ptr<ccWebsocket>& websocket) {
     std::lock_guard<std::mutex> lock(mtx_);
 
     auto item = websocket_list_.find(instance);
@@ -64,24 +64,42 @@ bool ccWebsocketGroup::get_websocket(std::int32_t instance, std::shared_ptr<ccWe
     if (item == websocket_list_.end())
         return false;
 
-    socket = item->second;
+    websocket = item->second;
 
     return true;
 }
 
-void  ccWebsocketGroup::broadcast(const std::string& strMessage) {
+bool ccWebsocketGroup::get_websocket(void* connection_info, std::shared_ptr<ccWebsocket>& websocket) {
+    std::lock_guard<std::mutex> lock(mtx_);
+
+    websocket = NULL;
+
+    for (auto item : websocket_list_) {
+        if (item.second->get_connection_info() == connection_info) {
+            websocket = item.second;
+            break;
+        }
+    }
+
+    if (websocket == NULL)
+        return false;
+
+    return true;
+}
+
+void  ccWebsocketGroup::broadcast(const std::string& message) {
     std::lock_guard<std::mutex> lock(mtx_);
 
     for (auto item : websocket_list_)
-        item.second->send(strMessage);
+        item.second->send(message);
 }
 
-void ccWebsocketGroup::broadcast_ex(const std::string& strMessage, std::shared_ptr<ccWebsocket>& excepted_socket) {
+void ccWebsocketGroup::broadcast_ex(const std::string& message, std::shared_ptr<ccWebsocket>& excepted_websocket) {
     std::lock_guard<std::mutex> lock(mtx_);
 
     for (auto item : websocket_list_) {
-        if (item.second != excepted_socket)
-            item.second->send(strMessage);
+        if (item.second != excepted_websocket)
+            item.second->send(message);
     }
 }
 

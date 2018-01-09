@@ -36,7 +36,9 @@ public:
     virtual bool            close() = 0;
 
     virtual std::int32_t    get_instance() = 0;  // It may be a Socket ID. 
-    virtual bool            send(const std::string& strMessage) = 0;
+    virtual void*           get_connection_info() = 0;
+
+    virtual bool            send(const std::string& message) = 0;
     virtual bool            send_binary(const void* pBuffer, std::size_t size) = 0;
 
 public:

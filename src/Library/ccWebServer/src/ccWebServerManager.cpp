@@ -4,7 +4,7 @@
  *  Created on: 2015. 11. 7.
  *      Author: kmansoo
  */
-
+#include <iostream>
 #include <algorithm>
 
 #include "ccWebServer/ccWebServerManager.h"
@@ -173,17 +173,29 @@ void ccWebServerManager::on_websocket_disconnected(std::int32_t socket_id) {
     doPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent_Disconnected, socket_id, blank_string_);
 }
 
+int  ccWebServerManager::on_websocket_check_instance(void* connection_info) {
+    std::shared_ptr<ccWebsocket> websocket;
+
+    for (const auto& item : websocket_manager_list_) {
+        if (item->get_websocket(connection_info, websocket)) {
+            return websocket->get_instance();
+        }
+    }
+
+    return -1;
+}
+
 void ccWebServerManager::on_websocket_received_data(std::int32_t socket_id, const std::string& data) {
     doPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent_ReceivedData, socket_id, data);
 }
 
 void ccWebServerManager::doPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent event, std::int32_t socket_id, const std::string& data) {
-    std::shared_ptr<ccWebsocket> new_websocket;
+    std::shared_ptr<ccWebsocket> websocket;
 
     for (const auto& item : websocket_manager_list_) {
-        if (item->get_websocket(socket_id, new_websocket)) {
-            if (new_websocket != NULL)
-                item->perform_websocket_event(event, new_websocket, data);
+        if (item->get_websocket(socket_id, websocket)) {
+            if (websocket != NULL)
+                item->perform_websocket_event(event, websocket, data);
 
             return;
         }

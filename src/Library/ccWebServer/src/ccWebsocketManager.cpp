@@ -55,24 +55,35 @@ bool ccWebsocketManager::remove_all_websocket() {
     return true;
 }
 
-bool ccWebsocketManager::get_websocket(std::int32_t instance, std::shared_ptr<ccWebsocket>& pWebsocket) {
+bool ccWebsocketManager::get_websocket(std::int32_t instance, std::shared_ptr<ccWebsocket>& websocket) {
     std::lock_guard<std::mutex> lock(mtx_);
 
     for (auto item : websocket_group_map_) {
-        if (item.second->get_websocket(instance, pWebsocket))
+        if (item.second->get_websocket(instance, websocket))
             return true;
     }
 
     return false;
 }
 
-bool ccWebsocketManager::get_websocket(const std::string& uri, std::int32_t instance, std::shared_ptr<ccWebsocket>& pWebsocket) {
+bool ccWebsocketManager::get_websocket(const std::string& uri, std::int32_t instance, std::shared_ptr<ccWebsocket>& websocket) {
     std::shared_ptr<ccWebsocketGroup> group;
 
     if (get_group(uri, group) == false)
         return false;
 
-    return group->get_websocket(instance, pWebsocket);
+    return group->get_websocket(instance, websocket);
+}
+
+bool ccWebsocketManager::get_websocket(void* connection_info, std::shared_ptr<ccWebsocket>& websocket) {
+    std::lock_guard<std::mutex> lock(mtx_);
+
+    for (auto item : websocket_group_map_) {
+        if (item.second->get_websocket(connection_info, websocket))
+            return true;
+    }
+
+    return false;
 }
 
 bool ccWebsocketManager::get_group(const std::string& uri, std::shared_ptr<ccWebsocketGroup>& group) {
