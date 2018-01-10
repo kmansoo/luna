@@ -470,6 +470,13 @@ class _RealWebSocket : public easywsclient::WebSocket
         // middleware:
         const uint8_t masking_key[4] = { 0x12, 0x34, 0x56, 0x78 };
         // TODO: consider acquiring a lock on txbuf...
+		while (txbuf.size() > 0) {
+			timeval tv = { 0, 1 * 1000 };
+			select(0, NULL, NULL, NULL, &tv);
+
+			if (readyState == CLOSING || readyState == CLOSED) { return; }
+		}
+
         if (readyState == CLOSING || readyState == CLOSED) { return; }
         std::vector<uint8_t> header;
         header.assign(2 + (message_size >= 126 ? 2 : 0) + (message_size >= 65536 ? 6 : 0) + (useMask ? 4 : 0), 0);
