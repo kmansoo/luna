@@ -56,6 +56,12 @@ std::int32_t ccEasyWebsocketClient::get_instance()  // It may be a Socket ID.
     return websocket_->getInstance();
 }
 
+const std::string ccEasyWebsocketClient::get_peer_ip() {
+
+    return std::string("");
+}
+
+
 
 bool ccEasyWebsocketClient::send(const std::string& message) {
     if (websocket_ == NULL)
@@ -88,7 +94,7 @@ void ccEasyWebsocketClient::receive(const std::string& message) {
 }
 
 void ccEasyWebsocketClient::poll() {
-    easywsclient::WebSocket::readyStateValues connect_status = websocket_->getReadyState();
+    easywsclient::WebSocket::readyStateValues connect_status = easywsclient::WebSocket::CLOSED;
 
     while (is_stop_thread_ == false) {
         if (is_stop_thread_ == true)

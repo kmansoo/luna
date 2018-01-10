@@ -32,6 +32,8 @@ public:
 
     virtual std::int32_t    get_instance();  // It may be a Socket ID. 
     virtual void*           get_connection_info() { return NULL; }
+    virtual const std::string get_peer_ip();
+    
     virtual bool            send(const std::string& message);
     virtual bool            send_binary(const void* buffer, std::size_t size);
 

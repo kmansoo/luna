@@ -172,7 +172,7 @@ void ccString::replace(std::string& destStr, const ccString& search,
     * @param src
     * @return
     */
-bool ccString::encode_base64(std::string& dest, std::string& src) {
+bool ccString::encode_base64(std::string& dest, const std::string& src) {
     if (src.length() == 0) return false;
 
     int size = src.length();
@@ -244,6 +244,12 @@ bool ccString::encode_base64(std::string& dest, std::vector<unsigned char>& bina
     return true;    
 }
 
+bool ccString::encode_base64(std::string& dest, const char* buffer, size_t size) {
+    std::string data(buffer, size);
+
+    return encode_base64(dest, data);
+}
+
 bool ccString::encode_base64(std::string& dest, std::ifstream& fin) {
     if (!fin) return false;
     
@@ -295,7 +301,7 @@ bool ccString::encode_base64(std::string& dest, std::ifstream& fin) {
     * @param src
     * @return
     */
-bool ccString::decode_base64(std::string& dest, std::string& src) {
+bool ccString::decode_base64(std::string& dest, const std::string& src) {
     if (src.length() == 0) return false;
 
     int size = src.length();

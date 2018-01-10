@@ -37,13 +37,14 @@ public:
 
     virtual std::int32_t    get_instance() = 0;  // It may be a Socket ID. 
     virtual void*           get_connection_info() = 0;
+    virtual const std::string get_peer_ip() = 0;
 
     virtual bool            send(const std::string& message) = 0;
     virtual bool            send_binary(const void* pBuffer, std::size_t size) = 0;
 
 public:
     void                    set_event_listener(WebSocketEventFunction f);
-
+    
     const std::string       get_uri();
     void                    set_group(ccWebsocketGroup* group);
     ccWebsocketGroup*       get_group();

@@ -36,16 +36,22 @@ bool ccMongooseWebsocket::close() {
     return false;
 }
 
-std::int32_t ccMongooseWebsocket::get_instance()  // It may be a Socket ID. 
-{
+std::int32_t ccMongooseWebsocket::get_instance()  { // It may be a Socket ID. 
     if (mg_connection_ == NULL)
         return -1;
 
     return socket_id_;
 }
 
-void* ccMongooseWebsocket::get_connection_info()
-{
+const std::string ccMongooseWebsocket::get_peer_ip() {
+    char addr[32];
+
+    mg_sock_addr_to_str(&mg_connection_->sa, addr, sizeof(addr), MG_SOCK_STRINGIFY_IP);
+
+    return std::string(addr);
+}
+
+void* ccMongooseWebsocket::get_connection_info() {
     return mg_connection_;
 }
 

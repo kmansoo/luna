@@ -68,10 +68,11 @@ public:
 
     static  long    decode_string_to_hex(const char* strVal, int nLength = -1, int* pConvertedSize = NULL);
     
-    static  bool    encode_base64(std::string& dest, std::string& src);
+    static  bool    encode_base64(std::string& dest, const std::string& src);
     static  bool    encode_base64(std::string& dest, std::vector<unsigned char>& binary_buffer);
+    static  bool    encode_base64(std::string& dest, const char* buffer, size_t size);
     static  bool    encode_base64(std::string& dest, std::ifstream& fin);
-    static  bool    decode_base64(std::string& dest, std::string& src);
+    static  bool    decode_base64(std::string& dest, const std::string& src);
 
 
     // 2017.6.28, Mansoo(mansoo.kim@icloud.com), Added this method to support spliting string using token
