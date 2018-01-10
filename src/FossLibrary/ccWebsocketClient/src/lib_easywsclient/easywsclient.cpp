@@ -71,6 +71,7 @@
 
 #include <vector>
 #include <string>
+#include <mutex>
 
 #include "ccWebsocketClient/easywsclient/easywsclient.hpp"
 
@@ -175,6 +176,7 @@ class _RealWebSocket : public easywsclient::WebSocket
         uint8_t masking_key[4];
     };
 
+	std::mutex      mtx_;
     std::vector<uint8_t> rxbuf;
     std::vector<uint8_t> txbuf;
     std::vector<uint8_t> receivedData;
@@ -235,6 +237,8 @@ class _RealWebSocket : public easywsclient::WebSocket
             }
         }
         while (txbuf.size()) {
+			std::lock_guard<std::mutex> lock(mtx_);
+
             int ret = ::send(sockfd, (char*)&txbuf[0], txbuf.size(), 0);
             if (false) { } // ??
             else if (ret < 0 && (socketerrno == SOCKET_EWOULDBLOCK || socketerrno == SOCKET_EAGAIN_EINPROGRESS)) {
@@ -470,13 +474,6 @@ class _RealWebSocket : public easywsclient::WebSocket
         // middleware:
         const uint8_t masking_key[4] = { 0x12, 0x34, 0x56, 0x78 };
         // TODO: consider acquiring a lock on txbuf...
-		while (txbuf.size() > 0) {
-			timeval tv = { 0, 1 * 1000 };
-			select(0, NULL, NULL, NULL, &tv);
-
-			if (readyState == CLOSING || readyState == CLOSED) { return; }
-		}
-
         if (readyState == CLOSING || readyState == CLOSED) { return; }
         std::vector<uint8_t> header;
         header.assign(2 + (message_size >= 126 ? 2 : 0) + (message_size >= 65536 ? 6 : 0) + (useMask ? 4 : 0), 0);
@@ -520,11 +517,14 @@ class _RealWebSocket : public easywsclient::WebSocket
             }
         }
         // N.B. - txbuf will keep growing until it can be transmitted over the socket:
+		mtx_.lock();
+
         txbuf.insert(txbuf.end(), header.begin(), header.end());
         txbuf.insert(txbuf.end(), message_begin, message_end);
         if (useMask) {
             for (size_t i = 0; i != (size_t)message_size; ++i) { *(txbuf.end() - (size_t)message_size + i) ^= masking_key[i&0x3]; }
         }
+		mtx_.unlock();
     }
 
     void close() {
