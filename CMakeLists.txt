@@ -10,9 +10,25 @@ PROJECT(LUNA-SW-PLATFORM)
 # SET(CMAKE_VERBOSE_MAKEFILE ON)
 #
 
-option(USE_CURL       "Use cURL Library"        ON)
-option(USE_MBEDTLS    "Use Mbedtls Library"     ON)
-option(USE_MOSQUITTO  "Use mosquitto Library"   OFF)
+option(GIT_SUBMODULE  "Check submodules during build" ON)
+option(USE_CURL       "Use cURL Library"              ON)
+option(USE_MBEDTLS    "Use Mbedtls Library"           ON)
+option(USE_MOSQUITTO  "Use mosquitto Library"         OFF)
+
+if (USE_CURL AND USE_MBEDTLS AND USE_MOSQUITTO)
+  SET(GIT_SUBMODULE, OFF)
+endif()
+
+if (GIT_SUBMODULE)
+    message(STATUS "Submodule update")
+    execute_process(COMMAND git submodule update --init --recursive
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                    RESULT_VARIABLE GIT_SUBMOD_RESULT)
+
+    if(NOT GIT_SUBMOD_RESULT EQUAL "0")
+        message(FATAL_ERROR "git submodule update --init failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
+    endif()
+endif()
 
 #
 # Configuration
