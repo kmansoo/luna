@@ -18,6 +18,6 @@ file(GLOB SRC_FILES
 	src/lib_easywsclient/*.cpp
 )
 
-add_library (ccWebsocketClient
+add_library (ccWebsocketClient STATIC
 	${SRC_FILES}
 )

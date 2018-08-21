@@ -20,6 +20,6 @@ file(GLOB SRC_FILES
 	src/*.cpp
 )
 
-add_library(ccIoTDevice
+add_library(ccIoTDevice STATIC
 	${SRC_FILES}
 )

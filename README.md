@@ -8,15 +8,8 @@ Very tiny SW Platform for Web API using C++ and mongoose web server.
 
 ## Build
 ## STEP1: How to build dependency libraries
-### Linux & OS X
-```bash
-cd ~/Luna
-cd dependency
-mkdir build
-cd build
-cmake ..
-make
-```
+There are nothings to build dependency libraries.
+If you don't need to use cURL, Mbedtls or MQTT, you have to turn off options for their in CMakeLists.txt.
 
 ## STEP2: How to build Luna
 ### Linux & OS X

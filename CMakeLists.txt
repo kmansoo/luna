@@ -2,7 +2,17 @@
 CMAKE_MINIMUM_REQUIRED (VERSION 3.5.1)
 
 # Project Name
-PROJECT(luna_sw_platform)
+PROJECT(LUNA-SW-PLATFORM)
+
+#
+# Configuration
+#
+# SET(CMAKE_VERBOSE_MAKEFILE ON)
+#
+
+option(USE_CURL       "Use cURL Library"        ON)
+option(USE_MBEDTLS    "Use Mbedtls Library"     ON)
+option(USE_MOSQUITTO  "Use mosquitto Library"   OFF)
 
 #
 # Configuration
@@ -39,6 +49,35 @@ SET(LUNA_SW_PLATFORM ${CMAKE_CURRENT_SOURCE_DIR})
 #
 SET(CMAKE_CXX_FLAGS "-std=c++11")
 ADD_DEFINITIONS(-Wall -DCALIB_CFG_OS="${CMAKE_SYSTEM_NAME}" -DCALIB_CFG_CPU="${CMAKE_SYSTEM_PROCESSOR}")
+
+if (USE_MBEDTLS)
+  option(ENABLE_TESTING     "Build mbed TLS tests."       OFF)
+  option(ENABLE_PROGRAMS    "Build mbed TLS programs."    OFF)
+
+  ADD_SUBDIRECTORY(dependency/mbedtls)
+endif()
+
+if (USE_CURL)
+  if (USE_MBEDTLS)
+    option(CMAKE_USE_MBEDTLS  "Enable mbedTLS for SSL/TLS"  ON)
+
+    # For mbedTLS in curl
+    SET(MBEDCRYPTO_LIBRARY ${CMAKE_BINARY_DIR}/lib/libmbedcrypto.a)
+    SET(MBEDTLS_LIBRARY ${CMAKE_BINARY_DIR}/lib/libmbedtls.a)
+    SET(MBEDX509_LIBRARY ${CMAKE_BINARY_DIR}/lib/libmbedx509.a)
+
+    SET(MBEDTLS_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/dependency/mbedtls/include)
+  endif()
+
+  option(ENABLE_MANUAL "to provide the built-in manual for cURL"  OFF)
+  option(BUILD_TESTING "Disable buinding for cURL test"           OFF)
+
+  ADD_SUBDIRECTORY(dependency/curl)
+endif()
+
+if (USE_MOSQUITTO)
+  ADD_SUBDIRECTORY(dependency/mosquitto)
+endif()
 
 #
 # Make Libraries
