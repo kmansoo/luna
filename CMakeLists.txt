@@ -13,10 +13,10 @@ PROJECT(LUNA-SW-PLATFORM)
 option(GIT_SUBMODULE  "Check submodules during build" ON)
 option(USE_CURL       "Use cURL Library"              ON)
 option(USE_MBEDTLS    "Use Mbedtls Library"           ON)
-option(USE_MOSQUITTO  "Use mosquitto Library"         OFF)
+option(USE_MOSQUITTO  "Use mosquitto Library"         ON)
 
-if (USE_CURL AND USE_MBEDTLS AND USE_MOSQUITTO)
-  SET(GIT_SUBMODULE, OFF)
+if (USE_CURL OR USE_MBEDTLS OR USE_MOSQUITTO)
+  SET(GIT_SUBMODULE, ON)
 endif()
 
 if (GIT_SUBMODULE)
@@ -28,6 +28,18 @@ if (GIT_SUBMODULE)
     if(NOT GIT_SUBMOD_RESULT EQUAL "0")
         message(FATAL_ERROR "git submodule update --init failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
     endif()
+endif()
+
+if (USE_MOSQUITTO)
+  find_package(OpenSSL)
+
+  if (NOT OpenSSL_FOUND)
+      message(STATUS "OpenSSL not found. So you can not use the MOSQUITTO library!!!")
+
+      set(USE_MOSQUITTO OFF)
+  elseif()
+    SET(USE_MBEDTLS, OFF)
+  endif()
 endif()
 
 #
@@ -92,6 +104,8 @@ if (USE_CURL)
 endif()
 
 if (USE_MOSQUITTO)
+  option(WITH_TLS_PSK, "Build without TLS_PSK"  OFF)
+
   ADD_SUBDIRECTORY(dependency/mosquitto)
 endif()
 
