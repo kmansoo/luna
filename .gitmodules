@@ -7,6 +7,3 @@
 [submodule "dependency/json"]
 	path = dependency/json
 	url = https://github.com/nlohmann/json.git
-[submodule "dependency/paho.mqtt.c"]
-	path = dependency/paho.mqtt.c
-	url = https://github.com/eclipse/paho.mqtt.c.git
