@@ -5,8 +5,7 @@
  *      Author: kmansoo
  */
 
-#ifndef PRODUCTLIBRARY_CCIOTDEVICEPROTOCOLAPI_CCIOTDEVICESPECIFICATIONLIST_H_
-#define PRODUCTLIBRARY_CCIOTDEVICEPROTOCOLAPI_CCIOTDEVICESPECIFICATIONLIST_H_
+#pragma once
 
 #include <string>
 #include <vector>
@@ -51,5 +50,3 @@ protected:
     std::vector<std::shared_ptr<ccIoTDeviceSpecification>>   specification_list_;            //  Device Specfication
 
 };
-
-#endif /* PRODUCTLIBRARY_CCIOTDEVICEPROTOCOLAPI_ccIoTDeviceSpecificationList_H_ */

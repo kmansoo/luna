@@ -5,8 +5,7 @@
 *      Author: kmansoo
 */
 
-#ifndef FOSSLIBRARY_CCWEBSOCKETCLIENTAPI_CCEASYWEBSOCKETCLIENT_H_
-#define FOSSLIBRARY_CCWEBSOCKETCLIENTAPI_CCEASYWEBSOCKETCLIENT_H_
+#pragma once
 
 #include <string>
 #include <memory>
@@ -49,5 +48,3 @@ private:
 };
 
 }
-
-#endif

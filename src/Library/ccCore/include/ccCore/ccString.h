@@ -5,8 +5,7 @@
  *      Author: Mansoo Kim(kmansoo@gmail.com)
  */
 
-#ifndef CCLIBRARY_CCCOREAPI_CCSTRING_H_
-#define CCLIBRARY_CCCOREAPI_CCSTRING_H_
+#pragma once
 
 #include <string>
 #include <vector>
@@ -85,5 +84,3 @@ private:
 };
 
 };
-
-#endif /* CCLIBRARY_CCCOREAPI_CCSTRING_H_ */

@@ -5,8 +5,7 @@
  *      Author: kmansoo
  */
 
-#ifndef PRODUCTLIBRARY_CCIOTDEVICEAPI_CCIOTDEVICETRANSPORT_H_
-#define PRODUCTLIBRARY_CCIOTDEVICEAPI_CCIOTDEVICETRANSPORT_H_
+#pragma once
 
 class ccIoTDeviceTransport
 {
@@ -14,5 +13,3 @@ public:
     ccIoTDeviceTransport();
     virtual ~ccIoTDeviceTransport();
 };
-
-#endif /* PRODUCTLIBRARY_CCIOTDEVICEAPI_CCIOTDEVICETRANSPORT_H_ */

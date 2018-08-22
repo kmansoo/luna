@@ -5,8 +5,7 @@
  *      Author: Mansoo Kim(kmansoo@gmail.com)
  */
 
-#ifndef LIBRARY_CCCOREAPI_CCCOREAPI_H_
-#define LIBRARY_CCCOREAPI_CCCOREAPI_H_
+#pragma once
 
 namespace Luna {
 
@@ -16,5 +15,3 @@ void    usleep(int milliseconds);
 unsigned long long get_tick_count();     //  tick count(ms)
 
 }
-
-#endif /* LIBRARY_CCCOREAPI_CCCOREAPI_H_ */

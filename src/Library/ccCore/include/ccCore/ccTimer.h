@@ -5,8 +5,7 @@
  *      Author: Mansoo Kim(kmansoo@gmail.com)
  */
 
-#ifndef LIBRARY_CCCOREAPI_CCTIMER_H_
-#define LIBRARY_CCCOREAPI_CCTIMER_H_
+#pragma once
 
 #include <functional>
 #include <chrono>
@@ -33,5 +32,3 @@ public:
 };
 
 };
-
-#endif /* LIBRARY_CCCOREAPI_CCTIMER_H_ */

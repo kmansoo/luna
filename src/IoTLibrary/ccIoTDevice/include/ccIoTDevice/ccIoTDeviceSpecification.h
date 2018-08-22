@@ -5,8 +5,7 @@
  *      Author: kmansoo
  */
 
-#ifndef PRODUCTLIBRARY_CCIOTDEVICEPROTOCOLAPI_CCIOTDEVICESPECIFICATION_H_
-#define PRODUCTLIBRARY_CCIOTDEVICEPROTOCOLAPI_CCIOTDEVICESPECIFICATION_H_
+#pragma once
 
 #include <string>
 
@@ -90,5 +89,3 @@ protected:
     std::string     description_;
     std::string     manufacture_;
 };
-
-#endif /* PRODUCTLIBRARY_CCIOTDEVICEPROTOCOLAPI_CCIOTDEVICESPECIFICATION_H_ */

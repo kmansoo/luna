@@ -5,8 +5,7 @@
 *      Author: Mansoo Kim
 */
 
-#ifndef CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVERPAGEDIRECTORY_H_
-#define CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVERPAGEDIRECTORY_H_
+#pragma once
 
 #include <unordered_map>
 
@@ -41,5 +40,3 @@ private:
 };
 
 }
-
-#endif /* CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVERPAGEDIRECTORY_H_ */

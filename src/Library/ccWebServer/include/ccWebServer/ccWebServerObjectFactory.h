@@ -5,8 +5,7 @@
  *      Author: kmansoo
  */
 
-#ifndef CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVEROBJECTFACTORY_H_
-#define CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVEROBJECTFACTORY_H_
+#pragma once
 
 #include <memory>
 
@@ -20,5 +19,3 @@ public:
 };
 
 }
-
-#endif /* CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVEROBJECTFACTORY_H_ */

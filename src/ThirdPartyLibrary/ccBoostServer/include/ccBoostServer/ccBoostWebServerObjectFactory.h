@@ -1,6 +1,6 @@
 
-#ifndef THIRDPARTYLIBRARY_CCBOOSTSERVERAPI_CCBOOSTWEBSERVEROBJECTFACTORY_H_
-#define THIRDPARTYLIBRARY_CCBOOSTSERVERAPI_CCBOOSTWEBSERVEROBJECTFACTORY_H_
+#pragma once
+
 
 #include "ccWebServerAPI/ccWebServerObjectFactory.h"
 
@@ -13,5 +13,3 @@ public:
 public:
     virtual  std::shared_ptr<ccWebServer> CreateWebServer(const char* name, const char* ports);
 };
-
-#endif /* THIRDPARTYLIBRARY_CCBOOSTSERVERAPI_CCBOOSTWEBSERVEROBJECTFACTORY_H_ */

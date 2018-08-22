@@ -5,8 +5,7 @@
 *      Author: kmansoo
 */
 
-#ifndef CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVEREVENTLISTENERH_
-#define CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVEREVENTLISTENERH_
+#pragma once
 
 #include "ccWebServerRequest.h"
 #include "ccWebServerResponse.h"
@@ -30,5 +29,3 @@ struct ccWebServerEventListener {
 };
 
 }
-
-#endif /* CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVEREVENTLISTENERH_ */

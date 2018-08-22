@@ -5,8 +5,7 @@
  *      Author: kmansoo
  */
 
-#ifndef PRODUCTLIBRARY_CCIOTDEVICEAPI_CCIOTDEVICE_H_
-#define PRODUCTLIBRARY_CCIOTDEVICEAPI_CCIOTDEVICE_H_
+#pragma once
 
 #include <memory>
 
@@ -67,5 +66,3 @@ protected:
 
     std::map < std::string, std::function<bool(ccIoTDeviceProtocol& protocol)>> command_map_;
 };
-
-#endif /* PRODUCTLIBRARY_CCIOTDEVICEAPI_CCIOTDEVICE_H_ */

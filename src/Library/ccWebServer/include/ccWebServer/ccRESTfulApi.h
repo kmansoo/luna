@@ -5,8 +5,7 @@
 *      Author: kmansoo
 */
 
-#ifndef CCLIBRARY_CCWEBSERVERAPI_CCRESTFULAPI_H_
-#define CCLIBRARY_CCWEBSERVERAPI_CCRESTFULAPI_H_
+#pragma once
 
 #include <string>
 #include <map>
@@ -43,5 +42,3 @@ protected:
 };
 
 }
-
-#endif

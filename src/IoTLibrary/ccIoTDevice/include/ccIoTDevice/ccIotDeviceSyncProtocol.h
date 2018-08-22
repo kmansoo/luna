@@ -5,8 +5,7 @@
  *      Author: kmansoo
  */
 
-#ifndef PRODUCTLIBRARY_CCIOTDEVICEPROTOCOLAPI_CCIOTDEVICESYNCPROTOCOL_H_
-#define PRODUCTLIBRARY_CCIOTDEVICEPROTOCOLAPI_CCIOTDEVICESYNCPROTOCOL_H_
+#pragma once
 
 class ccIotDeviceSyncProtocol
 {
@@ -14,5 +13,3 @@ public:
     ccIotDeviceSyncProtocol();
     virtual ~ccIotDeviceSyncProtocol();
 };
-
-#endif /* PRODUCTLIBRARY_CCIOTDEVICEPROTOCOLAPI_CCIOTDEVICESYNCPROTOCOL_H_ */

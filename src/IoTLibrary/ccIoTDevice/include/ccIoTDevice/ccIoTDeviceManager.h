@@ -5,8 +5,7 @@
  *      Author: kmansoo
  */
 
-#ifndef CCPRODUCTLIBRARY_CCIOTDEVICEMANAGERAPI_CCIOTDEVICEMANAGER_H_
-#define CCPRODUCTLIBRARY_CCIOTDEVICEMANAGERAPI_CCIOTDEVICEMANAGER_H_
+#pragma once
 
 #include <string>
 #include <functional>
@@ -66,6 +65,3 @@ protected:
 
     std::map < std::string, std::function<bool(std::shared_ptr<Luna::ccWebsocket> websocket, ccIoTDeviceProtocol& protocol)>> command_map_;
 };
-
-
-#endif /* CCPRODUCTLIBRARY_CCIOTDEVICEMANAGERAPI_CCIOTDEVICEMANAGER_H_ */
