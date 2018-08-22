@@ -11,6 +11,11 @@ Very tiny SW Platform for Web API using C++ and mongoose web server.
 There are nothings to build dependency libraries.
 If you don't need to use cURL, Mbedtls or MQTT, you have to turn off options for their in CMakeLists.txt.
 
+Before starting build, you have to install the OpenSSL into your system.
+And set 'OPENSSL_ROOT_DIR' environment variable.
+
+CMake will find the OpenSSL package using that 'OPENSSL_ROOT_DIR'.
+
 ## STEP2: How to build Luna
 ### Linux & OS X
 ```bash
