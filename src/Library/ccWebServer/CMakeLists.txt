@@ -15,6 +15,6 @@ file(GLOB SRC_FILES
 	src/*.cpp
 )
 
-add_library (ccWebServer
+add_library (ccWebServer  STATIC
 	${SRC_FILES}
 )

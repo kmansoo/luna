@@ -18,6 +18,6 @@ file(GLOB SRC_FILES
 	src/*.cpp
 )
 
-add_library (ccCore
+add_library (ccCore STATIC
 	${SRC_FILES}
 )

@@ -15,7 +15,7 @@ file(GLOB SRC_FILES
 	src/lib_json/*.cpp
 )
 
-add_library (ccJsonParser
+add_library (ccJsonParser STATIC
 	${SRC_FILES}
 )
 

@@ -16,7 +16,7 @@ file(GLOB SRC_FILES
 	src/*.cc
 )
 
-add_library (ccRestClient
+add_library (ccRestClient STATIC
 	${SRC_FILES}
 )
 

@@ -14,6 +14,6 @@ file(GLOB SRC_FILES
 	src/*.cpp
 )
 
-add_library (ccNetwork
+add_library (ccNetwork STATIC
 	${SRC_FILES}
 )

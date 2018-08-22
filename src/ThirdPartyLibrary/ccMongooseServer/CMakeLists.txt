@@ -23,6 +23,6 @@ file(GLOB SRC_FILES
 	src/mongoose/*.c
 )
 
-add_library (ccMongooseServer
+add_library (ccMongooseServer STATIC
 	${SRC_FILES}
 )
