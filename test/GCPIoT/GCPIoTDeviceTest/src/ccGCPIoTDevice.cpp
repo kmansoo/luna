@@ -1,9 +1,10 @@
 #include <iostream>
+#include <fstream>
 
 #include "ccCore/ccCoreAPI.h"
 #include "ccCore/ccTimer.h"
 
-#include "ccGCPIoTDevice/ccGCPIoTDevice.h"
+#include "ccGCPIoTDevice.h"
 
 #include "JWT/jwt.hpp"
 
@@ -11,20 +12,12 @@
 
 using namespace Luna;
 
-nlohmann::json service_info = {
-  {"endpoint",    "ssl://mqtt.googleapis.com"},
-  {"clientid",    "<user-clientid>"},
-  {"deviceid",    "<user-deviceid>"},
-  {"ecpath",      "<user-device-private-key.pem>"},
-  {"projectid",   "<user-projectid>",},
-  {"registryid",  "<user-registryid>"},
-  {"rootpath",    "<user-rootpath>"},
-  {"topic",       "<user-topic>"},
-  {"payload",     "Hello world!"}
-};
-
 ccGCPIoTDevice::ccGCPIoTDevice(const std::string &strSpecFile)
     : is_connected_(false), is_stop_by_user_(false) {
+
+  std::ifstream json_file(strSpecFile);
+
+  json_file >> device_spec_;
 
   command_map_["SetDevice"] = std::bind(&ccGCPIoTDevice::set_device_command,
                                         this, std::placeholders::_1);
@@ -88,7 +81,7 @@ std::string CreateJwt(const char *ec_private_path, const char *project_id) {
       { "exp", exp_time }
   }; 
 
-  auto out = jwt::encode(payload, std::string((char*)key), "ES256");
+  auto out = jwt::encode(payload, std::string((char*)key), "RS256");
 
   free(key);
 
@@ -111,23 +104,25 @@ bool ccGCPIoTDevice::start() {
   MQTTClient_deliveryToken token = {0};
 
   std::string kUsername = "unused";
-  std::string clientid = "projects/xmdw31/locations/asia-east1/registries/sf-iot/devices/sf-iot-id-0001";
-  std::string projectid = "xmdw31";
 
-  MQTTClient_create(&client, "ssl://mqtt.googleapis.com:8883", clientid.c_str(), MQTTCLIENT_PERSISTENCE_NONE, NULL);
+  MQTTClient_create(&client,
+                    device_spec_["endpoint"].get<std::string>().c_str(),
+                    device_spec_["clientid"].get<std::string>().c_str(),
+                    MQTTCLIENT_PERSISTENCE_NONE,
+                    NULL);
 
   conn_opts.keepAliveInterval = 60;
   conn_opts.cleansession = 1;
   conn_opts.username = kUsername.c_str();
 
-  auto password = CreateJwt("sf-iot-id-0001_rsa_private.pem", projectid.c_str());
+  auto password = CreateJwt(device_spec_["ecpath"].get<std::string>().c_str(), device_spec_["projectid"].get<std::string>().c_str());
 
   conn_opts.password = password.c_str();
 
   MQTTClient_SSLOptions sslopts = MQTTClient_SSLOptions_initializer;
 
-  sslopts.trustStore = "./roots.pem";
-  sslopts.privateKey = "./sf-iot-id-0001_rsa_private.pem";
+  sslopts.trustStore = device_spec_["rootpath"].get<std::string>().c_str();
+  sslopts.privateKey = device_spec_["ecpath"].get<std::string>().c_str();
 
   conn_opts.ssl = &sslopts;
 
