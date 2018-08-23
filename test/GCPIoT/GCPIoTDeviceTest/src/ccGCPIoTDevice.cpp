@@ -81,7 +81,7 @@ std::string CreateJwt(const char *ec_private_path, const char *project_id) {
       { "exp", exp_time }
   }; 
 
-  auto out = jwt::encode(payload, std::string((char*)key), "ES256");
+  auto out = jwt::encode(payload, std::string((char*)key), "RS256");
 
   free(key);
 
