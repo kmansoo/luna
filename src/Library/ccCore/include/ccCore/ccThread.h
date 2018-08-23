@@ -5,8 +5,7 @@
  *      Author: Mansoo Kim(kmansoo@gmail.com)
  */
 
-#ifndef LIBRARY_CCCOREAPI_CCTHREAD_H_
-#define LIBRARY_CCCOREAPI_CCTHREAD_H_
+#pragma once
 
 #include <functional>
 #include <chrono>
@@ -37,5 +36,3 @@ private:
 };
 
 };
-
-#endif /* LIBRARY_CCCOREAPI_CCTHREAD_H_ */

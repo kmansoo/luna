@@ -5,8 +5,7 @@
  *      Author: Mansoo Kim
  */
 
-#ifndef CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVERPAGE_H_
-#define CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVERPAGE_H_
+#pragma once
 
 #include <string>
 #include <memory>
@@ -42,5 +41,3 @@ protected:
 };
 
 }
-
-#endif /* CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVERPAGE_H_ */

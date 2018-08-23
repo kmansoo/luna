@@ -5,8 +5,7 @@
  *      Author: kmansoo
  */
 
-#ifndef THIRDPARTYLIBRARY_CCMONGOOSESERVERAPI_CCMONGOOSEWEBSERVEROBJECTFACTORY_H_
-#define THIRDPARTYLIBRARY_CCMONGOOSESERVERAPI_CCMONGOOSEWEBSERVEROBJECTFACTORY_H_
+#pragma once
 
 #include "ccWebServer/ccWebServerObjectFactory.h"
 
@@ -25,5 +24,3 @@ public:
         std::shared_ptr<ccWebServerPageDirectory> page_directory = nullptr);
 };
 }
-
-#endif /* THIRDPARTYLIBRARY_CCMONGOOSESERVERAPI_CCMONGOOSEWEBSERVEROBJECTFACTORY_H_ */

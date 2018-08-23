@@ -5,8 +5,7 @@
 *      Author: Mansoo Kim
 */
 
-#ifndef CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVERFILEUPLOADLOADPAGE_H_
-#define CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVERFILEUPLOADLOADPAGE_H_
+#pragma once
 
 #include <mutex>
 #include <unordered_map>
@@ -70,5 +69,3 @@ private:
 };
 
 }
-
-#endif /* CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVERFILEUPLOADLOADPAGE_H_ */

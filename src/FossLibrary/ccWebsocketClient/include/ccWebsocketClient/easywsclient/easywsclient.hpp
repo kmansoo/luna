@@ -1,5 +1,4 @@
-#ifndef EASYWSCLIENT_HPP_20120819_MIOFVASDTNUASZDQPLFD
-#define EASYWSCLIENT_HPP_20120819_MIOFVASDTNUASZDQPLFD
+#pragma once
 
 // This code comes from:
 // https://github.com/dhbaird/easywsclient
@@ -267,5 +266,3 @@ class WebSocket {
 };
 
 } // namespace easywsclient
-
-#endif /* EASYWSCLIENT_HPP_20120819_MIOFVASDTNUASZDQPLFD */

@@ -5,8 +5,7 @@
 *      Author: kmansoo
 */
 
-#ifndef CCLIBRARY_CCWEBSERVERAPI_CCWEBSOCKETGROUP_H_
-#define CCLIBRARY_CCWEBSERVERAPI_CCWEBSOCKETGROUP_H_
+#pragma once
 
 #include <string>
 #include <map>
@@ -45,5 +44,3 @@ private:
 };
 
 }
-
-#endif

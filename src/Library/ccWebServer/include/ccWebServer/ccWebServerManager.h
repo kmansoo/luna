@@ -5,8 +5,7 @@
  *      Author: kmansoo
  */
 
-#ifndef CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVERMANAGER_H_
-#define CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVERMANAGER_H_
+#pragma once
 
 #include <memory>
 
@@ -86,5 +85,3 @@ private:
 };
 
 }
-
-#endif /* CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVERMANAGER_H_ */

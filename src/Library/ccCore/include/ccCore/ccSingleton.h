@@ -5,8 +5,7 @@
  *      Author: Mansoo Kim(kmansoo@gmail.com)
  */
 
-#ifndef LIBRARY_CCCOREAPI_CCSINGLETON_H_
-#define LIBRARY_CCCOREAPI_CCSINGLETON_H_
+#pragma once
 
 #include <mutex>
 #include <memory>
@@ -72,5 +71,3 @@ std::shared_ptr<T>  ccSingleton<T>::instance_;
 
 */
 }
-
-#endif /* LIBRARY_CCCOREAPI_CCSINGLETONT_H_ */

@@ -5,8 +5,7 @@
  *      Author: kmansoo
  */
 
-#ifndef CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVERRESPONSE_H_
-#define CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVERRESPONSE_H_
+#pragma once
 
 #include <stdarg.h>
 
@@ -64,5 +63,3 @@ protected:
 };
 
 }
-
-#endif /* CCLIBRARY_CCWEBSERVERAPI_CCWEBSERVERRESPONSE_H_ */

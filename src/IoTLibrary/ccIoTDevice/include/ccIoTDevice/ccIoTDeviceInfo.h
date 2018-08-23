@@ -5,8 +5,7 @@
  *      Author: kmansoo
  */
 
-#ifndef PRODUCTLIBRARY_CCIOTDEVICEAPI_CCIOTDEVICEINFO_H_
-#define PRODUCTLIBRARY_CCIOTDEVICEAPI_CCIOTDEVICEINFO_H_
+#pragma once
 
 #include <string>
 
@@ -41,5 +40,3 @@ private:
     ccIoTDeviceSpecificationList  specification_list_;            //  Device Specfication
     std::string                   iot_device_master_uri_;
 };
-
-#endif /* PRODUCTLIBRARY_CCIOTDEVICEPROTOCOLAPI_CCIOTDEVICESPECIFICATION_H_ */

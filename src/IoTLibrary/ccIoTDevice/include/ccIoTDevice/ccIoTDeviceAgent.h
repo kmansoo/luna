@@ -5,8 +5,7 @@
  *      Author: kmansoo
  */
 
-#ifndef PRODUCTLIBRARY_CCIOTDEVICEMANAGERAPI_CCIOTDEVICEAGENT_H_
-#define PRODUCTLIBRARY_CCIOTDEVICEMANAGERAPI_CCIOTDEVICEAGENT_H_
+#pragma once
 
 #include <string>
 #include <memory>
@@ -57,5 +56,3 @@ private:
     ccIoTDeviceSpecification null_obj_;
     std::string blank_string_data_;
 };
-
-#endif /* PRODUCTLIBRARY_CCIOTDEVICEMANAGERAPI_CCIOTDEVICEAGENT_H_ */

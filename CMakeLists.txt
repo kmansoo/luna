@@ -10,35 +10,39 @@ PROJECT(LUNA-SW-PLATFORM)
 # SET(CMAKE_VERBOSE_MAKEFILE ON)
 #
 
-option(GIT_SUBMODULE  "Check submodules during build" ON)
-option(USE_CURL       "Use cURL Library"              ON)
-option(USE_MBEDTLS    "Use Mbedtls Library"           ON)
-option(USE_MOSQUITTO  "Use mosquitto Library"         ON)
+option(GIT_SUBMODULE      "Check submodules during build"               ON)
+option(USE_OPENSSL        "Use OpenSSL library"                         ON)
+option(USE_CURL           "Use cURL library"                            ON)
+option(USE_MBEDTLS        "Use Mbedtls library"                         ON)
+option(USE_NLOHMANN_JSON  "Use nlohmann's json library"                 ON)
+option(USE_JWT            "Use JSON Web Token (JWT) library"            OFF)
 
-if (USE_CURL OR USE_MBEDTLS OR USE_MOSQUITTO)
+if (USE_CURL OR USE_MBEDTLS OR USE_NLOHMANN_JSON OR USE_JWT)
   SET(GIT_SUBMODULE, ON)
 endif()
 
 if (GIT_SUBMODULE)
-    message(STATUS "Submodule update")
-    execute_process(COMMAND git submodule update --init --recursive
-                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                    RESULT_VARIABLE GIT_SUBMOD_RESULT)
+  message(STATUS "Submodule update")
+  execute_process(COMMAND git submodule update --init --recursive
+                  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                  RESULT_VARIABLE GIT_SUBMOD_RESULT)
 
-    if(NOT GIT_SUBMOD_RESULT EQUAL "0")
-        message(FATAL_ERROR "git submodule update --init failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
-    endif()
+  if(NOT GIT_SUBMOD_RESULT EQUAL "0")
+      message(FATAL_ERROR "git submodule update --init failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
+  endif()
 endif()
 
-if (USE_MOSQUITTO)
+if (USE_OPENSSL)
   find_package(OpenSSL)
 
-  if (NOT OpenSSL_FOUND)
-      message(STATUS "OpenSSL not found. So you can not use the MOSQUITTO library!!!")
+  if (OpenSSL_FOUND)
+    include_directories(${OPENSSL_INCLUDE_DIR})
 
-      set(USE_MOSQUITTO OFF)
+    ADD_DEFINITIONS(-DOPENSSL)
+
+    SET(USE_MBEDTLS   OFF)
   elseif()
-    SET(USE_MBEDTLS, OFF)
+    message(STATUS "OpenSSL not found.")
   endif()
 endif()
 
@@ -50,7 +54,7 @@ endif()
 
 # cmake -DCMAKE_TOOLCHAIN_FILE=toolchain.arm.cmake
 
-#
+# BUILD TYPE
 if ("${build}" MATCHES "debug")
  SET (CMAKE_BUILD_TYPE "debug")
 else ("${build}" MATCHES "debug")
@@ -61,6 +65,9 @@ endif ("${build}" MATCHES "debug")
 # Add Compiler Option and Macro
 #
 ADD_DEFINITIONS(-DCALIB_CFG_BUILD_MODE="${CMAKE_BUILD_TYPE}")
+
+SET(CMAKE_CXX_STANDARD 14)
+SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Set Build Directories
 SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -75,7 +82,10 @@ SET(LUNA_SW_PLATFORM ${CMAKE_CURRENT_SOURCE_DIR})
 #
 # Check OS and Processor Information 
 #
-SET(CMAKE_CXX_FLAGS "-std=c++11")
+if (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+  ADD_DEFINITIONS(-DOSX)
+endif()
+
 ADD_DEFINITIONS(-Wall -DCALIB_CFG_OS="${CMAKE_SYSTEM_NAME}" -DCALIB_CFG_CPU="${CMAKE_SYSTEM_PROCESSOR}")
 
 if (USE_MBEDTLS)
@@ -98,15 +108,23 @@ if (USE_CURL)
   endif()
 
   option(ENABLE_MANUAL "to provide the built-in manual for cURL"  OFF)
-  option(BUILD_TESTING "Disable buinding for cURL test"           OFF)
+  option(BUILD_TESTING "Disable building for cURL test"           OFF)
 
   ADD_SUBDIRECTORY(dependency/curl)
 endif()
 
-if (USE_MOSQUITTO)
-  option(WITH_TLS_PSK, "Build without TLS_PSK"  OFF)
+if (USE_NLOHMANN_JSON)
+  option(BUILD_TESTING "Disable building for nlohmann's json test" OFF)
+  
+  include_directories(./dependency/json/single_include)
 
-  ADD_SUBDIRECTORY(dependency/mosquitto)
+  ADD_SUBDIRECTORY(dependency/json)
+endif()
+
+if (USE_JWT)
+  include_directories(./dependency/cpp-jwt/include)
+
+  ADD_SUBDIRECTORY(dependency/cpp-jwt)  
 endif()
 
 #
@@ -118,5 +136,7 @@ ADD_SUBDIRECTORY(src/Library/ccWebServer)
 ADD_SUBDIRECTORY(src/FossLibrary/ccJsonParser)
 ADD_SUBDIRECTORY(src/FossLibrary/ccWebsocketClient)
 ADD_SUBDIRECTORY(src/FossLibrary/ccRestClient)
+ADD_SUBDIRECTORY(src/FossLibrary/ccMqttClient)
 ADD_SUBDIRECTORY(src/ThirdPartyLibrary/ccMongooseServer)
 ADD_SUBDIRECTORY(src/IoTLibrary/ccIoTDevice)
+ADD_SUBDIRECTORY(src/CloudIoTLibrary/ccGCPIoTDevice)

@@ -5,8 +5,7 @@
  *      Author: kmansoo
  */
 
-#ifndef PRODUCTLIBRARY_CCIOTDEVICEPROTOCOLAPI_CCIOTDEVICEPROTOCOL_H_
-#define PRODUCTLIBRARY_CCIOTDEVICEPROTOCOLAPI_CCIOTDEVICEPROTOCOL_H_
+#pragma once
 
 #include <functional>
 #include <string>
@@ -71,5 +70,3 @@ public:
 private:
     std::map < std::string, std::function<bool(const Json::Value& ext_info)>> command_map_;
 };
-
-#endif /* PRODUCTLIBRARY_CCIOTDEVICEPROTOCOLAPI_CCIOTDEVICEPROTOCOL_H_ */

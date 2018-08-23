@@ -4,6 +4,6 @@
 [submodule "dependency/mbedtls"]
 	path = dependency/mbedtls
 	url = https://github.com/ARMmbed/mbedtls.git
-[submodule "dependency/mosquitto"]
-	path = dependency/mosquitto
-	url = https://github.com/eclipse/mosquitto.git
+[submodule "dependency/json"]
+	path = dependency/json
+	url = https://github.com/nlohmann/json.git

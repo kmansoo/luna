@@ -5,8 +5,7 @@
  *      Author: kmansoo
  */
 
-#ifndef LIBRARY_CCNETWORKAPI_CCNETWORKMANAGER_H_
-#define LIBRARY_CCNETWORKAPI_CCNETWORKMANAGER_H_
+#pragma once
 
 #include <string>
 
@@ -38,5 +37,3 @@ private:
 };
 
 }
-
-#endif /* LIBRARY_CCNETWORKAPI_CCNETWORKMANAGER_H_ */
