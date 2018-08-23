@@ -13,13 +13,13 @@ using namespace Luna;
 
 nlohmann::json service_info = {
   {"endpoint",    "ssl://mqtt.googleapis.com"},
-  {"clientid",    "projects/xmdw31/locations/asia-east1/registries/sf-iot/devices/sf-iot-id-0001"},
-  {"deviceid",    "sf-iot-id-0001"},
-  {"ecpath",      "sf-iot-id-0001_rsa_private.pem"},
-  {"projectid",   "xmdw31",},
-  {"registryid",  "sf-iot"},
-  {"rootpath",    "roots.pem"},
-  {"topic",       "projects/xmdw31/topics/sf-iot-montitor"},
+  {"clientid",    "<user-clientid>"},
+  {"deviceid",    "<user-deviceid>"},
+  {"ecpath",      "<user-device-private-key.pem>"},
+  {"projectid",   "<user-projectid>",},
+  {"registryid",  "<user-registryid>"},
+  {"rootpath",    "<user-rootpath>"},
+  {"topic",       "<user-topic>"},
   {"payload",     "Hello world!"}
 };
 
