@@ -32,6 +32,8 @@ protected:
   bool is_connected_;
   bool is_stop_by_user_;
 
+  nlohmann::json  device_spec_;
+
   std::string target_uri_;
   std::map<std::string, std::function<bool(nlohmann::json &protocol)>> command_map_;
 };

@@ -6,7 +6,13 @@
 #include "ccGCPIoTDevice/ccGCPIoTDevice.h"
 
 int main(int argc, char* argv[]) {
-  ccGCPIoTDevice device;
+
+  if (argc < 2) {
+    std::cout << "Useage: " << argv[0] << " <env.json>" << std::endl;
+    return 0;
+  }
+
+  ccGCPIoTDevice device(argv[1]);
 
   std::string command;
 

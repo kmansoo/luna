@@ -111,8 +111,8 @@ bool ccGCPIoTDevice::start() {
   MQTTClient_deliveryToken token = {0};
 
   std::string kUsername = "unused";
-  std::string clientid = "projects/xmdw31/locations/asia-east1/registries/sf-iot/devices/sf-iot-id-0001";
-  std::string projectid = "xmdw31";
+  std::string clientid = "";
+  std::string projectid = "";
 
   MQTTClient_create(&client, "ssl://mqtt.googleapis.com:8883", clientid.c_str(), MQTTCLIENT_PERSISTENCE_NONE, NULL);
 
@@ -120,14 +120,14 @@ bool ccGCPIoTDevice::start() {
   conn_opts.cleansession = 1;
   conn_opts.username = kUsername.c_str();
 
-  auto password = CreateJwt("sf-iot-id-0001_rsa_private.pem", projectid.c_str());
+  auto password = CreateJwt("", projectid.c_str());
 
   conn_opts.password = password.c_str();
 
   MQTTClient_SSLOptions sslopts = MQTTClient_SSLOptions_initializer;
 
-  sslopts.trustStore = "roots.pem";
-  sslopts.privateKey = "sf-iot-id-0001_rsa_private.pem";
+  sslopts.trustStore = "";
+  sslopts.privateKey = "";
 
   conn_opts.ssl = &sslopts;
 
