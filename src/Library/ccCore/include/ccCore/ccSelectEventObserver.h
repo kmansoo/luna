@@ -10,6 +10,7 @@
 #include <thread>
 #include <list>
 #include <mutex>
+#include <functional>
 
 #include "ccSingleton.h"
 
