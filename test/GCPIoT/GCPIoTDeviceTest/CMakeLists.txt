@@ -30,10 +30,14 @@ include_directories(
 
 link_directories(${LUNA_SW_PLATFORM}/build/lib)
 
+
+file(GLOB SRC_FILES 
+	src/*.cpp
+	src/JWT/*.cpp
+)
+
 add_executable(${PROJECT_NAME}
-    src/main.cpp
-		src/ccGCPIoTDevice.cpp
-		src/JWT/jwt.cpp
+    ${SRC_FILES}
 )
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME}
