@@ -6,7 +6,8 @@
 #include "ccCore/ccTimer.h"
 
 #include "ccGCPIoTDevice.h"
-#include "ccJWTManager.h"
+
+#include "JWT/jwt.hpp"
 
 using namespace Luna;
 
@@ -30,6 +31,7 @@ bool ccGCPIoTDevice::loadSpecFile(const std::string& file) {
   json_file >> device_spec_;
 
   std::string clientid;
+  std::string topic;
 
   ccString::format(
     clientid, 
@@ -39,12 +41,19 @@ bool ccGCPIoTDevice::loadSpecFile(const std::string& file) {
     device_spec_["registryid"].get<std::string>().c_str(),
     device_spec_["deviceid"].get<std::string>().c_str());
 
+  ccString::format(
+    topic, 
+    "/devices/%s/state", //  "/devices/%s/events",
+    device_spec_["deviceid"].get<std::string>().c_str());    
+
   device_spec_["clientid"] = clientid;
+  device_spec_["topic"] = topic;
 
   return true;
 }
 
 bool ccGCPIoTDevice::initMqttClient() {
+  std::cout << "initMqttClient, enter" << std::endl;
 
   if (mqtt_client_ != 0)
     clearMqttClient();
@@ -56,28 +65,55 @@ bool ccGCPIoTDevice::initMqttClient() {
   MQTTClient_create(&mqtt_client_,
                     device_spec_["endpoint"].get<std::string>().c_str(),
                     device_spec_["clientid"].get<std::string>().c_str(),
-                    MQTTCLIENT_PERSISTENCE_NONE,
+                    MQTTCLIENT_PERSISTENCE_DEFAULT,
                     NULL);
 
-
-  mqttt_user_password_ = ccJWTManager::createJWT(device_spec_);
+  mqttt_user_password_ = createJWT();
 
   mqtt_conn_opts_.keepAliveInterval = mqtt_keepalive_;
   mqtt_conn_opts_.cleansession = 1;
   mqtt_conn_opts_.username = mqttt_user_name.c_str();
   mqtt_conn_opts_.password = mqttt_user_password_.c_str();  
 
-  mqtt_sslopts_= MQTTClient_SSLOptions_initializer;
-
-  mqtt_sslopts_.trustStore = device_spec_["rootpath"].get<std::string>().c_str();
-  mqtt_sslopts_.privateKey = device_spec_["ecpath"].get<std::string>().c_str();
-
-  mqtt_conn_opts_.ssl = &mqtt_sslopts_;  
+  MQTTClient_setCallbacks(mqtt_client_, this, &ccGCPIoTDevice::on_mqtt_disconnect, &ccGCPIoTDevice::on_mqtt_receive_message, NULL);
 
   return true;
 }
 
+void ccGCPIoTDevice::on_mqtt_disconnect(void* context, char* cause) {
+  std::cout << "on_mqtt_disconnect, enter" << std::endl;
+
+  if (cause != NULL)
+    std::cout << "cause: " << cause << std::endl;
+  std::cout << "on_mqtt_disconnect, leave" << std::endl;
+}
+
+int ccGCPIoTDevice::ccGCPIoTDevice::on_mqtt_receive_message(void* context, char* topicName, int topicLen, MQTTClient_message* message) {
+  /* 
+    if 0 (false) is returned by the callback then it failed, so we don't remove the message from
+    the queue, and it will be retried later.  If 1 is returned then the message data may have been freed,
+    so we must be careful how we use it.
+  */
+    
+  std::cout << "on_mqtt_receive_message, enter" << std::endl;
+
+  std::cout << "topicName: " << topicName << std::endl;
+
+  if (message->payloadlen > 0) {
+    std::string payload((char*)message->payload, message->payloadlen);
+
+    std::cout << "payloadlen: " << message->payloadlen << std::endl;
+    std::cout << "message: " << payload << std::endl;
+  }
+
+  std::cout << "on_mqtt_receive_message, leave" << std::endl;
+
+  return 1;
+}
+
 bool ccGCPIoTDevice::clearMqttClient() {
+  std::cout << "clearMqttClient, enter" << std::endl;
+
   if (mqtt_client_ == 0)
     return false;
 
@@ -85,28 +121,6 @@ bool ccGCPIoTDevice::clearMqttClient() {
   MQTTClient_destroy(&mqtt_client_);    
 
   mqtt_client_ = 0;
-
-  return true;
-}
-
-bool ccGCPIoTDevice::sendMqttTopic(const std::string& payload) {
-  if (mqtt_client_ == 0)
-    return false;
-    
-  mqtt_pubmsg_.payload = (void*)payload.c_str();
-  mqtt_pubmsg_.payloadlen = payload.length();
-  mqtt_pubmsg_.qos = kQos;
-  mqtt_pubmsg_.retained = 0;
-
-  MQTTClient_publishMessage(mqtt_client_, device_spec_["topic"].get<std::string>().c_str(), &mqtt_pubmsg_, &mqtt_token_);
-
-  //printf("Waiting for up to %lu seconds for publication of %s\n"
-  //        "on topic %s for client with ClientID: %s\n",
-  //        (kTimeout/1000), device_spec_["endpoint"].get<std::string>().c_str(), device_spec_["topic"].get<std::string>().c_str(), device_spec_["clientid"].get<std::string>().c_str();
-  
-  int rc = MQTTClient_waitForCompletion(mqtt_client_, mqtt_token_, kTimeout);
-  
-  std::cout << "Message with delivery token " << mqtt_token_ << " delivered" << std::endl;
 
   return true;
 }
@@ -124,6 +138,14 @@ bool ccGCPIoTDevice::start() {
   std::cout << "I'm ready to connect to server!" << std::endl;
 
   initMqttClient();
+
+  // Set up for SSL
+  MQTTClient_SSLOptions sslopts = MQTTClient_SSLOptions_initializer;
+
+  sslopts.trustStore = device_spec_["rootpath"].get<std::string>().c_str();
+  sslopts.privateKey = device_spec_["ecpath"].get<std::string>().c_str();
+  
+  mqtt_conn_opts_.ssl = &sslopts;    
 
   while ((rc = MQTTClient_connect(mqtt_client_, &mqtt_conn_opts_)) !=
          MQTTCLIENT_SUCCESS) {
@@ -152,8 +174,21 @@ bool ccGCPIoTDevice::start() {
     }
   }
 
+  //  Subscribe Test
+  std::string topic;
+
+  ccString::format(
+    topic, 
+    "/devices/%s/config",
+    device_spec_["deviceid"].get<std::string>().c_str());   
+
+  std::cout << "Subscribe to " << topic << std::endl;
+
+  MQTTClient_subscribe(mqtt_client_, topic.c_str(), 1);
+
   return true;
 }
+
 
 bool ccGCPIoTDevice::stop() {
   is_stop_by_user_ = true;
@@ -176,4 +211,59 @@ bool ccGCPIoTDevice::set_device_command(nlohmann::json &protocol) { return true;
 
 bool ccGCPIoTDevice::get_device_status_command(nlohmann::json &protocol) {
   return true;
+}
+
+bool ccGCPIoTDevice::sendMqttTopic(const std::string& topic_name, const std::string& payload) {
+  if (mqtt_client_ == 0)
+    return false;
+
+  std::string topic;
+
+  ccString::format(
+    topic, 
+    "/devices/%s/%s", //  "/devices/%s/events",
+    device_spec_["deviceid"].get<std::string>().c_str(),
+    topic_name.c_str());    
+
+  std::cout << "topic: " << topic << std::endl;
+  std::cout << "payload: " << payload << std::endl;
+
+  mqtt_pubmsg_.payload = (void*)payload.c_str();
+  mqtt_pubmsg_.payloadlen = payload.length();
+  mqtt_pubmsg_.qos = kQos;
+  mqtt_pubmsg_.retained = 0;
+
+  MQTTClient_deliveryToken mqtt_token_ = 0;
+
+  MQTTClient_publishMessage(mqtt_client_, topic.c_str(), &mqtt_pubmsg_, &mqtt_token_);
+
+  int rc = MQTTClient_waitForCompletion(mqtt_client_, mqtt_token_, kTimeout);
+  
+  std::cout << "Message with delivery token " << mqtt_token_ << " delivered" << std::endl;
+
+  return true;
+}
+
+std::string ccGCPIoTDevice::createJWT(const std::string& algorithm) {
+  std::string iat_time, exp_time;
+
+  time_t now_seconds = time(NULL);
+
+  Luna::ccString::format(iat_time, "%lu", now_seconds);
+  Luna::ccString::format(exp_time, "%lu", now_seconds + 3600);
+
+  nlohmann::json jwt_payload{
+      { "aud", device_spec_["projectid"]},
+      { "iat", iat_time },
+      { "exp", exp_time }
+  }; 
+
+  // Read private key from file
+  std::ifstream file(device_spec_["ecpath"].get<std::string>());
+  std::string private_key((std::istreambuf_iterator<char>(file)),
+                  std::istreambuf_iterator<char>());  
+
+  auto json_web_token = jwt::encode(jwt_payload, private_key, algorithm);
+
+  return json_web_token;
 }

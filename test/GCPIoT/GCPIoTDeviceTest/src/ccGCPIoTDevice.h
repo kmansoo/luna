@@ -23,9 +23,14 @@ public:
     return is_connected_;
   }
 
+  bool sendMqttTopic(const std::string& topic_name, const std::string& payload);  
+
 protected:
   virtual bool set_device_command(nlohmann::json &protocol);
   virtual bool get_device_status_command(nlohmann::json &protocol);
+
+  static void on_mqtt_disconnect(void* context, char* cause);
+  static int on_mqtt_receive_message(void* context, char* topicName, int topicLen, MQTTClient_message* message);
 
 protected:
   void retry_connect();
@@ -36,7 +41,7 @@ private:
   bool initMqttClient();
   bool clearMqttClient();
 
-  bool sendMqttTopic(const std::string& payload);
+  std::string createJWT(const std::string& algorithm = "RS256");
 
 protected:  
   bool is_connected_;
@@ -47,7 +52,6 @@ protected:
   MQTTClient_connectOptions   mqtt_conn_opts_ = MQTTClient_connectOptions_initializer;
   MQTTClient_message          mqtt_pubmsg_ = MQTTClient_message_initializer;
   MQTTClient_deliveryToken    mqtt_token_ = 0;
-  MQTTClient_SSLOptions       mqtt_sslopts_ = MQTTClient_SSLOptions_initializer; 
   std::string                 mqttt_user_name = "unused";
   std::string                 mqttt_user_password_;
   int                         mqtt_keepalive_ = 60;

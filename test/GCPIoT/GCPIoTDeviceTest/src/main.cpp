@@ -3,7 +3,8 @@
 
 #include "ccCore/ccCoreAPI.h"
 #include "ccNetwork/ccNetworkManager.h"
-#include "ccGCPIoTDevice/ccGCPIoTDevice.h"
+
+#include "ccGCPIoTDevice.h"
 
 int main(int argc, char* argv[]) {
 
@@ -19,7 +20,7 @@ int main(int argc, char* argv[]) {
   device.start();
 
   while (true) {
-    std::cout << "S: Start, T: Stop, A: Update Device Status" << std::endl;
+    std::cout << "S: Start, T: Stop, a, b: state" << std::endl;
     std::cout
         << "Please press 'q' to stop this program. What is your command? ";
     std::cin >> command;
@@ -27,6 +28,25 @@ int main(int argc, char* argv[]) {
 
     if (command == "q") break;
 
+    std::string topic_name;
+    std::string payload;
+
+    if (command == "a") {
+      topic_name = "state";
+      payload = "{'power':'off'}";
+    }
+
+    if (command == "b") {
+      topic_name = "state";
+      payload = "{'power':'on'}";
+    }
+
+
+    if (payload.length() > 0) {
+      device.sendMqttTopic(topic_name, payload);
+      //  std::cout << "SENT: " << payload << std::endl;
+    }
+  
     Luna::sleep(10);
   }
 
