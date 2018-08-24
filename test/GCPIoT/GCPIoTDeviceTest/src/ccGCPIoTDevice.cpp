@@ -127,6 +127,10 @@ bool ccGCPIoTDevice::start() {
   conn_opts.ssl = &sslopts;
 
   int rc = -1;
+
+  static const int kQos = 1;
+  static const unsigned long kTimeout = 10000L;
+
   static const unsigned long kInitialConnectIntervalMillis = 500L;
   static const unsigned long kMaxConnectIntervalMillis = 6000L;
   static const unsigned long kMaxConnectRetryTimeElapsedMillis = 900000L;
@@ -158,6 +162,18 @@ bool ccGCPIoTDevice::start() {
   }
 
   //  std::cout << "ret_value: " << ret_value << std::endl;
+  pubmsg.payload = (void*)device_spec_["endpoint"].get<std::string>().c_str();
+  pubmsg.payloadlen = device_spec_["endpoint"].get<std::string>().length();
+  pubmsg.qos = kQos;
+  pubmsg.retained = 0;
+  MQTTClient_publishMessage(client, device_spec_["topic"].get<std::string>().c_str(), &pubmsg, &token);
+  //printf("Waiting for up to %lu seconds for publication of %s\n"
+  //        "on topic %s for client with ClientID: %s\n",
+  //        (kTimeout/1000), device_spec_["endpoint"].get<std::string>().c_str(), device_spec_["topic"].get<std::string>().c_str(), device_spec_["clientid"].get<std::string>().c_str();
+  rc = MQTTClient_waitForCompletion(client, token, kTimeout);
+  printf("Message with delivery token %d delivered\n", token);
+  MQTTClient_disconnect(client, 10000);
+  MQTTClient_destroy(&client);  
 
   return true;
 }
