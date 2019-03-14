@@ -1,9 +1,3 @@
-[submodule "dependency/curl"]
-	path = dependency/curl
-	url = https://github.com/curl/curl.git
 [submodule "dependency/mbedtls"]
 	path = dependency/mbedtls
 	url = https://github.com/ARMmbed/mbedtls.git
-[submodule "dependency/json"]
-	path = dependency/json
-	url = https://github.com/nlohmann/json.git

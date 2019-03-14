@@ -10,16 +10,8 @@ PROJECT(LUNA-SW-PLATFORM)
 # SET(CMAKE_VERBOSE_MAKEFILE ON)
 #
 
-option(GIT_SUBMODULE      "Check submodules during build"               ON)
-option(USE_OPENSSL        "Use OpenSSL library"                         ON)
-option(USE_CURL           "Use cURL library"                            ON)
-option(USE_MBEDTLS        "Use Mbedtls library"                         ON)
-option(USE_NLOHMANN_JSON  "Use nlohmann's json library"                 ON)
-option(USE_JWT            "Use JSON Web Token (JWT) library"            OFF)
-
-if (USE_CURL OR USE_MBEDTLS OR USE_NLOHMANN_JSON OR USE_JWT)
-  SET(GIT_SUBMODULE, ON)
-endif()
+option(GIT_SUBMODULE      "Check submodules during build"              OFF)
+option(USE_MBEDTLS        "Use Mbedtls library"                        OFF)
 
 if (GIT_SUBMODULE)
   message(STATUS "Submodule update")
@@ -29,20 +21,6 @@ if (GIT_SUBMODULE)
 
   if(NOT GIT_SUBMOD_RESULT EQUAL "0")
       message(FATAL_ERROR "git submodule update --init failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
-  endif()
-endif()
-
-if (USE_OPENSSL)
-  find_package(OpenSSL)
-
-  if (OpenSSL_FOUND)
-    include_directories(${OPENSSL_INCLUDE_DIR})
-
-    ADD_DEFINITIONS(-DOPENSSL)
-
-    SET(USE_MBEDTLS   OFF)
-  elseif()
-    message(STATUS "OpenSSL not found.")
   endif()
 endif()
 
@@ -95,38 +73,6 @@ if (USE_MBEDTLS)
   ADD_SUBDIRECTORY(dependency/mbedtls)
 endif()
 
-if (USE_CURL)
-  if (USE_MBEDTLS)
-    option(CMAKE_USE_MBEDTLS  "Enable mbedTLS for SSL/TLS"  ON)
-
-    # For mbedTLS in curl
-    SET(MBEDCRYPTO_LIBRARY ${CMAKE_BINARY_DIR}/lib/libmbedcrypto.a)
-    SET(MBEDTLS_LIBRARY ${CMAKE_BINARY_DIR}/lib/libmbedtls.a)
-    SET(MBEDX509_LIBRARY ${CMAKE_BINARY_DIR}/lib/libmbedx509.a)
-
-    SET(MBEDTLS_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/dependency/mbedtls/include)
-  endif()
-
-  option(ENABLE_MANUAL "to provide the built-in manual for cURL"  OFF)
-  option(BUILD_TESTING "Disable building for cURL test"           OFF)
-
-  ADD_SUBDIRECTORY(dependency/curl)
-endif()
-
-if (USE_NLOHMANN_JSON)
-  option(BUILD_TESTING "Disable building for nlohmann's json test" OFF)
-  
-  include_directories(./dependency/json/single_include)
-
-  ADD_SUBDIRECTORY(dependency/json)
-endif()
-
-if (USE_JWT)
-  include_directories(./dependency/cpp-jwt/include)
-
-  ADD_SUBDIRECTORY(dependency/cpp-jwt)  
-endif()
-
 #
 # Make Libraries
 #
@@ -138,5 +84,3 @@ ADD_SUBDIRECTORY(src/FossLibrary/ccWebsocketClient)
 ADD_SUBDIRECTORY(src/FossLibrary/ccRestClient)
 ADD_SUBDIRECTORY(src/FossLibrary/ccMqttClient)
 ADD_SUBDIRECTORY(src/ThirdPartyLibrary/ccMongooseServer)
-ADD_SUBDIRECTORY(src/IoTLibrary/ccIoTDevice)
-ADD_SUBDIRECTORY(src/CloudIoTLibrary/ccGCPIoTDevice)

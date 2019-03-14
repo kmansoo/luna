@@ -1,9 +1,0 @@
-{
-    "IoTDeviceSpecification" : {
-        "Type" : "Controller",
-        "Name" : "iPhone UI",
-        "Description" : "Monitoring Sesnor Data and Control Device",
-        "Manufacture" : "Mansoo"
-    },
-    "IoTDeviceMasterUri" : "ws://172.30.1.47:8000/ws_iot_deivce"
-}

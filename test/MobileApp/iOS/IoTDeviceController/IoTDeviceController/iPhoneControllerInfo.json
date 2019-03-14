@@ -1,9 +1,0 @@
-{
-    "IoTDeviceSpecification" : {
-        "Type" : "Controller",
-        "Name" : "xho95's iPhone Controller",
-        "Description" : "Modified Control Device",
-        "Manufacture" : "Kim, Min Ho"
-    },
-    "IoTDeviceMasterUri" : "ws://localhost:8000/ws_iot_deivce"
-}
