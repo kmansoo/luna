@@ -13,7 +13,7 @@
 
 #include "restclient-cpp/restclient.h"
 
-#include <curl/curl.h>
+//  #include <curl/curl.h>
 
 #include "restclient-cpp/version.h"
 #include "restclient-cpp/connection.h"
@@ -22,12 +22,14 @@
  * @brief global init function. Call this before you start any threads.
  */
 int RestClient::init() {
+#ifdef LUNA_USE_CURL
   CURLcode res = curl_global_init(CURL_GLOBAL_ALL);
   if (res == CURLE_OK) {
     return 0;
-  } else {
-    return 1;
   }
+#endif
+
+  return 1;
 }
 
 /**
@@ -35,7 +37,9 @@ int RestClient::init() {
  * program.
  */
 void RestClient::disable() {
+#ifdef LUNA_USE_CURL
   curl_global_cleanup();
+#endif
 }
 
 /**

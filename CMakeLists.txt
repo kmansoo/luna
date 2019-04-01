@@ -10,8 +10,9 @@ PROJECT(LUNA-SW-PLATFORM)
 # SET(CMAKE_VERBOSE_MAKEFILE ON)
 #
 
-option(GIT_SUBMODULE      "Check submodules during build"              OFF)
-option(USE_MBEDTLS        "Use Mbedtls library"                        OFF)
+option(GIT_SUBMODULE      "Check submodules during build"               OFF)
+option(USE_MBEDTLS        "Use Mbedtls library"                         OFF)
+option(USE_CURL           "Use Curl library"                            OFF)
 
 if (GIT_SUBMODULE)
   message(STATUS "Submodule update")
@@ -64,6 +65,10 @@ if (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
   ADD_DEFINITIONS(-DOSX)
 endif()
 
+if (USE_CURL)
+  ADD_DEFINITIONS(-LUNA_USE_CURL)
+endif()
+
 ADD_DEFINITIONS(-Wall -DCALIB_CFG_OS="${CMAKE_SYSTEM_NAME}" -DCALIB_CFG_CPU="${CMAKE_SYSTEM_PROCESSOR}")
 
 if (USE_MBEDTLS)
@@ -81,7 +86,15 @@ ADD_SUBDIRECTORY(src/Library/ccNetwork)
 ADD_SUBDIRECTORY(src/Library/ccWebServer)
 ADD_SUBDIRECTORY(src/FossLibrary/ccJsonParser)
 ADD_SUBDIRECTORY(src/FossLibrary/ccWebsocketClient)
-ADD_SUBDIRECTORY(src/FossLibrary/ccRestClient)
+
+if (USE_CURL EQUAL ON)
+  ADD_SUBDIRECTORY(src/FossLibrary/ccRestClient)
+else()
+  message(STATUS "=============================================================================================")
+  message(STATUS "The ccRestClient is excluded in building libraries because Luna doesn't support CURL library.")
+  message(STATUS "=============================================================================================")
+endif()
+
 ADD_SUBDIRECTORY(src/FossLibrary/ccMqttClient)
 ADD_SUBDIRECTORY(src/FossLibrary/poco)
 ADD_SUBDIRECTORY(src/ThirdPartyLibrary/ccMongooseServer)

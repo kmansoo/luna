@@ -6,7 +6,7 @@
 
 #include "restclient-cpp/connection.h"
 
-#include <curl/curl.h>
+//  #include <curl/curl.h>
 
 #include <cstring>
 #include <string>
@@ -27,10 +27,14 @@
  */
 RestClient::Connection::Connection(const std::string& baseUrl)
                                : headerFields(), lastRequest() {
+
+#ifdef LUNA_USE_CURL
   this->curlHandle = curl_easy_init();
   if (!this->curlHandle) {
     throw std::runtime_error("Couldn't initialize curl handle");
   }
+#endif
+
   this->baseUrl = baseUrl;
   this->timeout = 0;
   this->followRedirects = false;
@@ -41,9 +45,11 @@ RestClient::Connection::Connection(const std::string& baseUrl)
 }
 
 RestClient::Connection::~Connection() {
+#ifdef LUNA_USE_CURL
   if (this->curlHandle) {
     curl_easy_cleanup(this->curlHandle);
   }
+#endif
 }
 
 // getters/setters
@@ -282,8 +288,10 @@ RestClient::Connection::performCurlRequest(const std::string& uri) {
   // init return type
   RestClient::Response ret = {};
 
+#ifdef LUNA_USE_CURL
   std::string url = std::string(this->baseUrl + uri);
   std::string headerString;
+
   CURLcode res = CURLE_OK;
   curl_slist* headerList = NULL;
 
@@ -417,6 +425,11 @@ RestClient::Connection::performCurlRequest(const std::string& uri) {
   curl_slist_free_all(headerList);
   // reset curl handle
   curl_easy_reset(this->curlHandle);
+#else
+  ret.body = "Failed to query. This library only can be called using CURL. So if the CURL configuration is not ON, it does not work.";
+  ret.code = -1;
+#endif
+
   return ret;
 }
 
@@ -442,11 +455,13 @@ RestClient::Connection::get(const std::string& url) {
 RestClient::Response
 RestClient::Connection::post(const std::string& url,
                              const std::string& data) {
+#ifdef  LUNA_USE_CURL
   /** Now specify we want to POST data */
   curl_easy_setopt(this->curlHandle, CURLOPT_POST, 1L);
   /** set post fields */
   curl_easy_setopt(this->curlHandle, CURLOPT_POSTFIELDS, data.c_str());
   curl_easy_setopt(this->curlHandle, CURLOPT_POSTFIELDSIZE, data.size());
+#endif
 
   return this->performCurlRequest(url);
 }
@@ -466,6 +481,7 @@ RestClient::Connection::put(const std::string& url,
   up_obj.data = data.c_str();
   up_obj.length = data.size();
 
+#ifdef  LUNA_USE_CURL
   /** Now specify we want to PUT data */
   curl_easy_setopt(this->curlHandle, CURLOPT_PUT, 1L);
   curl_easy_setopt(this->curlHandle, CURLOPT_UPLOAD, 1L);
@@ -477,6 +493,7 @@ RestClient::Connection::put(const std::string& url,
   /** set data size */
   curl_easy_setopt(this->curlHandle, CURLOPT_INFILESIZE,
                      static_cast<int64_t>(up_obj.length));
+#endif
 
   return this->performCurlRequest(url);
 }
@@ -492,8 +509,10 @@ RestClient::Connection::del(const std::string& url) {
   /** we want HTTP DELETE */
   const char* http_delete = "DELETE";
 
+#ifdef  LUNA_USE_CURL
   /** set HTTP DELETE METHOD */
   curl_easy_setopt(this->curlHandle, CURLOPT_CUSTOMREQUEST, http_delete);
+#endif
 
   return this->performCurlRequest(url);
 }
@@ -510,9 +529,11 @@ RestClient::Connection::head(const std::string& url) {
     /** we want HTTP HEAD */
     const char* http_head = "HEAD";
 
+#ifdef  LUNA_USE_CURL
     /** set HTTP HEAD METHOD */
     curl_easy_setopt(this->curlHandle, CURLOPT_CUSTOMREQUEST, http_head);
     curl_easy_setopt(this->curlHandle, CURLOPT_NOBODY, 1L);
+#endif
 
     return this->performCurlRequest(url);
 }

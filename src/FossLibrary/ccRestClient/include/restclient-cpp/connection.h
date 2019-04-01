@@ -9,7 +9,10 @@
 #ifndef INCLUDE_RESTCLIENT_CPP_CONNECTION_H_
 #define INCLUDE_RESTCLIENT_CPP_CONNECTION_H_
 
-#include <curl/curl.h>
+#ifdef  LUNA_USE_CURL
+# include <curl/curl.h>
+#endif
+
 #include <string>
 #include <map>
 #include <cstdlib>
@@ -192,7 +195,10 @@ class Connection {
     RestClient::Response head(const std::string& uri);
 
  private:
+#ifdef  LUNA_USE_CURL
     CURL* curlHandle;
+#endif
+
     std::string baseUrl;
     RestClient::HeaderFields headerFields;
     int timeout;
@@ -210,6 +216,7 @@ class Connection {
     std::string keyPath;
     std::string keyPassword;
     std::string uriProxy;
+    
     RestClient::Response performCurlRequest(const std::string& uri);
 
     // 2017.6.27, added the variable by mansoo.kim@icloud.com
