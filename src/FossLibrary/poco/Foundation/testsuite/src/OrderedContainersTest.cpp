@@ -271,7 +271,7 @@ void OrderedContainersTest::testTryEmplaceHint()
 	OrderedMap<std::int64_t, move_only_test> map(0);
 
 	// end() hint, new value
-	auto it = map.try_emplace(map.find(10), 10, 1);
+	auto &it = map.try_emplace(map.find(10), 10, 1);
 	assertEquals(it->first, 10);
 	assert(it->second == move_only_test(1));
 
@@ -312,7 +312,7 @@ void OrderedContainersTest::testInsertOrAssignHint()
 	OrderedMap<std::int64_t, move_only_test> map(0);
 
 	// end() hint, new value
-	auto it = map.insert_or_assign(map.find(10), 10, move_only_test(1));
+	auto &it = map.insert_or_assign(map.find(10), 10, move_only_test(1));
 	assertEquals(it->first, 10);
 	assert(it->second == move_only_test(1));
 
@@ -378,7 +378,7 @@ void OrderedContainersTest::testRangeEraseAll()
 	const std::size_t nb_values = 1000;
 	HMap map = utils::get_filled_hash_map<HMap>(nb_values);
 
-	auto it = map.erase(map.begin(), map.end());
+	auto &it = map.erase(map.begin(), map.end());
 	assertTrue(it == map.end());
 	assertTrue(map.empty());
 }
@@ -392,7 +392,7 @@ void OrderedContainersTest::testRangeErase()
 	const std::size_t nb_values = 1000;
 	HMap map = utils::get_filled_hash_map<HMap>(nb_values);
 
-	auto it = map.erase(map.begin() + 10, map.end() - 10);
+	auto &it = map.erase(map.begin() + 10, map.end() - 10);
 	assertTrue(it == map.end() - 10);
 	assertEquals(map.size(), 20);
 	assertEquals(std::distance(map.begin(), map.end()), 20);
@@ -448,7 +448,7 @@ void OrderedContainersTest::testUnorderedErase()
 	assertEquals(map.unordered_erase(0), 0);
 	assertEquals(map.size(), 5);
 
-	auto it = map.begin();
+	auto &it = map.begin();
 	while(it != map.end()) {
 		it = map.unordered_erase(it);
 	}
@@ -501,13 +501,13 @@ void OrderedContainersTest::testReverseIterator()
 	map[2] = 4;
 
 	std::size_t i = 4;
-	for(auto it = map.rbegin(); it != map.rend(); ++it) {
+	for(auto &it = map.rbegin(); it != map.rend(); ++it) {
 		assertEquals(it->second, i);
 		i--;
 	}
 
 	i = 4;
-	for(auto it = map.rcbegin(); it != map.rcend(); ++it) {
+	for(auto &it = map.rcbegin(); it != map.rcend(); ++it) {
 		assertEquals(it->second, i);
 		i--;
 	}
@@ -611,7 +611,7 @@ void OrderedContainersTest::testModifyValue()
 	const std::size_t nb_values = 100;
 	auto map = utils::get_filled_hash_map<OrderedMap<std::int64_t, std::int64_t>>(nb_values);
 
-	for(auto it = map.begin(); it != map.end(); ++it)
+	for(auto &it = map.begin(); it != map.end(); ++it)
 	{
 		if(it->first % 2 == 0) it.value() = -1;
 	}
@@ -758,7 +758,7 @@ void OrderedContainersTest::testEqualRange()
 {
 	OrderedMap<std::int64_t, std::int64_t> map = {{0, 10}, {-2, 20}};
 
-	auto it_pair = map.equal_range(0);
+	auto &it_pair = map.equal_range(0);
 	assertTrue(std::distance(it_pair.first, it_pair.second) == 1);
 	assertEquals(it_pair.first->second, 10);
 
@@ -1010,11 +1010,11 @@ void OrderedContainersTest::testPrecalculatedHash()
 	/**
 	 * equal_range
 	 */
-	auto it_range = map.equal_range(3, map.hash_function()(3));
+	auto &it_range = map.equal_range(3, map.hash_function()(3));
 	assertTrue(std::distance(it_range.first, it_range.second) == 1);
 	assertEquals(it_range.first->second, -3);
 
-	auto it_range_const = map_const.equal_range(3, map_const.hash_function()(3));
+	auto &it_range_const = map_const.equal_range(3, map_const.hash_function()(3));
 	assertTrue(std::distance(it_range_const.first, it_range_const.second) == 1);
 	assertEquals(it_range_const.first->second, -3);
 

@@ -334,11 +334,11 @@ bool ccString::decode_base64(std::string& dest, const std::string& src) {
     return true;
 }
 
-std::vector<std::string> ccString::splitToken(const std::string& source, char token_char) {
+size_t ccString::split_token(std::vector<std::string>& token_list, const std::string& source, char token_char) {
+    token_list.clear();
+
     auto end = source.cend();
     auto start = end;
-
-    std::vector<std::string> tokens;
 
     for (auto it = source.cbegin(); it != end; ++it) {
         if (*it != token_char) {
@@ -347,14 +347,14 @@ std::vector<std::string> ccString::splitToken(const std::string& source, char to
             continue;
         }
         if (start != end) {
-            tokens.emplace_back(start, it);
+            token_list.emplace_back(start, it);
             start = end;
         }
     }
     if (start != end)
-        tokens.emplace_back(start, end);
+        token_list.emplace_back(start, end);
 
-    return tokens;
+    return token_list.size();
 }
 
 /**

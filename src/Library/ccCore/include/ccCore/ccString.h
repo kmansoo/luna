@@ -73,9 +73,8 @@ public:
     static  bool    encode_base64(std::string& dest, std::ifstream& fin);
     static  bool    decode_base64(std::string& dest, const std::string& src);
 
-
     // 2017.6.28, Mansoo(mansoo.kim@icloud.com), Added this method to support spliting string using token
-    static std::vector<std::string> splitToken(const std::string& source, char token_char);
+    static size_t   split_token(std::vector<std::string>& token_list, const std::string& source, char token_char);
 
 private:
     enum CONST_VALUE {

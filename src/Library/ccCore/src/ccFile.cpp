@@ -11,9 +11,17 @@ bool ccFile::put_char(uint8_t ch) {
 }
 
 const std::string& ccFile::get_string(std::string& buffer) {
-  char read_buffer[4096];
+  buffer.clear();
+  
+  while (this->eof() == false) {
+    
+    char in_char = get_char();
 
-  buffer = gets(read_buffer, 4096);
+    if (in_char == '\n')
+      break;
+
+    buffer.push_back(in_char);
+  }
 
   return buffer;
 }
