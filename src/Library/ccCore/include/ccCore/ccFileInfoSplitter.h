@@ -1,5 +1,5 @@
 /*
- * ccFileInfoSpliter.h
+ * ccFileInfoSplitter.h
  *
  *  Created on: 2019.02.16
  *      Author: Mansoo Kim(mansoo.kim@stradvision.com)
@@ -11,13 +11,13 @@
 
 namespace Luna {
 
-class ccFileInfoSpliter
+class ccFileInfoSplitter
 {
 public:
-    ccFileInfoSpliter() {}
-    ccFileInfoSpliter(const std::string& path);
+    ccFileInfoSplitter() {}
+    ccFileInfoSplitter(const std::string& path);
 
-    virtual ~ccFileInfoSpliter() {}
+    virtual ~ccFileInfoSplitter() {}
 
 public:
     void    split(const std::string& path);

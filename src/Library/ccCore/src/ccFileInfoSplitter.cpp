@@ -1,10 +1,10 @@
-#include "ccCore/ccFileInfoSpliter.h"
+#include "ccCore/ccFileInfoSplitter.h"
 
 namespace Luna {
 
-ccFileInfoSpliter::ccFileInfoSpliter(const std::string& path) { split(path); }
+ccFileInfoSplitter::ccFileInfoSplitter(const std::string& path) { split(path); }
 
-void ccFileInfoSpliter::split(const std::string& path)
+void ccFileInfoSplitter::split(const std::string& path)
 {
   path_ = path;
 
@@ -15,7 +15,7 @@ void ccFileInfoSpliter::split(const std::string& path)
   file_name_ += ext_;
 }
 
-bool ccFileInfoSpliter::split_path(
+bool ccFileInfoSplitter::split_path(
     const std::string& path,
     std::string& drive,
     std::string& dir, std::string& file_name,
