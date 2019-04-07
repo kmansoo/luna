@@ -492,6 +492,7 @@
     <ClInclude Include="include\Poco\Net\UDPSocketReader.h">
       <Filter>UDP\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Poco\Net\PollSet.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNS.cpp">
@@ -797,6 +798,7 @@
     <ClCompile Include="src\UDPServerParams.cpp">
       <Filter>UDP\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\PollSet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\DLLVersion.rc" />

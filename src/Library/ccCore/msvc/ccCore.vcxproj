@@ -23,7 +23,7 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Luna</RootNamespace>
     <ProjectName>ccCore</ProjectName>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.10586.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -167,6 +167,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\ccCore\ccCoreAPI.h" />
+    <ClInclude Include="..\include\ccCore\ccFile.h" />
+    <ClInclude Include="..\include\ccCore\ccFileInfoSplitter.h" />
+    <ClInclude Include="..\include\ccCore\ccFileMemory.h" />
+    <ClInclude Include="..\include\ccCore\ccFileStream.h" />
     <ClInclude Include="..\include\ccCore\ccSelectEventObserver.h" />
     <ClInclude Include="..\include\ccCore\ccSingleton.h" />
     <ClInclude Include="..\include\ccCore\ccString.h" />
@@ -175,6 +179,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\ccCoreAPI.cpp" />
+    <ClCompile Include="..\src\ccFile.cpp" />
+    <ClCompile Include="..\src\ccFileInfoSplitter.cpp" />
+    <ClCompile Include="..\src\ccFileMemory.cpp" />
+    <ClCompile Include="..\src\ccFileStream.cpp" />
     <ClCompile Include="..\src\ccSelectEventObserver.cpp" />
     <ClCompile Include="..\src\ccString.cpp" />
     <ClCompile Include="..\src\ccThread.cpp" />

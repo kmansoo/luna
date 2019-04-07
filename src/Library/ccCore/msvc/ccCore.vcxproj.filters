@@ -33,6 +33,18 @@
     <ClInclude Include="..\include\ccCore\ccThread.h">
       <Filter>include\ccCore</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\ccCore\ccFile.h">
+      <Filter>include\ccCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccCore\ccFileInfoSplitter.h">
+      <Filter>include\ccCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccCore\ccFileMemory.h">
+      <Filter>include\ccCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ccCore\ccFileStream.h">
+      <Filter>include\ccCore</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\ccString.cpp">
@@ -45,6 +57,18 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ccThread.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccFile.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccFileInfoSplitter.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccFileMemory.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ccFileStream.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
