@@ -14,3 +14,6 @@ src/.cproject
 *.user
 env.json
 dependency/lib
+src/FossLibrary/poco/lib64/*
+src/FossLibrary/poco/Foundation/src/pocomsg.rc
+src/FossLibrary/poco/Foundation/src/pocomsg.h
