@@ -28,21 +28,22 @@ bool ccFileInfoSplitter::split_path(
   char sep = '/';
 
 #ifdef _WIN32
-  sep = '\\';
+   sep = '\\';
 #endif
 
   size_t pos = path.rfind(sep, path.length());
+  std::string full_file_name = path;
 
   if (pos != std::string::npos) {
     dir = path.substr(0, pos);
-    std::string full_file_name = path.substr(pos + 1, path.length() - pos);
+    full_file_name = path.substr(pos + 1, path.length() - pos);
+  }
 
-    pos = full_file_name.rfind(".", full_file_name.length());
+  pos = full_file_name.rfind(".", full_file_name.length());
 
-    if (pos != std::string::npos) {
-      file_name = full_file_name.substr(0, pos);
-      file_ext = full_file_name.substr(pos + 1, full_file_name.length() - pos);
-    }
+  if (pos != std::string::npos) {
+    file_name = full_file_name.substr(0, pos);
+    file_ext = full_file_name.substr(pos + 1, full_file_name.length() - pos);
   }
 
   return true;
