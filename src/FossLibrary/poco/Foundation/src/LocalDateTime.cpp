@@ -17,7 +17,7 @@
 #include "Poco/Timespan.h"
 #include "Poco/Exception.h"
 #include <algorithm>
-#include <time.h>
+#include <ctime>
 #if defined(_WIN32_WCE) && _WIN32_WCE < 0x800
 #include "wce_time.h"
 #endif
@@ -32,30 +32,30 @@ LocalDateTime::LocalDateTime()
 }
 
 
-LocalDateTime::LocalDateTime(int otherYear, int otherMonth, int otherDay, int otherHour, int otherMinute, int otherSecond, int otherMillisecond, int otherMicrosecond):
-	_dateTime(otherYear, otherMonth, otherDay, otherHour, otherMinute, otherSecond, otherMillisecond, otherMicrosecond)
+LocalDateTime::LocalDateTime(int year, int month, int day, int hour, int minute, int second, int millisecond, int microsecond):
+	_dateTime(year, month, day, hour, minute, second, millisecond, microsecond)
 {
 	determineTzd();
 }
 
 
-LocalDateTime::LocalDateTime(int otherTzd, int otherYear, int otherMonth, int otherDay, int otherHour, int otherMinute, int otherSecond, int otherMillisecond, int otherMicrosecond):
-	_dateTime(otherYear, otherMonth, otherDay, otherHour, otherMinute, otherSecond, otherMillisecond, otherMicrosecond),
-	_tzd(otherTzd)
+LocalDateTime::LocalDateTime(int tzd, int year, int month, int day, int hour, int minute, int second, int millisecond, int microsecond):
+	_dateTime(year, month, day, hour, minute, second, millisecond, microsecond),
+	_tzd(tzd)
 {
 }
 
 
-LocalDateTime::LocalDateTime(double otherJulianDay):
-	_dateTime(otherJulianDay)
+LocalDateTime::LocalDateTime(double julianDay):
+	_dateTime(julianDay)
 {
 	determineTzd(true);
 }
 
 
-LocalDateTime::LocalDateTime(int otherTzd, double otherJulianDay):
-	_dateTime(otherJulianDay),
-	_tzd(otherTzd)
+LocalDateTime::LocalDateTime(int tzd, double julianDay):
+	_dateTime(julianDay),
+	_tzd(tzd)
 {
 	adjustForTzd();
 }
@@ -68,17 +68,17 @@ LocalDateTime::LocalDateTime(const DateTime& dateTime):
 }
 
 
-LocalDateTime::LocalDateTime(int otherTzd, const DateTime& otherDateTime):
-	_dateTime(otherDateTime),
-	_tzd(otherTzd)
+LocalDateTime::LocalDateTime(int tzd, const DateTime& dateTime):
+	_dateTime(dateTime),
+	_tzd(tzd)
 {
 	adjustForTzd();
 }
 
 
-LocalDateTime::LocalDateTime(int otherTzd, const DateTime& otherDateTime, bool adjust):
-	_dateTime(otherDateTime),
-	_tzd(otherTzd)
+LocalDateTime::LocalDateTime(int tzd, const DateTime& dateTime, bool adjust):
+	_dateTime(dateTime),
+	_tzd(tzd)
 {
 	if (adjust)
 		adjustForTzd();
@@ -92,9 +92,9 @@ LocalDateTime::LocalDateTime(const LocalDateTime& dateTime):
 }
 
 
-LocalDateTime::LocalDateTime(Timestamp::UtcTimeVal utcTimeVal, Timestamp::TimeDiff diff, int otherTzd):
-	_dateTime(utcTimeVal, diff),
-	_tzd(otherTzd)
+LocalDateTime::LocalDateTime(Timestamp::UtcTimeVal utcTime, Timestamp::TimeDiff diff, int tzd):
+	_dateTime(utcTime, diff),
+	_tzd(tzd)
 {
 	adjustForTzd();
 }
@@ -116,45 +116,45 @@ LocalDateTime& LocalDateTime::operator = (const LocalDateTime& dateTime)
 }
 
 
-LocalDateTime& LocalDateTime::operator = (const Timestamp& otherTimestamp)
+LocalDateTime& LocalDateTime::operator = (const Timestamp& timestamp)
 {
-	if (otherTimestamp != timestamp())
+	if (timestamp != this->timestamp())
 	{
-		_dateTime = otherTimestamp;
+		_dateTime = timestamp;
 		determineTzd(true);
 	}
 	return *this;
 }
 
 
-LocalDateTime& LocalDateTime::operator = (double otherJulianDay)
+LocalDateTime& LocalDateTime::operator = (double julianDay)
 {
-	_dateTime = otherJulianDay;
+	_dateTime = julianDay;
 	determineTzd(true);
 	return *this;
 }
 
 
-LocalDateTime& LocalDateTime::assign(int otherYear, int otherMonth, int otherDay, int otherHour, int otherMinute, int otherSecond, int otherMillisecond, int otherMicroseconds)
+LocalDateTime& LocalDateTime::assign(int year, int month, int day, int hour, int minute, int second, int millisecond, int microseconds)
 {
-	_dateTime.assign(otherYear, otherMonth, otherDay, otherHour, otherMinute, otherSecond, otherMillisecond, otherMicroseconds);
+	_dateTime.assign(year, month, day, hour, minute, second, millisecond, microseconds);
 	determineTzd(false);
 	return *this;
 }
 
 
-LocalDateTime& LocalDateTime::assign(int otherTzd, int otherYear, int otherMonth, int otherDay, int otherHour, int otherMinute, int otherSecond, int otherMillisecond, int otherMicroseconds)
+LocalDateTime& LocalDateTime::assign(int tzd, int year, int month, int day, int hour, int minute, int second, int millisecond, int microseconds)
 {
-	_dateTime.assign(otherYear, otherMonth, otherDay, otherHour, otherMinute, otherSecond, otherMillisecond, otherMicroseconds);
-	_tzd = otherTzd;
+	_dateTime.assign(year, month, day, hour, minute, second, millisecond, microseconds);
+	_tzd = tzd;
 	return *this;
 }
 
 
-LocalDateTime& LocalDateTime::assign(int otherTzd, double otherJulianDay)
+LocalDateTime& LocalDateTime::assign(int tzd, double julianDay)
 {
-	_tzd      = otherTzd;
-	_dateTime = otherJulianDay;
+	_tzd      = tzd;
+	_dateTime = julianDay;
 	adjustForTzd();
 	return *this;
 }
@@ -290,7 +290,7 @@ void LocalDateTime::determineTzd(bool adjust)
 }
 
 
-std::time_t LocalDateTime::dstOffset(int& rDstOffset) const
+std::time_t LocalDateTime::dstOffset(int& dstOffset) const
 {
 	std::time_t local;
 	std::tm     broken;
@@ -308,7 +308,7 @@ std::time_t LocalDateTime::dstOffset(int& rDstOffset) const
 	local = std::mktime(&broken);
 #endif
 	
-	rDstOffset = (broken.tm_isdst == 1) ? 3600 : 0;
+	dstOffset = (broken.tm_isdst == 1) ? 3600 : 0;
 	return local;
 }
 

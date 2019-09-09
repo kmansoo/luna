@@ -9,8 +9,8 @@
 
 
 #include "FIFOBufferStreamTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/FIFOBuffer.h"
 #include "Poco/FIFOBufferStream.h"
 #include "Poco/Delegate.h"
@@ -21,7 +21,7 @@ using Poco::FIFOBufferStream;
 using Poco::delegate;
 
 
-FIFOBufferStreamTest::FIFOBufferStreamTest(const std::string& rName): CppUnit::TestCase(rName)
+FIFOBufferStreamTest::FIFOBufferStreamTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -36,41 +36,41 @@ void FIFOBufferStreamTest::testInput()
 	const char* data = "This is a test";
 	FIFOBuffer fb1(data, 14);
 	FIFOBufferStream str1(fb1);
-	assertTrue (str1.rdbuf()->fifoBuffer().isFull());
+	assert (str1.rdbuf()->fifoBuffer().isFull());
 
 	int c = str1.get();
-	assertTrue (c == 'T');
+	assert (c == 'T');
 	c = str1.get();
-	assertTrue (c == 'h');
+	assert (c == 'h');
 	
 	std::string str;
 	str1 >> str;
-	assertTrue (str == "is");
+	assert (str == "is");
 	
 	char buffer[32];
 	str1.read(buffer, sizeof(buffer));
-	assertTrue (str1.gcount() == 10);
+	assert (str1.gcount() == 10);
 	buffer[str1.gcount()] = 0;
-	assertTrue (std::string(" is a test") == buffer);
+	assert (std::string(" is a test") == buffer);
 	
 	const char* data2 = "123";
 	FIFOBufferStream str2(data2, 3);
 
 	c = str2.get();
-	assertTrue (c == '1');
-	assertTrue (str2.good());
+	assert (c == '1');
+	assert (str2.good());
 	c = str2.get();
-	assertTrue (c == '2');
+	assert (c == '2');
 	str2.unget();
 	c = str2.get();
-	assertTrue (c == '2');
-	assertTrue (str2.good());
+	assert (c == '2');
+	assert (str2.good());
 	c = str2.get();
-	assertTrue (c == '3');
-	assertTrue (str2.good());
+	assert (c == '3');
+	assert (str2.good());
 	c = str2.get();
-	assertTrue (c == -1);
-	assertTrue (str2.eof());
+	assert (c == -1);
+	assert (str2.eof());
 }
 
 
@@ -79,7 +79,7 @@ void FIFOBufferStreamTest::testOutput()
 	char output[64];
 	FIFOBufferStream iostr1(output, 64);
 	iostr1 << "This is a test " << 42 << std::ends << std::flush;
-	assertTrue (std::string("This is a test 42") == output);
+	assert (std::string("This is a test 42") == output);
 }
 
 
@@ -87,75 +87,75 @@ void FIFOBufferStreamTest::testNotify()
 {
 	FIFOBuffer fb(18);
 	FIFOBufferStream iostr(fb);
-	assertTrue (iostr.rdbuf()->fifoBuffer().isEmpty());
+	assert (iostr.rdbuf()->fifoBuffer().isEmpty());
 
-	assertTrue (0 == _readableToNot);
-	assertTrue (0 == _notToReadable);
-	assertTrue (0 == _writableToNot);
-	assertTrue (0 == _notToWritable);
+	assert (0 == _readableToNot);
+	assert (0 == _notToReadable);
+	assert (0 == _writableToNot);
+	assert (0 == _notToWritable);
 
 	iostr.readable += delegate(this, &FIFOBufferStreamTest::onReadable);
 	iostr.writable += delegate(this, &FIFOBufferStreamTest::onWritable);
 
 	iostr << "This is a test " << 42 << std::ends << std::flush;
-	assertTrue (iostr.rdbuf()->fifoBuffer().isFull());
+	assert (iostr.rdbuf()->fifoBuffer().isFull());
 
-	assertTrue (0 == _readableToNot);
-	assertTrue (1 == _notToReadable);
-	assertTrue (1 == _writableToNot);
-	assertTrue (0 == _notToWritable);
+	assert (0 == _readableToNot);
+	assert (1 == _notToReadable);
+	assert (1 == _writableToNot);
+	assert (0 == _notToWritable);
 
 	char input[64];
 	iostr >> input;
-	assertTrue (std::string("This") == input);
-	assertTrue (iostr.rdbuf()->fifoBuffer().isEmpty());
+	assert (std::string("This") == input);
+	assert (iostr.rdbuf()->fifoBuffer().isEmpty());
 	
-	assertTrue (1 == _readableToNot);
-	assertTrue (1 == _notToReadable);
-	assertTrue (1 == _writableToNot);
-	assertTrue (1 == _notToWritable);
+	assert (1 == _readableToNot);
+	assert (1 == _notToReadable);
+	assert (1 == _writableToNot);
+	assert (1 == _notToWritable);
 
 	iostr >> input;
-	assertTrue (std::string("is") == input);
+	assert (std::string("is") == input);
 
-	assertTrue (1 == _readableToNot);
-	assertTrue (1 == _notToReadable);
-	assertTrue (1 == _writableToNot);
-	assertTrue (1 == _notToWritable);
-
-	iostr >> input;
-	assertTrue (std::string("a") == input);
-
-	assertTrue (1 == _readableToNot);
-	assertTrue (1 == _notToReadable);
-	assertTrue (1 == _writableToNot);
-	assertTrue (1 == _notToWritable);
+	assert (1 == _readableToNot);
+	assert (1 == _notToReadable);
+	assert (1 == _writableToNot);
+	assert (1 == _notToWritable);
 
 	iostr >> input;
-	assertTrue (std::string("test") == input);
+	assert (std::string("a") == input);
 
-	assertTrue (1 == _readableToNot);
-	assertTrue (1 == _notToReadable);
-	assertTrue (1 == _writableToNot);
-	assertTrue (1 == _notToWritable);
+	assert (1 == _readableToNot);
+	assert (1 == _notToReadable);
+	assert (1 == _writableToNot);
+	assert (1 == _notToWritable);
 
 	iostr >> input;
-	assertTrue (std::string("42") == input);
+	assert (std::string("test") == input);
 
-	assertTrue (1 == _readableToNot);
-	assertTrue (1 == _notToReadable);
-	assertTrue (1 == _writableToNot);
-	assertTrue (1 == _notToWritable);
+	assert (1 == _readableToNot);
+	assert (1 == _notToReadable);
+	assert (1 == _writableToNot);
+	assert (1 == _notToWritable);
+
+	iostr >> input;
+	assert (std::string("42") == input);
+
+	assert (1 == _readableToNot);
+	assert (1 == _notToReadable);
+	assert (1 == _writableToNot);
+	assert (1 == _notToWritable);
 
 	iostr.clear();
-	assertTrue (iostr.good());
+	assert (iostr.good());
 	iostr << "This is a test " << 42 << std::ends << std::flush;
-	assertTrue (iostr.rdbuf()->fifoBuffer().isFull());
+	assert (iostr.rdbuf()->fifoBuffer().isFull());
 
-	assertTrue (1 == _readableToNot);
-	assertTrue (2 == _notToReadable);
-	assertTrue (2 == _writableToNot);
-	assertTrue (1 == _notToWritable);
+	assert (1 == _readableToNot);
+	assert (2 == _notToReadable);
+	assert (2 == _writableToNot);
+	assert (1 == _notToWritable);
 
 	iostr.readable -= delegate(this, &FIFOBufferStreamTest::onReadable);
 	iostr.writable -= delegate(this, &FIFOBufferStreamTest::onWritable);

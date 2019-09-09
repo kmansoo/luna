@@ -15,7 +15,7 @@
 
 
 #include "Poco/Foundation.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class PathTest: public CppUnit::TestCase
@@ -29,12 +29,10 @@ public:
 	void testParseUnix3();
 	void testParseUnix4();
 	void testParseUnix5();
-	void testExpandVariableFromPath();
 	void testParseWindows1();
 	void testParseWindows2();
 	void testParseWindows3();
 	void testParseWindows4();
-	void testParseWindows5();
 	void testParseVMS1();
 	void testParseVMS2();
 	void testParseVMS3();

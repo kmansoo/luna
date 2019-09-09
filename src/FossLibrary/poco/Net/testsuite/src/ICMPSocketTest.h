@@ -15,7 +15,7 @@
 
 
 #include "Poco/Net/Net.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class ICMPSocketTest: public CppUnit::TestCase
@@ -26,7 +26,6 @@ public:
 
 	void testSendToReceiveFrom();
 	void testAssign();
-	void testMTU();
 
 	void setUp();
 	void tearDown();

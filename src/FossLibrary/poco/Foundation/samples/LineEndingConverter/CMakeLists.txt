@@ -1,2 +1,7 @@
-add_executable(LineEndingConverter src/LineEndingConverter.cpp)
-target_link_libraries(LineEndingConverter PUBLIC Poco::Foundation )
+set(SAMPLE_NAME "LineEndingConverter")
+
+set(LOCAL_SRCS "")
+aux_source_directory(src LOCAL_SRCS)
+
+add_executable( ${SAMPLE_NAME} ${LOCAL_SRCS} )
+target_link_libraries( ${SAMPLE_NAME} PocoFoundation )

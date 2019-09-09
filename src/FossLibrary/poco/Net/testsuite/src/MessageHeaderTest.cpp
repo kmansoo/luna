@@ -9,8 +9,8 @@
 
 
 #include "MessageHeaderTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Net/MessageHeader.h"
 #include "Poco/Net/NetException.h"
 #include <sstream>
@@ -41,7 +41,7 @@ void MessageHeaderTest::testWrite()
 	std::ostringstream ostr;
 	mh.write(ostr);
 	std::string s = ostr.str();
-	assertTrue (s == "name1: value1\r\nname2: value2\r\nname3: value3\r\n");
+	assert (s == "name1: value1\r\nname2: value2\r\nname3: value3\r\n");
 }
 
 
@@ -51,10 +51,10 @@ void MessageHeaderTest::testRead1()
 	std::istringstream istr(s);
 	MessageHeader mh;
 	mh.read(istr);
-	assertTrue (mh.size() == 3);
-	assertTrue (mh["name1"] == "value1");
-	assertTrue (mh["name2"] == "value2");
-	assertTrue (mh["name3"] == "value3");
+	assert (mh.size() == 3);
+	assert (mh["name1"] == "value1");
+	assert (mh["name2"] == "value2");
+	assert (mh["name3"] == "value3");
 }
 
 
@@ -64,10 +64,10 @@ void MessageHeaderTest::testRead2()
 	std::istringstream istr(s);
 	MessageHeader mh;
 	mh.read(istr);
-	assertTrue (mh.size() == 3);
-	assertTrue (mh["name1"] == "value1");
-	assertTrue (mh["name2"] == "value2");
-	assertTrue (mh["name3"] == "value3");
+	assert (mh.size() == 3);
+	assert (mh["name1"] == "value1");
+	assert (mh["name2"] == "value2");
+	assert (mh["name3"] == "value3");
 }
 
 
@@ -77,8 +77,8 @@ void MessageHeaderTest::testRead3()
 	std::istringstream istr(s);
 	MessageHeader mh;
 	mh.read(istr);
-	assertTrue (mh.size() == 1);
-	assertTrue (mh["name1"] == "value1");
+	assert (mh.size() == 1);
+	assert (mh["name1"] == "value1");
 }
 
 
@@ -89,15 +89,15 @@ void MessageHeaderTest::testRead4()
 	std::istringstream istr(s);
 	MessageHeader mh;
 	mh.read(istr);
-	assertTrue (mh.size() == 2);
-	assertTrue (mh["name1"] == "value1");
-	assertTrue (mh["name2"] == "value2");
+	assert (mh.size() == 2);
+	assert (mh["name1"] == "value1");
+	assert (mh["name2"] == "value2");
 	int ch = istr.get();
-	assertTrue (ch == '\r');
+	assert (ch == '\r');
 	ch = istr.get();
-	assertTrue (ch == '\n');
+	assert (ch == '\n');
 	ch = istr.get();
-	assertTrue (ch == 's');
+	assert (ch == 's');
 }
 
 
@@ -107,10 +107,10 @@ void MessageHeaderTest::testRead5()
 	std::istringstream istr(s);
 	MessageHeader mh;
 	mh.read(istr);
-	assertTrue (mh.size() == 3);
-	assertTrue (mh["name1"] == "");
-	assertTrue (mh["name2"] == "value2");
-	assertTrue (mh["name3"] == "value3");
+	assert (mh.size() == 3);
+	assert (mh["name1"] == "");
+	assert (mh["name2"] == "value2");
+	assert (mh["name3"] == "value3");
 }
 
 
@@ -120,10 +120,10 @@ void MessageHeaderTest::testReadFolding1()
 	std::istringstream istr(s);
 	MessageHeader mh;
 	mh.read(istr);
-	assertTrue (mh.size() == 3);
-	assertTrue (mh["name1"] == "value1");
-	assertTrue (mh["name2"] == "value21 value22");
-	assertTrue (mh["name3"] == "value3");
+	assert (mh.size() == 3);
+	assert (mh["name1"] == "value1");
+	assert (mh["name2"] == "value21 value22");
+	assert (mh["name3"] == "value3");
 }
 
 
@@ -133,10 +133,10 @@ void MessageHeaderTest::testReadFolding2()
 	std::istringstream istr(s);
 	MessageHeader mh;
 	mh.read(istr);
-	assertTrue (mh.size() == 3);
-	assertTrue (mh["name1"] == "value1");
-	assertTrue (mh["name2"] == "value21\tvalue22");
-	assertTrue (mh["name3"] == "value3");
+	assert (mh.size() == 3);
+	assert (mh["name1"] == "value1");
+	assert (mh["name2"] == "value21\tvalue22");
+	assert (mh["name3"] == "value3");
 }
 
 
@@ -146,9 +146,9 @@ void MessageHeaderTest::testReadFolding3()
 	std::istringstream istr(s);
 	MessageHeader mh;
 	mh.read(istr);
-	assertTrue (mh.size() == 2);
-	assertTrue (mh["name1"] == "value1");
-	assertTrue (mh["name2"] == "value21 value22");
+	assert (mh.size() == 2);
+	assert (mh["name1"] == "value1");
+	assert (mh["name2"] == "value21 value22");
 }
 
 
@@ -158,9 +158,9 @@ void MessageHeaderTest::testReadFolding4()
 	std::istringstream istr(s);
 	MessageHeader mh;
 	mh.read(istr);
-	assertTrue (mh.size() == 2);
-	assertTrue (mh["name1"] == "value1");
-	assertTrue (mh["name2"] == "value21 value22 value23");
+	assert (mh.size() == 2);
+	assert (mh["name1"] == "value1");
+	assert (mh["name2"] == "value21 value22 value23");
 }
 
 
@@ -170,10 +170,10 @@ void MessageHeaderTest::testReadFolding5()
 	std::istringstream istr(s);
 	MessageHeader mh;
 	mh.read(istr);
-	assertTrue (mh.size() == 3);
-	assertTrue (mh["name1"] == "value1");
-	assertTrue (mh["name2"] == "value21 value22 value23");
-	assertTrue (mh["name3"] == "value3");
+	assert (mh.size() == 3);
+	assert (mh["name1"] == "value1");
+	assert (mh["name2"] == "value21 value22 value23");
+	assert (mh["name3"] == "value3");
 }
 
 
@@ -216,74 +216,74 @@ void MessageHeaderTest::testSplitElements()
 	std::string s;
 	std::vector<std::string> v;
 	MessageHeader::splitElements(s, v);
-	assertTrue (v.empty());
+	assert (v.empty());
 	
 	s = "foo";
 	MessageHeader::splitElements(s, v);
-	assertTrue (v.size() == 1);
-	assertTrue (v[0] == "foo");
+	assert (v.size() == 1);
+	assert (v[0] == "foo");
 	
 	s = "  foo ";
 	MessageHeader::splitElements(s, v);
-	assertTrue (v.size() == 1);
-	assertTrue (v[0] == "foo");
+	assert (v.size() == 1);
+	assert (v[0] == "foo");
 
 	s = "foo,bar";
 	MessageHeader::splitElements(s, v);
-	assertTrue (v.size() == 2);
-	assertTrue (v[0] == "foo");
-	assertTrue (v[1] == "bar");
+	assert (v.size() == 2);
+	assert (v[0] == "foo");
+	assert (v[1] == "bar");
 	
 	s = "foo,,bar";
 	MessageHeader::splitElements(s, v);
-	assertTrue (v.size() == 2);
-	assertTrue (v[0] == "foo");
-	assertTrue (v[1] == "bar");
+	assert (v.size() == 2);
+	assert (v[0] == "foo");
+	assert (v[1] == "bar");
 
 	MessageHeader::splitElements(s, v, false);
-	assertTrue (v.size() == 3);
-	assertTrue (v[0] == "foo");
-	assertTrue (v[1] == "");
-	assertTrue (v[2] == "bar");
+	assert (v.size() == 3);
+	assert (v[0] == "foo");
+	assert (v[1] == "");
+	assert (v[2] == "bar");
 
 	s = "foo;param=\"a,b\",bar;param=\"c,d\"";
 	MessageHeader::splitElements(s, v);
-	assertTrue (v.size() == 2);
-	assertTrue (v[0] == "foo;param=\"a,b\"");
-	assertTrue (v[1] == "bar;param=\"c,d\"");
+	assert (v.size() == 2);
+	assert (v[0] == "foo;param=\"a,b\"");
+	assert (v[1] == "bar;param=\"c,d\"");
 
 	s = "foo; param=\"a,b\",  bar; param=\"c,d\"";
 	MessageHeader::splitElements(s, v);
-	assertTrue (v.size() == 2);
-	assertTrue (v[0] == "foo; param=\"a,b\"");
-	assertTrue (v[1] == "bar; param=\"c,d\"");
+	assert (v.size() == 2);
+	assert (v[0] == "foo; param=\"a,b\"");
+	assert (v[1] == "bar; param=\"c,d\"");
 	
 	s = "foo, bar, f00, baz";
 	MessageHeader::splitElements(s, v);
-	assertTrue (v.size() == 4);
-	assertTrue (v[0] == "foo");
-	assertTrue (v[1] == "bar");
-	assertTrue (v[2] == "f00");
-	assertTrue (v[3] == "baz");
+	assert (v.size() == 4);
+	assert (v[0] == "foo");
+	assert (v[1] == "bar");
+	assert (v[2] == "f00");
+	assert (v[3] == "baz");
 	
 	s = "a,b,c";
 	MessageHeader::splitElements(s, v);
-	assertTrue (v.size() == 3);
-	assertTrue (v[0] == "a");
-	assertTrue (v[1] == "b");
-	assertTrue (v[2] == "c");
+	assert (v.size() == 3);
+	assert (v[0] == "a");
+	assert (v[1] == "b");
+	assert (v[2] == "c");
 	
 	s = "a=\"value=\\\\\\\"foo, bar\\\\\\\"\",b=foo";
 	MessageHeader::splitElements(s, v);
-	assertTrue (v.size() == 2);
-	assertTrue (v[0] == "a=\"value=\\\"foo, bar\\\"\"");
-	assertTrue (v[1] == "b=foo");
+	assert (v.size() == 2);
+	assert (v[0] == "a=\"value=\\\"foo, bar\\\"\"");
+	assert (v[1] == "b=foo");
 	
 	s = "a=\\\",b=\\\"";
 	MessageHeader::splitElements(s, v);
-	assertTrue (v.size() == 2);
-	assertTrue (v[0] == "a=\"");
-	assertTrue (v[1] == "b=\"");
+	assert (v.size() == 2);
+	assert (v[0] == "a=\"");
+	assert (v[1] == "b=\"");
 	
 }
 
@@ -295,51 +295,51 @@ void MessageHeaderTest::testSplitParameters()
 	NameValueCollection p;
 	
 	MessageHeader::splitParameters(s, v, p);
-	assertTrue (v.empty());
-	assertTrue (p.empty());
+	assert (v.empty());
+	assert (p.empty());
 	
 	s = "multipart/related";
 	MessageHeader::splitParameters(s, v, p);
-	assertTrue (v == "multipart/related");
-	assertTrue (p.empty());
+	assert (v == "multipart/related");
+	assert (p.empty());
 	
 	s = "multipart/related; boundary=MIME_boundary_01234567";
 	MessageHeader::splitParameters(s, v, p);
-	assertTrue (v == "multipart/related");
-	assertTrue (p.size() == 1);
-	assertTrue (p["boundary"] == "MIME_boundary_01234567");
+	assert (v == "multipart/related");
+	assert (p.size() == 1);
+	assert (p["boundary"] == "MIME_boundary_01234567");
 	
 	s = "multipart/related; boundary=\"MIME_boundary_76543210\"";
 	MessageHeader::splitParameters(s, v, p);
-	assertTrue (v == "multipart/related");
-	assertTrue (p.size() == 1);
-	assertTrue (p["boundary"] == "MIME_boundary_76543210");
+	assert (v == "multipart/related");
+	assert (p.size() == 1);
+	assert (p["boundary"] == "MIME_boundary_76543210");
 	
 	s = "text/plain; charset=us-ascii";
 	MessageHeader::splitParameters(s, v, p);
-	assertTrue (v == "text/plain");
-	assertTrue (p.size() == 1);
-	assertTrue (p["charset"] == "us-ascii");
+	assert (v == "text/plain");
+	assert (p.size() == 1);
+	assert (p["charset"] == "us-ascii");
 	
 	s = "value; p1=foo; p2=bar";
 	MessageHeader::splitParameters(s, v, p);
-	assertTrue (v == "value");
-	assertTrue (p.size() == 2);
-	assertTrue (p["p1"] == "foo");
-	assertTrue (p["p2"] == "bar");
+	assert (v == "value");
+	assert (p.size() == 2);
+	assert (p["p1"] == "foo");
+	assert (p["p2"] == "bar");
 	
 	s = "value; p1=\"foo; bar\"";
 	MessageHeader::splitParameters(s, v, p);
-	assertTrue (v == "value");
-	assertTrue (p.size() == 1);
-	assertTrue (p["p1"] == "foo; bar");	
+	assert (v == "value");
+	assert (p.size() == 1);
+	assert (p["p1"] == "foo; bar");	
 
 	s = "value ; p1=foo ; p2=bar ";
 	MessageHeader::splitParameters(s, v, p);
-	assertTrue (v == "value");
-	assertTrue (p.size() == 2);
-	assertTrue (p["p1"] == "foo");
-	assertTrue (p["p2"] == "bar");
+	assert (v == "value");
+	assert (p.size() == 2);
+	assert (p["p1"] == "foo");
+	assert (p["p2"] == "bar");
 }
 
 
@@ -364,15 +364,15 @@ void MessageHeaderTest::testDecodeWord()
 {
 	std::string coded("this is pure ASCII");
 	std::string decoded = MessageHeader::decodeWord(coded, "ISO-8859-1");
-	assertTrue (decoded == coded);
+	assert(decoded == coded);
 
 	coded = "(=?ISO-8859-1?Q?a?= =?ISO-8859-1?Q?b?=)";
 	decoded = MessageHeader::decodeWord(coded, "ISO-8859-1");
-	assertTrue (decoded == "(a b)");
+	assert(decoded == "(a b)");
 
 	coded = "Hello =?UTF-8?B?RnJhbmNpcw==?=, good bye";
 	decoded = MessageHeader::decodeWord(coded, "ISO-8859-1");
-	assertTrue (decoded == "Hello Francis, good bye");
+	assert(decoded == "Hello Francis, good bye");
 }
 
 

@@ -5,7 +5,7 @@
 // Package: Filesystem
 // Module:  File
 //
-// Copyright (c) 2006, Applied Informatics Software Engineering GmbH.
+// Copyright (c) 2004-2006, Applied Informatics Software Engineering GmbH.
 // and Contributors.
 //
 // SPDX-License-Identifier:	BSL-1.0
@@ -15,7 +15,6 @@
 #include "Poco/File_WIN32.h"
 #include "Poco/Exception.h"
 #include "Poco/String.h"
-#include "Poco/UnicodeConverter.h"
 #include "Poco/UnWindows.h"
 
 
@@ -25,9 +24,9 @@ namespace Poco {
 class FileHandle
 {
 public:
-	FileHandle(const std::string& path, const std::wstring& upath, DWORD access, DWORD share, DWORD disp)
+	FileHandle(const std::string& path, DWORD access, DWORD share, DWORD disp)
 	{
-		_h = CreateFileW(upath.c_str(), access, share, 0, disp, 0, 0);
+		_h = CreateFileA(path.c_str(), access, share, 0, disp, 0, 0);
 		if (_h == INVALID_HANDLE_VALUE)
 		{
 			FileImpl::handleLastErrorImpl(path);
@@ -61,7 +60,6 @@ FileImpl::FileImpl(const std::string& path): _path(path)
 	{
 		_path.resize(n - 1);
 	}
-	convertPath(_path, _upath);
 }
 
 
@@ -73,7 +71,6 @@ FileImpl::~FileImpl()
 void FileImpl::swapImpl(FileImpl& file)
 {
 	std::swap(_path, file._path);
-	std::swap(_upath, file._upath);
 }
 
 
@@ -85,7 +82,6 @@ void FileImpl::setPathImpl(const std::string& path)
 	{
 		_path.resize(n - 1);
 	}
-	convertPath(_path, _upath);
 }
 
 
@@ -93,7 +89,7 @@ bool FileImpl::existsImpl() const
 {
 	poco_assert (!_path.empty());
 
-	DWORD attr = GetFileAttributesW(_upath.c_str());
+	DWORD attr = GetFileAttributes(_path.c_str());
 	if (attr == INVALID_FILE_ATTRIBUTES)
 	{
 		switch (GetLastError())
@@ -115,7 +111,7 @@ bool FileImpl::canReadImpl() const
 {
 	poco_assert (!_path.empty());
 
-	DWORD attr = GetFileAttributesW(_upath.c_str());
+	DWORD attr = GetFileAttributes(_path.c_str());
 	if (attr == INVALID_FILE_ATTRIBUTES)
 	{
 		switch (GetLastError())
@@ -134,7 +130,7 @@ bool FileImpl::canWriteImpl() const
 {
 	poco_assert (!_path.empty());
 
-	DWORD attr = GetFileAttributesW(_upath.c_str());
+	DWORD attr = GetFileAttributes(_path.c_str());
 	if (attr == INVALID_FILE_ATTRIBUTES)
 		handleLastErrorImpl(_path);
 	return (attr & FILE_ATTRIBUTE_READONLY) == 0;
@@ -158,7 +154,7 @@ bool FileImpl::isDirectoryImpl() const
 {
 	poco_assert (!_path.empty());
 
-	DWORD attr = GetFileAttributesW(_upath.c_str());
+	DWORD attr = GetFileAttributes(_path.c_str());
 	if (attr == INVALID_FILE_ATTRIBUTES)
 		handleLastErrorImpl(_path);
 	return (attr & FILE_ATTRIBUTE_DIRECTORY) != 0;
@@ -169,11 +165,12 @@ bool FileImpl::isLinkImpl() const
 {
 	poco_assert (!_path.empty());
 
-	DWORD attr = GetFileAttributesW(_upath.c_str());
+	DWORD attr = GetFileAttributes(_path.c_str());
 	if (attr == INVALID_FILE_ATTRIBUTES)
 		handleLastErrorImpl(_path);
 	return (attr & FILE_ATTRIBUTE_DIRECTORY) == 0 && (attr & FILE_ATTRIBUTE_REPARSE_POINT) != 0;
 }
+
 
 
 bool FileImpl::isDeviceImpl() const
@@ -196,7 +193,7 @@ bool FileImpl::isHiddenImpl() const
 {
 	poco_assert (!_path.empty());
 
-	DWORD attr = GetFileAttributesW(_upath.c_str());
+	DWORD attr = GetFileAttributes(_path.c_str());
 	if (attr == INVALID_FILE_ATTRIBUTES)
 		handleLastErrorImpl(_path);
 	return (attr & FILE_ATTRIBUTE_HIDDEN) != 0;
@@ -208,7 +205,7 @@ Timestamp FileImpl::createdImpl() const
 	poco_assert (!_path.empty());
 
 	WIN32_FILE_ATTRIBUTE_DATA fad;
-	if (GetFileAttributesExW(_upath.c_str(), GetFileExInfoStandard, &fad) == 0)
+	if (GetFileAttributesEx(_path.c_str(), GetFileExInfoStandard, &fad) == 0)
 		handleLastErrorImpl(_path);
 	return Timestamp::fromFileTimeNP(fad.ftCreationTime.dwLowDateTime, fad.ftCreationTime.dwHighDateTime);
 }
@@ -219,7 +216,7 @@ Timestamp FileImpl::getLastModifiedImpl() const
 	poco_assert (!_path.empty());
 
 	WIN32_FILE_ATTRIBUTE_DATA fad;
-	if (GetFileAttributesExW(_upath.c_str(), GetFileExInfoStandard, &fad) == 0)
+	if (GetFileAttributesEx(_path.c_str(), GetFileExInfoStandard, &fad) == 0)
 		handleLastErrorImpl(_path);
 	return Timestamp::fromFileTimeNP(fad.ftLastWriteTime.dwLowDateTime, fad.ftLastWriteTime.dwHighDateTime);
 }
@@ -235,7 +232,7 @@ void FileImpl::setLastModifiedImpl(const Timestamp& ts)
 	FILETIME ft;
 	ft.dwLowDateTime  = low;
 	ft.dwHighDateTime = high;
-	FileHandle fh(_path, _upath, FILE_WRITE_ATTRIBUTES, FILE_SHARE_READ | FILE_SHARE_WRITE, OPEN_EXISTING);
+	FileHandle fh(_path, FILE_WRITE_ATTRIBUTES, FILE_SHARE_READ | FILE_SHARE_WRITE, OPEN_EXISTING);
 	if (SetFileTime(fh.get(), 0, &ft, &ft) == 0)
 		handleLastErrorImpl(_path);
 }
@@ -246,7 +243,7 @@ FileImpl::FileSizeImpl FileImpl::getSizeImpl() const
 	poco_assert (!_path.empty());
 
 	WIN32_FILE_ATTRIBUTE_DATA fad;
-	if (GetFileAttributesExW(_upath.c_str(), GetFileExInfoStandard, &fad) == 0)
+	if (GetFileAttributesEx(_path.c_str(), GetFileExInfoStandard, &fad) == 0)
 		handleLastErrorImpl(_path);
 	LARGE_INTEGER li;
 	li.LowPart  = fad.nFileSizeLow;
@@ -259,7 +256,7 @@ void FileImpl::setSizeImpl(FileSizeImpl size)
 {
 	poco_assert (!_path.empty());
 
-	FileHandle fh(_path, _upath, GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, OPEN_EXISTING);
+	FileHandle fh(_path, GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, OPEN_EXISTING);
 	LARGE_INTEGER li;
 	li.QuadPart = size;
 	if (SetFilePointer(fh.get(), li.LowPart, &li.HighPart, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
@@ -273,19 +270,19 @@ void FileImpl::setWriteableImpl(bool flag)
 {
 	poco_assert (!_path.empty());
 
-	DWORD attr = GetFileAttributesW(_upath.c_str());
+	DWORD attr = GetFileAttributes(_path.c_str());
 	if (attr == -1)
 		handleLastErrorImpl(_path);
 	if (flag)
 		attr &= ~FILE_ATTRIBUTE_READONLY;
 	else
 		attr |= FILE_ATTRIBUTE_READONLY;
-	if (SetFileAttributesW(_upath.c_str(), attr) == 0)
+	if (SetFileAttributes(_path.c_str(), attr) == 0)
 		handleLastErrorImpl(_path);
 }
 
 
-void FileImpl::setExecutableImpl(bool /*flag*/)
+void FileImpl::setExecutableImpl(bool flag)
 {
 	// not supported
 }
@@ -295,9 +292,7 @@ void FileImpl::copyToImpl(const std::string& path) const
 {
 	poco_assert (!_path.empty());
 
-	std::wstring upath;
-	convertPath(path, upath);
-	if (CopyFileW(_upath.c_str(), upath.c_str(), FALSE) == 0)
+	if (CopyFileA(_path.c_str(), path.c_str(), FALSE) == 0)
 		handleLastErrorImpl(_path);
 }
 
@@ -306,9 +301,7 @@ void FileImpl::renameToImpl(const std::string& path)
 {
 	poco_assert (!_path.empty());
 
-	std::wstring upath;
-	convertPath(path, upath);
-	if (MoveFileExW(_upath.c_str(), upath.c_str(), MOVEFILE_REPLACE_EXISTING) == 0)
+	if (MoveFileExA(_path.c_str(), path.c_str(), MOVEFILE_REPLACE_EXISTING) == 0)
 		handleLastErrorImpl(_path);
 }
 
@@ -317,12 +310,9 @@ void FileImpl::linkToImpl(const std::string& path, int type) const
 {
 	poco_assert (!_path.empty());
 
-	std::wstring upath;
-	convertPath(path, upath);
-
 	if (type == 0)
 	{
-		if (CreateHardLinkW(upath.c_str(), _upath.c_str(), NULL) == 0)
+		if (CreateHardLinkA(path.c_str(), _path.c_str(), NULL) == 0)
 			handleLastErrorImpl(_path);
 	}
 	else
@@ -333,11 +323,12 @@ void FileImpl::linkToImpl(const std::string& path, int type) const
 #ifdef SYMBOLIC_LINK_FLAG_ALLOW_UNPRIVILEGED_CREATE
 		flags |= SYMBOLIC_LINK_FLAG_ALLOW_UNPRIVILEGED_CREATE;
 #endif
-		if (CreateSymbolicLinkW(upath.c_str(), _upath.c_str(), flags) == 0)
+		if (CreateSymbolicLinkA(path.c_str(), _path.c_str(), flags) == 0)
 			handleLastErrorImpl(_path);
 #else
-		throw Poco::NotImplementedException("Symbolic link support not available in used version of the Windows SDK");
+		throw Poco::NotImplementedException("Symbolic link support not available in used version of the Windows SDK")
 #endif
+
 	}
 }
 
@@ -348,12 +339,12 @@ void FileImpl::removeImpl()
 
 	if (isDirectoryImpl())
 	{
-		if (RemoveDirectoryW(_upath.c_str()) == 0)
+		if (RemoveDirectoryA(_path.c_str()) == 0)
 			handleLastErrorImpl(_path);
 	}
 	else
 	{
-		if (DeleteFileW(_upath.c_str()) == 0)
+		if (DeleteFileA(_path.c_str()) == 0)
 			handleLastErrorImpl(_path);
 	}
 }
@@ -363,7 +354,7 @@ bool FileImpl::createFileImpl()
 {
 	poco_assert (!_path.empty());
 
-	HANDLE hFile = CreateFileW(_upath.c_str(), GENERIC_WRITE, 0, 0, CREATE_NEW, 0, 0);
+	HANDLE hFile = CreateFileA(_path.c_str(), GENERIC_WRITE, 0, 0, CREATE_NEW, 0, 0);
 	if (hFile != INVALID_HANDLE_VALUE)
 	{
 		CloseHandle(hFile);
@@ -383,7 +374,7 @@ bool FileImpl::createDirectoryImpl()
 
 	if (existsImpl() && isDirectoryImpl())
 		return false;
-	if (CreateDirectoryW(_upath.c_str(), 0) == 0)
+	if (CreateDirectoryA(_path.c_str(), 0) == 0)
 		handleLastErrorImpl(_path);
 	return true;
 }
@@ -394,7 +385,7 @@ FileImpl::FileSizeImpl FileImpl::totalSpaceImpl() const
 	poco_assert(!_path.empty());
 
 	ULARGE_INTEGER space;
-	if (!GetDiskFreeSpaceExW(_upath.c_str(), NULL, &space, NULL))
+	if (!GetDiskFreeSpaceExA(_path.c_str(), NULL, &space, NULL))
 		handleLastErrorImpl(_path);
 	return space.QuadPart;
 }
@@ -405,7 +396,7 @@ FileImpl::FileSizeImpl FileImpl::usableSpaceImpl() const
 	poco_assert(!_path.empty());
 
 	ULARGE_INTEGER space;
-	if (!GetDiskFreeSpaceExW(_upath.c_str(), &space, NULL, NULL))
+	if (!GetDiskFreeSpaceExA(upath.c_str(), &space, NULL, NULL))
 		handleLastErrorImpl(_path);
 	return space.QuadPart;
 }
@@ -416,7 +407,7 @@ FileImpl::FileSizeImpl FileImpl::freeSpaceImpl() const
 	poco_assert(!_path.empty());
 
 	ULARGE_INTEGER space;
-	if (!GetDiskFreeSpaceExW(_upath.c_str(), NULL, NULL, &space))
+	if (!GetDiskFreeSpaceExA(_path.c_str(), NULL, NULL, &space))
 		handleLastErrorImpl(_path);
 	return space.QuadPart;
 }
@@ -470,23 +461,5 @@ void FileImpl::handleLastErrorImpl(const std::string& path)
 	}
 }
 
-
-void FileImpl::convertPath(const std::string& utf8Path, std::wstring& utf16Path)
-{
-	UnicodeConverter::toUTF16(utf8Path, utf16Path);
-	if (utf16Path.size() >= MAX_PATH - 12) // Note: CreateDirectory has a limit of MAX_PATH - 12 (room for 8.3 file name)
-	{
-		if (utf16Path[0] == '\\' || utf16Path[1] == ':')
-		{
-			if (utf16Path.compare(0, 4, L"\\\\?\\", 4) != 0)
-			{
-				if (utf16Path[1] == '\\')
-					utf16Path.insert(0, L"\\\\?\\UNC\\", 8);
-				else
-					utf16Path.insert(0, L"\\\\?\\", 4);
-			}
-		}
-	}
-}
 
 } // namespace Poco

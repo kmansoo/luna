@@ -23,7 +23,6 @@
 #include "Poco/Thread.h"
 #include "Poco/Mutex.h"
 #include "Poco/Runnable.h"
-#include "Poco/AutoPtr.h"
 #include "Poco/NotificationQueue.h"
 
 
@@ -41,21 +40,19 @@ class Foundation_API AsyncChannel: public Channel, public Runnable
 	/// then processed by a separate thread.
 {
 public:
-	typedef AutoPtr<AsyncChannel> Ptr;
-
-	AsyncChannel(Channel::Ptr pChannel = 0, Thread::Priority prio = Thread::PRIO_NORMAL);
+	AsyncChannel(Channel* pChannel = 0, Thread::Priority prio = Thread::PRIO_NORMAL);
 		/// Creates the AsyncChannel and connects it to
 		/// the given channel.
 
-	void setChannel(Channel::Ptr pChannel);
+	void setChannel(Channel* pChannel);
 		/// Connects the AsyncChannel to the given target channel.
 		/// All messages will be forwarded to this channel.
 		
-	Channel::Ptr getChannel() const;
+	Channel* getChannel() const;
 		/// Returns the target channel.
 
 	void open();
-		/// Opens the channel and creates the
+		/// Opens the channel and creates the 
 		/// background logging thread.
 		
 	void close();
@@ -69,7 +66,7 @@ public:
 	void setProperty(const std::string& name, const std::string& value);
 		/// Sets or changes a configuration property.
 		///
-		/// The "channel" property allows setting the target
+		/// The "channel" property allows setting the target 
 		/// channel via the LoggingRegistry.
 		/// The "channel" property is set-only.
 		///
@@ -89,10 +86,10 @@ protected:
 	void setPriority(const std::string& value);
 		
 private:
-	Channel::Ptr      _pChannel;
-	Thread            _thread;
-	FastMutex         _threadMutex;
-	FastMutex         _channelMutex;
+	Channel*  _pChannel;
+	Thread    _thread;
+	FastMutex _threadMutex;
+	FastMutex _channelMutex;
 	NotificationQueue _queue;
 };
 

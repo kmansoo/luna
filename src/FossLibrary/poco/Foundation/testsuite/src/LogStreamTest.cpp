@@ -9,8 +9,8 @@
 
 
 #include "LogStreamTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Logger.h"
 #include "Poco/LogStream.h"
 #include "Poco/AutoPtr.h"
@@ -24,7 +24,7 @@ using Poco::Message;
 using Poco::AutoPtr;
 
 
-LogStreamTest::LogStreamTest(const std::string& rName): CppUnit::TestCase(rName)
+LogStreamTest::LogStreamTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -38,18 +38,18 @@ void LogStreamTest::testLogStream()
 {
 	AutoPtr<TestChannel> pChannel = new TestChannel;
 	Logger& root = Logger::root();
-	root.setChannel(pChannel);
+	root.setChannel(pChannel.get());
 
 	LogStream ls(root);
 
 	ls << "information" << ' ' << 1 << std::endl;
-	assertTrue (pChannel->list().begin()->getPriority() == Message::PRIO_INFORMATION);
-	assertTrue (pChannel->list().begin()->getText() == "information 1");
+	assert (pChannel->list().begin()->getPriority() == Message::PRIO_INFORMATION);
+	assert (pChannel->list().begin()->getText() == "information 1");
 	pChannel->list().clear();
 
 	ls.error() << "error" << std::endl;
-	assertTrue (pChannel->list().begin()->getPriority() == Message::PRIO_ERROR);
-	assertTrue (pChannel->list().begin()->getText() == "error");
+	assert (pChannel->list().begin()->getPriority() == Message::PRIO_ERROR);
+	assert (pChannel->list().begin()->getText() == "error");
 	pChannel->list().clear();
 }
 

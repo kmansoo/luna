@@ -14,14 +14,24 @@
 
 #include "Poco/DateTime.h"
 #include "Poco/Timespan.h"
-#include "Poco/Exception.h"
-#include "Poco/Format.h"
 #include <algorithm>
 #include <cmath>
-#include <ctime>
 
 
 namespace Poco {
+
+
+inline double DateTime::toJulianDay(Timestamp::UtcTimeVal utcTime)
+{
+	double utcDays = double(utcTime)/864000000000.0;
+	return utcDays + 2299160.5; // first day of Gregorian reform (Oct 15 1582)
+}
+
+
+inline Timestamp::UtcTimeVal DateTime::toUtcTime(double julianDay)
+{
+	return Timestamp::UtcTimeVal((julianDay - 2299160.5)*864000000000.0);
+}
 
 
 DateTime::DateTime()
@@ -33,39 +43,6 @@ DateTime::DateTime()
 }
 
 
-DateTime::DateTime(const tm& tmStruct):
-	_year(tmStruct.tm_year + 1900),
-	_month(tmStruct.tm_mon + 1),
-	_day(tmStruct.tm_mday),
-	_hour(tmStruct.tm_hour),
-	_minute(tmStruct.tm_min),
-	_second(tmStruct.tm_sec),
-	_millisecond(0),
-	_microsecond(0)
-{
-	if (isValid(_year, _month, _day, _hour, _minute, _second, _millisecond, _microsecond))
-	{
-		_utcTime = toUtcTime(toJulianDay(_year, _month, _day)) + 10*(_hour*Timespan::HOURS + _minute*Timespan::MINUTES + _second*Timespan::SECONDS);
-	}
-	else
-	{
-		throw Poco::InvalidArgumentException(Poco::format("Date time is %hd-%hd-%hdT%hd:%hd:%hd.%hd.%hd\n"
-														  "Valid values:\n"
-														  "0 <= year <= 9999\n"
-														  "1 <= month <= 12\n"
-														  "1 <= day <=  %d\n"
-														  "0 <= hour <= 23\n"
-														  "0 <= minute <= 59\n"
-														  "0 <= second <= 60\n"
-														  "0 <= millisecond <= 999\n"
-														  "0 <= microsecond <= 999",
-														  _year, _month, _day, _hour, _minute,
-														  _second, _millisecond, _microsecond,
-														  daysOfMonth(_year, _month)));
-	}
-}
-
-
 DateTime::DateTime(const Timestamp& timestamp):
 	_utcTime(timestamp.utcTime())
 {
@@ -73,7 +50,7 @@ DateTime::DateTime(const Timestamp& timestamp):
 	computeDaytime();
 }
 
-
+	
 DateTime::DateTime(int year, int month, int day, int hour, int minute, int second, int millisecond, int microsecond):
 	_year(year),
 	_month(month),
@@ -84,39 +61,28 @@ DateTime::DateTime(int year, int month, int day, int hour, int minute, int secon
 	_millisecond(millisecond),
 	_microsecond(microsecond)
 {
-	if (isValid(_year, _month, _day, _hour, _minute, _second, _millisecond, _microsecond))
-	{
-		_utcTime = toUtcTime(toJulianDay(_year, _month, _day)) +
-			10 * (_hour * Timespan::HOURS + _minute * Timespan::MINUTES + _second * Timespan::SECONDS +
-				_millisecond * Timespan::MILLISECONDS + _microsecond);
-	}
-	else
-	{
-		throw Poco::InvalidArgumentException(Poco::format("Date time is %hd-%hd-%hdT%hd:%hd:%hd.%hd.%hd\n"
-			"Valid values:\n"
-			"0 <= year <= 9999\n"
-			"1 <= month <= 12\n"
-			"1 <= day <=  %d\n"
-			"0 <= hour <= 23\n"
-			"0 <= minute <= 59\n"
-			"0 <= second <= 60\n"
-			"0 <= millisecond <= 999\n"
-			"0 <= microsecond <= 999",
-			_year, _month, _day, _hour, _minute,
-			_second, _millisecond, _microsecond,
-			daysOfMonth(_year, _month)));
-	}
+	poco_assert (year >= 0 && year <= 9999);
+	poco_assert (month >= 1 && month <= 12);
+	poco_assert (day >= 1 && day <= daysOfMonth(year, month));
+	poco_assert (hour >= 0 && hour <= 23);
+	poco_assert (minute >= 0 && minute <= 59);
+	poco_assert (second >= 0 && second <= 60); // allow leap seconds
+	poco_assert (millisecond >= 0 && millisecond <= 999);
+	poco_assert (microsecond >= 0 && microsecond <= 999);
+	
+	_utcTime = toUtcTime(toJulianDay(year, month, day)) + 10*(hour*Timespan::HOURS + minute*Timespan::MINUTES + second*Timespan::SECONDS + millisecond*Timespan::MILLISECONDS + microsecond);
 }
 
-DateTime::DateTime(double otherJulianDay):
-	_utcTime(toUtcTime(otherJulianDay))
+
+DateTime::DateTime(double julianDay):
+	_utcTime(toUtcTime(julianDay))
 {
-	computeGregorian(otherJulianDay);
+	computeGregorian(julianDay);
 }
 
 
-DateTime::DateTime(Timestamp::UtcTimeVal otherUtcTime, Timestamp::TimeDiff diff):
-	_utcTime(otherUtcTime + diff*10)
+DateTime::DateTime(Timestamp::UtcTimeVal utcTime, Timestamp::TimeDiff diff):
+	_utcTime(utcTime + diff*10)
 {
 	computeGregorian(julianDay());
 	computeDaytime();
@@ -160,54 +126,44 @@ DateTime& DateTime::operator = (const DateTime& dateTime)
 }
 
 	
-DateTime& DateTime::operator = (const Timestamp& otherTimestamp)
+DateTime& DateTime::operator = (const Timestamp& timestamp)
 {
-	_utcTime = otherTimestamp.utcTime();
+	_utcTime = timestamp.utcTime();
 	computeGregorian(julianDay());
 	computeDaytime();
 	return *this;
 }
 
 
-DateTime& DateTime::operator = (double otherJulianDay)
+DateTime& DateTime::operator = (double julianDay)
 {
-	_utcTime = toUtcTime(otherJulianDay);
-	computeGregorian(otherJulianDay);
+	_utcTime = toUtcTime(julianDay);
+	computeGregorian(julianDay);
 	return *this;
 }
 
 
-DateTime& DateTime::assign(int otherYear, int otherMonth, int otherDay, int otherHour, int otherMinute, int otherSecond, int otherMillisecond, int otherMicrosecond)
+DateTime& DateTime::assign(int year, int month, int day, int hour, int minute, int second, int millisecond, int microsecond)
 {
-	if(isValid(otherYear, otherMonth, otherDay, otherHour, otherMinute, otherSecond, otherMillisecond, otherMicrosecond))
-	{
-		_utcTime     = toUtcTime(toJulianDay(otherYear, otherMonth, otherDay)) + 10*(otherHour*Timespan::HOURS + otherMinute*Timespan::MINUTES + otherSecond*Timespan::SECONDS + otherMillisecond*Timespan::MILLISECONDS + otherMicrosecond);
-		_year        = static_cast<short>(otherYear);
-		_month       = static_cast<short>(otherMonth);
-		_day         = static_cast<short>(otherDay);
-		_hour        = static_cast<short>(otherHour);
-		_minute      = static_cast<short>(otherMinute);
-		_second      = static_cast<short>(otherSecond);
-		_millisecond = static_cast<short>(otherMillisecond);
-		_microsecond = static_cast<short>(otherMicrosecond);
-	}
-	else
-	{
-		throw Poco::InvalidArgumentException(Poco::format("Date time is %d-%d-%dT%d:%d:%d:%d:%d\n"
-			"Valid values:\n"
-			"0 <= year <= 9999\n"
-			"1 <= month <= 12\n"
-			"1 <= day <=  %d\n"
-			"0 <= hour <= 23\n"
-			"0 <= minute <= 59\n"
-			"0 <= second <= 60\n"
-			"0 <= millisecond <= 999\n"
-			"0 <= microsecond <= 999",
-			_year, _month, _day, _hour, _minute,
-			_second, _millisecond, _microsecond,
-			daysOfMonth(_year, _month)));
-	}
+	poco_assert (year >= 0 && year <= 9999);
+	poco_assert (month >= 1 && month <= 12);
+	poco_assert (day >= 1 && day <= daysOfMonth(year, month));
+	poco_assert (hour >= 0 && hour <= 23);
+	poco_assert (minute >= 0 && minute <= 59);
+	poco_assert (second >= 0 && second <= 60); // allow leap seconds
+	poco_assert (millisecond >= 0 && millisecond <= 999);
+	poco_assert (microsecond >= 0 && microsecond <= 999);
 
+	_utcTime     = toUtcTime(toJulianDay(year, month, day)) + 10*(hour*Timespan::HOURS + minute*Timespan::MINUTES + second*Timespan::SECONDS + millisecond*Timespan::MILLISECONDS + microsecond);
+	_year        = year;
+	_month       = month;
+	_day         = day;
+	_hour        = hour;
+	_minute      = minute;
+	_second      = second;
+	_millisecond = millisecond;
+	_microsecond = microsecond;
+	
 	return *this;
 }
 
@@ -235,8 +191,8 @@ int DateTime::dayOfWeek() const
 int DateTime::dayOfYear() const
 {
 	int doy = 0;
-	for (int currentMonth = 1; currentMonth < _month; ++currentMonth)
-		doy += daysOfMonth(_year, currentMonth);
+	for (int month = 1; month < _month; ++month)
+		doy += daysOfMonth(_year, month);
 	doy += _day;
 	return doy;
 }
@@ -278,7 +234,7 @@ int DateTime::week(int firstDayOfWeek) const
 	while (DateTime(_year, 1, baseDay).dayOfWeek() != firstDayOfWeek) ++baseDay;
 
 	int doy  = dayOfYear();
-	int offs = baseDay <= 4 ? 0 : 1;
+	int offs = baseDay <= 4 ? 0 : 1; 
 	if (doy < baseDay)
 		return offs;
 	else
@@ -328,28 +284,6 @@ DateTime& DateTime::operator -= (const Timespan& span)
 }
 
 
-tm DateTime::makeTM() const
-{
-	tm tmStruct;
-
-	tmStruct.tm_sec = _second;
-	tmStruct.tm_min = _minute;
-	tmStruct.tm_hour = _hour;
-	tmStruct.tm_mday = _day;
-	poco_assert (_month > 0);
-	tmStruct.tm_mon = _month - 1;
-	poco_assert (_year >= 1900);
-	tmStruct.tm_year = _year - 1900;
-	tmStruct.tm_wday = dayOfWeek();
-	int doy = dayOfYear();
-	poco_assert (_year >0);
-	tmStruct.tm_yday = doy - 1;
-	tmStruct.tm_isdst = -1;
-
-	return tmStruct;
-}
-
-
 void DateTime::makeUTC(int tzd)
 {
 	operator -= (Timespan(((Timestamp::TimeDiff) tzd)*Timespan::SECONDS));
@@ -366,7 +300,7 @@ double DateTime::toJulianDay(int year, int month, int day, int hour, int minute,
 {
 	// lookup table for (153*month - 457)/5 - note that 3 <= month <= 14.
 	static int lookup[] = {-91, -60, -30, 0, 31, 61, 92, 122, 153, 184, 214, 245, 275, 306, 337};
-
+ 
 	// day to double
 	double dday = double(day) + ((double((hour*60 + minute)*60 + second)*1000 + millisecond)*1000 + microsecond)/86400000000.0;
 	if (month < 3)
@@ -399,7 +333,7 @@ void DateTime::normalize()
 
 	if (_day > daysOfMonth(_year, _month))
 	{
-		_day -= static_cast<short>(daysOfMonth(_year, _month));
+		_day -= daysOfMonth(_year, _month);
 		if (++_month > 12)
 		{
 			++_year;
@@ -409,10 +343,10 @@ void DateTime::normalize()
 }
 
 
-void DateTime::computeGregorian(double otherJulianDay)
+void DateTime::computeGregorian(double julianDay)
 {
-	double z    = std::floor(otherJulianDay - 1721118.5);
-	double r    = otherJulianDay - 1721118.5 - z;
+	double z    = std::floor(julianDay - 1721118.5);
+	double r    = julianDay - 1721118.5 - z;
 	double g    = z - 0.25;
 	double a    = std::floor(g / 36524.25);
 	double b    = a - std::floor(a/4);
@@ -456,10 +390,10 @@ void DateTime::computeGregorian(double otherJulianDay)
 void DateTime::computeDaytime()
 {
 	Timespan span(_utcTime/10);
-	int spanHour = span.hours();
+	int hour = span.hours();
 	// Due to double rounding issues, the previous call to computeGregorian()
 	// may have crossed into the next or previous day. We need to correct that.
-	if (spanHour == 23 && _hour == 0)
+	if (hour == 23 && _hour == 0)
 	{
 		_day--;
 		if (_day == 0)
@@ -470,10 +404,10 @@ void DateTime::computeDaytime()
 				_month = 12;
 				_year--;
 			}
-			_day = static_cast<short>(daysOfMonth(_year, _month));
+			_day = daysOfMonth(_year, _month);
 		}
 	}
-	else if (spanHour == 0 && _hour == 23)
+	else if (hour == 0 && _hour == 23)
 	{
 		_day++;
 		if (_day > daysOfMonth(_year, _month))
@@ -487,11 +421,11 @@ void DateTime::computeDaytime()
 			_day = 1;
 		}
 	}
-	_hour        = static_cast<short>(spanHour);
-	_minute      = static_cast<short>(span.minutes());
-	_second      = static_cast<short>(span.seconds());
-	_millisecond = static_cast<short>(span.milliseconds());
-	_microsecond = static_cast<short>(span.microseconds());
+	_hour        = hour;
+	_minute      = span.minutes();
+	_second      = span.seconds();
+	_millisecond = span.milliseconds();
+	_microsecond = span.microseconds();
 }
 
 

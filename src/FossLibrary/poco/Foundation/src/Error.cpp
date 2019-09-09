@@ -15,9 +15,6 @@
 #include "Poco/Foundation.h"
 #include "Poco/UnicodeConverter.h"
 #include "Poco/Error.h"
-#ifdef POCO_OS_FAMILY_WINDOWS
-#include "Poco/UnWindows.h"
-#endif
 #include <string>
 #include <string.h>
 #include <errno.h>
@@ -29,44 +26,88 @@ namespace Poco {
 #ifdef POCO_OS_FAMILY_WINDOWS
 
 
-	Poco::UInt32 Error::last()
+	DWORD Error::last()
 	{
 		return GetLastError();
 	}
 
 
-	std::string Error::getMessage(Poco::UInt32 errorCode)
+	std::string Error::getMessage(DWORD errorCode)
 	{
 		std::string errMsg;
 		DWORD dwFlg = FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
-	#if !defined(POCO_NO_WSTRING)
+	#if defined(POCO_WIN32_UTF8) && !defined(POCO_NO_WSTRING)
 		LPWSTR lpMsgBuf = 0;
 		if (FormatMessageW(dwFlg, 0, errorCode, 0, (LPWSTR) & lpMsgBuf, 0, NULL))
 			UnicodeConverter::toUTF8(lpMsgBuf, errMsg);
-		LocalFree(lpMsgBuf);
+	#else
+		LPTSTR lpMsgBuf = 0;
+		if (FormatMessageA(dwFlg, 0, errorCode, 0, (LPTSTR) & lpMsgBuf, 0, NULL))
+			errMsg = lpMsgBuf;
 	#endif
-
+		LocalFree(lpMsgBuf);
 		return errMsg;
 	}
 
 
 #else
 
-	
+
 	int Error::last()
 	{
 		return errno;
 	}
 
 
+	class StrErrorHelper
+		/// This little hack magically handles all variants
+		/// of strerror_r() (POSIX and GLIBC) and strerror().
+	{
+	public:
+		explicit StrErrorHelper(int err)
+		{
+			_buffer[0] = 0;
+
+#if (_XOPEN_SOURCE >= 600) || POCO_OS == POCO_OS_ANDROID || __APPLE__
+			setMessage(strerror_r(err, _buffer, sizeof(_buffer)));
+#elif _GNU_SOURCE
+			setMessage(strerror_r(err, _buffer, sizeof(_buffer)));
+#else
+			setMessage(strerror(err));
+#endif		
+		}
+		
+		~StrErrorHelper()
+		{
+		}
+		
+		const std::string& message() const
+		{
+			return _message;
+		}
+		
+	protected:
+		void setMessage(int rc)
+			/// Handles POSIX variant
+		{
+			_message = _buffer;
+		}
+		
+		void setMessage(const char* msg)
+			/// Handles GLIBC variant
+		{
+			_message = msg;
+		}
+		
+	private:
+		char _buffer[256];
+		std::string _message;
+	};
+
 	std::string Error::getMessage(int errorCode)
 	{
-#if defined _GNU_SOURCE || (_XOPEN_SOURCE >= 600) || POCO_OS == POCO_OS_ANDROID || __APPLE__
-		char errmsg[256] = "";
-		return std::string(strerror_result(strerror_r(errorCode, errmsg, sizeof(errmsg)), errmsg));
-#else
-		return std::string(strerror(errorCode));
-#endif
+		StrErrorHelper helper(errorCode);
+		return helper.message();
 	}
 
 

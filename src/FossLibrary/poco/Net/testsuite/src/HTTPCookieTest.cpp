@@ -9,8 +9,8 @@
 
 
 #include "HTTPCookieTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Net/HTTPCookie.h"
 #include "Poco/Timestamp.h"
 #include "Poco/Timespan.h"
@@ -46,64 +46,64 @@ HTTPCookieTest::~HTTPCookieTest()
 void HTTPCookieTest::testCookie()
 {
 	HTTPCookie cookie("name", "value");
-	assertTrue (cookie.getName() == "name");
-	assertTrue (cookie.getValue() == "value");
-	assertTrue (cookie.toString() == "name=value");
+	assert (cookie.getName() == "name");
+	assert (cookie.getValue() == "value");
+	assert (cookie.toString() == "name=value");
 	cookie.setPath("/");
-	assertTrue (cookie.toString() == "name=value; path=/");
+	assert (cookie.toString() == "name=value; path=/");
 	cookie.setComment("comment");
-	assertTrue (cookie.toString() == "name=value; path=/");
+	assert (cookie.toString() == "name=value; path=/");
 	cookie.setDomain("appinf.com");
-	assertTrue (cookie.toString() == "name=value; domain=appinf.com; path=/");
+	assert (cookie.toString() == "name=value; domain=appinf.com; path=/");
 	cookie.setSecure(true);
-	assertTrue (cookie.toString() == "name=value; domain=appinf.com; path=/; secure");
+	assert (cookie.toString() == "name=value; domain=appinf.com; path=/; secure");
 	cookie.setHttpOnly(true);
-	assertTrue (cookie.toString() == "name=value; domain=appinf.com; path=/; secure; HttpOnly");
+	assert (cookie.toString() == "name=value; domain=appinf.com; path=/; secure; HttpOnly");
 	cookie.setPriority("Low");
-	assertTrue (cookie.toString() == "name=value; domain=appinf.com; path=/; Priority=Low; secure; HttpOnly");
+	assert (cookie.toString() == "name=value; domain=appinf.com; path=/; Priority=Low; secure; HttpOnly");
 	cookie.setPriority("Medium");
-	assertTrue (cookie.toString() == "name=value; domain=appinf.com; path=/; Priority=Medium; secure; HttpOnly");
+	assert (cookie.toString() == "name=value; domain=appinf.com; path=/; Priority=Medium; secure; HttpOnly");
 	cookie.setPriority("High");
-	assertTrue (cookie.toString() == "name=value; domain=appinf.com; path=/; Priority=High; secure; HttpOnly");
+	assert (cookie.toString() == "name=value; domain=appinf.com; path=/; Priority=High; secure; HttpOnly");
 	cookie.setPriority("");
 	cookie.setHttpOnly(false);
 
 	cookie.setVersion(1);
-	assertTrue (cookie.toString() == "name=\"value\"; Comment=\"comment\"; Domain=\"appinf.com\"; Path=\"/\"; secure; Version=\"1\"");
+	assert (cookie.toString() == "name=\"value\"; Comment=\"comment\"; Domain=\"appinf.com\"; Path=\"/\"; secure; Version=\"1\"");
 	
 	cookie.setSecure(false);
 	cookie.setMaxAge(100);
-	assertTrue (cookie.toString() == "name=\"value\"; Comment=\"comment\"; Domain=\"appinf.com\"; Path=\"/\"; Max-Age=\"100\"; Version=\"1\"");
+	assert (cookie.toString() == "name=\"value\"; Comment=\"comment\"; Domain=\"appinf.com\"; Path=\"/\"; Max-Age=\"100\"; Version=\"1\"");
 	
 	cookie.setHttpOnly(true);
-	assertTrue (cookie.toString() == "name=\"value\"; Comment=\"comment\"; Domain=\"appinf.com\"; Path=\"/\"; Max-Age=\"100\"; HttpOnly; Version=\"1\"");
+	assert (cookie.toString() == "name=\"value\"; Comment=\"comment\"; Domain=\"appinf.com\"; Path=\"/\"; Max-Age=\"100\"; HttpOnly; Version=\"1\"");
 
 	cookie.setPriority("Low");
-	assertTrue (cookie.toString() == "name=\"value\"; Comment=\"comment\"; Domain=\"appinf.com\"; Path=\"/\"; Priority=\"Low\"; Max-Age=\"100\"; HttpOnly; Version=\"1\"");
+	assert (cookie.toString() == "name=\"value\"; Comment=\"comment\"; Domain=\"appinf.com\"; Path=\"/\"; Priority=\"Low\"; Max-Age=\"100\"; HttpOnly; Version=\"1\"");
 	cookie.setPriority("Medium");
-	assertTrue (cookie.toString() == "name=\"value\"; Comment=\"comment\"; Domain=\"appinf.com\"; Path=\"/\"; Priority=\"Medium\"; Max-Age=\"100\"; HttpOnly; Version=\"1\"");
+	assert (cookie.toString() == "name=\"value\"; Comment=\"comment\"; Domain=\"appinf.com\"; Path=\"/\"; Priority=\"Medium\"; Max-Age=\"100\"; HttpOnly; Version=\"1\"");
 	cookie.setPriority("High");
-	assertTrue (cookie.toString() == "name=\"value\"; Comment=\"comment\"; Domain=\"appinf.com\"; Path=\"/\"; Priority=\"High\"; Max-Age=\"100\"; HttpOnly; Version=\"1\"");	
+	assert (cookie.toString() == "name=\"value\"; Comment=\"comment\"; Domain=\"appinf.com\"; Path=\"/\"; Priority=\"High\"; Max-Age=\"100\"; HttpOnly; Version=\"1\"");	
 }
 
 
 void HTTPCookieTest::testEscape()
 {
 	std::string escaped = HTTPCookie::escape("this is a test.");
-	assertTrue (escaped == "this%20is%20a%20test.");
+	assert (escaped == "this%20is%20a%20test.");
 
 	escaped = HTTPCookie::escape("\n\t@,;\"'");
-	assertTrue (escaped == "%0A%09@%2C%3B%22%27");
+	assert (escaped == "%0A%09@%2C%3B%22%27");
 }
 
 
 void HTTPCookieTest::testUnescape()
 {
 	std::string unescaped = HTTPCookie::unescape("this%20is%20a%20test!");
-	assertTrue (unescaped == "this is a test!");
+	assert (unescaped == "this is a test!");
 
 	unescaped = HTTPCookie::unescape("%0a%09@%2c%3b%22%27");
-	assertTrue (unescaped == "\n\t@,;\"'");
+	assert (unescaped == "\n\t@,;\"'");
 }
 
 
@@ -174,11 +174,11 @@ void HTTPCookieTest::testCookieExpiry(DateTime expiryTime)
 
 	//assert that the cookie's expiry time reflects the time passed to
 	//its constructor, within a delta of the lifetime of the cookie
-	assertTrue (cookieExpireTime - expiryTime <= delta);
+	assert (cookieExpireTime - expiryTime <= delta);
 	//assert that the cookie's max age is the number of seconds between
 	//the creation of the cookie and the expiry time passed to its
 	//constuctor, within a delta of the lifetime of the cookie
-	assertTrue (cookieMaxAge - expectedMaxAge <= delta.seconds());
+	assert (cookieMaxAge - expectedMaxAge <= delta.seconds());
 }
 
 

@@ -9,8 +9,8 @@
 
 
 #include "StreamConverterTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/StreamConverter.h"
 #include "Poco/ASCIIEncoding.h"
 #include "Poco/Latin1Encoding.h"
@@ -27,7 +27,7 @@ using Poco::ASCIIEncoding;
 using Poco::StreamCopier;
 
 
-StreamConverterTest::StreamConverterTest(const std::string& rName): CppUnit::TestCase(rName)
+StreamConverterTest::StreamConverterTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -45,22 +45,22 @@ void StreamConverterTest::testIdentityASCIIIn()
 	std::ostringstream ostr1;
 	InputStreamConverter converter1(istr1, encoding, encoding);
 	StreamCopier::copyStream(converter1, ostr1);
-	assertTrue (ostr1.str() == "");
-	assertTrue (converter1.errors() == 0);
+	assert (ostr1.str() == "");
+	assert (converter1.errors() == 0);
 	
 	std::istringstream istr2("foo bar");
 	std::ostringstream ostr2;
 	InputStreamConverter converter2(istr2, encoding, encoding);
 	StreamCopier::copyStream(converter2, ostr2);
-	assertTrue (ostr2.str() == "foo bar");
-	assertTrue (converter2.errors() == 0);
+	assert (ostr2.str() == "foo bar");
+	assert (converter2.errors() == 0);
 
 	std::istringstream istr3("x");
 	std::ostringstream ostr3;
 	InputStreamConverter converter3(istr3, encoding, encoding);
 	StreamCopier::copyStream(converter3, ostr3);
-	assertTrue (ostr3.str() == "x");
-	assertTrue (converter3.errors() == 0);
+	assert (ostr3.str() == "x");
+	assert (converter3.errors() == 0);
 }
 
 
@@ -71,20 +71,20 @@ void StreamConverterTest::testIdentityASCIIOut()
 	std::ostringstream ostr1;
 	OutputStreamConverter converter1(ostr1, encoding, encoding);
 	converter1 << "";
-	assertTrue (ostr1.str() == "");
-	assertTrue (converter1.errors() == 0);
+	assert (ostr1.str() == "");
+	assert (converter1.errors() == 0);
 	
 	std::ostringstream ostr2;
 	OutputStreamConverter converter2(ostr2, encoding, encoding);
 	converter2 << "foo bar";
-	assertTrue (ostr2.str() == "foo bar");
-	assertTrue (converter2.errors() == 0);
+	assert (ostr2.str() == "foo bar");
+	assert (converter2.errors() == 0);
 
 	std::ostringstream ostr3;
 	OutputStreamConverter converter3(ostr3, encoding, encoding);
 	converter3 << "x";
-	assertTrue (ostr3.str() == "x");
-	assertTrue (converter3.errors() == 0);
+	assert (ostr3.str() == "x");
+	assert (converter3.errors() == 0);
 }
 
 
@@ -96,22 +96,22 @@ void StreamConverterTest::testIdentityUTF8In()
 	std::ostringstream ostr1;
 	InputStreamConverter converter1(istr1, encoding, encoding);
 	StreamCopier::copyStream(converter1, ostr1);
-	assertTrue (ostr1.str() == "");
-	assertTrue (converter1.errors() == 0);
+	assert (ostr1.str() == "");
+	assert (converter1.errors() == 0);
 	
 	std::istringstream istr2("foo bar");
 	std::ostringstream ostr2;
 	InputStreamConverter converter2(istr2, encoding, encoding);
 	StreamCopier::copyStream(converter2, ostr2);
-	assertTrue (ostr2.str() == "foo bar");
-	assertTrue (converter2.errors() == 0);
+	assert (ostr2.str() == "foo bar");
+	assert (converter2.errors() == 0);
 
 	std::istringstream istr3("x");
 	std::ostringstream ostr3;
 	InputStreamConverter converter3(istr3, encoding, encoding);
 	StreamCopier::copyStream(converter3, ostr3);
-	assertTrue (ostr3.str() == "x");
-	assertTrue (converter3.errors() == 0);
+	assert (ostr3.str() == "x");
+	assert (converter3.errors() == 0);
 	
 	const unsigned char greek[] = {0x20, 0xce, 0xba, 0xe1, 0xbd, 0xb9, 0xcf, 0x83, 0xce, 0xbc, 0xce, 0xb5, 0x20, 0x00};
 	std::string text((const char*) greek);
@@ -120,8 +120,8 @@ void StreamConverterTest::testIdentityUTF8In()
 	std::ostringstream ostr4;
 	InputStreamConverter converter4(istr4, encoding, encoding);
 	StreamCopier::copyStream(converter4, ostr4);
-	assertTrue (ostr4.str() == text);
-	assertTrue (converter4.errors() == 0);
+	assert (ostr4.str() == text);
+	assert (converter4.errors() == 0);
 
 	const unsigned char supp[] = {0x41, 0x42, 0xf0, 0x90, 0x82, 0xa4, 0xf0, 0xaf, 0xa6, 0xa0, 0xf0, 0xaf, 0xa8, 0x9d, 0x00};
 	std::string text2((const char*) supp);
@@ -130,8 +130,8 @@ void StreamConverterTest::testIdentityUTF8In()
 	std::ostringstream ostr5;
 	InputStreamConverter converter5(istr5, encoding, encoding);
 	StreamCopier::copyStream(converter5, ostr5);
-	assertTrue (ostr5.str() == text2);
-	assertTrue (converter5.errors() == 0);
+	assert (ostr5.str() == text2);
+	assert (converter5.errors() == 0);
 
 
 }
@@ -144,20 +144,20 @@ void StreamConverterTest::testIdentityUTF8Out()
 	std::ostringstream ostr1;
 	OutputStreamConverter converter1(ostr1, encoding, encoding);
 	converter1 << "";
-	assertTrue (ostr1.str() == "");
-	assertTrue (converter1.errors() == 0);
+	assert (ostr1.str() == "");
+	assert (converter1.errors() == 0);
 	
 	std::ostringstream ostr2;
 	OutputStreamConverter converter2(ostr2, encoding, encoding);
 	converter2 << "foo bar";
-	assertTrue (ostr2.str() == "foo bar");
-	assertTrue (converter2.errors() == 0);
+	assert (ostr2.str() == "foo bar");
+	assert (converter2.errors() == 0);
 
 	std::ostringstream ostr3;
 	OutputStreamConverter converter3(ostr3, encoding, encoding);
 	converter3 << "x";
-	assertTrue (ostr3.str() == "x");
-	assertTrue (converter3.errors() == 0);
+	assert (ostr3.str() == "x");
+	assert (converter3.errors() == 0);
 	
 	const unsigned char greek[] = {0x20, 0xce, 0xba, 0xe1, 0xbd, 0xb9, 0xcf, 0x83, 0xce, 0xbc, 0xce, 0xb5, 0x20, 0x00};
 	std::string text((const char*) greek);
@@ -165,8 +165,8 @@ void StreamConverterTest::testIdentityUTF8Out()
 	std::ostringstream ostr4;
 	OutputStreamConverter converter4(ostr4, encoding, encoding);
 	converter4 << text;
-	assertTrue (ostr4.str() == text);
-	assertTrue (converter4.errors() == 0);
+	assert (ostr4.str() == text);
+	assert (converter4.errors() == 0);
 }
 
 
@@ -182,15 +182,15 @@ void StreamConverterTest::testUTF8toASCIIIn()
 	std::ostringstream ostr1;
 	InputStreamConverter converter1(istr1, utf8Encoding, asciiEncoding);
 	StreamCopier::copyStream(converter1, ostr1);
-	assertTrue (ostr1.str() == " ????? AB");
-	assertTrue (converter1.errors() == 0);
+	assert (ostr1.str() == " ????? AB");
+	assert (converter1.errors() == 0);
 
 	std::istringstream istr2("abcde");
 	std::ostringstream ostr2;
 	InputStreamConverter converter2(istr2, utf8Encoding, asciiEncoding);
 	StreamCopier::copyStream(converter2, ostr2);
-	assertTrue (ostr2.str() == "abcde");
-	assertTrue (converter2.errors() == 0);
+	assert (ostr2.str() == "abcde");
+	assert (converter2.errors() == 0);
 }
 
 
@@ -205,14 +205,14 @@ void StreamConverterTest::testUTF8toASCIIOut()
 	std::ostringstream ostr1;
 	OutputStreamConverter converter1(ostr1, utf8Encoding, asciiEncoding);
 	converter1 << text;
-	assertTrue (ostr1.str() == " ????? AB");
-	assertTrue (converter1.errors() == 0);
+	assert (ostr1.str() == " ????? AB");
+	assert (converter1.errors() == 0);
 
 	std::ostringstream ostr2;
 	OutputStreamConverter converter2(ostr2, utf8Encoding, asciiEncoding);
 	converter2 << "abcde";
-	assertTrue (ostr2.str() == "abcde");
-	assertTrue (converter2.errors() == 0);
+	assert (ostr2.str() == "abcde");
+	assert (converter2.errors() == 0);
 }
 
 
@@ -230,8 +230,8 @@ void StreamConverterTest::testLatin1toUTF8In()
 	std::ostringstream ostr1;
 	InputStreamConverter converter1(istr1, latin1Encoding, utf8Encoding);
 	StreamCopier::copyStream(converter1, ostr1);
-	assertTrue (ostr1.str() == utf8Text);
-	assertTrue (converter1.errors() == 0);
+	assert (ostr1.str() == utf8Text);
+	assert (converter1.errors() == 0);
 }
 
 
@@ -248,8 +248,8 @@ void StreamConverterTest::testLatin1toUTF8Out()
 	std::ostringstream ostr1;
 	OutputStreamConverter converter1(ostr1, latin1Encoding, utf8Encoding);
 	converter1 << latin1Text;
-	assertTrue (ostr1.str() == utf8Text);
-	assertTrue (converter1.errors() == 0);
+	assert (ostr1.str() == utf8Text);
+	assert (converter1.errors() == 0);
 }
 
 
@@ -265,7 +265,7 @@ void StreamConverterTest::testErrorsIn()
 	std::ostringstream ostr1;
 	InputStreamConverter converter1(istr1, utf8Encoding, latin1Encoding);
 	StreamCopier::copyStream(converter1, ostr1);
-	assertTrue (converter1.errors() == 2);
+	assert (converter1.errors() == 2);
 }
 
 
@@ -280,7 +280,7 @@ void StreamConverterTest::testErrorsOut()
 	std::ostringstream ostr1;
 	OutputStreamConverter converter1(ostr1, utf8Encoding, latin1Encoding);
 	converter1 << badText;
-	assertTrue (converter1.errors() == 1);
+	assert (converter1.errors() == 1);
 }
 
 

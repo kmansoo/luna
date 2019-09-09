@@ -9,8 +9,8 @@
 
 
 #include "LinearHashTableTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/LinearHashTable.h"
 #include "Poco/HashTable.h"
 #include "Poco/Stopwatch.h"
@@ -26,7 +26,7 @@ using Poco::Stopwatch;
 using Poco::NumberFormatter;
 
 
-LinearHashTableTest::LinearHashTableTest(const std::string& rName): CppUnit::TestCase(rName)
+LinearHashTableTest::LinearHashTableTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -42,36 +42,36 @@ void LinearHashTableTest::testInsert()
 
 	LinearHashTable<int, Hash<int> > ht;
 	
-	assertTrue (ht.empty());
+	assert (ht.empty());
 	
 	for (int i = 0; i < N; ++i)
 	{
 		std::pair<LinearHashTable<int, Hash<int> >::Iterator, bool> res = ht.insert(i);
-		assertTrue (*res.first == i);
-		assertTrue (res.second);
+		assert (*res.first == i);
+		assert (res.second);
 		LinearHashTable<int, Hash<int> >::Iterator it = ht.find(i);
-		assertTrue (it != ht.end());
-		assertTrue (*it == i);
-		assertTrue (ht.size() == i + 1);
+		assert (it != ht.end());
+		assert (*it == i);
+		assert (ht.size() == i + 1);
 	}		
-	assertTrue (ht.buckets() == N + 1);
+	assert (ht.buckets() == N + 1);
 	
-	assertTrue (!ht.empty());
+	assert (!ht.empty());
 	
 	for (int i = 0; i < N; ++i)
 	{
 		LinearHashTable<int, Hash<int> >::Iterator it = ht.find(i);
-		assertTrue (it != ht.end());
-		assertTrue (*it == i);
+		assert (it != ht.end());
+		assert (*it == i);
 	}
 	
 	for (int i = 0; i < N; ++i)
 	{
 		std::pair<LinearHashTable<int, Hash<int> >::Iterator, bool> res = ht.insert(i);
-		assertTrue (*res.first == i);
-		assertTrue (!res.second);
-		assertTrue (ht.size() == N);
-		assertTrue (ht.buckets() == N + 1);
+		assert (*res.first == i);
+		assert (!res.second);
+		assert (ht.size() == N);
+		assert (ht.buckets() == N + 1);
 	}		
 }
 
@@ -86,27 +86,27 @@ void LinearHashTableTest::testErase()
 	{
 		ht.insert(i);
 	}
-	assertTrue (ht.size() == N);
+	assert (ht.size() == N);
 	
 	for (int i = 0; i < N; i += 2)
 	{
 		ht.erase(i);
 		LinearHashTable<int, Hash<int> >::Iterator it = ht.find(i);
-		assertTrue (it == ht.end());
+		assert (it == ht.end());
 	}
-	assertTrue (ht.size() == N/2);
+	assert (ht.size() == N/2);
 	
 	for (int i = 0; i < N; i += 2)
 	{
 		LinearHashTable<int, Hash<int> >::Iterator it = ht.find(i);
-		assertTrue (it == ht.end());
+		assert (it == ht.end());
 	}
 	
 	for (int i = 1; i < N; i += 2)
 	{
 		LinearHashTable<int, Hash<int> >::Iterator it = ht.find(i);
-		assertTrue (it != ht.end());
-		assertTrue (*it == i);
+		assert (it != ht.end());
+		assert (*it == i);
 	}
 
 	for (int i = 0; i < N; i += 2)
@@ -117,8 +117,8 @@ void LinearHashTableTest::testErase()
 	for (int i = 0; i < N; ++i)
 	{
 		LinearHashTable<int, Hash<int> >::Iterator it = ht.find(i);
-		assertTrue (it != ht.end());
-		assertTrue (*it == i);
+		assert (it != ht.end());
+		assert (*it == i);
 	}
 }
 
@@ -138,12 +138,12 @@ void LinearHashTableTest::testIterator()
 	LinearHashTable<int, Hash<int> >::Iterator it = ht.begin();
 	while (it != ht.end())
 	{
-		assertTrue (values.find(*it) == values.end());
+		assert (values.find(*it) == values.end());
 		values.insert(*it);
 		++it;
 	}
 	
-	assertTrue (values.size() == N);
+	assert (values.size() == N);
 }
 
 
@@ -162,12 +162,12 @@ void LinearHashTableTest::testConstIterator()
 	LinearHashTable<int, Hash<int> >::ConstIterator it = ht.begin();
 	while (it != ht.end())
 	{
-		assertTrue (values.find(*it) == values.end());
+		assert (values.find(*it) == values.end());
 		values.insert(*it);
 		++it;
 	}
 	
-	assertTrue (values.size() == N);
+	assert (values.size() == N);
 	
 	values.clear();
 	const LinearHashTable<int, Hash<int> > cht(ht);
@@ -175,12 +175,12 @@ void LinearHashTableTest::testConstIterator()
 	LinearHashTable<int, Hash<int> >::ConstIterator cit = cht.begin();
 	while (cit != cht.end())
 	{
-		assertTrue (values.find(*cit) == values.end());
+		assert (values.find(*cit) == values.end());
 		values.insert(*cit);
 		++cit;
 	}
 	
-	assertTrue (values.size() == N);	
+	assert (values.size() == N);	
 }
 
 

@@ -28,15 +28,15 @@ class Foundation_API Clock
 	/// A Clock stores a monotonic* clock value
 	/// with (theoretical) microseconds resolution.
 	/// Clocks can be compared with each other
-	/// and simple arithmetic is supported.
+	/// and simple arithmetics are supported.
 	///
 	/// [*] Note that Clock values are only monotonic if
 	/// the operating system provides a monotonic clock.
 	/// The monotonic() function can be used to check whether
 	/// the system's clock is monotonic.
 	///
-	/// Monotonic Clock is available on Windows, Linux, OS X
-	/// and on POSIX platforms supporting clock_gettime() with CLOCK_MONOTONIC.	
+	/// Monotonic Clock is available on Windows, Linux, OS X 
+	/// and on POSIX platforms supporting clock_gettime() with CLOCK_MONOTONIC.	  
 	///
 	/// Clock values are relative to a system-dependent epoch time
 	/// (usually the system's startup time) and have no relation
@@ -108,7 +108,7 @@ public:
 	
 	static ClockDiff resolution();
 		/// Returns the resolution in units per second.
-		/// Since the Clock class has microsecond resolution,
+		/// Since the Clock clas has microsecond resolution,
 		/// the returned value is always 1000000.
 		
 	static ClockDiff accuracy();

@@ -22,14 +22,7 @@
 #include "Poco/Exception.h"
 
 
-// TODO: std::shared_timed_mutex has separate read and write unlock
-
-//#define POCO_CXX11_RWLOCK_FINISHED
-
-
-#if defined(POCO_CXX11_RWLOCK_FINISHED) && defined(POCO_ENABLE_CPP14)
-#include "Poco/RWLock_STD.h"
-#elif defined(POCO_OS_FAMILY_WINDOWS)
+#if defined(POCO_OS_FAMILY_WINDOWS)
 #if defined(_WIN32_WCE)
 #include "Poco/RWLock_WINCE.h"
 #else
@@ -76,13 +69,13 @@ public:
 		/// false if another thread currently holds a write lock.
 
 	void writeLock();
-		/// Acquires a write lock. If one or more other threads currently hold
+		/// Acquires a write lock. If one or more other threads currently hold 
 		/// locks, waits until all locks are released. The results are undefined
 		/// if the same thread already holds a read or write lock
 
 	bool tryWriteLock();
 		/// Tries to acquire a write lock. Immediately returns true if successful,
-		/// or false if one or more other threads currently hold
+		/// or false if one or more other threads currently hold 
 		/// locks. The result is undefined if the same thread already
 		/// holds a read or write lock.
 

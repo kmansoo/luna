@@ -5,7 +5,7 @@
 // Package: Filesystem
 // Module:  Path
 //
-// Copyright (c) 2006, Applied Informatics Software Engineering GmbH.
+// Copyright (c) 2004-2006, Applied Informatics Software Engineering GmbH.
 // and Contributors.
 //
 // SPDX-License-Identifier:	BSL-1.0
@@ -14,9 +14,6 @@
 
 #include "Poco/Path_WIN32.h"
 #include "Poco/Environment_WIN32.h"
-#include "Poco/UnicodeConverter.h"
-#include "Poco/Buffer.h"
-#include "Poco/Exception.h"
 #include "Poco/UnWindows.h"
 
 
@@ -25,38 +22,31 @@ namespace Poco {
 
 std::string PathImpl::currentImpl()
 {
-	std::string result;
-	DWORD len = GetCurrentDirectoryW(0, NULL);
-	if (len > 0)
+	char buffer[MAX_PATH];
+	DWORD n = GetCurrentDirectoryA(sizeof(buffer), buffer);
+	if (n > 0 && n < sizeof(buffer))
 	{
-		Buffer<wchar_t> buffer(len);
-		DWORD n = GetCurrentDirectoryW(len, buffer.begin());
-		if (n > 0 && n <= len)
-		{
-			UnicodeConverter::toUTF8(buffer.begin(), result);
-			if (result[result.size() - 1] != '\\')
-				result.append("\\");
-			return result;
-		}
+		std::string result(buffer, n);
+		if (result[n - 1] != '\\')
+			result.append("\\");
+		return result;
 	}
-	throw SystemException("Cannot get current directory");
+	else throw SystemException("Cannot get current directory");
 }
 
 
 std::string PathImpl::systemImpl()
 {
-	Buffer<wchar_t> buffer(MAX_PATH_LEN);
-	DWORD n = GetSystemDirectoryW(buffer.begin(), static_cast<DWORD>(buffer.size()));
-	if (n > 0)
+	char buffer[MAX_PATH];
+	DWORD n = GetSystemDirectoryA(buffer, sizeof(buffer));
+	if (n > 0 && n < sizeof(buffer))
 	{
-		n = GetLongPathNameW(buffer.begin(), buffer.begin(), static_cast<DWORD>(buffer.size()));
-		if (n <= 0) throw SystemException("Cannot get system directory long path name");
-		std::string result;
-		UnicodeConverter::toUTF8(buffer.begin(), result);
-		if (result[result.size() - 1] != '\\') result.append("\\");
+		std::string result(buffer, n);
+		if (result[n - 1] != '\\')
+			result.append("\\");
 		return result;
 	}
-	throw SystemException("Cannot get temporary directory path");
+	else throw SystemException("Cannot get system directory");
 }
 
 
@@ -88,7 +78,7 @@ std::string PathImpl::configHomeImpl()
 {
 	std::string result;
 
-	// if APPDATA environment variable no exist, return home directory instead
+	// if APPDATA environment variable not exist, return home directory instead
 	try
 	{
 		result = EnvironmentImpl::getImpl("APPDATA");
@@ -109,7 +99,7 @@ std::string PathImpl::dataHomeImpl()
 {
 	std::string result;
 
-	// if LOCALAPPDATA environment variable no exist, return config home instead
+	// if LOCALAPPDATA environment variable not exist, return config home instead
 	try
 	{
 		result = EnvironmentImpl::getImpl("LOCALAPPDATA");
@@ -132,38 +122,26 @@ std::string PathImpl::cacheHomeImpl()
 }
 
 
-std::string PathImpl::selfImpl()
+std::string PathImpl::tempHomeImpl()
 {
-	Buffer<wchar_t> buffer(MAX_PATH_LEN);
-	DWORD n = GetModuleFileNameW(NULL, buffer.begin(), static_cast<DWORD>(buffer.size()));
-	DWORD err = GetLastError();
-	if (n > 0)
-	{
-		if (err == ERROR_INSUFFICIENT_BUFFER)
-			throw SystemException("Buffer too small to get executable name.");
-		std::string result;
-		UnicodeConverter::toUTF8(buffer.begin(), result);
-		return result;
-	}
-	throw SystemException("Cannot get executable name.");
+	return tempImpl();
 }
 
 
 std::string PathImpl::tempImpl()
 {
-	Buffer<wchar_t> buffer(MAX_PATH_LEN);
-	DWORD n = GetTempPathW(static_cast<DWORD>(buffer.size()), buffer.begin());
-	if (n > 0)
+	char buffer[MAX_PATH];
+	DWORD n = GetTempPathA(sizeof(buffer), buffer);
+	if (n > 0 && n < sizeof(buffer))
 	{
-		n = GetLongPathNameW(buffer.begin(), buffer.begin(), static_cast<DWORD>(buffer.size()));
+		n = GetLongPathNameA(buffer, buffer, static_cast<DWORD>(sizeof buffer));
 		if (n <= 0) throw SystemException("Cannot get temporary directory long path name");
-		std::string result;
-		UnicodeConverter::toUTF8(buffer.begin(), result);
-		if (result[result.size() - 1] != '\\')
+		std::string result(buffer, n);
+		if (result[n - 1] != '\\')
 			result.append("\\");
 		return result;
 	}
-	throw SystemException("Cannot get temporary directory path");
+	else throw SystemException("Cannot get temporary directory");
 }
 
 
@@ -196,35 +174,26 @@ std::string PathImpl::nullImpl()
 
 std::string PathImpl::expandImpl(const std::string& path)
 {
-	std::wstring upath;
-	UnicodeConverter::toUTF16(path, upath);
-	Buffer<wchar_t> buffer(MAX_PATH_LEN);
-	DWORD n = ExpandEnvironmentStringsW(upath.c_str(), buffer.begin(), static_cast<DWORD>(buffer.size()));
-	if (n > 0 && n < buffer.size() - 1)
-	{
-		buffer[n + 1] = 0;
-		std::string result;
-		UnicodeConverter::toUTF8(buffer.begin(), result);
-		return result;
-	}
-	else return path;
+	char buffer[MAX_PATH];
+	DWORD n = ExpandEnvironmentStringsA(path.c_str(), buffer, sizeof(buffer));
+	if (n > 0 && n < sizeof(buffer))
+		return std::string(buffer, n - 1);
+	else
+		return path;
 }
 
 
 void PathImpl::listRootsImpl(std::vector<std::string>& roots)
 {
 	roots.clear();
-	const int bufferSize = 128;
-	wchar_t buffer[bufferSize];
-	DWORD n = GetLogicalDriveStringsW(bufferSize - 1, buffer);
-	wchar_t* it  = buffer;
-	wchar_t* end = buffer + (n > bufferSize ? bufferSize : n);
+	char buffer[128];
+	DWORD n = GetLogicalDriveStrings(sizeof(buffer) - 1, buffer);
+	char* it = buffer;
+	char* end = buffer + (n > sizeof(buffer) ? sizeof(buffer) : n);
 	while (it < end)
 	{
-		std::wstring udev;
-		while (it < end && *it) udev += *it++;
 		std::string dev;
-		UnicodeConverter::toUTF8(udev, dev);
+		while (it < end && *it) dev += *it++;
 		roots.push_back(dev);
 		++it;
 	}

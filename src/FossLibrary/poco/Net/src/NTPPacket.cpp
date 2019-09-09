@@ -27,7 +27,7 @@ namespace Net {
 #else
 #pragma pack(1)
 #endif
-struct NTPPacketData
+struct NTPPacketData 
 {
 	Poco::Int8 mode:3;
 	Poco::Int8 vn:3;
@@ -55,6 +55,7 @@ NTPPacket::NTPPacket() :
 	_leapIndicator(3),
 	_version(4),
 	_mode(3),
+
 	_stratum(0),
 	_pool(6),
 	_precision(-18),

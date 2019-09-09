@@ -47,7 +47,7 @@ public:
 		/// Notice: The behavior of this constructor has changed
 		/// in release 2.0. Previously, the constructor created
 		/// an unbound IPv4 multicast socket.
-
+		
 	explicit MulticastSocket(SocketAddress::Family family);
 		/// Creates an unconnected datagram socket.
 		///

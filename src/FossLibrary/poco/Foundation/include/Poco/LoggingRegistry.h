@@ -42,24 +42,24 @@ public:
 	~LoggingRegistry();
 		/// Destroys the LoggingRegistry.
 
-	Channel::Ptr channelForName(const std::string& name) const;
+	Channel* channelForName(const std::string& name) const;
 		/// Returns the Channel object which has been registered
 		/// under the given name.
 		///
 		/// Throws a NotFoundException if the name is unknown.
 
-	Formatter::Ptr formatterForName(const std::string& name) const;
+	Formatter* formatterForName(const std::string& name) const;
 		/// Returns the Formatter object which has been registered
 		/// under the given name.
 		///
 		/// Throws a NotFoundException if the name is unknown.
 
-	void registerChannel(const std::string& name, Channel::Ptr pChannel);
+	void registerChannel(const std::string& name, Channel* pChannel);
 		/// Registers a channel under a given name.
 		/// It is okay to re-register a different channel under an
 		/// already existing name.
 		
-	void registerFormatter(const std::string& name, Formatter::Ptr pFormatter);
+	void registerFormatter(const std::string& name, Formatter* pFormatter);
 		/// Registers a formatter under a given name.
 		/// It is okay to re-register a different formatter under an
 		/// already existing name.
@@ -82,13 +82,13 @@ public:
 		/// LoggingRegistry.
 
 private:
-	typedef Channel::Ptr                        ChannelPtr;
-	typedef AutoPtr<Formatter>                  FormatterPtr;
-	typedef std::map<std::string, ChannelPtr>   ChannelMap;
+	typedef AutoPtr<Channel>   ChannelPtr;
+	typedef AutoPtr<Formatter> FormatterPtr;
+	typedef std::map<std::string, ChannelPtr> ChannelMap;
 	typedef std::map<std::string, FormatterPtr> FormatterMap;
 	
-	ChannelMap        _channelMap;
-	FormatterMap      _formatterMap;
+	ChannelMap   _channelMap;
+	FormatterMap _formatterMap;
 	mutable FastMutex _mutex;
 };
 

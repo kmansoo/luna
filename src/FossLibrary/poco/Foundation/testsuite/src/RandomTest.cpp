@@ -9,8 +9,8 @@
 
 
 #include "RandomTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Random.h"
 #include <vector>
 #include <cmath>
@@ -19,7 +19,7 @@
 using Poco::UInt32;
 
 
-RandomTest::RandomTest(const std::string& rName): CppUnit::TestCase(rName)
+RandomTest::RandomTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -37,7 +37,7 @@ void RandomTest::testSequence1()
 	rnd2.seed(12345);
 	for (int i = 0; i < 100; ++i)
 	{
-		assertTrue (rnd1.next() == rnd2.next());
+		assert (rnd1.next() == rnd2.next());
 	}
 }
 
@@ -58,7 +58,7 @@ void RandomTest::testSequence2()
 			break;
 		}
 	}
-	assertTrue (!equals);
+	assert (!equals);
 }
 
 
@@ -75,7 +75,7 @@ void RandomTest::testDistribution1()
 	int sum = 0;
 	for (int k = 0; k < n; ++k) sum += d[k];
 	
-	assertTrue (sum == n);
+	assert (sum == n);
 }
 
 
@@ -97,8 +97,8 @@ void RandomTest::testDistribution2()
 	var /= n;
 	int sd = int(std::sqrt((double) var));
 	
-	assertTrue (95 < avg && avg < 105);
-	assertTrue (sd < 15);
+	assert (95 < avg && avg < 105);
+	assert (sd < 15);
 }
 
 
@@ -120,8 +120,8 @@ void RandomTest::testDistribution3()
 	var /= n;
 	int sd = int(std::sqrt((double) var));
 	
-	assertTrue (95 < avg && avg < 105);
-	assertTrue (sd < 15);
+	assert (95 < avg && avg < 105);
+	assert (sd < 15);
 }
 
 

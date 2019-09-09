@@ -9,8 +9,8 @@
 
 
 #include "SocketTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "EchoServer.h"
 #include "Poco/Net/StreamSocket.h"
 #include "Poco/Net/ServerSocket.h"
@@ -55,11 +55,11 @@ void SocketTest::testEcho()
 	StreamSocket ss;
 	ss.connect(SocketAddress("127.0.0.1", echoServer.port()));
 	int n = ss.sendBytes("hello", 5);
-	assertTrue (n == 5);
+	assert (n == 5);
 	char buffer[256];
 	n = ss.receiveBytes(buffer, sizeof(buffer));
-	assertTrue (n == 5);
-	assertTrue (std::string(buffer, n) == "hello");
+	assert (n == 5);
+	assert (std::string(buffer, n) == "hello");
 	ss.close();
 }
 
@@ -72,19 +72,19 @@ void SocketTest::testPoll()
 	Stopwatch sw;
 	sw.start();
 	Timespan timeout(1000000);
-	assertTrue (!ss.poll(timeout, Socket::SELECT_READ));
-	assertTrue (sw.elapsed() >= 900000);
+	assert (!ss.poll(timeout, Socket::SELECT_READ));
+	assert (sw.elapsed() >= 900000);
 	sw.restart();
-	assertTrue (ss.poll(timeout, Socket::SELECT_WRITE));
-	assertTrue (sw.elapsed() < 100000);
+	assert (ss.poll(timeout, Socket::SELECT_WRITE));
+	assert (sw.elapsed() < 100000);
 	ss.sendBytes("hello", 5);
 	char buffer[256];
 	sw.restart();
-	assertTrue (ss.poll(timeout, Socket::SELECT_READ));
-	assertTrue (sw.elapsed() < 100000);
+	assert (ss.poll(timeout, Socket::SELECT_READ));
+	assert (sw.elapsed() < 100000);
 	int n = ss.receiveBytes(buffer, sizeof(buffer));
-	assertTrue (n == 5);
-	assertTrue (std::string(buffer, n) == "hello");
+	assert (n == 5);
+	assert (std::string(buffer, n) == "hello");
 	ss.close();
 }
 
@@ -97,12 +97,12 @@ void SocketTest::testAvailable()
 	Timespan timeout(1000000);
 	ss.sendBytes("hello", 5);
 	char buffer[256];
-	assertTrue (ss.poll(timeout, Socket::SELECT_READ));
+	assert (ss.poll(timeout, Socket::SELECT_READ));
 	int av = ss.available();
-	assertTrue (av > 0 && av <= 5);
+	assert (av > 0 && av <= 5);
 	int n = ss.receiveBytes(buffer, sizeof(buffer));
-	assertTrue (n == 5);
-	assertTrue (std::string(buffer, n) == "hello");
+	assert (n == 5);
+	assert (std::string(buffer, n) == "hello");
 	ss.close();
 }
 
@@ -121,40 +121,40 @@ void SocketTest::testFIFOBuffer()
 	f.readable += delegate(this, &SocketTest::onReadable);
 	f.writable += delegate(this, &SocketTest::onWritable);
 
-	assertTrue (0 == _notToReadable);
-	assertTrue (0 == _readableToNot);
-	assertTrue (0 == _notToWritable);
-	assertTrue (0 == _writableToNot);
+	assert(0 == _notToReadable);
+	assert(0 == _readableToNot);
+	assert(0 == _notToWritable);
+	assert(0 == _writableToNot);
 	f.write(b);
-	assertTrue (1 == _notToReadable);
-	assertTrue (0 == _readableToNot);
-	assertTrue (0 == _notToWritable);
-	assertTrue (1 == _writableToNot);
+	assert(1 == _notToReadable);
+	assert(0 == _readableToNot);
+	assert(0 == _notToWritable);
+	assert(1 == _writableToNot);
 
 	EchoServer echoServer;
 	StreamSocket ss;
 	ss.connect(SocketAddress("127.0.0.1", echoServer.port()));
 	int n = ss.sendBytes(f);
-	assertTrue (n == 5);
-	assertTrue (1 == _notToReadable);
-	assertTrue (1 == _readableToNot);
-	assertTrue (1 == _notToWritable);
-	assertTrue (1 == _writableToNot);
-	assertTrue (f.isEmpty());
+	assert (n == 5);
+	assert(1 == _notToReadable);
+	assert(1 == _readableToNot);
+	assert(1 == _notToWritable);
+	assert(1 == _writableToNot);
+	assert (f.isEmpty());
 
 	n = ss.receiveBytes(f);
-	assertTrue (n == 5);
+	assert (n == 5);
 	
-	assertTrue (2 == _notToReadable);
-	assertTrue (1 == _readableToNot);
-	assertTrue (1 == _notToWritable);
-	assertTrue (2 == _writableToNot);
+	assert(2 == _notToReadable);
+	assert(1 == _readableToNot);
+	assert(1 == _notToWritable);
+	assert(2 == _writableToNot);
 
-	assertTrue (f[0] == 'h');
-	assertTrue (f[1] == 'e');
-	assertTrue (f[2] == 'l');
-	assertTrue (f[3] == 'l');
-	assertTrue (f[4] == 'o');
+	assert (f[0] == 'h');
+	assert (f[1] == 'e');
+	assert (f[2] == 'l');
+	assert (f[3] == 'l');
+	assert (f[4] == 'o');
 
 	f.readable -= delegate(this, &SocketTest::onReadable);
 	f.writable -= delegate(this, &SocketTest::onWritable);
@@ -225,15 +225,15 @@ void SocketTest::testNonBlocking()
 	ss.setBlocking(false);
 
 	Timespan timeout(1000000);
-	assertTrue (ss.poll(timeout, Socket::SELECT_WRITE));
+	assert (ss.poll(timeout, Socket::SELECT_WRITE));
 	int n = ss.sendBytes("hello", 5);
-	assertTrue (n == 5);
+	assert (n == 5);
 
 	char buffer[256];
-	assertTrue (ss.poll(timeout, Socket::SELECT_READ));
+	assert (ss.poll(timeout, Socket::SELECT_READ));
 	n = ss.receiveBytes(buffer, sizeof(buffer));
-	assertTrue (n == 5);
-	assertTrue (std::string(buffer, n) == "hello");
+	assert (n == 5);
+	assert (std::string(buffer, n) == "hello");
 	ss.close();
 }
 
@@ -247,8 +247,8 @@ void SocketTest::testAddress()
 	StreamSocket ss;
 	ss.connect(SocketAddress("127.0.0.1", serv.address().port()));
 	StreamSocket css = serv.acceptConnection();
-	assertTrue (css.peerAddress().host() == ss.address().host());
-	assertTrue (css.peerAddress().port() == ss.address().port());
+	assert (css.peerAddress().host() == ss.address().host());
+	assert (css.peerAddress().port() == ss.address().port());
 }
 
 
@@ -258,12 +258,12 @@ void SocketTest::testAssign()
 	StreamSocket ss1;
 	StreamSocket ss2;
 	
-	assertTrue (ss1 != ss2);
+	assert (ss1 != ss2);
 	StreamSocket ss3(ss1);
-	assertTrue (ss1 == ss3);
+	assert (ss1 == ss3);
 	ss3 = ss2;
-	assertTrue (ss1 != ss3);
-	assertTrue (ss2 == ss3);
+	assert (ss1 != ss3);
+	assert (ss2 == ss3);
 	
 	try
 	{
@@ -318,7 +318,7 @@ void SocketTest::testTimeout()
 	std::cout << "actual receive timeout:    " << timeout1.totalMicroseconds() << std::endl;
 	
 	// some socket implementations adjust the timeout value
-	// assertTrue (ss.getReceiveTimeout() == timeout);
+	// assert (ss.getReceiveTimeout() == timeout);
 	Stopwatch sw;
 	try
 	{
@@ -330,7 +330,7 @@ void SocketTest::testTimeout()
 	catch (TimeoutException&)
 	{
 	}
-	assertTrue (sw.elapsed() < 1000000);
+	assert (sw.elapsed() < 1000000);
 	
 	timeout0 = ss.getSendTimeout();
 	ss.setSendTimeout(timeout);
@@ -338,7 +338,7 @@ void SocketTest::testTimeout()
 	std::cout << "original send timeout:  " << timeout0.totalMicroseconds() << std::endl;
 	std::cout << "requested send timeout: " << timeout.totalMicroseconds() << std::endl;
 	std::cout << "actual send timeout:    " << timeout1.totalMicroseconds() << std::endl;
-	// assertTrue (ss.getSendTimeout() == timeout);
+	// assert (ss.getSendTimeout() == timeout);
 }
 
 
@@ -375,25 +375,25 @@ void SocketTest::testOptions()
 	bool f;
 	int  t;
 	ss.getLinger(f, t);
-	assertTrue (f && t == 20);
+	assert (f && t == 20);
 	ss.setLinger(false, 0);
 	ss.getLinger(f, t);
-	assertTrue (!f);
+	assert (!f);
 	
 	ss.setNoDelay(true);
-	assertTrue (ss.getNoDelay());
+	assert (ss.getNoDelay());
 	ss.setNoDelay(false);
-	assertTrue (!ss.getNoDelay());
+	assert (!ss.getNoDelay());
 	
 	ss.setKeepAlive(true);
-	assertTrue (ss.getKeepAlive());
+	assert (ss.getKeepAlive());
 	ss.setKeepAlive(false);
-	assertTrue (!ss.getKeepAlive());
+	assert (!ss.getKeepAlive());
 	
 	ss.setOOBInline(true);
-	assertTrue (ss.getOOBInline());
+	assert (ss.getOOBInline());
 	ss.setOOBInline(false);
-	assertTrue (!ss.getOOBInline());
+	assert (!ss.getOOBInline());
 }
 
 
@@ -410,10 +410,10 @@ void SocketTest::testSelect()
 	Socket::SocketList exceptList;
 
 	readList.push_back(ss);
-	assertTrue (Socket::select(readList, writeList, exceptList, timeout) == 0);
-	assertTrue (readList.empty());
-	assertTrue (writeList.empty());
-	assertTrue (exceptList.empty());
+	assert (Socket::select(readList, writeList, exceptList, timeout) == 0);
+	assert (readList.empty());
+	assert (writeList.empty());
+	assert (exceptList.empty());
 	
 	ss.sendBytes("hello", 5);
 
@@ -421,15 +421,15 @@ void SocketTest::testSelect()
 
 	readList.push_back(ss);
 	writeList.push_back(ss);
-	assertTrue (Socket::select(readList, writeList, exceptList, timeout) == 2);
-	assertTrue (!readList.empty());
-	assertTrue (!writeList.empty());
-	assertTrue (exceptList.empty());
+	assert (Socket::select(readList, writeList, exceptList, timeout) == 2);
+	assert (!readList.empty());
+	assert (!writeList.empty());
+	assert (exceptList.empty());
 
 	char buffer[256];
 	int n = ss.receiveBytes(buffer, sizeof(buffer));
-	assertTrue (n == 5);
-	assertTrue (std::string(buffer, n) == "hello");
+	assert (n == 5);
+	assert (std::string(buffer, n) == "hello");
 	ss.close();
 }
 
@@ -449,10 +449,10 @@ void SocketTest::testSelect2()
 
 	readList.push_back(ss1);
 	readList.push_back(ss2);
-	assertTrue (Socket::select(readList, writeList, exceptList, timeout) == 0);
-	assertTrue (readList.empty());
-	assertTrue (writeList.empty());
-	assertTrue (exceptList.empty());
+	assert (Socket::select(readList, writeList, exceptList, timeout) == 0);
+	assert (readList.empty());
+	assert (writeList.empty());
+	assert (exceptList.empty());
 	
 	ss1.sendBytes("hello", 5);
 
@@ -460,28 +460,28 @@ void SocketTest::testSelect2()
 
 	readList.push_back(ss1);
 	readList.push_back(ss2);
-	assertTrue (Socket::select(readList, writeList, exceptList, timeout) == 1);
+	assert (Socket::select(readList, writeList, exceptList, timeout) == 1);
 
-	assertTrue (readList.size() == 1);
-	assertTrue (readList[0] == ss1);
-	assertTrue (writeList.empty());
-	assertTrue (exceptList.empty());
+	assert (readList.size() == 1);
+	assert (readList[0] == ss1);
+	assert (writeList.empty());
+	assert (exceptList.empty());
 
 	char buffer[256];
 	int n = ss1.receiveBytes(buffer, sizeof(buffer));
-	assertTrue (n == 5);
+	assert (n == 5);
 
 	readList.clear();
 	writeList.clear();
 	exceptList.clear();
 	writeList.push_back(ss1);
 	writeList.push_back(ss2);
-	assertTrue (Socket::select(readList, writeList, exceptList, timeout) == 2);
-	assertTrue (readList.empty());
-	assertTrue (writeList.size() == 2);
-	assertTrue (writeList[0] == ss1);
-	assertTrue (writeList[1] == ss2);
-	assertTrue (exceptList.empty());
+	assert (Socket::select(readList, writeList, exceptList, timeout) == 2);
+	assert (readList.empty());
+	assert (writeList.size() == 2);
+	assert (writeList[0] == ss1);
+	assert (writeList[1] == ss2);
+	assert (exceptList.empty());
 
 	ss1.close();
 	ss2.close();
@@ -496,14 +496,14 @@ void SocketTest::testSelect3()
 	Timespan timeout(1000);
 
 	int rc = Socket::select(readList, writeList, exceptList, timeout);
-	assertTrue (rc == 0);
+	assert (rc == 0);
 }
 
 
 void SocketTest::testEchoUnixLocal()
 {
 #if defined(POCO_OS_FAMILY_UNIX)
-#if  POCO_OS == POCO_OS_ANDROID
+#if POCO_OS == POCO_OS_ANDROID
 	Poco::File socketFile("/data/local/tmp/SocketTest.sock");
 #else
 	Poco::File socketFile("/tmp/SocketTest.sock");
@@ -514,34 +514,17 @@ void SocketTest::testEchoUnixLocal()
 	StreamSocket ss(SocketAddress::UNIX_LOCAL);
 	ss.connect(localAddr);
 	int n = ss.sendBytes("hello", 5);
-	assertTrue (n == 5);
+	assert (n == 5);
 	char buffer[256];
 	n = ss.receiveBytes(buffer, sizeof(buffer));
-	assertTrue (n == 5);
-	assertTrue (std::string(buffer, n) == "hello");
+	assert (n == 5);
+	assert (std::string(buffer, n) == "hello");
 	ss.close();
 	socketFile.remove();
 #endif
 }
 
-void SocketTest::testEchoLinuxAbstract()
-{
-#if POCO_OS == POCO_OS_LINUX || POCO_OS == POCO_OS_ANDROID
-	std::string path("sock.pocoproject.org");
-	path.insert(0, 1, '\0');
-	SocketAddress localAddr(SocketAddress::UNIX_LOCAL, path);
-	EchoServer echoServer(localAddr);
-	StreamSocket ss(SocketAddress::UNIX_LOCAL);
-	ss.connect(localAddr);
-	int n = ss.sendBytes("hello", 5);
-	assertTrue(n == 5);
-	char buffer[256];
-	n = ss.receiveBytes(buffer, sizeof(buffer));
-	assertTrue(n == 5);
-	assertTrue(std::string(buffer, n) == "hello");
-	ss.close();
-#endif
-}
+
 
 void SocketTest::onReadable(bool& b)
 {
@@ -592,7 +575,6 @@ CppUnit::Test* SocketTest::suite()
 	CppUnit_addTest(pSuite, SocketTest, testSelect2);
 	CppUnit_addTest(pSuite, SocketTest, testSelect3);
 	CppUnit_addTest(pSuite, SocketTest, testEchoUnixLocal);
-	CppUnit_addTest(pSuite, SocketTest, testEchoLinuxAbstract);
 
 	return pSuite;
 }

@@ -1,5 +1,10 @@
-add_executable(WebSocketServer src/WebSocketServer.cpp)
+set(SAMPLE_NAME "WebSocketServer")
+
+set(LOCAL_SRCS "")
+aux_source_directory(src LOCAL_SRCS)
+
+add_executable( ${SAMPLE_NAME} ${LOCAL_SRCS} )
 if(WINCE)
-	set_target_properties(WebSocketServer PROPERTIES LINK_FLAGS "/ENTRY:wmainCRTStartup")
+set_target_properties( ${SAMPLE_NAME} PROPERTIES LINK_FLAGS "/ENTRY:wmainCRTStartup")
 endif()
-target_link_libraries(WebSocketServer PUBLIC Poco::Net Poco::Util Poco::JSON)
+target_link_libraries( ${SAMPLE_NAME} PocoNet PocoUtil PocoJSON PocoXML PocoFoundation )

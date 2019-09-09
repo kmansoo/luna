@@ -15,7 +15,7 @@
 
 
 #include "Poco/Foundation.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class MemoryPoolTest: public CppUnit::TestCase
@@ -25,8 +25,6 @@ public:
 	~MemoryPoolTest();
 
 	void testMemoryPool();
-	void testFastMemoryPool();
-	void memoryPoolBenchmark();
 
 	void setUp();
 	void tearDown();

@@ -9,8 +9,8 @@
 
 
 #include "HTTPStreamFactoryTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Net/HTTPStreamFactory.h"
 #include "Poco/Net/NetException.h"
 #include "Poco/URI.h"
@@ -44,10 +44,14 @@ void HTTPStreamFactoryTest::testNoRedirect()
 	HTTPStreamFactory factory;
 	URI uri("http://127.0.0.1/large");
 	uri.setPort(server.port());
+#ifndef POCO_ENABLE_CPP11
+	std::auto_ptr<std::istream> pStr(factory.open(uri));
+#else
 	std::unique_ptr<std::istream> pStr(factory.open(uri));
+#endif // POCO_ENABLE_CPP11
 	std::ostringstream ostr;
 	StreamCopier::copyStream(*pStr.get(), ostr);
-	assertTrue (ostr.str() == HTTPTestServer::LARGE_BODY);
+	assert (ostr.str() == HTTPTestServer::LARGE_BODY);
 }
 
 
@@ -57,10 +61,14 @@ void HTTPStreamFactoryTest::testEmptyPath()
 	HTTPStreamFactory factory;
 	URI uri("http://127.0.0.1");
 	uri.setPort(server.port());
+#ifndef POCO_ENABLE_CPP11
+	std::auto_ptr<std::istream> pStr(factory.open(uri));
+#else
 	std::unique_ptr<std::istream> pStr(factory.open(uri));
+#endif // POCO_ENABLE_CPP11
 	std::ostringstream ostr;
 	StreamCopier::copyStream(*pStr.get(), ostr);
-	assertTrue (ostr.str() == HTTPTestServer::SMALL_BODY);
+	assert (ostr.str() == HTTPTestServer::SMALL_BODY);
 }
 
 
@@ -71,10 +79,14 @@ void HTTPStreamFactoryTest::testRedirect()
 	opener.registerStreamFactory("http", new HTTPStreamFactory);
 	URI uri("http://127.0.0.1/redirect");
 	uri.setPort(server.port());
+#ifndef POCO_ENABLE_CPP11
+	std::auto_ptr<std::istream> pStr(opener.open(uri));
+#else
 	std::unique_ptr<std::istream> pStr(opener.open(uri));
+#endif // POCO_ENABLE_CPP11
 	std::ostringstream ostr;
 	StreamCopier::copyStream(*pStr.get(), ostr);
-	assertTrue (ostr.str() == HTTPTestServer::LARGE_BODY);
+	assert (ostr.str() == HTTPTestServer::LARGE_BODY);
 }
 
 
@@ -83,10 +95,14 @@ void HTTPStreamFactoryTest::testProxy()
 	HTTPTestServer server;
 	HTTPStreamFactory factory("127.0.0.1", server.port());
 	URI uri("http://www.somehost.com/large");
+#ifndef POCO_ENABLE_CPP11
+	std::auto_ptr<std::istream> pStr(factory.open(uri));
+#else
 	std::unique_ptr<std::istream> pStr(factory.open(uri));
+#endif // POCO_ENABLE_CPP11
 	std::ostringstream ostr;
 	StreamCopier::copyStream(*pStr.get(), ostr);
-	assertTrue (ostr.str() == HTTPTestServer::LARGE_BODY);
+	assert (ostr.str() == HTTPTestServer::LARGE_BODY);
 }
 
 

@@ -9,8 +9,8 @@
 
 
 #include "SMTPClientSessionTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "DialogServer.h"
 #include "Poco/Net/SMTPClientSession.h"
 #include "Poco/Net/MailMessage.h"
@@ -43,10 +43,10 @@ void SMTPClientSessionTest::testLoginEHLO()
 	SMTPClientSession session("127.0.0.1", server.port());
 	session.login("localhost");
 	std::string cmd = server.popCommand();
-	assertTrue (cmd == "EHLO localhost");
+	assert (cmd == "EHLO localhost");
 	session.close();
 	cmd = server.popCommand();
-	assertTrue (cmd == "QUIT");
+	assert (cmd == "QUIT");
 }
 
 
@@ -60,12 +60,12 @@ void SMTPClientSessionTest::testLoginHELO()
 	SMTPClientSession session("127.0.0.1", server.port());
 	session.login("localhost");
 	std::string cmd = server.popCommand();
-	assertTrue (cmd == "EHLO localhost");
+	assert (cmd == "EHLO localhost");
 	cmd = server.popCommand();
-	assertTrue (cmd == "HELO localhost");
+	assert (cmd == "HELO localhost");
 	session.close();
 	cmd = server.popCommand();
-	assertTrue (cmd == "QUIT");
+	assert (cmd == "QUIT");
 }
 
 
@@ -108,31 +108,31 @@ void SMTPClientSessionTest::testSend()
 	server.clearCommands();
 	session.sendMessage(message);
 	std::string cmd = server.popCommandWait();
-	assertTrue (cmd == "MAIL FROM: <john.doe@no.where>");
+	assert (cmd == "MAIL FROM: <john.doe@no.where>");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "RCPT TO: <jane.doe@no.where>");
+	assert (cmd == "RCPT TO: <jane.doe@no.where>");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "DATA");
+	assert (cmd == "DATA");
 	cmd = server.popCommandWait();
-	assertTrue (cmd.substr(0, 4) == "Date");
+	assert (cmd.substr(0, 4) == "Date");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "Content-Type: text/plain");
+	assert (cmd == "Content-Type: text/plain");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "From: john.doe@no.where");
+	assert (cmd == "From: john.doe@no.where");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "Subject: Test Message");
+	assert (cmd == "Subject: Test Message");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "Content-Transfer-Encoding: quoted-printable");
+	assert (cmd == "Content-Transfer-Encoding: quoted-printable");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "To: Jane Doe <jane.doe@no.where>");
+	assert (cmd == "To: Jane Doe <jane.doe@no.where>");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "Hello");
+	assert (cmd == "Hello");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "blah blah");
+	assert (cmd == "blah blah");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "John");
+	assert (cmd == "John");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == ".");
+	assert (cmd == ".");
 
 	session.close();
 }
@@ -167,37 +167,37 @@ void SMTPClientSessionTest::testSendMultiRecipient()
 	server.clearCommands();
 	session.sendMessage(message);
 	std::string cmd = server.popCommandWait();
-	assertTrue (cmd == "MAIL FROM: <john.doe@no.where>");
+	assert (cmd == "MAIL FROM: <john.doe@no.where>");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "RCPT TO: <jane.doe@no.where>");
+	assert (cmd == "RCPT TO: <jane.doe@no.where>");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "RCPT TO: <jack.doe@no.where>");
+	assert (cmd == "RCPT TO: <jack.doe@no.where>");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "RCPT TO: <joe.doe@no.where>");
+	assert (cmd == "RCPT TO: <joe.doe@no.where>");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "DATA");
+	assert (cmd == "DATA");
 	cmd = server.popCommandWait();
-	assertTrue (cmd.substr(0, 4) == "Date");
+	assert (cmd.substr(0, 4) == "Date");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "Content-Type: text/plain");
+	assert (cmd == "Content-Type: text/plain");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "From: john.doe@no.where");
+	assert (cmd == "From: john.doe@no.where");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "Subject: Test Message");
+	assert (cmd == "Subject: Test Message");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "Content-Transfer-Encoding: quoted-printable");
+	assert (cmd == "Content-Transfer-Encoding: quoted-printable");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "To: Jane Doe <jane.doe@no.where>");
+	assert (cmd == "To: Jane Doe <jane.doe@no.where>");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "CC: Jack Doe <jack.doe@no.where>");
+	assert (cmd == "CC: Jack Doe <jack.doe@no.where>");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "Hello");
+	assert (cmd == "Hello");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "blah blah");
+	assert (cmd == "blah blah");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "John");
+	assert (cmd == "John");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == ".");
+	assert (cmd == ".");
 
 	session.close();
 }
@@ -237,37 +237,37 @@ void SMTPClientSessionTest::testMultiSeparateRecipient()
 	server.clearCommands();
 	session.sendMessage(message, recipients);
 	std::string cmd = server.popCommandWait();
-	assertTrue (cmd == "MAIL FROM: <john.doe@no.where>");
+	assert (cmd == "MAIL FROM: <john.doe@no.where>");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "RCPT TO: <jill.doe@no.where>");
+	assert (cmd == "RCPT TO: <jill.doe@no.where>");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "RCPT TO: <josh.doe@no.where>");
+	assert (cmd == "RCPT TO: <josh.doe@no.where>");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "RCPT TO: <jake.doe@no.where>");
+	assert (cmd == "RCPT TO: <jake.doe@no.where>");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "DATA");
+	assert (cmd == "DATA");
 	cmd = server.popCommandWait();
-	assertTrue (cmd.substr(0, 4) == "Date");
+	assert (cmd.substr(0, 4) == "Date");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "Content-Type: text/plain");
+	assert (cmd == "Content-Type: text/plain");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "From: john.doe@no.where");
+	assert (cmd == "From: john.doe@no.where");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "Subject: Test Message");
+	assert (cmd == "Subject: Test Message");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "Content-Transfer-Encoding: quoted-printable");
+	assert (cmd == "Content-Transfer-Encoding: quoted-printable");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "To: Jane Doe <jane.doe@no.where>");
+	assert (cmd == "To: Jane Doe <jane.doe@no.where>");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "CC: Jack Doe <jack.doe@no.where>, Joe Doe <joe.doe@no.where>");
+	assert (cmd == "CC: Jack Doe <jack.doe@no.where>, Joe Doe <joe.doe@no.where>");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "Hello");
+	assert (cmd == "Hello");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "blah blah");
+	assert (cmd == "blah blah");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "John");
+	assert (cmd == "John");
 	cmd = server.popCommandWait();
-	assertTrue (cmd == ".");
+	assert (cmd == ".");
 
 	session.close();
 }

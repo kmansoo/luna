@@ -9,8 +9,8 @@
 
 
 #include "DialogSocketTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "EchoServer.h"
 #include "Poco/Net/DialogSocket.h"
 #include "Poco/Net/SocketAddress.h"
@@ -40,53 +40,53 @@ void DialogSocketTest::testDialogSocket()
 	ds.sendMessage("Hello, world!");
 	std::string str;
 	ds.receiveMessage(str);
-	assertTrue (str == "Hello, world!");
+	assert (str == "Hello, world!");
 
 	ds.sendString("Hello, World!\n");
 	ds.receiveMessage(str);
-	assertTrue (str == "Hello, World!");
+	assert (str == "Hello, World!");
 	
 	ds.sendMessage("EHLO", "appinf.com");
 	ds.receiveMessage(str);
-	assertTrue (str == "EHLO appinf.com");
+	assert (str == "EHLO appinf.com");
 	
 	ds.sendMessage("PUT", "local.txt", "remote.txt");
 	ds.receiveMessage(str);
-	assertTrue (str == "PUT local.txt remote.txt");
+	assert (str == "PUT local.txt remote.txt");
 
 	ds.sendMessage("220 Hello, world!");
 	int status = ds.receiveStatusMessage(str);
-	assertTrue (status == 220);
-	assertTrue (str == "220 Hello, world!");
+	assert (status == 220);
+	assert (str == "220 Hello, world!");
 	
 	ds.sendString("220-line1\r\n220 line2\r\n");
 	status = ds.receiveStatusMessage(str);
-	assertTrue (status == 220);
-	assertTrue (str == "220-line1\n220 line2");
+	assert (status == 220);
+	assert (str == "220-line1\n220 line2");
 	
 	ds.sendString("220-line1\r\nline2\r\n220 line3\r\n");
 	status = ds.receiveStatusMessage(str);
-	assertTrue (status == 220);
-	assertTrue (str == "220-line1\nline2\n220 line3");
+	assert (status == 220);
+	assert (str == "220-line1\nline2\n220 line3");
 
 	ds.sendMessage("Hello, world!");
 	status = ds.receiveStatusMessage(str);
-	assertTrue (status == 0);
-	assertTrue (str == "Hello, world!");
+	assert (status == 0);
+	assert (str == "Hello, world!");
 	
 	ds.sendString("Header\nMore Bytes");
 	status = ds.receiveStatusMessage(str);
-	assertTrue (status == 0);
-	assertTrue (str == "Header");
+	assert (status == 0);
+	assert (str == "Header");
 	char buffer[16];
 	int n = ds.receiveRawBytes(buffer, sizeof(buffer));
-	assertTrue (n == 10);
-	assertTrue (std::memcmp(buffer, "More Bytes", 10) == 0);
+	assert (n == 10);
+	assert (std::memcmp(buffer, "More Bytes", 10) == 0);
 
 	ds.sendString("Even More Bytes");
 	n = ds.receiveRawBytes(buffer, sizeof(buffer));
-	assertTrue (n == 15);
-	assertTrue (std::memcmp(buffer, "Even More Bytes", 15) == 0);
+	assert (n == 15);
+	assert (std::memcmp(buffer, "Even More Bytes", 15) == 0);
 }
 
 

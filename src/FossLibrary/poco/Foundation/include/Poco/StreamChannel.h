@@ -34,12 +34,10 @@ class Foundation_API StreamChannel: public Channel
 	/// by a newline.
 	///
 	/// Chain this channel to a FormattingChannel with an
-	/// appropriate Formatter to control what is contained
+	/// appropriate Formatter to control what is contained 
 	/// in the text.
 {
 public:
-	typedef AutoPtr<StreamChannel> Ptr;
-
 	StreamChannel(std::ostream& str);
 		/// Creates the channel.
 

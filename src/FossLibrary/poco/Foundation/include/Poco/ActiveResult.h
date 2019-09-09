@@ -33,7 +33,7 @@ template <class ResultType>
 class ActiveResultHolder: public RefCountedObject
 	/// This class holds the result of an asynchronous method
 	/// invocation. It is used to pass the result from the
-	/// execution thread back to the invocation thread.
+	/// execution thread back to the invocation thread. 
 	/// The class uses reference counting for memory management.
 	/// Do not use this class directly, use ActiveResult instead.
 {
@@ -41,7 +41,7 @@ public:
 	ActiveResultHolder():
 		_pData(0),
 		_pExc(0),
-		_event(Event::EVENT_MANUALRESET)
+		_event(false)
 		/// Creates an ActiveResultHolder.
 	{
 	}
@@ -147,7 +147,7 @@ class ActiveResultHolder<void>: public RefCountedObject
 public:
 	ActiveResultHolder():
 		_pExc(0),
-		_event(Event::EVENT_MANUALRESET)
+		_event(false)
 		/// Creates an ActiveResultHolder.
 	{
 	}
@@ -234,8 +234,8 @@ private:
 template <class RT>
 class ActiveResult
 	/// This class holds the result of an asynchronous method
-	/// invocation (see class ActiveMethod). It is used to pass the
-	/// result from the execution thread back to the invocation thread.
+	/// invocation (see class ActiveMethod). It is used to pass the 
+	/// result from the execution thread back to the invocation thread. 
 {
 public:
 	typedef RT ResultType;
@@ -373,8 +373,8 @@ private:
 template <>
 class ActiveResult<void>
 	/// This class holds the result of an asynchronous method
-	/// invocation (see class ActiveMethod). It is used to pass the
-	/// result from the execution thread back to the invocation thread.
+	/// invocation (see class ActiveMethod). It is used to pass the 
+	/// result from the execution thread back to the invocation thread. 
 {
 public:
 	typedef ActiveResultHolder<void> ActiveResultHolderType;

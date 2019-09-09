@@ -24,7 +24,6 @@
 #include "Poco/Bugcheck.h"
 #include "Poco/Timestamp.h"
 #include "Poco/EventArgs.h"
-#include "Poco/Exception.h"
 #include <set>
 #include <map>
 
@@ -32,7 +31,7 @@
 namespace Poco {
 
 
-template <
+template < 
 	class TKey,
 	class TValue
 >
@@ -51,7 +50,7 @@ public:
 		/// Create an expire strategy. Note that the smallest allowed caching time is 25ms.
 		/// Anything lower than that is not useful with current operating systems.
 	{
-		if (_expireTime < 25000) throw InvalidArgumentException("expireTime must be at least 25 ms");
+		if (_expireTime < 25000) throw InvalidArgumentException("expireTime must be at least 25 ms");  
 	}
 
 	~ExpireStrategy()

@@ -9,8 +9,8 @@
 
 
 #include "PriorityNotificationQueueTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/PriorityNotificationQueue.h"
 #include "Poco/Notification.h"
 #include "Poco/Thread.h"
@@ -25,7 +25,7 @@ using Poco::Thread;
 using Poco::RunnableAdapter;
 
 
-namespace
+namespace 
 {
 	class QTestNotification: public Notification
 	{
@@ -47,7 +47,7 @@ namespace
 }
 
 
-PriorityNotificationQueueTest::PriorityNotificationQueueTest(const std::string& rName): CppUnit::TestCase(rName)
+PriorityNotificationQueueTest::PriorityNotificationQueueTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -60,49 +60,49 @@ PriorityNotificationQueueTest::~PriorityNotificationQueueTest()
 void PriorityNotificationQueueTest::testQueueDequeue()
 {
 	PriorityNotificationQueue queue;
-	assertTrue (queue.empty());
-	assertTrue (queue.size() == 0);
+	assert (queue.empty());
+	assert (queue.size() == 0);
 	Notification* pNf = queue.dequeueNotification();
 	assertNullPtr(pNf);
 	queue.enqueueNotification(new Notification, 1);
-	assertTrue (!queue.empty());
-	assertTrue (queue.size() == 1);
+	assert (!queue.empty());
+	assert (queue.size() == 1);
 	pNf = queue.dequeueNotification();
 	assertNotNullPtr(pNf);
-	assertTrue (queue.empty());
-	assertTrue (queue.size() == 0);
+	assert (queue.empty());
+	assert (queue.size() == 0);
 	pNf->release();
 	
 	queue.enqueueNotification(new QTestNotification("first"), 1);
 	queue.enqueueNotification(new QTestNotification("fourth"), 4);
 	queue.enqueueNotification(new QTestNotification("third"), 3);
 	queue.enqueueNotification(new QTestNotification("second"), 2);
-	assertTrue (!queue.empty());
-	assertTrue (queue.size() == 4);
+	assert (!queue.empty());
+	assert (queue.size() == 4);
 	QTestNotification* pTNf = dynamic_cast<QTestNotification*>(queue.dequeueNotification());
 	assertNotNullPtr(pTNf);
-	assertTrue (pTNf->data() == "first");
+	assert (pTNf->data() == "first");
 	pTNf->release();
-	assertTrue (!queue.empty());
-	assertTrue (queue.size() == 3);
+	assert (!queue.empty());
+	assert (queue.size() == 3);
 	pTNf = dynamic_cast<QTestNotification*>(queue.dequeueNotification());
 	assertNotNullPtr(pTNf);
-	assertTrue (pTNf->data() == "second");
+	assert (pTNf->data() == "second");
 	pTNf->release();
-	assertTrue (!queue.empty());
-	assertTrue (queue.size() == 2);
+	assert (!queue.empty());
+	assert (queue.size() == 2);
 	pTNf = dynamic_cast<QTestNotification*>(queue.dequeueNotification());
 	assertNotNullPtr(pTNf);
-	assertTrue (pTNf->data() == "third");
+	assert (pTNf->data() == "third");
 	pTNf->release();
-	assertTrue (!queue.empty());
-	assertTrue (queue.size() == 1);
+	assert (!queue.empty());
+	assert (queue.size() == 1);
 	pTNf = dynamic_cast<QTestNotification*>(queue.dequeueNotification());
 	assertNotNullPtr(pTNf);
-	assertTrue (pTNf->data() == "fourth");
+	assert (pTNf->data() == "fourth");
 	pTNf->release();
-	assertTrue (queue.empty());
-	assertTrue (queue.size() == 0);
+	assert (queue.empty());
+	assert (queue.size() == 0);
 
 	pNf = queue.dequeueNotification();
 	assertNullPtr(pNf);
@@ -114,20 +114,20 @@ void PriorityNotificationQueueTest::testWaitDequeue()
 	PriorityNotificationQueue queue;
 	queue.enqueueNotification(new QTestNotification("third"), 3);
 	queue.enqueueNotification(new QTestNotification("fourth"), 4);
-	assertTrue (!queue.empty());
-	assertTrue (queue.size() == 2);
+	assert (!queue.empty());
+	assert (queue.size() == 2);
 	QTestNotification* pTNf = dynamic_cast<QTestNotification*>(queue.waitDequeueNotification(10));
 	assertNotNullPtr(pTNf);
-	assertTrue (pTNf->data() == "third");
+	assert (pTNf->data() == "third");
 	pTNf->release();
-	assertTrue (!queue.empty());
-	assertTrue (queue.size() == 1);
+	assert (!queue.empty());
+	assert (queue.size() == 1);
 	pTNf = dynamic_cast<QTestNotification*>(queue.waitDequeueNotification(10));
 	assertNotNullPtr(pTNf);
-	assertTrue (pTNf->data() == "fourth");
+	assert (pTNf->data() == "fourth");
 	pTNf->release();
-	assertTrue (queue.empty());
-	assertTrue (queue.size() == 0);
+	assert (queue.empty());
+	assert (queue.size() == 0);
 
 	Notification* pNf = queue.waitDequeueNotification(10);
 	assertNullPtr(pNf);
@@ -156,18 +156,18 @@ void PriorityNotificationQueueTest::testThreads()
 	t1.join();
 	t2.join();
 	t3.join();
-	assertTrue (_handled.size() == NOTIFICATION_COUNT);
-	assertTrue (_handled.count("thread1") > 0);
-	assertTrue (_handled.count("thread2") > 0);
-	assertTrue (_handled.count("thread3") > 0);
+	assert (_handled.size() == NOTIFICATION_COUNT);
+	assert (_handled.count("thread1") > 0);
+	assert (_handled.count("thread2") > 0);
+	assert (_handled.count("thread3") > 0);
 }
 
 
 void PriorityNotificationQueueTest::testDefaultQueue()
 {
 	PriorityNotificationQueue& queue = PriorityNotificationQueue::defaultQueue();
-	assertTrue (queue.empty());
-	assertTrue (queue.size() == 0);
+	assert (queue.empty());
+	assert (queue.size() == 0);
 }
 
 

@@ -9,8 +9,8 @@
 
 
 #include "SemaphoreTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Thread.h"
 #include "Poco/Runnable.h"
 #include "Poco/Semaphore.h"
@@ -67,7 +67,7 @@ private:
 };
 
 
-SemaphoreTest::SemaphoreTest(const std::string& rName): CppUnit::TestCase(rName)
+SemaphoreTest::SemaphoreTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -80,7 +80,7 @@ SemaphoreTest::~SemaphoreTest()
 void SemaphoreTest::testInitZero()
 {
 	SemaRunnable r(0, 3);
-	assertTrue (!r.tryWait(10));
+	assert (!r.tryWait(10));
 	r.set();
 	r.wait();
 	try
@@ -97,18 +97,18 @@ void SemaphoreTest::testInitZero()
 	}
 	r.set();
 	r.set();
-	assertTrue (r.tryWait(0));
+	assert (r.tryWait(0));
 	r.wait();
-	assertTrue (!r.tryWait(10));
+	assert (!r.tryWait(10));
 	
 	Thread t;
 	t.start(r);
 	Thread::sleep(100);
-	assertTrue (!r.ran());
+	assert (!r.ran());
 	r.set();
 	t.join();
-	assertTrue (r.ran());
-	assertTrue (!r.tryWait(10));
+	assert (r.ran());
+	assert (!r.tryWait(10));
 }
 
 
@@ -116,11 +116,11 @@ void SemaphoreTest::testInitNonZero()
 {
 	SemaRunnable r(2, 2);
 	r.wait();
-	assertTrue (r.tryWait(10));
-	assertTrue (!r.tryWait(10));
+	assert (r.tryWait(10));
+	assert (!r.tryWait(10));
 	r.set();
-	assertTrue (r.tryWait(10));
-	assertTrue (!r.tryWait(10));
+	assert (r.tryWait(10));
+	assert (!r.tryWait(10));
 }
 
 

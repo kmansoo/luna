@@ -195,7 +195,7 @@ protected:
 
 private:
 	typedef Poco::Net::Impl::SocketAddressImpl Impl;
-	typedef Impl* Ptr;
+	typedef Poco::AutoPtr<Impl> Ptr;
 
 	Ptr pImpl() const;
 
@@ -209,23 +209,85 @@ private:
 #endif
 
 #if defined(POCO_OS_FAMILY_UNIX)
-	void newLocal(const sockaddr_un* sockAddr, poco_socklen_t length);
+	void newLocal(const sockaddr_un* sockAddr);
 	void newLocal(const std::string& path);
 #endif
 
-	void destruct();
-
-	char* storage();
-
-	static const unsigned sz = sizeof(Poco::Net::Impl::IPv6SocketAddressImpl);
-	typedef std::aligned_storage<sz>::type AlignerType;
-	union
-	{
-		char buffer[sz];
-	private:
-		AlignerType aligner;
-	} _memory;
+	Ptr _pImpl;
 };
+
+
+//
+// inlines
+//
+inline SocketAddress::Ptr SocketAddress::pImpl() const
+{
+	if (_pImpl) return _pImpl;
+	throw Poco::NullPointerException("Pointer to SocketAddress implementation is NULL.");
+}
+
+
+inline void SocketAddress::newIPv4()
+{
+	_pImpl = new Poco::Net::Impl::IPv4SocketAddressImpl;
+}
+
+
+inline void SocketAddress::newIPv4(const sockaddr_in* sockAddr)
+{
+	_pImpl = new Poco::Net::Impl::IPv4SocketAddressImpl(sockAddr);
+}
+
+
+inline void SocketAddress::newIPv4(const IPAddress& hostAddress, Poco::UInt16 portNumber)
+{
+	_pImpl = new Poco::Net::Impl::IPv4SocketAddressImpl(hostAddress.addr(), htons(portNumber));
+}
+
+
+#if defined(POCO_HAVE_IPv6)
+inline void SocketAddress::newIPv6(const sockaddr_in6* sockAddr)
+{
+	_pImpl = new Poco::Net::Impl::IPv6SocketAddressImpl(sockAddr);
+}
+
+
+inline void SocketAddress::newIPv6(const IPAddress& hostAddress, Poco::UInt16 portNumber)
+{
+	_pImpl = new Poco::Net::Impl::IPv6SocketAddressImpl(hostAddress.addr(), htons(portNumber), hostAddress.scope());
+}
+#endif // POCO_HAVE_IPv6
+
+
+#if defined(POCO_OS_FAMILY_UNIX)
+inline void SocketAddress::newLocal(const sockaddr_un* sockAddr)
+{
+	_pImpl = new Poco::Net::Impl::LocalSocketAddressImpl(sockAddr);
+}
+
+
+inline void SocketAddress::newLocal(const std::string& path)
+{
+	_pImpl = new Poco::Net::Impl::LocalSocketAddressImpl(path.c_str(), path.size());
+}
+#endif // POCO_OS_FAMILY_UNIX
+
+
+inline 	bool SocketAddress::operator == (const SocketAddress& socketAddress) const
+{
+#if defined(POCO_OS_FAMILY_UNIX)
+	if (family() == UNIX_LOCAL)
+		return toString() == socketAddress.toString();
+	else
+#endif
+		return host() == socketAddress.host() && port() == socketAddress.port();
+}
+
+
+inline bool SocketAddress::operator != (const SocketAddress& socketAddress) const
+{
+	return !(operator == (socketAddress));
+}
 
 
 } } // namespace Poco::Net

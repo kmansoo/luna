@@ -102,7 +102,7 @@ public:
 	void setCredentials(const std::string& scheme, const std::string& authInfo);
 		/// Sets the authentication scheme and information for
 		/// this request.
-		
+
 	bool getExpectContinue() const;
 		/// Returns true if the request contains an
 		/// "Expect: 100-continue" header.

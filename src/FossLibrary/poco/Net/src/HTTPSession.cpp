@@ -98,6 +98,7 @@ void HTTPSession::setTimeout(const Poco::Timespan& timeout)
 	setTimeout(timeout, timeout, timeout);
 }
 
+
 void HTTPSession::setTimeout(const Poco::Timespan& connectionTimeout, const Poco::Timespan& sendTimeout, const Poco::Timespan& receiveTimeout)
 {
 	 _connectionTimeout = connectionTimeout;
@@ -199,13 +200,6 @@ void HTTPSession::connect(const SocketAddress& address)
 	// There may be leftover data from a previous (failed) request in the buffer,
 	// so we clear it.
 	_pCurrent = _pEnd = _pBuffer;
-}
-
-
-void HTTPSession::connect(const SocketAddress& targetAddress, const SocketAddress& sourceAddress)
-{
-	_socket.bind(sourceAddress, true);
-	connect(targetAddress);
 }
 
 

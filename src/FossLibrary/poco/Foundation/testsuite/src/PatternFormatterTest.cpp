@@ -9,12 +9,11 @@
 
 
 #include "PatternFormatterTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/PatternFormatter.h"
 #include "Poco/Message.h"
 #include "Poco/DateTime.h"
-#include "Poco/Exception.h"
 
 
 using Poco::PatternFormatter;
@@ -22,7 +21,7 @@ using Poco::Message;
 using Poco::DateTime;
 
 
-PatternFormatterTest::PatternFormatterTest(const std::string& rName): CppUnit::TestCase(rName)
+PatternFormatterTest::PatternFormatterTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -48,65 +47,50 @@ void PatternFormatterTest::testPatternFormatter()
 	std::string result;
 	fmt.setProperty("pattern", "%Y-%m-%dT%H:%M:%S [%s] %p: %t");
 	fmt.format(msg, result);
-	assertTrue (result == "2005-01-01T14:30:15 [TestSource] Error: Test message text");
+	assert (result == "2005-01-01T14:30:15 [TestSource] Error: Test message text");
 	
 	result.clear();
 	fmt.setProperty("pattern", "%w, %e %b %y %H:%M:%S.%i [%s:%I:%T] %q: %t");
 	fmt.format(msg, result);
-	assertTrue (result == "Sat, 1 Jan 05 14:30:15.500 [TestSource:1:TestThread] E: Test message text");
+	assert (result == "Sat, 1 Jan 05 14:30:15.500 [TestSource:1:TestThread] E: Test message text");
 
 	result.clear();
 	fmt.setProperty("pattern", "%Y-%m-%d %H:%M:%S [%N:%P:%s]%l-%t");
 	fmt.format(msg, result);
-	assertTrue (result.find("2005-01-01 14:30:15 [") == 0);
-	assertTrue (result.find(":TestSource]3-Test message text") != std::string::npos);
+	assert (result.find("2005-01-01 14:30:15 [") == 0);
+	assert (result.find(":TestSource]3-Test message text") != std::string::npos);
 	
 	result.clear();
-	assertTrue (fmt.getProperty("times") == "UTC");
+	assert (fmt.getProperty("times") == "UTC");
 	fmt.setProperty("times", "local");
 	fmt.format(msg, result);
-	assertTrue (result.find("2005-01-01 ") == 0);
-	assertTrue (result.find(":TestSource]3-Test message text") != std::string::npos);
+	assert (result.find("2005-01-01 ") == 0);
+	assert (result.find(":TestSource]3-Test message text") != std::string::npos);
 	
 	result.clear();
 	fmt.setProperty("pattern", "%[testParam]");
 	fmt.format(msg, result);
-	assertTrue (result == "Test Parameter");
+	assert (result == "Test Parameter");
 
 	result.clear();
 	fmt.setProperty("pattern", "%[testParam] %p");
 	fmt.format(msg, result);
-	assertTrue (result == "Test Parameter Error");
+	assert (result == "Test Parameter Error");
 
 	result.clear();
 	fmt.setProperty("pattern", "start %v[10] end");
 	fmt.format(msg, result);
-	assertTrue (result == "start TestSource end");
+	assert (result == "start TestSource end");
 
 	result.clear();
 	fmt.setProperty("pattern", "start %v[12] end");
 	fmt.format(msg, result);
-	assertTrue (result == "start TestSource   end");
+	assert (result == "start TestSource   end");
 
 	result.clear();
 	fmt.setProperty("pattern", "start %v[8] end");
 	fmt.format(msg, result);
-	assertTrue (result == "start stSource end");
-	
-	result.clear();
-	fmt.setProperty("pattern", "%p");
-	fmt.setProperty("priorityNames", "FAT, CRI, ERR, WRN, NTC, INF, DBG, TRC");
-	fmt.format(msg, result);
-	assertTrue (result == "ERR");
-	
-	try
-	{
-		fmt.setProperty("priorityNames", "FAT, CRI,");
-		fail("invalid value, must throw");
-	}
-	catch (Poco::SyntaxException&)
-	{
-	}
+	assert (result == "start stSource end");
 }
 
 

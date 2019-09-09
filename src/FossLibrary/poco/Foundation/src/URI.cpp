@@ -358,7 +358,7 @@ URI::QueryParameters URI::getQueryParameters() const
 		std::string value;
 		while (it != end && *it != '=' && *it != '&')
 		{
-			if (*it == '+')
+			if (*it == '+') 
 				name += ' ';
 			else
 				name += *it;
@@ -369,7 +369,7 @@ URI::QueryParameters URI::getQueryParameters() const
 			++it;
 			while (it != end && *it != '&')
 			{
-				if (*it == '+')
+				if (*it == '+') 
 					value += ' ';
 				else
 					value += *it;
@@ -498,7 +498,7 @@ void URI::resolve(const URI& relativeURI)
 			}
 		}
 	}
-	_fragment = relativeURI._fragment;
+	_fragment = relativeURI._fragment;      
 }
 
 
@@ -626,10 +626,10 @@ void URI::encode(const std::string& str, const std::string& reserved, std::strin
 	for (std::string::const_iterator it = str.begin(); it != str.end(); ++it)
 	{
 		char c = *it;
-		if ((c >= 'a' && c <= 'z') ||
-		    (c >= 'A' && c <= 'Z') ||
+		if ((c >= 'a' && c <= 'z') || 
+		    (c >= 'A' && c <= 'Z') || 
 		    (c >= '0' && c <= '9') ||
-		    c == '-' || c == '_' ||
+		    c == '-' || c == '_' || 
 		    c == '.' || c == '~')
 		{
 			encodedStr += c;
@@ -696,30 +696,16 @@ unsigned short URI::getWellKnownPort() const
 		return 22;
 	else if (_scheme == "telnet")
 		return 23;
-	else if (_scheme == "smtp")
-		return 25;
-	else if (_scheme == "dns")
-		return 53;
 	else if (_scheme == "http" || _scheme == "ws")
 		return 80;
 	else if (_scheme == "nntp")
 		return 119;
-	else if (_scheme == "imap")
-		return 143;
 	else if (_scheme == "ldap")
 		return 389;
 	else if (_scheme == "https" || _scheme == "wss")
 		return 443;
-	else if (_scheme == "smtps")
-		return 465;
 	else if (_scheme == "rtsp")
 		return 554;
-	else if (_scheme == "ldaps")
-		return 636;
-	else if (_scheme == "dnss")
-		return 853;
-	else if (_scheme == "imaps")
-		return 993;
 	else if (_scheme == "sip")
 		return 5060;
 	else if (_scheme == "sips")
@@ -757,7 +743,7 @@ void URI::parse(const std::string& uri)
 			}
 			parsePathEtc(it, end);
 		}
-		else
+		else 
 		{
 			it = uri.begin();
 			parsePathEtc(it, end);
@@ -919,7 +905,7 @@ void URI::buildPath(const std::vector<std::string>& segments, bool leadingSlash,
 		else _path += '/';
 		_path.append(*it);
 	}
-	if (trailingSlash)
+	if (trailingSlash) 
 		_path += '/';
 }
 

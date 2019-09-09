@@ -20,8 +20,6 @@
 
 #include "Poco/Foundation.h"
 #include "Poco/DirectoryIterator.h"
-#include "Poco/BasicEvent.h"
-#include "Poco/EventArgs.h"
 #include <stack>
 #include <queue>
 #include <functional>
@@ -40,8 +38,6 @@ public:
 	{
 		D_INFINITE = 0 /// Special value for infinite traverse depth.
 	};
-
-	Poco::BasicEvent<const std::string> traverseError;
 
 	TraverseBase(DepthFunPtr depthDeterminer, UInt16 maxDepth = D_INFINITE);
 

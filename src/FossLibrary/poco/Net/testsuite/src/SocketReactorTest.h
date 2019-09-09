@@ -15,7 +15,7 @@
 
 
 #include "Poco/Net/Net.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class SocketReactorTest: public CppUnit::TestCase
@@ -29,7 +29,6 @@ public:
 	void testParallelSocketReactor();
 	void testSocketConnectorFail();
 	void testSocketConnectorTimeout();
-	void testDataCollection();
 
 	void setUp();
 	void tearDown();

@@ -35,7 +35,7 @@ class ListMap
 	/// ordering of elements is not desirable. Naturally, this container will
 	/// have inferior data retrieval performance and it is not recommended for
 	/// use with large datasets. The main purpose within POCO is for Internet
-	/// messages (email message, http headers etc), to prevent automatic
+	/// messages (email message, http headers etc), to prevent automatic 
 	/// header entry reordering.
 {
 public:
@@ -107,12 +107,12 @@ public:
 		/// not found.
 	{
 		typename Container::const_iterator it = _list.begin();
-		typename Container::const_iterator end = _list.end();
-		for(; it != end; ++it)
+		typename Container::const_iterator itEnd = _list.end();
+		for(; it != itEnd; ++it)
 		{
 			if (isEqual(it->first, key)) return it;
 		}
-		return end;
+		return itEnd;
 	}
 
 	Iterator find(const KeyType& key)
@@ -122,20 +122,20 @@ public:
 		/// not found.
 	{
 		typename Container::iterator it = _list.begin();
-		typename Container::iterator end = _list.end();
-		for(; it != end; ++it)
+		typename Container::iterator itEnd = _list.end();
+		for(; it != itEnd; ++it)
 		{
 			if (isEqual(it->first, key)) return it;
 		}
-		return end;
+		return itEnd;
 	}
 
 	Iterator insert(const ValueType& val)
-		/// Inserts the value into the map. If one or more values
-		/// already exist, new value is inserted at the end of the
+		/// Inserts the value into the map. If one or more values 
+		/// already exist, new value is inserted at the end of the 
 		/// block. Thus, all the equal value entries are located
 		/// sequentially at all times.
-		/// Returns iterator pointing to the newly inserted value
+		/// Returns iterator pointing to the newly inserted value 
 	{
 		Iterator it = find(val.first);
 		while (it != _list.end() && isEqual(it->first, val.first)) ++it;
@@ -201,8 +201,8 @@ public:
 		else
 		{
 			ValueType value(key, Mapped());
-			Iterator it = insert(value);
-			return it->second;
+			Iterator itInsert = insert(value);
+			return itInsert->second;
 		}
 	}
 

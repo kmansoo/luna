@@ -22,7 +22,7 @@
 
 #include "Poco/DirectoryWatcher.h"
 #include "Poco/Path.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class DirectoryWatcherTest: public CppUnit::TestCase

@@ -15,7 +15,7 @@
 
 
 #include "Poco/Net/Net.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class HTMLFormTest: public CppUnit::TestCase
@@ -36,7 +36,6 @@ public:
 	void testSubmit2();
 	void testSubmit3();
 	void testSubmit4();
-	void testSubmit5();
 	void testFieldLimitUrl();
 	void testFieldLimitMultipart();
 

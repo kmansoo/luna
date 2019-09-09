@@ -19,9 +19,6 @@
 
 
 #include "Poco/Foundation.h"
-#include "Poco/Event.h"
-#include "Poco/Mutex.h"
-#include "Poco/Optional.h"
 #include "Poco/RefCountedObject.h"
 #include <unistd.h>
 #include <vector>
@@ -42,13 +39,9 @@ public:
 	
 	pid_t id() const;
 	int wait() const;
-	int wait(int options) const;
 	
 private:
-	const pid_t _pid;
-	mutable FastMutex _mutex;
-	mutable Event _event;
-	mutable Optional<int> _status;
+	pid_t _pid;
 };
 
 
@@ -62,11 +55,11 @@ public:
 	static PIDImpl idImpl();
 	static void timesImpl(long& userTime, long& kernelTime);
 	static ProcessHandleImpl* launchImpl(
-		const std::string& command,
-		const ArgsImpl& args,
+		const std::string& command, 
+		const ArgsImpl& args, 
 		const std::string& initialDirectory,
-		Pipe* inPipe,
-		Pipe* outPipe,
+		Pipe* inPipe, 
+		Pipe* outPipe, 
 		Pipe* errPipe,
 		const EnvImpl& env);
 	static void killImpl(ProcessHandleImpl& handle);
@@ -77,11 +70,11 @@ public:
 
 private:
 	static ProcessHandleImpl* launchByForkExecImpl(
-		const std::string& command,
-		const ArgsImpl& args,
+		const std::string& command, 
+		const ArgsImpl& args, 
 		const std::string& initialDirectory,
-		Pipe* inPipe,
-		Pipe* outPipe,
+		Pipe* inPipe, 
+		Pipe* outPipe, 
 		Pipe* errPipe,
 		const EnvImpl& env);
 };

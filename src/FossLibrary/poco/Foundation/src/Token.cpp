@@ -20,7 +20,7 @@
 namespace Poco {
 
 
-Token::Token(bool ignore) : _ignored(ignore)
+Token::Token()
 {
 }
 
@@ -30,14 +30,14 @@ Token::~Token()
 }
 
 
-bool Token::start(char c, std::istream& /*istr*/)
+bool Token::start(char c, std::istream& istr)
 {
 	_value = c;
 	return false;
 }
 
 
-void Token::finish(std::istream& /*istr*/)
+void Token::finish(std::istream& istr)
 {
 }
 
@@ -92,17 +92,6 @@ char Token::asChar() const
 }
 
 
-void Token::ignore(bool ignored)
-{
-	_ignored = ignored;
-}
-
-bool Token::ignored() const
-{
-	return _ignored;
-}
-
-
 InvalidToken::InvalidToken()
 {
 }
@@ -135,7 +124,7 @@ Token::Class EOFToken::tokenClass() const
 }
 
 
-WhitespaceToken::WhitespaceToken() : Token(true)
+WhitespaceToken::WhitespaceToken()
 {
 }
 
@@ -151,7 +140,7 @@ Token::Class WhitespaceToken::tokenClass() const
 }
 
 
-bool WhitespaceToken::start(char c, std::istream& /*istr*/)
+bool WhitespaceToken::start(char c, std::istream& istr)
 {
 	if (Ascii::isSpace(c))
 	{

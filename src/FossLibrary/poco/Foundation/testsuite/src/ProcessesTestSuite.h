@@ -14,7 +14,7 @@
 #define ProcessesTestSuite_INCLUDED
 
 
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestSuite.h"
 
 
 class ProcessesTestSuite

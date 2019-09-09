@@ -15,7 +15,7 @@
 
 
 #include "Poco/Foundation.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class ProcessTest: public CppUnit::TestCase
@@ -30,8 +30,6 @@ public:
 	void testLaunchEnv();
 	void testLaunchArgs();
 	void testIsRunning();
-	void testIsRunningAllowsForTermination();
-	void testSignalExitCode();
 
 	void setUp();
 	void tearDown();
@@ -39,7 +37,6 @@ public:
 	static CppUnit::Test* suite();
 
 private:
-	std::string execName();
 };
 
 

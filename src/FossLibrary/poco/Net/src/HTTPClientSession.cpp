@@ -40,8 +40,6 @@ HTTPClientSession::ProxyConfig HTTPClientSession::_globalProxyConfig;
 
 HTTPClientSession::HTTPClientSession():
 	_port(HTTPSession::HTTP_PORT),
-	_sourceAddress4(IPAddress::wildcard(IPAddress::IPv4), 0),
-	_sourceAddress6(IPAddress::wildcard(IPAddress::IPv6), 0),
 	_proxyConfig(_globalProxyConfig),
 	_keepAliveTimeout(DEFAULT_KEEP_ALIVE_TIMEOUT, 0),
 	_reconnect(false),
@@ -55,8 +53,6 @@ HTTPClientSession::HTTPClientSession():
 HTTPClientSession::HTTPClientSession(const StreamSocket& socket):
 	HTTPSession(socket),
 	_port(HTTPSession::HTTP_PORT),
-	_sourceAddress4(IPAddress::wildcard(IPAddress::IPv4), 0),
-	_sourceAddress6(IPAddress::wildcard(IPAddress::IPv6), 0),
 	_proxyConfig(_globalProxyConfig),
 	_keepAliveTimeout(DEFAULT_KEEP_ALIVE_TIMEOUT, 0),
 	_reconnect(false),
@@ -64,15 +60,12 @@ HTTPClientSession::HTTPClientSession(const StreamSocket& socket):
 	_expectResponseBody(false),
 	_responseReceived(false)
 {
-	setKeepAlive(true);
 }
 
 
 HTTPClientSession::HTTPClientSession(const SocketAddress& address):
 	_host(address.host().toString()),
 	_port(address.port()),
-	_sourceAddress4(IPAddress::wildcard(IPAddress::IPv4), 0),
-	_sourceAddress6(IPAddress::wildcard(IPAddress::IPv6), 0),
 	_proxyConfig(_globalProxyConfig),
 	_keepAliveTimeout(DEFAULT_KEEP_ALIVE_TIMEOUT, 0),
 	_reconnect(false),
@@ -86,8 +79,6 @@ HTTPClientSession::HTTPClientSession(const SocketAddress& address):
 HTTPClientSession::HTTPClientSession(const std::string& host, Poco::UInt16 port):
 	_host(host),
 	_port(port),
-	_sourceAddress4(IPAddress::wildcard(IPAddress::IPv4), 0),
-	_sourceAddress6(IPAddress::wildcard(IPAddress::IPv6), 0),
 	_proxyConfig(_globalProxyConfig),
 	_keepAliveTimeout(DEFAULT_KEEP_ALIVE_TIMEOUT, 0),
 	_reconnect(false),
@@ -101,8 +92,6 @@ HTTPClientSession::HTTPClientSession(const std::string& host, Poco::UInt16 port)
 HTTPClientSession::HTTPClientSession(const std::string& host, Poco::UInt16 port, const ProxyConfig& proxyConfig):
 	_host(host),
 	_port(port),
-	_sourceAddress4(IPAddress::wildcard(IPAddress::IPv4), 0),
-	_sourceAddress6(IPAddress::wildcard(IPAddress::IPv6), 0),
 	_proxyConfig(proxyConfig),
 	_keepAliveTimeout(DEFAULT_KEEP_ALIVE_TIMEOUT, 0),
 	_reconnect(false),
@@ -110,22 +99,6 @@ HTTPClientSession::HTTPClientSession(const std::string& host, Poco::UInt16 port,
 	_expectResponseBody(false),
 	_responseReceived(false)
 {
-}
-
-
-HTTPClientSession::HTTPClientSession(const StreamSocket& socket, const ProxyConfig& proxyConfig):
-	HTTPSession(socket),
-	_port(HTTPSession::HTTP_PORT),
-	_sourceAddress4(IPAddress::wildcard(IPAddress::IPv4), 0),
-	_sourceAddress6(IPAddress::wildcard(IPAddress::IPv6), 0),
-	_proxyConfig(proxyConfig),
-	_keepAliveTimeout(DEFAULT_KEEP_ALIVE_TIMEOUT, 0),
-	_reconnect(false),
-	_mustReconnect(false),
-	_expectResponseBody(false),
-	_responseReceived(false)
-{
-	setKeepAlive(true);
 }
 
 
@@ -149,39 +122,6 @@ void HTTPClientSession::setPort(Poco::UInt16 port)
 		_port = port;
 	else
 		throw IllegalStateException("Cannot set the port number for an already connected session");
-}
-
-
-void HTTPClientSession::setSourceAddress(const SocketAddress& address)
-{
-	if (!connected())
-	{
-		if (address.family() == IPAddress::IPv4)
-			_sourceAddress4 = address;
-		else
-			_sourceAddress6 = address;
-		_sourceAddress = address;
-	}
-	else
-		throw IllegalStateException("Cannot set the source address for an already connected session");
-}
-
-
-const SocketAddress& HTTPClientSession::getSourceAddress()
-{
-	return _sourceAddress;
-}
-
-
-const SocketAddress& HTTPClientSession::getSourceAddress4()
-{
-	return _sourceAddress4;
-}
-
-
-const SocketAddress& HTTPClientSession::getSourceAddress6()
-{
-	return _sourceAddress6;
 }
 
 
@@ -320,11 +260,16 @@ std::ostream& HTTPClientSession::sendRequest(HTTPRequest& request)
 }
 
 
-std::istream& HTTPClientSession::receiveResponse(HTTPResponse& response)
+void HTTPClientSession::flushRequest()
 {
 	_pRequestStream = 0;
 	if (networkException()) networkException()->rethrow();
+}
 
+
+std::istream& HTTPClientSession::receiveResponse(HTTPResponse& response)
+{
+	flushRequest();
 	if (!_responseReceived)
 	{
 		do
@@ -433,22 +378,16 @@ int HTTPClientSession::write(const char* buffer, std::streamsize length)
 
 void HTTPClientSession::reconnect()
 {
-	SocketAddress addr;
 	if (_proxyConfig.host.empty() || bypassProxy())
-		addr = SocketAddress(_host, _port);
-	else
-		addr = SocketAddress(_proxyConfig.host, _proxyConfig.port);
-
-	SocketAddress sourceAddr;
-	if (addr.family() == IPAddress::IPv4)
-		sourceAddr = _sourceAddress4;
-	else
-		sourceAddr = _sourceAddress6;
-
-	if ((!sourceAddr.host().isWildcard()) || (sourceAddr.port() != 0))
-		connect(addr, sourceAddr);
-	else
+	{
+		SocketAddress addr(_host, _port);
 		connect(addr);
+	}
+	else
+	{
+		SocketAddress addr(_proxyConfig.host, _proxyConfig.port);
+		connect(addr);
+	}
 }
 
 
@@ -503,8 +442,6 @@ StreamSocket HTTPClientSession::proxyConnect()
 	proxyRequest.set("Host", getHost());
 	proxyAuthenticateImpl(proxyRequest);
 	proxySession.setKeepAlive(true);
-	proxySession.setSourceAddress(_sourceAddress4);
-	proxySession.setSourceAddress(_sourceAddress6);
 	proxySession.sendRequest(proxyRequest);
 	proxySession.receiveResponse(proxyResponse);
 	if (proxyResponse.getStatus() != HTTPResponse::HTTP_OK)

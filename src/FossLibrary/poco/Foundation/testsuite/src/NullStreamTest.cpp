@@ -9,8 +9,8 @@
 
 
 #include "NullStreamTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/NullStream.h"
 
 
@@ -18,7 +18,7 @@ using Poco::NullInputStream;
 using Poco::NullOutputStream;
 
 
-NullStreamTest::NullStreamTest(const std::string& rName): CppUnit::TestCase(rName)
+NullStreamTest::NullStreamTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -31,20 +31,20 @@ NullStreamTest::~NullStreamTest()
 void NullStreamTest::testInput()
 {
 	NullInputStream istr;
-	assertTrue (istr.good());
-	assertTrue (!istr.eof());
+	assert (istr.good());
+	assert (!istr.eof());
 	int c = istr.get();
-	assertTrue (c == -1);
-	assertTrue (istr.eof());
+	assert (c == -1);
+	assert (istr.eof());
 }
 
 
 void NullStreamTest::testOutput()
 {
 	NullOutputStream ostr;
-	assertTrue (ostr.good());
+	assert (ostr.good());
 	ostr << "Hello, world!";
-	assertTrue (ostr.good());
+	assert (ostr.good());
 }
 
 

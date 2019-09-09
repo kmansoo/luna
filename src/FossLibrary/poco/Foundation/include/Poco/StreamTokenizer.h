@@ -66,7 +66,7 @@ public:
 	const Token* next();
 		/// Extracts the next token from the input stream.
 		/// Returns a pointer to an EOFToken if there are
-		/// no more characters to read.
+		/// no more characters to read. 
 		/// Returns a pointer to an InvalidToken if an
 		/// invalid character is encountered.
 		/// If a token is marked as ignorable, it will not
@@ -76,7 +76,13 @@ public:
 		/// You must not delete the token returned by next().
 
 private:
-	typedef std::vector<Token*> TokenVec;
+	struct TokenInfo
+	{
+		Token* pToken;
+		bool   ignore;
+	};
+	
+	typedef std::vector<TokenInfo> TokenVec;
 	
 	TokenVec      _tokens;
 	std::istream* _pIstr;

@@ -15,7 +15,7 @@
 
 
 #include "Poco/Foundation.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 #include "Poco/TimedNotificationQueue.h"
 #include "Poco/Mutex.h"
 #include <set>

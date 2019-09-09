@@ -24,7 +24,6 @@
 #include "Poco/AutoPtr.h"
 #include "Poco/NotificationCenter.h"
 #include "Poco/Timestamp.h"
-#include "Poco/ThreadPool.h"
 #include <list>
 
 
@@ -32,6 +31,7 @@ namespace Poco {
 
 
 class Notification;
+class ThreadPool;
 class Exception;
 
 
@@ -50,7 +50,7 @@ public:
 	typedef AutoPtr<Task>      TaskPtr;
 	typedef std::list<TaskPtr> TaskList;
 
-	TaskManager(ThreadPool::ThreadAffinityPolicy affinityPolicy = ThreadPool::TAP_DEFAULT);
+	TaskManager();
 		/// Creates the TaskManager, using the
 		/// default ThreadPool.
 
@@ -61,15 +61,10 @@ public:
 	~TaskManager();
 		/// Destroys the TaskManager.
 
-	void start(Task* pTask, int cpu = -1);
+	void start(Task* pTask);
 		/// Starts the given task in a thread obtained
-		/// from the thread pool,
-		/// on specified cpu.
-		/// The TaskManager takes ownership of the Task object
-		/// and deletes it when it it finished.
-
-	void startSync(Task* pTask);
-		/// Starts the given task in the current thread.
+		/// from the thread pool.
+		///
 		/// The TaskManager takes ownership of the Task object
 		/// and deletes it when it it finished.
 
@@ -89,7 +84,7 @@ public:
 	TaskList taskList() const;
 		/// Returns a copy of the internal task list.
 
-	std::size_t count() const;
+	int count() const;
 		/// Returns the number of tasks in the internal task list.
 
 	void addObserver(const AbstractObserver& observer);
@@ -105,7 +100,7 @@ public:
 
 protected:
 	void postNotification(const Notification::Ptr& pNf);
-		/// Posts a notification to the task manager's
+		/// Posts a notification to the task manager's 
 		/// notification center.
 
 	void taskStarted(Task* pTask);
@@ -128,11 +123,11 @@ private:
 //
 // inlines
 //
-inline std::size_t TaskManager::count() const
+inline int TaskManager::count() const
 {
 	FastMutex::ScopedLock lock(_mutex);
 
-	return _taskList.size();
+	return (int) _taskList.size();
 }
 
 

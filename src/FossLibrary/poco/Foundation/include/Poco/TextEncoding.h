@@ -20,15 +20,12 @@
 
 #include "Poco/Foundation.h"
 #include "Poco/SharedPtr.h"
-#include "Poco/String.h"
-#include "Poco/RWLock.h"
-#include <map>
 
 
 namespace Poco {
 
 
-class Foundation_API TextEncodingRegistry;
+class TextEncodingManager;
 
 
 class Foundation_API TextEncoding
@@ -45,12 +42,12 @@ class Foundation_API TextEncoding
 {
 public:
 	typedef SharedPtr<TextEncoding> Ptr;
-	
+
 	enum
 	{
 		MAX_SEQUENCE_LENGTH = 4 /// The maximum character byte sequence length supported.
 	};
-	
+
 	typedef int CharacterMap[256];
 		/// The map[b] member gives information about byte sequences
 		/// whose first byte is b.
@@ -72,8 +69,8 @@ public:
 		/// Returns true if the given name is one of the names of this encoding.
 		/// For example, the "ISO-8859-1" encoding is also known as "Latin-1".
 		///
-		/// Encoding name comparisons are case insensitive.
-			
+		/// Encoding name comparisions are case insensitive.
+
 	virtual const CharacterMap& characterMap() const = 0;
 		/// Returns the CharacterMap for the encoding.
 		/// The CharacterMap should be kept in a static member. As
@@ -81,7 +78,7 @@ public:
 		/// implemented in such a way that it just returns a static
 		/// map. If the map is built at runtime, this should be
 		/// done in the constructor.
-		
+
 	virtual int convert(const unsigned char* bytes) const;
 		/// The convert function is used to convert multibyte sequences;
 		/// bytes will point to a byte sequence of n bytes where
@@ -141,7 +138,7 @@ public:
 		/// Returns the TextEncoding object for the given encoding name.
 		///
 		/// Throws a NotFoundException if the encoding with given name is not available.
-		
+
 	static TextEncoding::Ptr find(const std::string& encodingName);
 		/// Returns a pointer to the TextEncoding object for the given encodingName,
 		/// or NULL if no such TextEncoding object exists.
@@ -176,54 +173,9 @@ public:
 	static const std::string GLOBAL;
 		/// Name of the global TextEncoding, which is the empty string.
 
-	static const TextEncodingRegistry& registry();
-		/// Returns the TextEncodingRegistry.
-
 protected:
-	static TextEncodingRegistry* registry(int);
-		/// Returns the TextEncodingRegistry.
-};
-
-
-class Foundation_API TextEncodingRegistry
-	/// This class serves as the main registry for all
-	/// supported TextEncoding's.
-{
-public:
-	TextEncodingRegistry();
-		/// Constructs TextEncodingRegistry
-
-	~TextEncodingRegistry();
-		/// Destroys TextEncodingRegistry
-
-	bool has(const std::string& name) const;
-		// Returns true if requested encoding is found.
-		// it will eturn true for both canonical and
-		// alternative encoding name.
-
-	void add(TextEncoding::Ptr pEncoding);
-		/// Adds encoding to the registry under its canonnical name.
-
-	void add(TextEncoding::Ptr pEncoding, const std::string& name);
-		/// Adds encoding to the registry under the specified name.
-
-	void remove(const std::string& name);
-		/// Removes the specified encoding from the registry.
-
-	TextEncoding::Ptr find(const std::string& name) const;
-		/// Returns Ptr to the enconding registerd under the speciied
-		/// name or having the name as an alias.
-		///
-		/// If encoding is not found, the returned Ptr points to nothing.
-
-private:
-	TextEncodingRegistry(const TextEncodingRegistry&);
-	TextEncodingRegistry& operator = (const TextEncodingRegistry&);
-
-	typedef std::map<std::string, TextEncoding::Ptr, CILess> EncodingMap;
-
-	EncodingMap    _encodings;
-	mutable RWLock _lock;
+	static TextEncodingManager& manager();
+		/// Returns the TextEncodingManager.
 };
 
 

@@ -9,8 +9,8 @@
 
 
 #include "AnyTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Exception.h"
 #include "Poco/Any.h"
 #include "Poco/Bugcheck.h"
@@ -40,7 +40,7 @@ public:
 };
 
 
-AnyTest::AnyTest(const std::string& rName): CppUnit::TestCase(rName)
+AnyTest::AnyTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -54,9 +54,9 @@ void AnyTest::testDefaultCtor()
 {
 	const Any value;
 	
-	assertTrue (value.empty());
-	assertTrue (0 == AnyCast<int>(&value));
-	assertTrue (value.type() == typeid(void));
+	assert (value.empty());
+	assert (0 == AnyCast<int>(&value));
+	assert (value.type() == typeid(void));
 }
 
 
@@ -65,12 +65,12 @@ void AnyTest::testConvertingCtor()
 	std::string text = "test message";
 	Any value = text;
 	
-	assertTrue (!value.empty());
-	assertTrue (value.type() == typeid(std::string));
-	assertTrue (0 == AnyCast<int>(&value));
-	assertTrue (0 != AnyCast<std::string>(&value));
-	assertTrue (AnyCast<std::string>(value) == text);
-	assertTrue (AnyCast<std::string>(&value) != &text);
+	assert (!value.empty());
+	assert (value.type() == typeid(std::string));
+	assert (0 == AnyCast<int>(&value));
+	assert (0 != AnyCast<std::string>(&value));
+	assert (AnyCast<std::string>(value) == text);
+	assert (AnyCast<std::string>(&value) != &text);
 }
 
 
@@ -79,11 +79,11 @@ void AnyTest::testCopyCtor()
 	std::string text = "test message";
 	Any original = text, copy = original;
 	
-	assertTrue (!copy.empty());
-	assertTrue (original.type() == copy.type());
-	assertTrue (AnyCast<std::string>(original) == AnyCast<std::string>(copy));
-	assertTrue (text == AnyCast<std::string>(copy));
-	assertTrue (AnyCast<std::string>(&original) != AnyCast<std::string>(&copy));
+	assert (!copy.empty());
+	assert (original.type() == copy.type());
+	assert (AnyCast<std::string>(original) == AnyCast<std::string>(copy));
+	assert (text == AnyCast<std::string>(copy));
+	assert (AnyCast<std::string>(&original) != AnyCast<std::string>(&copy));
 }
 
 
@@ -93,19 +93,19 @@ void AnyTest::testCopyAssign()
 	Any original = text, copy;
 	Any* assignResult = &(copy = original);
 	
-	assertTrue (!copy.empty());
-	assertTrue (original.type() == copy.type());
-	assertTrue (AnyCast<std::string>(original) == AnyCast<std::string>(copy));
-	assertTrue (text == AnyCast<std::string>(copy));
-	assertTrue (AnyCast<std::string>(&original) != AnyCast<std::string>(&copy));
-	assertTrue (assignResult == &copy);
+	assert (!copy.empty());
+	assert (original.type() == copy.type());
+	assert (AnyCast<std::string>(original) == AnyCast<std::string>(copy));
+	assert (text == AnyCast<std::string>(copy));
+	assert (AnyCast<std::string>(&original) != AnyCast<std::string>(&copy));
+	assert (assignResult == &copy);
 
 	// test self assignment
 	Any& ref = original;
 	original = ref;
-	assertTrue (AnyCast<std::string>(original) == AnyCast<std::string>(copy));
+	assert (AnyCast<std::string>(original) == AnyCast<std::string>(copy));
 	original = original;
-	assertTrue (AnyCast<std::string>(original) == AnyCast<std::string>(copy));
+	assert (AnyCast<std::string>(original) == AnyCast<std::string>(copy));
 }
 
 
@@ -115,13 +115,13 @@ void AnyTest::testConvertingAssign()
 	Any value;
 	Any* assignResult = &(value = text);
 	
-	assertTrue (!value.empty());
-	assertTrue (value.type() == typeid(std::string));
-	assertTrue (0 == AnyCast<int>(&value));
-	assertTrue (0 != AnyCast<std::string>(&value));
-	assertTrue (AnyCast<std::string>(value) == text);
-	assertTrue (AnyCast<std::string>(&value) != &text);
-	assertTrue (assignResult == &value);
+	assert (!value.empty());
+	assert (value.type() == typeid(std::string));
+	assert (0 == AnyCast<int>(&value));
+	assert (0 != AnyCast<std::string>(&value));
+	assert (AnyCast<std::string>(value) == text);
+	assert (AnyCast<std::string>(&value) != &text);
+	assert (assignResult == &value);
 }
 
 
@@ -136,17 +136,17 @@ void AnyTest::testCastToReference()
 	int const volatile& ra_cv = AnyCast<int const volatile&>(a);
 	
 	// cv references to same obj
-	assertTrue (&ra == &ra_c && &ra == &ra_v && &ra == &ra_cv);
+	assert (&ra == &ra_c && &ra == &ra_v && &ra == &ra_cv);
 	
 	int const &          rb_c  = AnyCast<int const &>(b);
 	int const volatile & rb_cv = AnyCast<int const volatile &>(b);
 
-	assertTrue (&rb_c == &rb_cv); // cv references to copied const obj
-	assertTrue (&ra != &rb_c); // copies hold different objects
+	assert (&rb_c == &rb_cv); // cv references to copied const obj
+	assert (&ra != &rb_c); // copies hold different objects
 	
 	++ra;
 	int incremented = AnyCast<int>(a);
-	assertTrue (incremented == 138); // increment by reference changes value
+	assert (incremented == 138); // increment by reference changes value
 
 	try
 	{
@@ -185,15 +185,15 @@ void AnyTest::testSwap()
 	std::string* originalPtr = AnyCast<std::string>(&original);
 	Any* swapResult = &original.swap(swapped);
 	
-	assertTrue (original.empty());
-	assertTrue (!swapped.empty());
-	assertTrue (swapped.type() == typeid(std::string));
-	assertTrue (text == AnyCast<std::string>(swapped));
-	assertTrue (0 != originalPtr);
+	assert (original.empty());
+	assert (!swapped.empty());
+	assert (swapped.type() == typeid(std::string));
+	assert (text == AnyCast<std::string>(swapped));
+	assert (0 != originalPtr);
 #ifdef POCO_NO_SOO // pointers only match when heap-allocated
-	assertTrue (originalPtr == AnyCast<std::string>(&swapped));
+	assert (originalPtr == AnyCast<std::string>(&swapped));
 #endif
-	assertTrue (swapResult == &original);
+	assert (swapResult == &original);
 }
 
 
@@ -203,31 +203,31 @@ void AnyTest::testEmptyCopy()
 	Any copied = null, assigned;
 	assigned = null;
 	
-	assertTrue (null.empty());
-	assertTrue (copied.empty());
-	assertTrue (assigned.empty());
+	assert (null.empty());
+	assert (copied.empty());
+	assert (assigned.empty());
 }
 
 
 void AnyTest::testInt()
 {
 	Any e;
-	assertTrue (e.empty());
+	assert (e.empty());
 
 	Any a = 13;
-	assertTrue (a.type() == typeid(int));
+	assert (a.type() == typeid(int));
 	int* i = AnyCast<int>(&a);
-	assertTrue (*i == 13);
+	assert (*i == 13);
 	Any b = a;
-	assertTrue (b.type() == typeid(int));
+	assert (b.type() == typeid(int));
 	int *cpyI = AnyCast<int>(&b);
-	assertTrue (*cpyI == *i);
+	assert (*cpyI == *i);
 	*cpyI = 20;
-	assertTrue (*cpyI != *i);
+	assert (*cpyI != *i);
 	std::string* s = AnyCast<std::string>(&a);
-	assertTrue (s == NULL);
+	assert (s == NULL);
 
-	int tmp = AnyCast<int>(a);
+	int POCO_UNUSED tmp = AnyCast<int>(a);
 	const Any c = a;
 	tmp = AnyCast<int>(a);
 }
@@ -238,14 +238,14 @@ void AnyTest::testComplexType()
 	SomeClass str(13,std::string("hello"));
 	Any a = str;
 	Any b = a;
-	assertTrue (a.type() == typeid(SomeClass));
-	assertTrue (b.type() == typeid(SomeClass));
+	assert (a.type() == typeid(SomeClass));
+	assert (b.type() == typeid(SomeClass));
 	SomeClass str2 = AnyCast<SomeClass>(a);
-	assertTrue (str == str2);
+	assert (str == str2);
 	const SomeClass& strCRef = RefAnyCast<SomeClass>(a);
-	assertTrue (str == strCRef);
+	assert (str == strCRef);
 	SomeClass& strRef = RefAnyCast<SomeClass>(a);
-	assertTrue (str == strRef);
+	assert (str == strRef);
 }
 
 
@@ -256,17 +256,17 @@ void AnyTest::testVector()
 	tmp.push_back(2);
 	tmp.push_back(3);
 	Any a = tmp;
-	assertTrue (a.type() == typeid(std::vector<int>));
+	assert (a.type() == typeid(std::vector<int>));
 	std::vector<int> tmp2 = AnyCast<std::vector<int> >(a);
-	assertTrue (tmp2.size() == 3);
+	assert (tmp2.size() == 3);
 	const std::vector<int>& vecCRef = RefAnyCast<std::vector<int> >(a);
 	std::vector<int>& vecRef = RefAnyCast<std::vector<int> >(a);
 	
-	assertTrue (vecRef[0] == 1);
-	assertTrue (vecRef[1] == 2);
-	assertTrue (vecRef[2] == 3);
+	assert (vecRef[0] == 1);
+	assert (vecRef[1] == 2);
+	assert (vecRef[2] == 3);
 	vecRef[0] = 0;
-	assertTrue (vecRef[0] == vecCRef[0]);
+	assert (vecRef[0] == vecCRef[0]);
 }
 
 

@@ -41,12 +41,6 @@
 #	define _SW_DENORMAL 0x00080000 // denormal status bit
 #endif
 
-#ifdef __MINGW32__
-    #define _RC_CHOP 0x00000300
-    #define _RC_UP 0x00000200
-    #define _RC_DOWN 0x00000100
-    #define _RC_NEAR 0x00000000
-#endif
 
 namespace Poco {
 
@@ -98,84 +92,49 @@ private:
 //
 inline bool FPEnvironmentImpl::isInfiniteImpl(float value)
 {
-#ifdef __MINGW32__
-	return isfinite(value) == 0;
-#else
-	if (_isnan(value) != 0) return false;
 	return _finite(value) == 0;
-#endif
 }
 
 
 inline bool FPEnvironmentImpl::isInfiniteImpl(double value)
 {
-#ifdef __MINGW32__
-	return isfinite(value) == 0;
-#else
-	if (_isnan(value) != 0) return false;
 	return _finite(value) == 0;
-#endif
 }
 
 
 inline bool FPEnvironmentImpl::isInfiniteImpl(long double value)
 {
-#ifdef __MINGW32__
-	return isfinite(value) == 0;
-#else
-	if (_isnan(static_cast<double>(value)) != 0) return false;
-	return _finite(static_cast<double>(value)) == 0;
-#endif
+	return _finite(value) == 0;
 }
 
 
 inline bool FPEnvironmentImpl::isNaNImpl(float value)
 {
-#ifdef __MINGW32__
-	return isnan(value) != 0;
-#else
 	return _isnan(value) != 0;
-#endif
 }
 
 
 inline bool FPEnvironmentImpl::isNaNImpl(double value)
 {
-#ifdef __MINGW32__
-	return isnan(value) != 0;
-#else
 	return _isnan(value) != 0;
-#endif
 }
 
 
 inline bool FPEnvironmentImpl::isNaNImpl(long double value)
 {
-#ifdef __MINGW32__
-	return isnan(value) != 0;
-#else
-	return _isnan(static_cast<double>(value)) != 0;
-#endif
+	return _isnan(value) != 0;
 }
 
 
 inline float FPEnvironmentImpl::copySignImpl(float target, float source)
 {
-#ifdef __MINGW32__
-	return float(copysign(target, source));
-#else
 	return float(_copysign(target, source));
-#endif
 }
 
 
 inline double FPEnvironmentImpl::copySignImpl(double target, double source)
 {
-#ifdef __MINGW32__
-	return copysign(target, source);
-#else
 	return _copysign(target, source);
-#endif
 }
 
 

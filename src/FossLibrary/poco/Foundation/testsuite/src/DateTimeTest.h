@@ -15,7 +15,7 @@
 
 
 #include "Poco/Foundation.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class DateTimeTest: public CppUnit::TestCase
@@ -41,7 +41,6 @@ public:
 	void testIncrementDecrement();
 	void testUTC();
 	void testLeapSeconds();
-	void testTM();
 
 	void setUp();
 	void tearDown();

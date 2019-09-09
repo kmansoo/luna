@@ -9,8 +9,8 @@
 
 
 #include "SocketStreamTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "EchoServer.h"
 #include "Poco/Net/SocketStream.h"
 #include "Poco/Net/StreamSocket.h"
@@ -50,16 +50,16 @@ void SocketStreamTest::testStreamEcho()
 	ss.connect(SocketAddress("127.0.0.1", echoServer.port()));
 	SocketStream str(ss);
 	str << "hello";
-	assertTrue (str.good());
+	assert (str.good());
 	str.flush();
-	assertTrue (str.good());
+	assert (str.good());
 	ss.shutdownSend();
 
 	char buffer[5];
 	str.read(buffer, sizeof(buffer));
-	assertTrue (str.good());
-	assertTrue (str.gcount() == 5);
-	assertTrue (std::string(buffer, 5) == "hello");
+	assert (str.good());
+	assert (str.gcount() == 5);
+	assert (std::string(buffer, 5) == "hello");
 
 	ss.close();
 }
@@ -76,16 +76,16 @@ void SocketStreamTest::testLargeStreamEcho()
 	ss.setReceiveBufferSize(msgSize);
 	std::string payload(msgSize, 'x');
 	str << payload;
-	assertTrue (str.good());
+	assert (str.good());
 	str.flush();
-	assertTrue (str.good());
+	assert (str.good());
 	ss.shutdownSend();
 
-	assertTrue (str.gcount() == 0);
+	assert (str.gcount() == 0);
 	char buffer[msgSize];
 	str.read(buffer, sizeof(buffer));
-	assertTrue (str.good());
-	assertTrue (str.gcount() == msgSize);
+	assert (str.good());
+	assert (str.gcount() == msgSize);
 
 	ss.close();
 }
@@ -100,21 +100,21 @@ void SocketStreamTest::testEOF()
 
 		ss.connect(SocketAddress("127.0.0.1", echoServer.port()));
 		str << "hello";
-		assertTrue (str.good());
+		assert (str.good());
 		str.flush();
-		assertTrue (str.good());
+		assert (str.good());
 		ss.shutdownSend();
 
 		char buffer[5];
 		str.read(buffer, sizeof(buffer));
-		assertTrue (str.good());
-		assertTrue (str.gcount() == 5);
-		assertTrue (std::string(buffer, 5) == "hello");
+		assert (str.good());
+		assert (str.gcount() == 5);
+		assert (std::string(buffer, 5) == "hello");
 	}
 	
 	int c = str.get();
-	assertTrue (c == -1);
-	assertTrue (str.eof());
+	assert (c == -1);
+	assert (str.eof());
 	
 	ss.close();
 }

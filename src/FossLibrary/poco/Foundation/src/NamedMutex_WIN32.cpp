@@ -14,7 +14,6 @@
 
 #include "Poco/NamedMutex_WIN32.h"
 #include "Poco/Exception.h"
-#include "Poco/UnicodeConverter.h"
 
 
 namespace Poco {
@@ -23,9 +22,8 @@ namespace Poco {
 NamedMutexImpl::NamedMutexImpl(const std::string& name):
 	_name(name)
 {
-	UnicodeConverter::toUTF16(_name, _uname);
-	_mutex = CreateMutexW(NULL, FALSE, _uname.c_str());
-	if (!_mutex)
+	_mutex = CreateMutexA(NULL, FALSE, _name.c_str());
+	if (!_mutex) 
 		throw SystemException("cannot create named mutex", _name);
 }
 

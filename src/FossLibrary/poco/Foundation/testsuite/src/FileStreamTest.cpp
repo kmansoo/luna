@@ -9,15 +9,15 @@
 
 
 #include "FileStreamTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/FileStream.h"
 #include "Poco/File.h"
 #include "Poco/TemporaryFile.h"
 #include "Poco/Exception.h"
 
 
-FileStreamTest::FileStreamTest(const std::string& rName): CppUnit::TestCase(rName)
+FileStreamTest::FileStreamTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -29,8 +29,12 @@ FileStreamTest::~FileStreamTest()
 
 void FileStreamTest::testRead()
 {
-#if defined(POCO_OS_FAMILY_WINDOWS)
+#if defined(POCO_OS_FAMILY_WINDOWS) && !defined(POCO_WIN32_UTF8)
 	char tmp[]={'\xc4', '\xd6', '\xdc', '\xe4', '\xf6', '\xfc', '\0'};
+	std::string file(tmp);
+	file.append(".txt");
+#elif defined(POCO_OS_FAMILY_WINDOWS)
+	char tmp[]={'\xc3', '\x84', '\xc3', '\x96', '\xc3', '\x9c', '\xc3', '\xa4', '\xc3', '\xb6', '\xc3', '\xbc', '\0'};
 	std::string file(tmp);
 	file.append(".txt");
 #else
@@ -44,19 +48,23 @@ void FileStreamTest::testRead()
 	fos.close();
 
 	Poco::FileInputStream fis(file);
-	assertTrue (fis.good());
+	assert (fis.good());
 	std::string read;
 	fis >> read;
-	assertTrue (!read.empty());
+	assert (!read.empty());
 }
 
 
 void FileStreamTest::testWrite()
 {
-#if defined(POCO_OS_FAMILY_WINDOWS)
+#if defined(POCO_OS_FAMILY_WINDOWS) && !defined(POCO_WIN32_UTF8)
 	char tmp[]={'\xdf', '\xc4', '\xd6', '\xdc', '\xe4', '\xf6', '\xfc', '\0'};
 	std::string file(tmp);
 	file = "dummy_" + file + (".txt");
+#elif defined(POCO_OS_FAMILY_WINDOWS)
+	char tmp[]={'\xc3', '\x9f', '\xc3', '\x84', '\xc3', '\x96', '\xc3', '\x9c', '\xc3', '\xa4', '\xc3', '\xb6', '\xc3', '\xbc', '\0'};
+	std::string file(tmp);
+	file = "dummy_" + file + ".txt";
 #else
 	std::string file("dummy_file.txt");
 #endif
@@ -64,21 +72,21 @@ void FileStreamTest::testWrite()
 	Poco::TemporaryFile::registerForDeletion(file);
 
 	Poco::FileOutputStream fos(file);
-	assertTrue (fos.good());
+	assert (fos.good());
 	fos << "hiho";
 	fos.close();
 
 	Poco::FileInputStream fis(file);
-	assertTrue (fis.good());
+	assert (fis.good());
 	std::string read;
 	fis >> read;
-	assertTrue (read == "hiho");
+	assert (read == "hiho");
 }
 
 
 void FileStreamTest::testReadWrite()
 {
-#if defined(POCO_OS_FAMILY_WINDOWS)
+#if defined(POCO_OS_FAMILY_WINDOWS) && !defined(POCO_WIN32_UTF8)
 	char tmp[]={'\xdf', '\xc4', '\xd6', '\xdc', '\xe4', '\xf6', '\xfc', '\0'};
 	std::string file(tmp);
 	file = "dummy_" + file + (".txt");
@@ -91,12 +99,12 @@ void FileStreamTest::testReadWrite()
 	Poco::TemporaryFile::registerForDeletion(file);
 
 	Poco::FileStream fos(file);
-	assertTrue (fos.good());
+	assert (fos.good());
 	fos << "hiho";
 	fos.seekg(0, std::ios::beg);
 	std::string read;
 	fos >> read;
-	assertTrue (read == "hiho");
+	assert (read == "hiho");
 }
 
 
@@ -104,7 +112,7 @@ void FileStreamTest::testOpen()
 {
 	Poco::FileOutputStream ostr;
 	ostr.open("test.txt", std::ios::out);
-	assertTrue (ostr.good());
+	assert (ostr.good());
 	ostr.close();
 }
 
@@ -126,7 +134,7 @@ void FileStreamTest::testOpenModeIn()
 
 	f.createFile();
 	Poco::FileInputStream istr("nonexistent.txt");
-	assertTrue (istr.good());
+	assert (istr.good());
 }
 
 
@@ -140,20 +148,20 @@ void FileStreamTest::testOpenModeOut()
 	ostr1 << "Hello, world!";
 	ostr1.close();
 
-	assertTrue (f.exists());
-	assertTrue (f.getSize() != 0);
+	assert (f.exists());
+	assert (f.getSize() != 0);
 	
 	Poco::FileStream str1("test.txt");
 	str1.close();
 
-	assertTrue (f.exists());
-	assertTrue (f.getSize() != 0);
+	assert (f.exists());
+	assert (f.getSize() != 0);
 		
 	Poco::FileOutputStream ostr2("test.txt");
 	ostr2.close();
 
-	assertTrue (f.exists());
-	assertTrue (f.getSize() == 0);
+	assert (f.exists());
+	assert (f.getSize() == 0);
 
 	f.remove();
 }
@@ -169,14 +177,14 @@ void FileStreamTest::testOpenModeTrunc()
 	ostr1 << "Hello, world!";
 	ostr1.close();
 
-	assertTrue (f.exists());
-	assertTrue (f.getSize() != 0);
+	assert (f.exists());
+	assert (f.getSize() != 0);
 	
 	Poco::FileStream str1("test.txt", std::ios::trunc);
 	str1.close();
 
-	assertTrue (f.exists());
-	assertTrue (f.getSize() == 0);
+	assert (f.exists());
+	assert (f.getSize() == 0);
 
 	f.remove();
 }
@@ -190,12 +198,12 @@ void FileStreamTest::testOpenModeAte()
 	
 	Poco::FileStream str1("test.txt", std::ios::ate);
 	int c = str1.get();
-	assertTrue (str1.eof());
+	assert (str1.eof());
 	
 	str1.clear();
 	str1.seekg(0);
 	c = str1.get();
-	assertTrue (c == '0');
+	assert (c == '0');
 	
 	str1.close();
 
@@ -204,7 +212,7 @@ void FileStreamTest::testOpenModeAte()
 	str2.seekg(0);
 	std::string s;
 	str2 >> s;
-	assertTrue (s == "0123456789abcdef");
+	assert (s == "0123456789abcdef");
 	str2.close();
 }
 
@@ -228,7 +236,7 @@ void FileStreamTest::testOpenModeApp()
 	Poco::FileInputStream istr("test.txt");
 	std::string s;
 	istr >> s;
-	assertTrue (s == "0123456789abcdef");
+	assert (s == "0123456789abcdef");
 	istr.close();
 }
 
@@ -240,37 +248,37 @@ void FileStreamTest::testSeek()
 	
 	str.seekg(0);
 	int c = str.get();
-	assertTrue (c == '0');
+	assert (c == '0');
 	
 	str.seekg(10);
-	assertTrue (str.tellg() == std::streampos(10));
+	assert (str.tellg() == std::streampos(10));
 	c = str.get();
-	assertTrue (c == 'a');
-	assertTrue (str.tellg() == std::streampos(11));
+	assert (c == 'a');
+	assert (str.tellg() == std::streampos(11));
 	
 	str.seekg(-1, std::ios::end);
-	assertTrue (str.tellg() == std::streampos(15));
+	assert (str.tellg() == std::streampos(15));
 	c = str.get();
-	assertTrue (c == 'f');
-	assertTrue (str.tellg() == std::streampos(16));
+	assert (c == 'f');
+	assert (str.tellg() == std::streampos(16));
 	
 	str.seekg(-1, std::ios::cur);
-	assertTrue (str.tellg() == std::streampos(15));
+	assert (str.tellg() == std::streampos(15));
 	c = str.get();
-	assertTrue (c == 'f');
-	assertTrue (str.tellg() == std::streampos(16));
+	assert (c == 'f');
+	assert (str.tellg() == std::streampos(16));
 	
 	str.seekg(-4, std::ios::cur);
-	assertTrue (str.tellg() == std::streampos(12));
+	assert (str.tellg() == std::streampos(12));
 	c = str.get();
-	assertTrue (c == 'c');
-	assertTrue (str.tellg() == std::streampos(13));
+	assert (c == 'c');
+	assert (str.tellg() == std::streampos(13));
 	
 	str.seekg(1, std::ios::cur);
-	assertTrue (str.tellg() == std::streampos(14));
+	assert (str.tellg() == std::streampos(14));
 	c = str.get();
-	assertTrue (c == 'e');
-	assertTrue (str.tellg() == std::streampos(15));
+	assert (c == 'e');
+	assert (str.tellg() == std::streampos(15));
 }
 
 
@@ -285,12 +293,12 @@ void FileStreamTest::testMultiOpen()
 	std::string s;
 	str.open("test.txt", std::ios::in);
 	std::getline(str, s);
-	assertTrue (s == "0123456789");
+	assert (s == "0123456789");
 	str.close();
 
 	str.open("test.txt", std::ios::in);
 	std::getline(str, s);
-	assertTrue (s == "0123456789");
+	assert (s == "0123456789");
 	str.close();	
 }
 

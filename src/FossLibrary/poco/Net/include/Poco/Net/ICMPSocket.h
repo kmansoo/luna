@@ -63,24 +63,17 @@ public:
 		/// Receives data from the socket.
 		/// Stores the address of the sender in address.
 		///
-		/// Returns the time elapsed since the originating
+		/// Returns the time elapsed since the originating 
 		/// request was sent.
 
 	int dataSize() const;
 		/// Returns the data size in bytes.
-
-	int packetSize() const;
-		/// Returns the packet size in bytes.
 
 	int ttl() const;
 		/// Returns the Time-To-Live value.
 
 	int timeout() const;
 		/// Returns the socket timeout value.
-
-	static Poco::UInt16 mtu(const SocketAddress& address, Poco::UInt16 sz);
-		/// Returns minimum payload path MTU size for the destination,
-		/// or 0 if MTU can not be determined.
 
 protected:
 	ICMPSocket(SocketImpl* pImpl);

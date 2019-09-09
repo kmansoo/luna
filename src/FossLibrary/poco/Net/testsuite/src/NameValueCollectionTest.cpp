@@ -9,8 +9,8 @@
 
 
 #include "NameValueCollectionTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Net/NameValueCollection.h"
 #include "Poco/Exception.h"
 
@@ -33,19 +33,19 @@ void NameValueCollectionTest::testNameValueCollection()
 {
 	NameValueCollection nvc;
 	
-	assertTrue (nvc.empty());
-	assertTrue (nvc.size() == 0);
+	assert (nvc.empty());
+	assert (nvc.size() == 0);
 	
 	nvc.set("name", "value");
-	assertTrue (!nvc.empty());
-	assertTrue (nvc["name"] == "value");
-	assertTrue (nvc["Name"] == "value");
+	assert (!nvc.empty());
+	assert (nvc["name"] == "value");
+	assert (nvc["Name"] == "value");
 	
 	nvc.set("name2", "value2");
-	assertTrue (nvc.get("name2") == "value2");
-	assertTrue (nvc.get("NAME2") == "value2");
+	assert (nvc.get("name2") == "value2");
+	assert (nvc.get("NAME2") == "value2");
 	
-	assertTrue (nvc.size() == 2);
+	assert (nvc.size() == 2);
 	
 	try
 	{
@@ -65,44 +65,44 @@ void NameValueCollectionTest::testNameValueCollection()
 	{
 	}
 	
-	assertTrue (nvc.get("name", "default") == "value");
-	assertTrue (nvc.get("name3", "default") == "default");
+	assert (nvc.get("name", "default") == "value");
+	assert (nvc.get("name3", "default") == "default");
 
-	assertTrue (nvc.has("name"));
-	assertTrue (nvc.has("name2"));
-	assertTrue (!nvc.has("name3"));	
+	assert (nvc.has("name"));
+	assert (nvc.has("name2"));
+	assert (!nvc.has("name3"));	
 	
 	nvc.add("name3", "value3");
-	assertTrue (nvc.get("name3") == "value3");
+	assert (nvc.get("name3") == "value3");
 	
 	nvc.add("name3", "value31");
 	
 	NameValueCollection::ConstIterator it = nvc.find("Name3");
-	assertTrue (it != nvc.end());
+	assert (it != nvc.end());
 	std::string v1 = it->second;
-	assertTrue (it->first == "name3");
+	assert (it->first == "name3");
 	++it;
-	assertTrue (it != nvc.end());
+	assert (it != nvc.end());
 	std::string v2 = it->second;
-	assertTrue (it->first == "name3");
+	assert (it->first == "name3");
 	
-	assertTrue ((v1 == "value3" && v2 == "value31") || (v1 == "value31" && v2 == "value3"));
+	assert ((v1 == "value3" && v2 == "value31") || (v1 == "value31" && v2 == "value3"));
 	
 	nvc.erase("name3");
-	assertTrue (!nvc.has("name3"));
-	assertTrue (nvc.find("name3") == nvc.end());
+	assert (!nvc.has("name3"));
+	assert (nvc.find("name3") == nvc.end());
 	
 	it = nvc.begin();
-	assertTrue (it != nvc.end());
+	assert (it != nvc.end());
 	++it;
-	assertTrue (it != nvc.end());
+	assert (it != nvc.end());
 	++it;
-	assertTrue (it == nvc.end());
+	assert (it == nvc.end());
 	
 	nvc.clear();
-	assertTrue (nvc.empty());
+	assert (nvc.empty());
 	
-	assertTrue (nvc.size() == 0);
+	assert (nvc.size() == 0);
 }
 
 

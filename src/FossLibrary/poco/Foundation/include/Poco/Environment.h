@@ -106,7 +106,7 @@ public:
 		/// in the include Foundation/Platform.h (POCO_OS)
 
 	static Poco::Int32 arch();
-		/// Return the underlying cpu that runs this operating system
+		/// Return the underlying cpu architecture that runs this operating system
 		/// as defined in Foundation/Platform (POCO_ARCH)
 
 	static bool isUnix();

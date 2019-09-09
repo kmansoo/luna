@@ -27,11 +27,11 @@ objects = \
 	WebSocketTest WebSocketTestSuite \
 	SyslogTest \
 	OAuth10CredentialsTest OAuth20CredentialsTest OAuthTestSuite \
-	PollSetTest UDPServerTest UDPServerTestSuite
+	PollSetTest
 
 target         = testrunner
 target_version = 1
-target_libs    = PocoNet PocoFoundation PocoCppUnit
+target_libs    = PocoNet PocoFoundation CppUnit
 
 include $(POCO_BASE)/build/rules/exec
 

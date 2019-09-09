@@ -9,8 +9,8 @@
 
 
 #include "FTPClientSessionTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "DialogServer.h"
 #include "Poco/Net/FTPClientSession.h"
 #include "Poco/Net/DialogSocket.h"
@@ -78,13 +78,13 @@ void FTPClientSessionTest::login(DialogServer& server, FTPClientSession& session
 	server.addResponse("200 Type set to I");
 	session.login("user", "password");
 	std::string cmd = server.popCommand();
-	assertTrue (cmd == "USER user");
+	assert (cmd == "USER user");
 	cmd = server.popCommand();
-	assertTrue (cmd == "PASS password");
+	assert (cmd == "PASS password");
 	cmd = server.popCommand();
-	assertTrue (cmd == "TYPE I");
+	assert (cmd == "TYPE I");
 	
-	assertTrue (session.getFileType() == FTPClientSession::TYPE_BINARY);
+	assert (session.getFileType() == FTPClientSession::TYPE_BINARY);
 }
 
 
@@ -93,25 +93,25 @@ void FTPClientSessionTest::testLogin1()
 	DialogServer server;
 	server.addResponse("220 localhost FTP ready");
 	FTPClientSession session("127.0.0.1", server.port());
-	assertTrue (session.isOpen());
-	assertTrue (!session.isLoggedIn());
+	assert (session.isOpen());
+	assert (!session.isLoggedIn());
 	login(server, session);
-	assertTrue (session.isOpen());
-	assertTrue (session.isLoggedIn());
+	assert (session.isOpen());
+	assert (session.isLoggedIn());
 	server.addResponse("221 Good Bye");
 	session.logout();
-	assertTrue (session.isOpen());
-	assertTrue (!session.isLoggedIn());
+	assert (session.isOpen());
+	assert (!session.isLoggedIn());
 
 	server.clearCommands();
 	server.clearResponses();
 	login(server, session);
-	assertTrue (session.isOpen());
-	assertTrue (session.isLoggedIn());
+	assert (session.isOpen());
+	assert (session.isLoggedIn());
 	server.addResponse("221 Good Bye");
 	session.close();
-	assertTrue (!session.isOpen());
-	assertTrue (!session.isLoggedIn());
+	assert (!session.isOpen());
+	assert (!session.isLoggedIn());
 }
 
 
@@ -124,12 +124,12 @@ void FTPClientSessionTest::testLogin2()
 	server.addResponse("200 Type set to I");
 	Poco::UInt16 serverPort = server.port();
 	FTPClientSession session("127.0.0.1", serverPort, "user", "password");
-	assertTrue (session.isOpen());
-	assertTrue (session.isLoggedIn());
+	assert (session.isOpen());
+	assert (session.isLoggedIn());
 	server.addResponse("221 Good Bye");
 	session.close();
-	assertTrue (!session.isOpen());
-	assertTrue (!session.isLoggedIn());
+	assert (!session.isOpen());
+	assert (!session.isLoggedIn());
 
 	server.clearCommands();
 	server.clearResponses();
@@ -138,12 +138,12 @@ void FTPClientSessionTest::testLogin2()
 	server.addResponse("230 Welcome");
 	server.addResponse("200 Type set to I");
 	session.open("127.0.0.1", serverPort, "user", "password");
-	assertTrue (session.isOpen());
-	assertTrue (session.isLoggedIn());
+	assert (session.isOpen());
+	assert (session.isLoggedIn());
 	server.addResponse("221 Good Bye");
 	session.close();
-	assertTrue (!session.isOpen());
-	assertTrue (!session.isLoggedIn());
+	assert (!session.isOpen());
+	assert (!session.isLoggedIn());
 }
 
 
@@ -155,13 +155,13 @@ void FTPClientSessionTest::testLogin3()
 	server.addResponse("230 Welcome");
 	server.addResponse("200 Type set to I");
 	FTPClientSession session;
-	assertTrue (!session.isOpen());
-	assertTrue (!session.isLoggedIn());
+	assert (!session.isOpen());
+	assert (!session.isLoggedIn());
 	session.open("127.0.0.1", server.port(), "user", "password");
 	server.addResponse("221 Good Bye");
 	session.close();
-	assertTrue (!session.isOpen());
-	assertTrue (!session.isLoggedIn());
+	assert (!session.isOpen());
+	assert (!session.isLoggedIn());
 }
 
 
@@ -214,53 +214,53 @@ void FTPClientSessionTest::testCommands()
 	FTPClientSession session("127.0.0.1", server.port());
 	session.login("user", "password");
 	std::string cmd = server.popCommand();
-	assertTrue (cmd == "USER user");
+	assert (cmd == "USER user");
 	cmd = server.popCommand();
-	assertTrue (cmd == "PASS password");
+	assert (cmd == "PASS password");
 	cmd = server.popCommand();
-	assertTrue (cmd == "TYPE I");
+	assert (cmd == "TYPE I");
 	
 	// systemType
 	server.clearCommands();
 	server.addResponse("215 UNIX Type: L8 Version: dummyFTP 1.0");
 	std::string type = session.systemType();
 	cmd = server.popCommand();
-	assertTrue (cmd == "SYST");
-	assertTrue (type == "UNIX Type: L8 Version: dummyFTP 1.0");
+	assert (cmd == "SYST");
+	assert (type == "UNIX Type: L8 Version: dummyFTP 1.0");
 	
 	// getWorkingDirectory
 	server.addResponse("257 \"/usr/test\" is current directory");
 	std::string cwd = session.getWorkingDirectory();
 	cmd = server.popCommand();
-	assertTrue (cmd == "PWD");
-	assertTrue (cwd == "/usr/test");
+	assert (cmd == "PWD");
+	assert (cwd == "/usr/test");
 
 	// getWorkingDirectory (quotes in filename)
 	server.addResponse("257 \"\"\"quote\"\"\" is current directory");
 	cwd = session.getWorkingDirectory();
 	cmd = server.popCommand();
-	assertTrue (cmd == "PWD");
-	assertTrue (cwd == "\"quote\"");
+	assert (cmd == "PWD");
+	assert (cwd == "\"quote\"");
 	
 	// setWorkingDirectory
 	server.addResponse("250 CWD OK");
 	session.setWorkingDirectory("test");
 	cmd = server.popCommand();
-	assertTrue (cmd == "CWD test");
+	assert (cmd == "CWD test");
 	
 	server.addResponse("250 CDUP OK");
 	session.cdup();
 	cmd = server.popCommand();
-	assertTrue (cmd == "CDUP");
+	assert (cmd == "CDUP");
 	
 	// rename
 	server.addResponse("350 File exists, send destination name");
 	server.addResponse("250 Rename OK");
 	session.rename("old.txt", "new.txt");
 	cmd = server.popCommand();
-	assertTrue (cmd == "RNFR old.txt");
+	assert (cmd == "RNFR old.txt");
 	cmd = server.popCommand();
-	assertTrue (cmd == "RNTO new.txt");
+	assert (cmd == "RNTO new.txt");
 	
 	// rename (failing)
 	server.addResponse("550 not found");
@@ -278,7 +278,7 @@ void FTPClientSessionTest::testCommands()
 	server.addResponse("250 delete ok");
 	session.remove("test.txt");
 	cmd = server.popCommand();
-	assertTrue (cmd == "DELE test.txt");
+	assert (cmd == "DELE test.txt");
 
 	// remove (failing)
 	server.addResponse("550 not found");
@@ -296,7 +296,7 @@ void FTPClientSessionTest::testCommands()
 	server.addResponse("257 dir created");
 	session.createDirectory("foo");
 	cmd = server.popCommand();
-	assertTrue (cmd == "MKD foo");
+	assert (cmd == "MKD foo");
 
 	// createDirectory (failing)
 	server.addResponse("550 exists");
@@ -314,7 +314,7 @@ void FTPClientSessionTest::testCommands()
 	server.addResponse("250 RMD OK");
 	session.removeDirectory("foo");
 	cmd = server.popCommand();
-	assertTrue (cmd == "RMD foo");
+	assert (cmd == "RMD foo");
 
 	// removeDirectory (failing)
 	server.addResponse("550 not found");
@@ -353,10 +353,10 @@ void FTPClientSessionTest::testDownloadPORT()
 	ActiveResult<std::string> result = dl.download("test.txt");
 		
 	std::string cmd = server.popCommandWait();
-	assertTrue (cmd.substr(0, 4) == "EPRT");
+	assert (cmd.substr(0, 4) == "EPRT");
 	
 	cmd = server.popCommandWait();
-	assertTrue (cmd.substr(0, 4) == "PORT");
+	assert (cmd.substr(0, 4) == "PORT");
 
 	std::string dummy;
 	int x, lo, hi;
@@ -369,7 +369,7 @@ void FTPClientSessionTest::testDownloadPORT()
 	int port = hi*256 + lo;
 
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "RETR test.txt");
+	assert (cmd == "RETR test.txt");
 
 	SocketAddress sa("127.0.0.1", (Poco::UInt16) port);
 	DialogSocket dataSock;
@@ -381,7 +381,7 @@ void FTPClientSessionTest::testDownloadPORT()
 
 	result.wait();
 	std::string received = result.data();
-	assertTrue (received == data);
+	assert (received == data);
 	
 	server.addResponse("221 Good Bye");
 	session.close();
@@ -407,7 +407,7 @@ void FTPClientSessionTest::testDownloadEPRT()
 	ActiveResult<std::string> result = dl.download("test.txt");
 		
 	std::string cmd = server.popCommandWait();
-	assertTrue (cmd.substr(0, 4) == "EPRT");
+	assert (cmd.substr(0, 4) == "EPRT");
 	
 	std::string dummy;
 	char c;
@@ -417,7 +417,7 @@ void FTPClientSessionTest::testDownloadEPRT()
 	istr >> dummy >> c >> d >> c >> d >> c >> d >> c >> d >> c >> d >> c >> port >> c;
 	
 	cmd = server.popCommandWait();
-	assertTrue (cmd == "RETR test.txt");
+	assert (cmd == "RETR test.txt");
 	
 	SocketAddress sa("127.0.0.1", (Poco::UInt16) port);
 	DialogSocket dataSock;
@@ -429,7 +429,7 @@ void FTPClientSessionTest::testDownloadEPRT()
 
 	result.wait();
 	std::string received = result.data();
-	assertTrue (received == data);
+	assert (received == data);
 	
 	server.addResponse("221 Good Bye");
 	session.close();
@@ -462,7 +462,7 @@ void FTPClientSessionTest::testDownloadPASV()
 	StreamCopier::copyStream(istr, dataStr);
 	session.endDownload();
 	std::string s(dataStr.str());
-	assertTrue (s == "This is some data\r\n");
+	assert (s == "This is some data\r\n");
 	
 	server.addResponse("221 Good Bye");
 	session.close();
@@ -492,12 +492,12 @@ void FTPClientSessionTest::testDownloadEPSV()
 	StreamCopier::copyStream(istr, dataStr);
 	session.endDownload();
 	std::string s(dataStr.str());
-	assertTrue (s == "This is some data\r\n");
+	assert (s == "This is some data\r\n");
 	
 	std::string cmd = server.popCommand();
-	assertTrue (cmd.substr(0, 4) == "EPSV");
+	assert (cmd.substr(0, 4) == "EPSV");
 	cmd = server.popCommand();
-	assertTrue (cmd == "RETR test.txt");
+	assert (cmd == "RETR test.txt");
 	
 	server.addResponse("221 Good Bye");
 	session.close();
@@ -525,12 +525,12 @@ void FTPClientSessionTest::testUpload()
 	ostr << "This is some data\r\n";
 	session.endUpload();
 	std::string s(dataServer.popCommandWait());
-	assertTrue (s == "This is some data");
+	assert (s == "This is some data");
 
 	std::string cmd = server.popCommand();
-	assertTrue (cmd.substr(0, 4) == "EPSV");
+	assert (cmd.substr(0, 4) == "EPSV");
 	cmd = server.popCommand();
-	assertTrue (cmd == "STOR test.txt");
+	assert (cmd == "STOR test.txt");
 
 	server.addResponse("221 Good Bye");
 	session.close();
@@ -560,12 +560,12 @@ void FTPClientSessionTest::testList()
 	StreamCopier::copyStream(istr, dataStr);
 	session.endList();
 	std::string s(dataStr.str());
-	assertTrue (s == "file1\r\nfile2\r\n");
+	assert (s == "file1\r\nfile2\r\n");
 	
 	std::string cmd = server.popCommand();
-	assertTrue (cmd.substr(0, 4) == "EPSV");
+	assert (cmd.substr(0, 4) == "EPSV");
 	cmd = server.popCommand();
-	assertTrue (cmd == "NLST");
+	assert (cmd == "NLST");
 	
 	server.addResponse("221 Good Bye");
 	session.close();

@@ -29,8 +29,6 @@ class Foundation_API SyslogChannel: public Channel
 	/// This Unix-only channel works with the Unix syslog service.
 {
 public:
-	typedef AutoPtr<SyslogChannel> Ptr;
-
 	enum Option
 	{
 		SYSLOG_PID    = 0x01, /// log the pid with each message

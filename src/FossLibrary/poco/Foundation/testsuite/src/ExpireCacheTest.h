@@ -14,7 +14,7 @@
 
 
 #include "Poco/Foundation.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class ExpireCacheTest: public CppUnit::TestCase
@@ -29,8 +29,8 @@ public:
 	void testExpireN();
 	void testAccessExpireN();
 	void testExpireWithHas();
+	void testAccessExpireGet();
 
-	
 	void setUp();
 	void tearDown();
 	static CppUnit::Test* suite();

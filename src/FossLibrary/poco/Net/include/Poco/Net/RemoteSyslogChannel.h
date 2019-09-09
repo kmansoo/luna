@@ -59,7 +59,7 @@ public:
 		SYSLOG_INFORMATIONAL = 6, /// Informational: informational messages
 		SYSLOG_DEBUG         = 7  /// Debug: debug-level messages
 	};
-	
+
 	enum Facility
 	{
 		SYSLOG_KERN     = ( 0<<3), /// kernel messages
@@ -87,28 +87,28 @@ public:
 		SYSLOG_LOCAL6   = (22<<3), /// reserved for local use
 		SYSLOG_LOCAL7   = (23<<3)  /// reserved for local use
 	};
-	
+
 	enum
 	{
 		SYSLOG_PORT = 514
 	};
-	
+
 	RemoteSyslogChannel();
 		/// Creates a RemoteSyslogChannel.
-		
+
 	RemoteSyslogChannel(const std::string& address, const std::string& name, int facility = SYSLOG_USER, bool bsdFormat = false);
 		/// Creates a RemoteSyslogChannel with the given target address, name, and facility.
 		/// If bsdFormat is true, messages are formatted according to RFC 3164.
-	
+
 	void open();
 		/// Opens the RemoteSyslogChannel.
-		
+
 	void close();
 		/// Closes the RemoteSyslogChannel.
-		
+
 	void log(const Message& msg);
 		/// Sends the message's text to the syslog service.
-		
+
 	void setProperty(const std::string& name, const std::string& value);
 		/// Sets the property with the given value.
 		///
@@ -121,7 +121,7 @@ public:
 		///                  by a colon) can also be specified.
 		///     * host:      (optional) Host name included in syslog messages. If not specified, the host's real domain name or
 		///                  IP address will be used.
-		
+
 	std::string getProperty(const std::string& name) const;
 		/// Returns the value of the property with the given name.
 

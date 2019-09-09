@@ -16,8 +16,6 @@
 #include "Poco/Exception.h"
 #include "Poco/NumberFormatter.h"
 #include "Poco/Pipe.h"
-#include "Poco/Thread.h"
-#include <limits>
 #include <errno.h>
 #include <signal.h>
 #include <stdlib.h>
@@ -41,10 +39,7 @@ namespace Poco {
 // ProcessHandleImpl
 //
 ProcessHandleImpl::ProcessHandleImpl(pid_t pid):
-	_pid(pid),
-	_mutex(),
-	_event(Event::EVENT_MANUALRESET),
-	_status()
+	_pid(pid)
 {
 }
 
@@ -62,57 +57,16 @@ pid_t ProcessHandleImpl::id() const
 
 int ProcessHandleImpl::wait() const
 {
-	if (wait(0) != _pid)
-		throw SystemException("Cannot wait for process", NumberFormatter::format(_pid));
-
-	const int status = _status.value();
-	if (WIFEXITED(status))
-		return WEXITSTATUS(status);
-	if (WIFSIGNALED(status))
-		return -WTERMSIG(status);
-
-	// This line should never be reached.
-	return std::numeric_limits<int>::max();
-}
-
-
-int ProcessHandleImpl::wait(int options) const
-{
-	{
-		FastMutex::ScopedLock lock(_mutex);
-		if (_status.isSpecified())
-		{
-			return _pid;
-		}
-	}
-
 	int status;
 	int rc;
 	do
 	{
-		rc = waitpid(_pid, &status, options);
+		rc = waitpid(_pid, &status, 0);
 	}
 	while (rc < 0 && errno == EINTR);
-
-	if (rc == _pid)
-	{
-		FastMutex::ScopedLock lock(_mutex);
-		_status = status;
-		_event.set();
-	}
-	else if (rc < 0 && errno == ECHILD)
-	{
-		// Looks like another thread was lucky and it should update the status for us shortly
-		_event.wait();
-
-		FastMutex::ScopedLock lock(_mutex);
-		if (_status.isSpecified())
-		{
-			rc = _pid;
-		}
-	}
-
-	return rc;
+	if (rc != _pid)
+		throw SystemException("Cannot wait for process", NumberFormatter::format(_pid));
+	return WEXITSTATUS(status);
 }
 
 
@@ -143,7 +97,7 @@ ProcessHandleImpl* ProcessImpl::launchImpl(const std::string& command, const Arg
 		char** argv = new char*[args.size() + 2];
 		int i = 0;
 		argv[i++] = const_cast<char*>(command.c_str());
-		for (ArgsImpl::const_iterator it = args.begin(); it != args.end(); ++it)
+		for (ArgsImpl::const_iterator it = args.begin(); it != args.end(); ++it) 
 			argv[i++] = const_cast<char*>(it->c_str());
 		argv[i] = NULL;
 		struct inheritance inherit;
@@ -174,7 +128,7 @@ ProcessHandleImpl* ProcessImpl::launchImpl(const std::string& command, const Arg
 	
 		int pid = spawn(command.c_str(), 3, fdmap, &inherit, argv, envPtr);
 		delete [] argv;
-		if (pid == -1)
+		if (pid == -1) 
 			throw SystemException("cannot spawn", command);
 
 		if (inPipe)  inPipe->close(Pipe::CLOSE_READ);
@@ -201,7 +155,7 @@ ProcessHandleImpl* ProcessImpl::launchByForkExecImpl(const std::string& command,
 	std::vector<char*> argv(args.size() + 2);
 	int i = 0;
 	argv[i++] = const_cast<char*>(command.c_str());
-	for (ArgsImpl::const_iterator it = args.begin(); it != args.end(); ++it)
+	for (ArgsImpl::const_iterator it = args.begin(); it != args.end(); ++it) 
 	{
 		argv[i++] = const_cast<char*>(it->c_str());
 	}
@@ -245,9 +199,9 @@ ProcessHandleImpl* ProcessImpl::launchByForkExecImpl(const std::string& command,
 		if (outPipe) outPipe->close(Pipe::CLOSE_BOTH);
 		if (errPipe) errPipe->close(Pipe::CLOSE_BOTH);
 		// close all open file descriptors other than stdin, stdout, stderr
-		for (int fd = 3; fd < sysconf(_SC_OPEN_MAX); ++fd)
+		for (int i = 3; i < sysconf(_SC_OPEN_MAX); ++i)
 		{
-			close(fd);
+			close(i);
 		}
 
 		execvp(argv[0], &argv[0]);
@@ -289,17 +243,17 @@ void ProcessImpl::killImpl(PIDImpl pid)
 
 bool ProcessImpl::isRunningImpl(const ProcessHandleImpl& handle)
 {
-	return handle.wait(WNOHANG) == 0;
+	return isRunningImpl(handle.id());
 }
 
 
-bool ProcessImpl::isRunningImpl(PIDImpl pid)
+bool ProcessImpl::isRunningImpl(PIDImpl pid)  
 {
-	if (kill(pid, 0) == 0)
+	if (kill(pid, 0) == 0) 
 	{
 		return true;
-	}
-	else
+	} 
+	else 
 	{
 		return false;
 	}

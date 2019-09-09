@@ -27,9 +27,9 @@
 namespace Poco {
 
 
-template <class TKey, class TValue>
+template <class TKey, class TValue> 
 class AbstractStrategy
-	/// An AbstractStrategy is the interface for all strategies.
+	/// An AbstractStrategy is the interface for all strategies. 
 {
 public:
 	AbstractStrategy()
@@ -67,7 +67,7 @@ public:
 	virtual void onReplace(const void* pSender, std::set<TKey>& elemsToRemove) = 0;
 		/// Used by the Strategy to indicate which elements should be removed from
 		/// the cache. Note that onReplace does not change the current list of keys.
-		/// The cache object is responsible to remove the elements.
+		/// The cache object is reponsible to remove the elements.
 };
 
 

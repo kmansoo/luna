@@ -14,6 +14,7 @@
 
 #include "Poco/TextEncoding.h"
 #include "Poco/Exception.h"
+#include "Poco/String.h"
 #include "Poco/ASCIIEncoding.h"
 #include "Poco/Latin1Encoding.h"
 #include "Poco/Latin2Encoding.h"
@@ -24,90 +25,87 @@
 #include "Poco/Windows1250Encoding.h"
 #include "Poco/Windows1251Encoding.h"
 #include "Poco/Windows1252Encoding.h"
+#include "Poco/RWLock.h"
 #include "Poco/SingletonHolder.h"
+#include <map>
 
 
 namespace Poco {
 
 
 //
-// TextEncodingRegistry
+// TextEncodingManager
 //
 
 
-TextEncodingRegistry::TextEncodingRegistry()
+class TextEncodingManager
 {
-	TextEncoding::Ptr pUtf8Encoding(new UTF8Encoding);
-	add(pUtf8Encoding, TextEncoding::GLOBAL);
-
-	add(new ASCIIEncoding);
-	add(new Latin1Encoding);
-	add(new Latin2Encoding);
-	add(new Latin9Encoding);
-	add(pUtf8Encoding);
-	add(new UTF16Encoding);
-	add(new UTF32Encoding);
-	add(new Windows1250Encoding);
-	add(new Windows1251Encoding);
-	add(new Windows1252Encoding);
-}
-
-TextEncodingRegistry::~TextEncodingRegistry()
-{
-}
-
-
-bool TextEncodingRegistry::has(const std::string& name) const
-{
-	if (_encodings.find(name) != _encodings.end())
-		return true;
-
-	for (const auto& enc : _encodings)
+public:
+	TextEncodingManager()
 	{
-		if (enc.second->isA(name)) return true;
+		TextEncoding::Ptr pUtf8Encoding(new UTF8Encoding);
+		add(pUtf8Encoding, TextEncoding::GLOBAL);
+
+		add(new ASCIIEncoding);
+		add(new Latin1Encoding);
+		add(new Latin2Encoding);
+		add(new Latin9Encoding);
+		add(pUtf8Encoding);
+		add(new UTF16Encoding);
+		add(new UTF32Encoding);
+		add(new Windows1250Encoding);
+		add(new Windows1251Encoding);
+		add(new Windows1252Encoding);
 	}
-	return false;
-}
 
-
-void TextEncodingRegistry::add(TextEncoding::Ptr pEncoding)
-{
-	add(pEncoding, pEncoding->canonicalName());
-}
-
-
-void TextEncodingRegistry::add(TextEncoding::Ptr pEncoding, const std::string& name)
-{
-	RWLock::ScopedLock lock(_lock, true);
-
-	_encodings[name] = pEncoding;
-}
-
-
-void TextEncodingRegistry::remove(const std::string& name)
-{
-	RWLock::ScopedLock lock(_lock, true);
-
-	_encodings.erase(name);
-}
-
-
-TextEncoding::Ptr TextEncodingRegistry::find(const std::string& name) const
-{
-	RWLock::ScopedLock lock(_lock);
-	
-	EncodingMap::const_iterator it = _encodings.find(name);
-	if (it != _encodings.end())
-		return it->second;
-	
-	for (it = _encodings.begin(); it != _encodings.end(); ++it)
+	~TextEncodingManager()
 	{
-		if (it->second->isA(name))
+	}
+
+	void add(TextEncoding::Ptr pEncoding)
+	{
+		add(pEncoding, pEncoding->canonicalName());
+	}
+
+	void add(TextEncoding::Ptr pEncoding, const std::string& name)
+	{
+		RWLock::ScopedLock lock(_lock, true);
+	
+		_encodings[name] = pEncoding;
+	}
+
+	void remove(const std::string& name)
+	{
+		RWLock::ScopedLock lock(_lock, true);
+	
+		_encodings.erase(name);
+	}
+	
+	TextEncoding::Ptr find(const std::string& name) const
+	{
+		RWLock::ScopedLock lock(_lock);
+		
+		EncodingMap::const_iterator it = _encodings.find(name);
+		if (it != _encodings.end())
 			return it->second;
+		
+		for (it = _encodings.begin(); it != _encodings.end(); ++it)
+		{
+			if (it->second->isA(name))
+				return it->second;
+		}
+		return TextEncoding::Ptr();
 	}
-	return TextEncoding::Ptr();
-}
 
+private:
+	TextEncodingManager(const TextEncodingManager&);
+	TextEncodingManager& operator = (const TextEncodingManager&);
+	
+	typedef std::map<std::string, TextEncoding::Ptr, CILess> EncodingMap;
+	
+	EncodingMap    _encodings;
+	mutable RWLock _lock;
+};
 
 
 //
@@ -129,19 +127,19 @@ int TextEncoding::convert(const unsigned char* bytes) const
 }
 
 
-int TextEncoding::convert(int /*ch*/, unsigned char* /*bytes*/, int /*length*/) const
+int TextEncoding::convert(int ch, unsigned char* bytes, int length) const
 {
 	return 0;
 }
 
 
-int TextEncoding::queryConvert(const unsigned char* bytes, int /*length*/) const
+int TextEncoding::queryConvert(const unsigned char* bytes, int length) const
 {
 	return (int) *bytes;
 }
 
 
-int TextEncoding::sequenceLength(const unsigned char* /*bytes*/, int /*length*/) const
+int TextEncoding::sequenceLength(const unsigned char* bytes, int length) const
 {
 	return 1;
 }
@@ -149,7 +147,7 @@ int TextEncoding::sequenceLength(const unsigned char* /*bytes*/, int /*length*/)
 
 TextEncoding& TextEncoding::byName(const std::string& encodingName)
 {
-	TextEncoding* pEncoding = registry(0)->find(encodingName);
+	TextEncoding* pEncoding = manager().find(encodingName);
 	if (pEncoding)
 		return *pEncoding;
 	else
@@ -159,25 +157,25 @@ TextEncoding& TextEncoding::byName(const std::string& encodingName)
 	
 TextEncoding::Ptr TextEncoding::find(const std::string& encodingName)
 {
-	return registry(0)->find(encodingName);
+	return manager().find(encodingName);
 }
 
 
 void TextEncoding::add(TextEncoding::Ptr pEncoding)
 {
-	registry(0)->add(pEncoding, pEncoding->canonicalName());
+	manager().add(pEncoding, pEncoding->canonicalName());
 }
 
 
 void TextEncoding::add(TextEncoding::Ptr pEncoding, const std::string& name)
 {
-	registry(0)->add(pEncoding, name);
+	manager().add(pEncoding, name);
 }
 
 
 void TextEncoding::remove(const std::string& encodingName)
 {
-	registry(0)->remove(encodingName);
+	manager().remove(encodingName);
 }
 
 
@@ -197,23 +195,13 @@ TextEncoding& TextEncoding::global()
 
 namespace
 {
-	TextEncodingRegistry* getRegistry()
-	{
-		static SingletonHolder<TextEncodingRegistry> sh;
-		return sh.get();
-	}
+	static SingletonHolder<TextEncodingManager> sh;
 }
 
 
-const TextEncodingRegistry& TextEncoding::registry()
+TextEncodingManager& TextEncoding::manager()
 {
-	return *getRegistry();
-}
-
-
-TextEncodingRegistry* TextEncoding::registry(int)
-{
-	return getRegistry();
+	return *sh.get();
 }
 
 

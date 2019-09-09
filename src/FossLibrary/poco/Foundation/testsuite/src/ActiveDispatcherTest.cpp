@@ -9,8 +9,8 @@
 
 
 #include "ActiveDispatcherTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/ActiveDispatcher.h"
 #include "Poco/ActiveMethod.h"
 #include "Poco/Thread.h"
@@ -88,7 +88,7 @@ namespace
 }
 
 
-ActiveDispatcherTest::ActiveDispatcherTest(const std::string& rName): CppUnit::TestCase(rName)
+ActiveDispatcherTest::ActiveDispatcherTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -102,12 +102,12 @@ void ActiveDispatcherTest::testWait()
 {
 	ActiveObject activeObj;
 	ActiveResult<int> result = activeObj.testMethod(123);
-	assertTrue (!result.available());
+	assert (!result.available());
 	activeObj.cont();
 	result.wait();
-	assertTrue (result.available());
-	assertTrue (result.data() == 123);
-	assertTrue (!result.failed());
+	assert (result.available());
+	assert (result.data() == 123);
+	assert (!result.failed());
 }
 
 
@@ -115,7 +115,7 @@ void ActiveDispatcherTest::testWaitInterval()
 {
 	ActiveObject activeObj;
 	ActiveResult<int> result = activeObj.testMethod(123);
-	assertTrue (!result.available());
+	assert (!result.available());
 	try
 	{
 		result.wait(100);
@@ -126,9 +126,9 @@ void ActiveDispatcherTest::testWaitInterval()
 	}
 	activeObj.cont();
 	result.wait(10000);
-	assertTrue (result.available());
-	assertTrue (result.data() == 123);
-	assertTrue (!result.failed());
+	assert (result.available());
+	assert (result.data() == 123);
+	assert (!result.failed());
 }
 
 
@@ -136,13 +136,13 @@ void ActiveDispatcherTest::testTryWait()
 {
 	ActiveObject activeObj;
 	ActiveResult<int> result = activeObj.testMethod(123);
-	assertTrue (!result.available());
-	assertTrue (!result.tryWait(200));
+	assert (!result.available());
+	assert (!result.tryWait(200));
 	activeObj.cont();
-	assertTrue (result.tryWait(10000));
-	assertTrue (result.available());
-	assertTrue (result.data() == 123);
-	assertTrue (!result.failed());
+	assert (result.tryWait(10000));
+	assert (result.available());
+	assert (result.data() == 123);
+	assert (!result.failed());
 }
 
 
@@ -151,10 +151,10 @@ void ActiveDispatcherTest::testFailure()
 	ActiveObject activeObj;
 	ActiveResult<int> result = activeObj.testMethod(100);
 	result.wait();
-	assertTrue (result.available());
-	assertTrue (result.failed());
+	assert (result.available());
+	assert (result.failed());
 	std::string msg = result.error();
-	assertTrue (msg.find("n == 100") != std::string::npos);
+	assert (msg == "n == 100");
 }
 
 
@@ -162,11 +162,11 @@ void ActiveDispatcherTest::testVoid()
 {
 	ActiveObject activeObj;
 	ActiveResult<void> result = activeObj.testVoid(123);
-	assertTrue (!result.available());
+	assert (!result.available());
 	activeObj.cont();
 	result.wait();
-	assertTrue (result.available());
-	assertTrue (!result.failed());
+	assert (result.available());
+	assert (!result.failed());
 }
 
 
@@ -174,11 +174,11 @@ void ActiveDispatcherTest::testVoidInOut()
 {
 	ActiveObject activeObj;
 	ActiveResult<void> result = activeObj.testVoidInOut();
-	assertTrue (!result.available());
+	assert (!result.available());
 	activeObj.cont();
 	result.wait();
-	assertTrue (result.available());
-	assertTrue (!result.failed());
+	assert (result.available());
+	assert (!result.failed());
 }
 
 
@@ -186,12 +186,12 @@ void ActiveDispatcherTest::testVoidIn()
 {
 	ActiveObject activeObj;
 	ActiveResult<int> result = activeObj.testVoidIn();
-	assertTrue (!result.available());
+	assert (!result.available());
 	activeObj.cont();
 	result.wait();
-	assertTrue (result.available());
-	assertTrue (!result.failed());
-	assertTrue (result.data() == 123);
+	assert (result.available());
+	assert (!result.failed());
+	assert (result.data() == 123);
 }
 
 

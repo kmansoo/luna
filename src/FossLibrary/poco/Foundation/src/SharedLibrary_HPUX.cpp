@@ -81,12 +81,6 @@ const std::string& SharedLibraryImpl::getPathImpl() const
 }
 
 
-std::string SharedLibraryImpl::prefixImpl()
-{
-	return "lib";
-}
-
-
 std::string SharedLibraryImpl::suffixImpl()
 {
 #if defined(_DEBUG) && !defined(POCO_NO_SHARED_LIBRARY_DEBUG_SUFFIX)
@@ -94,6 +88,12 @@ std::string SharedLibraryImpl::suffixImpl()
 #else
 	return ".sl";
 #endif
+}
+
+
+bool SharedLibraryImpl::setSearchPathImpl(const std::string&)
+{
+	return false;
 }
 
 

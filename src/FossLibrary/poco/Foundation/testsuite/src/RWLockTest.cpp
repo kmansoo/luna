@@ -9,8 +9,8 @@
 
 
 #include "RWLockTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/RWLock.h"
 #include "Poco/Thread.h"
 #include "Poco/Runnable.h"
@@ -119,7 +119,7 @@ private:
 };
 
 
-RWLockTest::RWLockTest(const std::string& rName): CppUnit::TestCase(rName)
+RWLockTest::RWLockTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -154,12 +154,12 @@ void RWLockTest::testLock()
 	t3.join();
 	t4.join();
 	t5.join();
-	assertTrue (counter == 50000);
-	assertTrue (r1.ok());
-	assertTrue (r2.ok());
-	assertTrue (r3.ok());
-	assertTrue (r4.ok());
-	assertTrue (r5.ok());
+	assert (counter == 50000);
+	assert (r1.ok());
+	assert (r2.ok());
+	assert (r3.ok());
+	assert (r4.ok());
+	assert (r5.ok());
 #endif // defined(ENABLE_LONG_RUNNING_TESTS)
 }
 
@@ -189,12 +189,12 @@ void RWLockTest::testTryLock()
 	t3.join();
 	t4.join();
 	t5.join();
-	assertTrue (counter == 50000);
-	assertTrue (r1.ok());
-	assertTrue (r2.ok());
-	assertTrue (r3.ok());
-	assertTrue (r4.ok());
-	assertTrue (r5.ok());
+	assert (counter == 50000);
+	assert (r1.ok());
+	assert (r2.ok());
+	assert (r3.ok());
+	assert (r4.ok());
+	assert (r5.ok());
 #endif // defined(ENABLE_LONG_RUNNING_TESTS)
 }
 

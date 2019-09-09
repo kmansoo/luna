@@ -9,8 +9,8 @@
 
 
 #include "RandomStreamTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/RandomStream.h"
 #include <vector>
 #include <cmath>
@@ -19,7 +19,7 @@
 using Poco::RandomInputStream;
 
 
-RandomStreamTest::RandomStreamTest(const std::string& rName): CppUnit::TestCase(rName)
+RandomStreamTest::RandomStreamTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -50,8 +50,8 @@ void RandomStreamTest::testStream()
 	var /= n;
 	int sd = int(std::sqrt((double) var));
 	
-	assertTrue (110 < avg && avg < 140);
-	assertTrue (sd < 20);
+	assert (110 < avg && avg < 140);
+	assert (sd < 20);
 }
 
 

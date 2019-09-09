@@ -15,7 +15,7 @@
 
 
 #include "Poco/Net/Net.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 #include "Poco/Net/NTPClient.h"
 #include "Poco/Net/NTPEventArgs.h"
 

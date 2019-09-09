@@ -15,7 +15,7 @@
 
 
 #include "Poco/Foundation.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class DateTimeParserTest: public CppUnit::TestCase
@@ -44,7 +44,6 @@ public:
 	static CppUnit::Test* suite();
 
 private:
-	void testBad(const std::string& fmt, const std::string& dateStr, int tzd);
 };
 
 

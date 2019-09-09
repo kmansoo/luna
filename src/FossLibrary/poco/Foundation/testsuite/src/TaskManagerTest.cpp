@@ -9,8 +9,8 @@
 
 
 #include "TaskManagerTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Exception.h"
 #include "Poco/TaskManager.h"
 #include "Poco/Task.h"
@@ -49,7 +49,7 @@ namespace
 	class TestTask: public Task
 	{
 	public:
-		TestTask():
+		TestTask(): 
 			Task("TestTask"),
 			_fail(false)
 		{
@@ -96,21 +96,6 @@ namespace
 		}
 	};
 	
-	class IncludingTask: public Task
-	{
-	public:
-		IncludingTask(): Task("IncludingTask")
-		{
-		}
-
-		void runTask()
-		{
-			setProgress(0.5);
-			getOwner()->startSync(new SimpleTask);
-			setProgress(1.0);
-		}
-	};
-
 	class TaskObserver
 	{
 	public:
@@ -196,7 +181,7 @@ namespace
 	class CustomNotificationTask: public Task
 	{
 	public:
-		CustomNotificationTask(const T& t):
+		CustomNotificationTask(const T& t): 
 			Task("CustomNotificationTask"),
 			_custom(t)
 		{
@@ -244,51 +229,10 @@ namespace
 	private:
 		C _custom;
 	};
-
-	class SimpleTaskQueue
-	{
-	public:
-		SimpleTaskQueue(TaskManager& tm): _tm(tm)
-		{
-			_tm.addObserver(Observer<SimpleTaskQueue, TaskFinishedNotification>(*this, &SimpleTaskQueue::taskFinished));
-		}
-
-		void enqueue(Task* pTask)
-		{
-			_tasks.push_back(pTask);
-		}
-
-		void startQueue()
-		{
-			if (_tm.count() == 0 && _tasks.size())
-			{
-				Task* pTask = _tasks.back();
-				// not thread-safe
-				_tasks.pop_back();
-				_tm.start(pTask);
-			}
-		}
-
-		void taskFinished(TaskFinishedNotification* pNf)
-		{
-			if (_tasks.size())
-			{
-				Task* pTask = _tasks.back();
-				// not thread-safe
-				_tasks.pop_back();
-				_tm.startSync(pTask);
-			}
-			pNf->release();
-		}
-
-	private:
-		std::vector<Task*> _tasks;
-		TaskManager& _tm;
-	};
 }
 
 
-TaskManagerTest::TaskManagerTest(const std::string& rName): CppUnit::TestCase(rName)
+TaskManagerTest::TaskManagerTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -300,7 +244,7 @@ TaskManagerTest::~TaskManagerTest()
 
 void TaskManagerTest::testFinish()
 {
-	TaskManager tm(ThreadPool::TAP_UNIFORM_DISTRIBUTION);
+	TaskManager tm;
 	TaskObserver to;
 	tm.addObserver(Observer<TaskObserver, TaskStartedNotification>(to, &TaskObserver::taskStarted));
 	tm.addObserver(Observer<TaskObserver, TaskCancelledNotification>(to, &TaskObserver::taskCancelled));
@@ -309,33 +253,33 @@ void TaskManagerTest::testFinish()
 	tm.addObserver(Observer<TaskObserver, TaskProgressNotification>(to, &TaskObserver::taskProgress));
 	AutoPtr<TestTask> pTT = new TestTask;
 	tm.start(pTT.duplicate());
-	assertTrue (pTT->progress() == 0);
+	assert (pTT->progress() == 0);
 	Thread::sleep(200);
 	pTT->cont();
 	while (pTT->progress() != 0.5) Thread::sleep(50);
-	assertTrue (to.progress() == 0.5);
-	assertTrue (to.started());
-	assertTrue (pTT->state() == Task::TASK_RUNNING);
+	assert (to.progress() == 0.5);
+	assert (to.started());
+	assert (pTT->state() == Task::TASK_RUNNING);
 	TaskManager::TaskList list = tm.taskList();
-	assertTrue (list.size() == 1);
-	assertTrue (tm.count() == 1);
+	assert (list.size() == 1);
+	assert (tm.count() == 1);
 	pTT->cont();
 	while (pTT->progress() != 1.0) Thread::sleep(50);
 	pTT->cont();
 	while (pTT->state() != Task::TASK_FINISHED) Thread::sleep(50);
-	assertTrue (pTT->state() == Task::TASK_FINISHED);
+	assert (pTT->state() == Task::TASK_FINISHED);
 	while (!to.finished()) Thread::sleep(50);
-	assertTrue (to.finished());
+	assert (to.finished());
 	while (tm.count() == 1) Thread::sleep(50);
 	list = tm.taskList();
-	assertTrue (list.empty());
-	assertTrue (!to.error());
+	assert (list.empty());
+	assert (!to.error());
 }
 
 
 void TaskManagerTest::testCancel()
 {
-	TaskManager tm(ThreadPool::TAP_UNIFORM_DISTRIBUTION);
+	TaskManager tm;
 	TaskObserver to;
 	tm.addObserver(Observer<TaskObserver, TaskStartedNotification>(to, &TaskObserver::taskStarted));
 	tm.addObserver(Observer<TaskObserver, TaskCancelledNotification>(to, &TaskObserver::taskCancelled));
@@ -344,32 +288,32 @@ void TaskManagerTest::testCancel()
 	tm.addObserver(Observer<TaskObserver, TaskProgressNotification>(to, &TaskObserver::taskProgress));
 	AutoPtr<TestTask> pTT = new TestTask;
 	tm.start(pTT.duplicate());
-	assertTrue (pTT->progress() == 0);
+	assert (pTT->progress() == 0);
 	Thread::sleep(200);
 	pTT->cont();
 	while (pTT->progress() != 0.5) Thread::sleep(50);
-	assertTrue (to.progress() == 0.5);
-	assertTrue (to.started());
-	assertTrue (pTT->state() == Task::TASK_RUNNING);
+	assert (to.progress() == 0.5);
+	assert (to.started());
+	assert (pTT->state() == Task::TASK_RUNNING);
 	TaskManager::TaskList list = tm.taskList();
-	assertTrue (list.size() == 1);
-	assertTrue (tm.count() == 1);
+	assert (list.size() == 1);
+	assert (tm.count() == 1);
 	tm.cancelAll();
-	assertTrue (to.cancelled());
+	assert (to.cancelled());
 	pTT->cont();
 	while (pTT->state() != Task::TASK_FINISHED) Thread::sleep(50);
-	assertTrue (pTT->state() == Task::TASK_FINISHED);
-	assertTrue (to.finished());
+	assert (pTT->state() == Task::TASK_FINISHED);
+	assert (to.finished());
 	while (tm.count() == 1) Thread::sleep(50);
 	list = tm.taskList();
-	assertTrue (list.empty());
-	assertTrue (!to.error());
+	assert (list.empty());
+	assert (!to.error());
 }
 
 
 void TaskManagerTest::testError()
 {
-	TaskManager tm(ThreadPool::TAP_UNIFORM_DISTRIBUTION);
+	TaskManager tm;
 	TaskObserver to;
 	tm.addObserver(Observer<TaskObserver, TaskStartedNotification>(to, &TaskObserver::taskStarted));
 	tm.addObserver(Observer<TaskObserver, TaskCancelledNotification>(to, &TaskObserver::taskCancelled));
@@ -378,31 +322,31 @@ void TaskManagerTest::testError()
 	tm.addObserver(Observer<TaskObserver, TaskProgressNotification>(to, &TaskObserver::taskProgress));
 	AutoPtr<TestTask> pTT = new TestTask;
 	tm.start(pTT.duplicate());
-	assertTrue (pTT->progress() == 0);
+	assert (pTT->progress() == 0);
 	Thread::sleep(200);
 	pTT->cont();
 	while (pTT->progress() != 0.5) Thread::sleep(50);
-	assertTrue (to.progress() == 0.5);
-	assertTrue (to.started());
-	assertTrue (pTT->state() == Task::TASK_RUNNING);
+	assert (to.progress() == 0.5);
+	assert (to.started());
+	assert (pTT->state() == Task::TASK_RUNNING);
 	TaskManager::TaskList list = tm.taskList();
-	assertTrue (list.size() == 1);
-	assertTrue (tm.count() == 1);
+	assert (list.size() == 1);
+	assert (tm.count() == 1);
 	pTT->fail();
 	pTT->cont();
 	while (pTT->state() != Task::TASK_FINISHED) Thread::sleep(50);
-	assertTrue (pTT->state() == Task::TASK_FINISHED);
-	assertTrue (to.finished());
-	assertTrue (to.error() != 0);
+	assert (pTT->state() == Task::TASK_FINISHED);
+	assert (to.finished());
+	assert (to.error() != 0);
 	while (tm.count() == 1) Thread::sleep(50);
 	list = tm.taskList();
-	assertTrue (list.empty());
+	assert (list.empty());
 }
 
 
 void TaskManagerTest::testCustom()
 {
-	TaskManager tm(ThreadPool::TAP_UNIFORM_DISTRIBUTION);
+	TaskManager tm;
 	
 	CustomTaskObserver<int> ti(0);
 	tm.addObserver(
@@ -411,12 +355,12 @@ void TaskManagerTest::testCustom()
 	
 	AutoPtr<CustomNotificationTask<int> > pCNT1 = new CustomNotificationTask<int>(0);
 	tm.start(pCNT1.duplicate());
-	assertTrue (ti.custom() == 0);
+	assert (ti.custom() == 0);
 	
 	for (int i = 1; i < 10; ++i)
 	{
 		pCNT1->setCustom(i);
-		assertTrue (ti.custom() == i);
+		assert (ti.custom() == i);
 	}
 
 	CustomTaskObserver<std::string> ts("");
@@ -426,11 +370,11 @@ void TaskManagerTest::testCustom()
 	
 	AutoPtr<CustomNotificationTask<std::string> > pCNT2 = new CustomNotificationTask<std::string>("");
 	tm.start(pCNT2.duplicate());
-	assertTrue (tm.taskList().size() == 2);
-	assertTrue (ts.custom() == "");
+	assert (tm.taskList().size() == 2);
+	assert (ts.custom() == "");
 	std::string str("notify me");
 	pCNT2->setCustom(str);
-	assertTrue (ts.custom() == str);
+	assert (ts.custom() == str);
 	
 	S s;
 	s.i = 0;
@@ -444,14 +388,14 @@ void TaskManagerTest::testCustom()
 	
 	AutoPtr<CustomNotificationTask<S*> > pCNT3 = new CustomNotificationTask<S*>(&s);
 	tm.start(pCNT3.duplicate());
-	assertTrue (tm.taskList().size() == 3);
-	assertTrue (ptst.custom()->i == 0);
-	assertTrue (ptst.custom()->str == "");
+	assert (tm.taskList().size() == 3);
+	assert (ptst.custom()->i == 0);
+	assert (ptst.custom()->str == "");
 	s.i = 123;
 	s.str = "123";
 	pCNT3->setCustom(&s);
-	assertTrue (ptst.custom()->i == 123);
-	assertTrue (ptst.custom()->str == "123");
+	assert (ptst.custom()->i == 123);
+	assert (ptst.custom()->str == "123");
 
 	s.i = 0;
 	s.str = "";
@@ -464,101 +408,44 @@ void TaskManagerTest::testCustom()
 	
 	AutoPtr<CustomNotificationTask<S> > pCNT4 = new CustomNotificationTask<S>(s);
 	tm.start(pCNT4.duplicate());
-	assertTrue (tm.taskList().size() == 4);
-	assertTrue (tst.custom().i == 0);
-	assertTrue (tst.custom().str == "");
+	assert (tm.taskList().size() == 4);
+	assert (tst.custom().i == 0);
+	assert (tst.custom().str == "");
 	s.i = 123;
 	s.str = "123";
 	pCNT4->setCustom(s);
-	assertTrue (tst.custom().i == 123);
-	assertTrue (tst.custom().str == "123");
+	assert (tst.custom().i == 123);
+	assert (tst.custom().str == "123");
 	
 	AutoPtr<SimpleTask> pST = new SimpleTask;
 	tm.start(pST.duplicate());
-	assertTrue (tm.taskList().size() == 5);
+	assert (tm.taskList().size() == 5);
 
 	tm.cancelAll();
 	while (tm.count() > 0) Thread::sleep(50);
-	assertTrue (tm.count() == 0);
+	assert (tm.count() == 0);
 }
 
 
 void TaskManagerTest::testMultiTasks()
 {
-	TaskManager tm(ThreadPool::TAP_UNIFORM_DISTRIBUTION);
+	TaskManager tm;
 	tm.start(new SimpleTask);
 	tm.start(new SimpleTask);
 	tm.start(new SimpleTask);
 	
 	TaskManager::TaskList list = tm.taskList();
-	assertTrue (list.size() == 3);
+	assert (list.size() == 3);
 	
 	tm.cancelAll();
 	while (tm.count() > 0) Thread::sleep(100);
-	assertTrue (tm.count() == 0);
-}
-
-
-void TaskManagerTest::testTaskInclusion()
-{
-	TaskManager tm(ThreadPool::TAP_UNIFORM_DISTRIBUTION);
-	IncludingTask* pTask = new IncludingTask;
-
-	pTask->duplicate();
-
-	tm.start(pTask);
-	// wait for the included task to be started
-	while (pTask->progress() < 0.5)
-	{
-		Thread::sleep(100);
-	}
-	Thread::sleep(100);
-	assertTrue (tm.count() == 2);
-
-	tm.cancelAll();
-	while (tm.count() > 0) Thread::sleep(100);
-	assertTrue (tm.count() == 0);
-}
-
-
-void TaskManagerTest::testTaskQueue()
-{
-	TaskManager tm(ThreadPool::TAP_UNIFORM_DISTRIBUTION);
-	SimpleTaskQueue tq(tm);
-
-	Task* pT1 = new SimpleTask;
-	Task* pT2 = new SimpleTask;
-	Task* pT3 = new SimpleTask;
-	tq.enqueue(pT1);
-	tq.enqueue(pT2);
-	tq.startQueue();
-
-	assertTrue (tm.count() == 1);
-	Thread::sleep(500);
-	assertTrue (pT1->state() == Task::TASK_RUNNING);
-	assertTrue (pT2->state() == Task::TASK_IDLE);
-
-	tq.enqueue(pT3);
-	pT1->cancel();
-	Thread::sleep(500);
-	assertTrue (tm.count() == 1);
-	assertTrue (pT2->state() == Task::TASK_RUNNING);
-	assertTrue (pT3->state() == Task::TASK_IDLE);
-
-	pT2->cancel();
-	Thread::sleep(500);
-	assertTrue (tm.count() == 1);
-	assertTrue (pT3->state() == Task::TASK_RUNNING);
-
-	tm.cancelAll();
-	while (tm.count() > 0) Thread::sleep(100);
-	assertTrue (tm.count() == 0);
+	assert (tm.count() == 0);
 }
 
 
 void TaskManagerTest::testCustomThreadPool()
 {
-	ThreadPool  tp(2, 5, 120, POCO_THREAD_STACK_SIZE, ThreadPool::TAP_UNIFORM_DISTRIBUTION);
+	ThreadPool  tp(2, 5, 120);
 	TaskManager tm(tp);
 
 	// fill up the thread pool
@@ -566,8 +453,8 @@ void TaskManagerTest::testCustomThreadPool()
 	{
 		tm.start(new SimpleTask);
 	}
-	assertTrue (tp.allocated() == tp.capacity());
-	assertTrue (tm.count() == tp.allocated());
+	assert (tp.allocated() == tp.capacity());
+	assert (tm.count() == tp.allocated());
 
 	// the next one should fail
 	try
@@ -583,7 +470,7 @@ void TaskManagerTest::testCustomThreadPool()
 		failmsg("wrong exception thrown");
 	}
 
-	assertTrue (tm.count() == tp.allocated());
+	assert (tm.count() == tp.allocated());
 	
 	tp.joinAll();
 }

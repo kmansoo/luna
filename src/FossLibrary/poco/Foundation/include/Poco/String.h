@@ -403,7 +403,7 @@ S translateInPlace(S& str, const typename S::value_type* from, const typename S:
 	poco_check_ptr (to);
 	str = translate(str, S(from), S(to));
 #if defined(__SUNPRO_CC)
-	// Fix around the RVO bug in SunStudio 12.4
+// Fix around the RVO bug in SunStudio 12.4
 	S ret(str);
 	return ret;
 #else
@@ -624,22 +624,6 @@ S cat(const S& delim, const It& begin, const It& end)
 		result += *it;
 	}
 	return result;
-}
-
-
-template <class S>
-bool startsWith(const S& str, const S& prefix)
-	/// Tests whether the string starts with the given prefix.
-{
-	return str.size() >= prefix.size() && equal(prefix.begin(), prefix.end(), str.begin());
-}
-
-
-template <class S>
-bool endsWith(const S& str, const S& suffix)
-	/// Tests whether the string ends with the given suffix.
-{
-	return str.size() >= suffix.size() && equal(suffix.rbegin(), suffix.rend(), str.rbegin());
 }
 
 

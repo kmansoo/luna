@@ -51,7 +51,7 @@ public:
 		USER_TOKEN
 	};
 	
-	Token(bool ignore = false);
+	Token();
 		/// Creates the Token.
 
 	virtual ~Token();
@@ -71,7 +71,7 @@ public:
 		/// be set as the token's value.
 
 	virtual void finish(std::istream& istr);
-		/// Builds the token by reading and appending
+		/// Builds the token by reading and appending 
 		/// the remaining characters from istr.
 		
 	virtual Class tokenClass() const;
@@ -106,20 +106,8 @@ public:
 	bool is(Class tokenClass) const;
 		/// Returns true iff the token has the given class.
 
-	void ignore(bool ignored);
-		/// If ignored is true, the token will be marked
-		/// as ignorable, which means that next() will
-		/// not return it.
-		/// If ignored is false, the token will be marked
-		/// as acceptable, which means that next() will
-		/// return it.
-
-	bool ignored() const;
-		/// return if the token is ignored or not
-
 protected:
 	std::string _value;
-	bool		_ignored;
 	
 private:
 	Token(const Token&);
@@ -128,7 +116,7 @@ private:
 
 
 class Foundation_API InvalidToken: public Token
-	/// This token class is used for signaling that
+	/// This token class is used for signalling that
 	/// an invalid character sequence has been encountered
 	/// in the input stream.
 {

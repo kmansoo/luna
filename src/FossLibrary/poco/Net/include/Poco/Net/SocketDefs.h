@@ -18,9 +18,6 @@
 #define Net_SocketDefs_INCLUDED
 
 
-#include <vector>
-
-
 #define POCO_ENOERR 0
 
 
@@ -28,7 +25,6 @@
 	#include "Poco/UnWindows.h"
 	#include <winsock2.h>
 	#include <ws2tcpip.h>
-	#include <ws2def.h>
 	#define POCO_INVALID_SOCKET  INVALID_SOCKET
 	#define poco_socket_t        SOCKET
 	#define poco_socklen_t       int
@@ -137,7 +133,6 @@
 	#include <sys/types.h>
 	#include <sys/socket.h>
 	#include <sys/un.h>
-	#include <sys/uio.h>
 	#include <fcntl.h>
 	#if POCO_OS != POCO_OS_HPUX
 		#include <sys/select.h>
@@ -355,14 +350,6 @@
 namespace Poco {
 namespace Net {
 
-
-#if defined(POCO_OS_FAMILY_WINDOWS)
-	typedef WSABUF SocketBuf;
-#elif defined(POCO_OS_FAMILY_UNIX) // TODO: may need more refinement
-	typedef iovec SocketBuf;
-#endif
-
-typedef std::vector<SocketBuf> SocketBufVec;
 
 struct AddressFamily
 	/// AddressFamily::Family replaces the previously used IPAddress::Family

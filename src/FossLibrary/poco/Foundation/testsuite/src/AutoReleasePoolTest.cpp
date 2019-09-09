@@ -9,8 +9,8 @@
 
 
 #include "AutoReleasePoolTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/AutoReleasePool.h"
 
 
@@ -63,7 +63,7 @@ namespace
 }
 
 
-AutoReleasePoolTest::AutoReleasePoolTest(const std::string& rName): CppUnit::TestCase(rName)
+AutoReleasePoolTest::AutoReleasePoolTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -78,9 +78,9 @@ void AutoReleasePoolTest::testAutoReleasePool()
 	AutoReleasePool<TestObj> arp;
 	arp.add(new TestObj);
 	arp.add(new TestObj);
-	assertTrue (TestObj::count() == 2);
+	assert (TestObj::count() == 2);
 	arp.release();
-	assertTrue (TestObj::count() == 0);
+	assert (TestObj::count() == 0);
 }
 
 

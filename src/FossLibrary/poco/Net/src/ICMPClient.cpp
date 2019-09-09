@@ -14,10 +14,11 @@
 
 #include "Poco/Net/SocketAddress.h"
 #include "Poco/Net/ICMPClient.h"
+#include "Poco/Net/ICMPSocket.h"
 #include "Poco/Net/NetException.h"
 #include "Poco/Channel.h"
 #include "Poco/Message.h"
-#include "Poco/Format.h"
+#include "Poco/Exception.h"
 #include <sstream>
 
 
@@ -56,32 +57,26 @@ int ICMPClient::ping(const std::string& address, int repeat) const
 }
 
 
-int ICMPClient::ping(const SocketAddress& address, int repeat) const
+int ICMPClient::ping(SocketAddress& address, int repeat) const
 {
 	if (repeat <= 0) return 0;
 
 	ICMPSocket icmpSocket(_family, _dataSize, _ttl, _timeout);
+	SocketAddress returnAddress;
 
 	ICMPEventArgs eventArgs(address, repeat, icmpSocket.dataSize(), icmpSocket.ttl());
 	pingBegin.notify(this, eventArgs);
 
 	for (int i = 0; i < repeat; ++i)
 	{
+		icmpSocket.sendTo(address);
+		++eventArgs;
+
 		try
 		{
-			int sent = icmpSocket.sendTo(address);
-			if (icmpSocket.packetSize() == sent)
-			{
-				SocketAddress responseAddress(address);
-				++eventArgs;
-				int t = icmpSocket.receiveFrom(responseAddress);
-				poco_assert (address.host() == responseAddress.host());
-				eventArgs.setReplyTime(i, t);
-				pingReply.notify(this, eventArgs);
-			}
-			else
-				throw ICMPException(Poco::format("Error sending ICMP packet "
-					"(sent=%d, expected=%d)", sent, icmpSocket.packetSize()));
+			int t = icmpSocket.receiveFrom(returnAddress);
+			eventArgs.setReplyTime(i, t);
+			pingReply.notify(this, eventArgs);
 		}
 		catch (TimeoutException&)
 		{
@@ -94,14 +89,16 @@ int ICMPClient::ping(const SocketAddress& address, int repeat) const
 		catch (ICMPException& ex)
 		{
 			std::ostringstream os;
-			os << address.host().toString() << ": " << ex.displayText();
+			os << address.host().toString() << ": " << ex.what();
 			eventArgs.setError(i, os.str());
 			pingError.notify(this, eventArgs);
 			continue;
 		}
 		catch (Exception& ex)
 		{
-			eventArgs.setError(i, ex.displayText());
+			std::ostringstream os;
+			os << ex.displayText();
+			eventArgs.setError(i, os.str());
 			pingError.notify(this, eventArgs);
 			continue;
 		}
@@ -121,28 +118,30 @@ int ICMPClient::pingIPv4(const std::string& address, int repeat,
 }
 
 
-int ICMPClient::ping(const SocketAddress& address,
+int ICMPClient::ping(SocketAddress& address,
 	IPAddress::Family family, int repeat,
 	int dataSize, int ttl, int timeout)
 {
 	if (repeat <= 0) return 0;
 
 	ICMPSocket icmpSocket(family, dataSize, ttl, timeout);
+	SocketAddress returnAddress;
 	int received = 0;
 
 	for (int i = 0; i < repeat; ++i)
 	{
+		icmpSocket.sendTo(address);
 		try
 		{
-			if (icmpSocket.sendTo(address) == icmpSocket.packetSize())
-			{
-				SocketAddress responseAddress(address);
-				icmpSocket.receiveFrom(responseAddress);
-				poco_assert (address.host() == responseAddress.host());
-				++received;
-			}
+			icmpSocket.receiveFrom(returnAddress);
+			++received;
 		}
-		catch (Exception&) { }
+		catch (TimeoutException&)
+		{
+		}
+		catch (ICMPException&)
+		{
+		}
 	}
 	return received;
 }

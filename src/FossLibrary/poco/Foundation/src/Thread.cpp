@@ -18,7 +18,19 @@
 #include "Poco/ThreadLocal.h"
 #include "Poco/AtomicCounter.h"
 #include <sstream>
-#include "Thread_STD.cpp"
+
+
+#if defined(POCO_OS_FAMILY_WINDOWS)
+#if defined(_WIN32_WCE)
+#include "Thread_WINCE.cpp"
+#else
+#include "Thread_WIN32.cpp"
+#endif
+#elif defined(POCO_VXWORKS)
+#include "Thread_VX.cpp"
+#else
+#include "Thread_POSIX.cpp"
+#endif
 
 
 namespace Poco {
@@ -75,20 +87,20 @@ private:
 } // namespace
 
 
-Thread::Thread():
-	_id(uniqueId()),
-	_name(makeName()),
+Thread::Thread(): 
+	_id(uniqueId()), 
+	_name(makeName()), 
 	_pTLS(0),
-	_event()
+	_event(true)
 {
 }
 
 
-Thread::Thread(const std::string& rName):
-	_id(uniqueId()),
-	_name(rName),
+Thread::Thread(const std::string& name): 
+	_id(uniqueId()), 
+	_name(name), 
 	_pTLS(0),
-	_event()
+	_event(true)
 {
 }
 
@@ -176,9 +188,9 @@ void Thread::clearTLS()
 
 std::string Thread::makeName()
 {
-	std::ostringstream threadName;
-	threadName << '#' << _id;
-	return threadName.str();
+	std::ostringstream name;
+	name << '#' << _id;
+	return name.str();
 }
 
 
@@ -189,11 +201,11 @@ int Thread::uniqueId()
 }
 
 
-void Thread::setName(const std::string& rName)
+void Thread::setName(const std::string& name)
 {
 	FastMutex::ScopedLock lock(_mutex);
 
-	_name = rName;
+	_name = name;
 }
 
 

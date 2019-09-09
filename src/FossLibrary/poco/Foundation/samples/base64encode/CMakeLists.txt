@@ -1,2 +1,7 @@
-add_executable(base64encode src/base64encode.cpp)
-target_link_libraries(base64encode PUBLIC Poco::Foundation )
+set(SAMPLE_NAME "base64encode")
+
+set(LOCAL_SRCS "")
+aux_source_directory(src LOCAL_SRCS)
+
+add_executable( ${SAMPLE_NAME} ${LOCAL_SRCS} )
+target_link_libraries( ${SAMPLE_NAME} PocoFoundation )

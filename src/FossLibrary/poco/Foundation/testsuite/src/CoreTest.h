@@ -15,7 +15,7 @@
 
 
 #include "Poco/Foundation.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class CoreTest: public CppUnit::TestCase
@@ -30,12 +30,12 @@ public:
 	void testFPE();
 	void testEnvironment();
 	void testBuffer();
+	void testFIFOBufferChar();
+	void testFIFOBufferInt();
+	void testFIFOBufferEOFAndError();
 	void testAtomicCounter();
-	void testAtomicFlag();
 	void testNullable();
 	void testAscii();
-	void testChecksum64();
-	void testMakeUnique();
 
 	void setUp();
 	void tearDown();
@@ -43,9 +43,13 @@ public:
 	static CppUnit::Test* suite();
 
 protected:
+	void onReadable(bool& b);
+	void onWritable(bool& b);
+
+private:
 	int _readableToNot;
-	int _writableToNot;
 	int _notToReadable;
+	int _writableToNot;
 	int _notToWritable;
 };
 

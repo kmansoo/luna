@@ -24,23 +24,32 @@
 namespace Poco {
 
 
-Logger::Logger(const std::string& name, Channel::Ptr pChannel, int level): _name(name), _pChannel(pChannel), _level(level)
+Logger::LoggerMap* Logger::_pLoggerMap = 0;
+Mutex Logger::_mapMtx;
+const std::string Logger::ROOT;
+
+
+Logger::Logger(const std::string& name, Channel* pChannel, int level): _name(name), _pChannel(pChannel), _level(level)
 {
+	if (pChannel) pChannel->duplicate();
 }
 
 
 Logger::~Logger()
 {
+	if (_pChannel) _pChannel->release();
 }
 
 
-void Logger::setChannel(Channel::Ptr pChannel)
+void Logger::setChannel(Channel* pChannel)
 {
+	if (_pChannel) _pChannel->release();
 	_pChannel = pChannel;
+	if (_pChannel) _pChannel->duplicate();
 }
 
 
-Channel::Ptr Logger::getChannel() const
+Channel* Logger::getChannel() const
 {
 	return _pChannel;
 }
@@ -58,14 +67,14 @@ void Logger::setLevel(const std::string& level)
 }
 
 
-void Logger::setProperty(const std::string& rName, const std::string& rValue)
+void Logger::setProperty(const std::string& name, const std::string& value)
 {
-	if (rName == "channel")
-		setChannel(LoggingRegistry::defaultRegistry().channelForName(rValue));
-	else if (rName == "level")
-		setLevel(rValue);
-	else
-		Channel::setProperty(rName, rValue);
+	if (name == "channel")
+		setChannel(LoggingRegistry::defaultRegistry().channelForName(value));
+	else if (name == "level")
+		setLevel(value);
+	else 
+		Channel::setProperty(name, value);
 }
 
 
@@ -110,7 +119,7 @@ void Logger::setLevel(const std::string& name, int level)
 		std::string::size_type len = name.length();
 		for (LoggerMap::iterator it = _pLoggerMap->begin(); it != _pLoggerMap->end(); ++it)
 		{
-			if (len == 0 ||
+			if (len == 0 || 
 				(it->first.compare(0, len, name) == 0 && (it->first.length() == len || it->first[len] == '.')))
 			{
 				it->second->setLevel(level);
@@ -120,7 +129,7 @@ void Logger::setLevel(const std::string& name, int level)
 }
 
 
-void Logger::setChannel(const std::string& name, Channel::Ptr pChannel)
+void Logger::setChannel(const std::string& name, Channel* pChannel)
 {
 	Mutex::ScopedLock lock(_mapMtx);
 
@@ -281,7 +290,7 @@ Logger& Logger::get(const std::string& name)
 
 Logger& Logger::unsafeGet(const std::string& name)
 {
-	Ptr pLogger = find(name);
+	Logger* pLogger = find(name);
 	if (!pLogger)
 	{
 		if (name == ROOT)
@@ -299,12 +308,12 @@ Logger& Logger::unsafeGet(const std::string& name)
 }
 
 
-Logger& Logger::create(const std::string& name, Channel::Ptr pChannel, int level)
+Logger& Logger::create(const std::string& name, Channel* pChannel, int level)
 {
 	Mutex::ScopedLock lock(_mapMtx);
 
 	if (find(name)) throw ExistsException();
-	Ptr pLogger = new Logger(name, pChannel, level);
+	Logger* pLogger = new Logger(name, pChannel, level);
 	add(pLogger);
 	return *pLogger;
 }
@@ -318,7 +327,7 @@ Logger& Logger::root()
 }
 
 
-Logger::Ptr Logger::has(const std::string& name)
+Logger* Logger::has(const std::string& name)
 {
 	Mutex::ScopedLock lock(_mapMtx);
 
@@ -330,16 +339,25 @@ void Logger::shutdown()
 {
 	Mutex::ScopedLock lock(_mapMtx);
 
-	_pLoggerMap.reset();
+	if (_pLoggerMap)
+	{
+		for (LoggerMap::iterator it = _pLoggerMap->begin(); it != _pLoggerMap->end(); ++it)
+		{
+			it->second->release();
+		}
+		delete _pLoggerMap;
+		_pLoggerMap = 0;
+	}
 }
 
 
-Logger::Ptr Logger::find(const std::string& name)
+Logger* Logger::find(const std::string& name)
 {
 	if (_pLoggerMap)
 	{
 		LoggerMap::iterator it = _pLoggerMap->find(name);
-		if (it != _pLoggerMap->end()) return it->second;
+		if (it != _pLoggerMap->end())
+			return it->second;
 	}
 	return 0;
 }
@@ -352,7 +370,11 @@ void Logger::destroy(const std::string& name)
 	if (_pLoggerMap)
 	{
 		LoggerMap::iterator it = _pLoggerMap->find(name);
-		if (it != _pLoggerMap->end()) _pLoggerMap->erase(it);
+		if (it != _pLoggerMap->end())
+		{
+			it->second->release();
+			_pLoggerMap->erase(it);
+		}
 	}
 }
 
@@ -378,7 +400,7 @@ Logger& Logger::parent(const std::string& name)
 	if (pos != std::string::npos)
 	{
 		std::string pname = name.substr(0, pos);
-		Ptr pParent = find(pname);
+		Logger* pParent = find(pname);
 		if (pParent)
 			return *pParent;
 		else
@@ -424,9 +446,36 @@ int Logger::parseLevel(const std::string& level)
 }
 
 
-void Logger::add(Ptr pLogger)
+class AutoLoggerShutdown
 {
-	if (!_pLoggerMap) _pLoggerMap.reset(new LoggerMap);
+public:
+	AutoLoggerShutdown()
+	{
+	}
+	~AutoLoggerShutdown()
+	{
+		try
+		{
+			Logger::shutdown();
+		}
+		catch (...)
+		{
+			poco_unexpected();
+		}
+	}
+};
+
+
+namespace
+{
+	static AutoLoggerShutdown als;
+}
+
+
+void Logger::add(Logger* pLogger)
+{
+	if (!_pLoggerMap)
+		_pLoggerMap = new LoggerMap;
 	_pLoggerMap->insert(LoggerMap::value_type(pLogger->name(), pLogger));
 }
 

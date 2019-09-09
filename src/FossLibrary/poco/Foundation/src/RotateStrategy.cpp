@@ -17,7 +17,6 @@
 #include "Poco/DateTimeParser.h"
 #include "Poco/DateTimeFormatter.h"
 #include "Poco/DateTimeFormat.h"
-#include "Poco/LineEndingConverter.h"
 
 
 namespace Poco {
@@ -46,7 +45,7 @@ RotateStrategy::~RotateStrategy()
 const std::string RotateByIntervalStrategy::ROTATE_TEXT("# Log file created/rotated ");
 
 
-RotateByIntervalStrategy::RotateByIntervalStrategy(const Timespan& span):
+RotateByIntervalStrategy::RotateByIntervalStrategy(const Timespan& span): 
 	_span(span),
 	_lastRotate(0)
 {
@@ -66,9 +65,8 @@ bool RotateByIntervalStrategy::mustRotate(LogFile* pFile)
 		if (pFile->size() != 0)
 		{
 			Poco::FileInputStream istr(pFile->path());
-			Poco::InputLineEndingConverter converter(istr, Poco::LineEnding::NEWLINE_LF);
 			std::string tag;
-			std::getline(converter, tag);
+			std::getline(istr, tag);
 			if (tag.compare(0, ROTATE_TEXT.size(), ROTATE_TEXT) == 0)
 			{
 				std::string timestamp(tag, ROTATE_TEXT.size());

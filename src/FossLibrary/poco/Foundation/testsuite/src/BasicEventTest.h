@@ -15,7 +15,7 @@
 
 
 #include "Poco/Foundation.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 #include "Poco/BasicEvent.h"
 #include "Poco/EventArgs.h"
 
@@ -24,14 +24,11 @@ class BasicEventTest: public CppUnit::TestCase
 {
 	Poco::BasicEvent<void> Void;
 	Poco::BasicEvent<int> Simple;
-	Poco::BasicEvent<std::string> SimpleString;
-	Poco::BasicEvent<const std::string> ConstString;
 	Poco::BasicEvent<const int> ConstSimple;
 	Poco::BasicEvent<Poco::EventArgs*> Complex;
 	Poco::BasicEvent<Poco::EventArgs> Complex2;
 	Poco::BasicEvent<const Poco::EventArgs*> ConstComplex;
 	Poco::BasicEvent<const Poco::EventArgs * const> Const2Complex;
-
 public:
 	BasicEventTest(const std::string& name);
 	~BasicEventTest();
@@ -47,8 +44,7 @@ public:
 	void testOverwriteDelegate();
 	void testAsyncNotify();
 	void testNullMutex();
-	void testLambda();
-
+	
 	void setUp();
 	void tearDown();
 	static CppUnit::Test* suite();
@@ -67,8 +63,6 @@ protected:
 	void onSimple(const void* pSender, int& i);
 	void onSimpleOther(const void* pSender, int& i);
 	void onConstSimple(const void* pSender, const int& i);
-	void onString(const void* pSender, std::string& i);
-	void onConstString(const void* pSender, const std::string& i);
 	void onComplex(const void* pSender, Poco::EventArgs* & i);
 	void onComplex2(const void* pSender, Poco::EventArgs & i);
 	void onConstComplex(const void* pSender, const Poco::EventArgs*& i);
@@ -77,8 +71,7 @@ protected:
 
 	int getCount() const;
 private:
-	int _count;
-	std::string _str;
+	int		_count;
 };
 
 

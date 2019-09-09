@@ -9,8 +9,8 @@
 
 
 #include "StreamCopierTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/StreamCopier.h"
 #include <sstream>
 
@@ -18,7 +18,7 @@
 using Poco::StreamCopier;
 
 
-StreamCopierTest::StreamCopierTest(const std::string& rName): CppUnit::TestCase(rName)
+StreamCopierTest::StreamCopierTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -36,8 +36,8 @@ void StreamCopierTest::testBufferedCopy()
 		std::istringstream istr(src);
 		std::ostringstream ostr;
 		std::streamsize n = StreamCopier::copyStream(istr, ostr);
-		assertTrue (ostr.str() == src);
-		assertTrue (n == src.size());
+		assert (ostr.str() == src);
+		assert (n == src.size());
 	}
 	{
 		std::string src;
@@ -45,8 +45,8 @@ void StreamCopierTest::testBufferedCopy()
 		std::istringstream istr(src);
 		std::ostringstream ostr;
 		std::streamsize n = StreamCopier::copyStream(istr, ostr, 100);
-		assertTrue (ostr.str() == src);
-		assertTrue (n == src.size());
+		assert (ostr.str() == src);
+		assert (n == src.size());
 	}
 	{
 		std::string src;
@@ -54,8 +54,8 @@ void StreamCopierTest::testBufferedCopy()
 		std::istringstream istr(src);
 		std::ostringstream ostr;
 		std::streamsize n = StreamCopier::copyStream(istr, ostr, 128);
-		assertTrue (ostr.str() == src);
-		assertTrue (n == src.size());
+		assert (ostr.str() == src);
+		assert (n == src.size());
 	}
 	{
 		std::string src;
@@ -63,8 +63,8 @@ void StreamCopierTest::testBufferedCopy()
 		std::istringstream istr(src);
 		std::ostringstream ostr;
 		std::streamsize n = StreamCopier::copyStream(istr, ostr, 512);
-		assertTrue (ostr.str() == src);
-		assertTrue (n == src.size());
+		assert (ostr.str() == src);
+		assert (n == src.size());
 	}
 }
 
@@ -76,8 +76,8 @@ void StreamCopierTest::testUnbufferedCopy()
 	std::istringstream istr(src);
 	std::ostringstream ostr;
 	std::streamsize n = StreamCopier::copyStreamUnbuffered(istr, ostr);
-	assertTrue (ostr.str() == src);
-	assertTrue (n == src.size());
+	assert (ostr.str() == src);
+	assert (n == src.size());
 }
 
 
@@ -88,8 +88,8 @@ void StreamCopierTest::testCopyToString()
 	std::istringstream istr(src);
 	std::string dest;
 	std::streamsize n = StreamCopier::copyToString(istr, dest, 100);
-	assertTrue (src == dest);
-	assertTrue (n == src.size());
+	assert (src == dest);
+	assert (n == src.size());
 }
 
 
@@ -102,8 +102,8 @@ void StreamCopierTest::testBufferedCopy64()
 		std::istringstream istr(src);
 		std::ostringstream ostr;
 		Poco::UInt64 n = StreamCopier::copyStream64(istr, ostr);
-		assertTrue (ostr.str() == src);
-		assertTrue (n == src.size());
+		assert (ostr.str() == src);
+		assert (n == src.size());
 	}
 	{
 		std::string src;
@@ -111,8 +111,8 @@ void StreamCopierTest::testBufferedCopy64()
 		std::istringstream istr(src);
 		std::ostringstream ostr;
 		Poco::UInt64 n = StreamCopier::copyStream64(istr, ostr, 100);
-		assertTrue (ostr.str() == src);
-		assertTrue (n == src.size());
+		assert (ostr.str() == src);
+		assert (n == src.size());
 	}
 	{
 		std::string src;
@@ -120,8 +120,8 @@ void StreamCopierTest::testBufferedCopy64()
 		std::istringstream istr(src);
 		std::ostringstream ostr;
 		Poco::UInt64 n = StreamCopier::copyStream64(istr, ostr, 128);
-		assertTrue (ostr.str() == src);
-		assertTrue (n == src.size());
+		assert (ostr.str() == src);
+		assert (n == src.size());
 	}
 	{
 		std::string src;
@@ -129,8 +129,8 @@ void StreamCopierTest::testBufferedCopy64()
 		std::istringstream istr(src);
 		std::ostringstream ostr;
 		Poco::UInt64 n = StreamCopier::copyStream64(istr, ostr, 512);
-		assertTrue (ostr.str() == src);
-		assertTrue (n == src.size());
+		assert (ostr.str() == src);
+		assert (n == src.size());
 	}
 }
 
@@ -142,8 +142,8 @@ void StreamCopierTest::testUnbufferedCopy64()
 	std::istringstream istr(src);
 	std::ostringstream ostr;
 	Poco::UInt64 n = StreamCopier::copyStreamUnbuffered64(istr, ostr);
-	assertTrue (ostr.str() == src);
-	assertTrue (n == src.size());
+	assert (ostr.str() == src);
+	assert (n == src.size());
 }
 
 
@@ -154,8 +154,8 @@ void StreamCopierTest::testCopyToString64()
 	std::istringstream istr(src);
 	std::string dest;
 	Poco::UInt64 n = StreamCopier::copyToString64(istr, dest, 100);
-	assertTrue (src == dest);
-	assertTrue (n == src.size());
+	assert (src == dest);
+	assert (n == src.size());
 }
 #endif
 

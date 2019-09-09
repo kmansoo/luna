@@ -106,7 +106,7 @@ bool SharedLibraryImpl::isLoadedImpl() const
 void* SharedLibraryImpl::findSymbolImpl(const std::string& name)
 {
 	poco_assert (_moduleId != 0);
-	
+
 	FastMutex::ScopedLock lock(_mutex);
 
 	MODULE_INFO mi;
@@ -126,15 +126,15 @@ const std::string& SharedLibraryImpl::getPathImpl() const
 }
 
 
-std::string SharedLibraryImpl::prefixImpl()
-{
-	return "";
-}
-
-
 std::string SharedLibraryImpl::suffixImpl()
 {
 	return ".out";
+}
+
+
+bool SharedLibraryImpl::setSearchPathImpl(const std::string&)
+{
+	return false;
 }
 
 

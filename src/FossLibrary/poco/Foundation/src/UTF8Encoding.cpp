@@ -85,7 +85,7 @@ int UTF8Encoding::convert(const unsigned char* bytes) const
 {
 	int n = _charMap[*bytes];
 	int uc;
-	
+
 	switch (n)
 	{
 	case -1:
@@ -101,7 +101,7 @@ int UTF8Encoding::convert(const unsigned char* bytes) const
 	}
 
 	while (n++ < -1)
-	{	
+	{
 		uc <<= 6;
 		uc |= (*++bytes & 0x3F);
 	}
@@ -175,7 +175,7 @@ int UTF8Encoding::queryConvert(const unsigned char* bytes, int length) const
 			return n;
 		}
 		while (n++ < -1)
-		{	
+		{
 			uc <<= 6;
 			uc |= (*++bytes & 0x3F);
 		}
@@ -200,11 +200,15 @@ int UTF8Encoding::sequenceLength(const unsigned char* bytes, int length) const
 
 bool UTF8Encoding::isLegal(const unsigned char *bytes, int length)
 {
+	// Note: The following is loosely based on the isLegalUTF8 function
+	// from ftp://ftp.unicode.org/Public/PROGRAMS/CVTUTF/ConvertUTF.c
+	// Excuse the ugliness...
+
 	if (0 == bytes || 0 == length) return false;
 
-	unsigned char a;
-	const unsigned char* srcptr = bytes + length;
-	switch (length)
+    unsigned char a;
+    const unsigned char* srcptr = bytes + length;
+    switch (length)
 	{
 	default:
 		return false;
@@ -234,7 +238,7 @@ bool UTF8Encoding::isLegal(const unsigned char *bytes, int length)
 		}
 	case 1:
 		if (*bytes >= 0x80 && *bytes < 0xC2) return false;
-	}
+    }
 	return *bytes <= 0xF4;
 }
 

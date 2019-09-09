@@ -84,7 +84,7 @@ public:
 		
 	HTTPServerSession& session();
 		/// Returns the underlying HTTPServerSession.
-	
+
 private:
 	HTTPServerResponseImpl&         _response;
 	HTTPServerSession&              _session;

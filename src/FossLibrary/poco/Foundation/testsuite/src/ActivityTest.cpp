@@ -9,8 +9,8 @@
 
 
 #include "ActivityTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Activity.h"
 #include "Poco/Thread.h"
 
@@ -24,7 +24,7 @@ namespace
 	class ActiveObject
 	{
 	public:
-		ActiveObject():
+		ActiveObject(): 
 			_activity(this, &ActiveObject::run),
 			_count(0)
 		{
@@ -47,7 +47,7 @@ namespace
 	protected:
 		void run()
 		{
-			while (!_activity.isStopped())
+			while (!_activity.isStopped()) 
 				++_count;
 		}
 
@@ -56,9 +56,9 @@ namespace
 		Poco::UInt64           _count;
 	};
 }
+ 
 
-
-ActivityTest::ActivityTest(const std::string& rName): CppUnit::TestCase(rName)
+ActivityTest::ActivityTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -71,14 +71,14 @@ ActivityTest::~ActivityTest()
 void ActivityTest::testActivity()
 {
 	ActiveObject activeObj;
-	assertTrue (activeObj.activity().isStopped());
+	assert (activeObj.activity().isStopped());
 	activeObj.activity().start();
-	assertTrue (!activeObj.activity().isStopped());
+	assert (!activeObj.activity().isStopped());
 	Thread::sleep(1000);
-	assertTrue (activeObj.activity().isRunning());
+	assert (activeObj.activity().isRunning());
 	activeObj.activity().stop();
 	activeObj.activity().wait();
-	assertTrue (activeObj.count() > 0);
+	assert (activeObj.count() > 0);
 }
 
 

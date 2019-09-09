@@ -22,9 +22,7 @@
 #include "Poco/Net/MessageHeader.h"
 #include "Poco/Net/MailRecipient.h"
 #include "Poco/Net/PartStore.h"
-#include "Poco/SharedPtr.h"
 #include "Poco/Timestamp.h"
-#include <sstream>
 #include <vector>
 
 
@@ -70,7 +68,7 @@ public:
 	struct Part
 	{
 		std::string             name;
-		mutable Poco::SharedPtr<PartSource> pSource;
+		PartSource*             pSource;
 		ContentDisposition      disposition;
 		ContentTransferEncoding encoding;
 	};
@@ -85,12 +83,6 @@ public:
 		/// common reason is to temporarily save attachments to
 		/// the file system in order to avoid potential memory
 		/// exhaustion when attachment files are very large.
-
-	MailMessage(MailMessage&&);
-		/// Move constructor.
-
-	MailMessage& operator = (MailMessage&&);
-		/// Move assignment.
 
 	virtual ~MailMessage();
 		/// Destroys the MailMessage.
@@ -172,10 +164,13 @@ public:
 		/// Returns true iff the message is a multipart message.
 
 	void addPart(const std::string& name,
-		const Poco::SharedPtr<PartSource>& pSource,
+		PartSource* pSource,
 		ContentDisposition disposition,
 		ContentTransferEncoding encoding);
 		/// Adds a part/attachment to the mail message.
+		///
+		/// The MailMessage takes ownership of the PartSource and deletes it
+		/// when it is no longer needed.
 		///
 		/// The MailMessage will be converted to a multipart message
 		/// if it is not already one.
@@ -184,11 +179,8 @@ public:
 		/// must not contain any non-ASCII characters.
 		/// To include non-ASCII characters in the part name or filename,
 		/// use RFC 2047 word encoding (see encodeWord()).
-		///
-		/// Use a MultipartSource to add a nested multi-part content
-		/// to a mail message.
 
-	void addContent(const Poco::SharedPtr<PartSource>& pSource,
+	void addContent(PartSource* pSource,
 		ContentTransferEncoding encoding = ENCODING_QUOTED_PRINTABLE);
 		/// Adds a part to the mail message by calling
 		/// addPart("", pSource, CONTENT_INLINE, encoding);
@@ -199,7 +191,7 @@ public:
 		/// use RFC 2047 word encoding (see encodeWord()).
 
 	void addAttachment(const std::string& name,
-		const Poco::SharedPtr<PartSource>& pSource,
+		PartSource* pSource,
 		ContentTransferEncoding encoding = ENCODING_BASE64);
 		/// Adds an attachment to the mail message by calling
 		/// addPart(name, pSource, CONTENT_ATTACHMENT, encoding);
@@ -239,24 +231,15 @@ public:
 	void write(std::ostream& ostr) const;
 		/// Writes the mail message to the given output stream.
 
-	static std::string encodeWord(const std::string& text, const std::string& charset = "UTF-8", char encoding = 'q');
+	static std::string encodeWord(const std::string& text, const std::string& charset = "UTF-8");
 		/// If the given string contains non-ASCII characters,
-		/// encodes the given string using RFC 2047 'Q' or 'B' word encoding.
+		/// encodes the given string using RFC 2047 "Q" word encoding.
 		///
 		/// The given text must already be encoded in the character set
 		/// given in charset (default is UTF-8).
 		///
 		/// Returns the encoded string, or the original string if it
 		/// consists only of ASCII characters.
-
-	static std::string decodeWord(const std::string& encodedWord, std::string toCharset = "");
-		/// Decodes a string containing encoded-word's according to the rules specified in
-		/// RFC 2047 and returns the decoded string. Both Q and B encodings are supported.
-		///
-		/// If toCharset is not provided, no decoded string conversion is performed (ie.
-		/// string is simply decoded to the charset specified in encodedWord string)
-		/// If toCharset is provided, returned string is converted to the specified
-		/// charset. For a list of supported encodings, see Poco:TextEncodingRegistry.
 
 	static const std::string HEADER_SUBJECT;
 	static const std::string HEADER_FROM;
@@ -277,12 +260,11 @@ public:
 	static const std::string CTE_BASE64;
 
 protected:
-
 	void makeMultipart();
 	void writeHeader(const MessageHeader& header, std::ostream& ostr) const;
 	void writeMultipart(MessageHeader& header, std::ostream& ostr) const;
-	static void writePart(MultipartWriter& writer, const Part& part);
-	static void writeEncoded(std::istream& istr, std::ostream& ostr, ContentTransferEncoding encoding);
+	void writePart(MultipartWriter& writer, const Part& part) const;
+	void writeEncoded(std::istream& istr, std::ostream& ostr, ContentTransferEncoding encoding) const;
 	void setRecipientHeaders(MessageHeader& headers) const;
 	void readHeader(std::istream& istr);
 	void readMultipart(std::istream& istr, PartHandler& handler);
@@ -291,12 +273,6 @@ protected:
 	static const std::string& contentTransferEncodingToString(ContentTransferEncoding encoding);
 	static int lineLength(const std::string& str);
 	static void appendRecipient(const MailRecipient& recipient, std::string& str);
-	static std::string decodeWord(const std::string& charset, char encoding,
-		const std::string& text, const std::string& toCharset);
-	static void getEncWordLimits(const std::string& encodedWord,
-		std::string::size_type& pos1, std::string::size_type& pos2, bool isComment);
-	static void advanceToEncoded(const std::string& encoded, std::string& decoded,
-		std::string::size_type& pos1, bool& isComment);
 
 private:
 	MailMessage(const MailMessage&);
@@ -308,60 +284,6 @@ private:
 	ContentTransferEncoding _encoding;
 	mutable std::string     _boundary;
 	PartStoreFactory*       _pStoreFactory;
-
-	friend class MultipartSource;
-};
-
-
-class Net_API MultipartSource: public PartSource
-	/// This is a PartSource for constructing complex
-	/// mail messages consisting of multiple nested parts.
-	///
-	/// A MultipartSource can be used with MailMessage::addPart()
-	/// to add a part that is itself consisting of multiple parts.
-	///
-	/// For example, a mail message consisting of alternative text
-	/// and HTML parts, as well as an attachment (e.g., a PDF file)
-	/// would be structured as follows:
-	///
-	///     mail message (multipart/mixed)
-	///       content (multipart/alternative, CONTENT_INLINE)
-	///         text (text/plain, CONTENT_INLINE)
-	///         html (text/html, CONTENT_INLINE)
-	///       attachment (application/pdf, CONTENT_ATTACHMENT)
-	///
-	/// In this case, the first part (content) would make use of a MultipartSource,
-	/// which again contains two PartSource objects for Text and HTML content.
-{
-public:
-	explicit MultipartSource(const std::string& contentType = "multipart/alternative");
-		/// Creates an empty MultipartSource.
-		///
-		/// At least one part must be added with addPart().
-
-	~MultipartSource();
-		/// Destroys the MultipartSource.
-
-	void addPart(const std::string& name,
-		const Poco::SharedPtr<PartSource>& pSource,
-		MailMessage::ContentDisposition disposition = MailMessage::CONTENT_INLINE,
-		MailMessage::ContentTransferEncoding encoding = MailMessage::ENCODING_QUOTED_PRINTABLE);
-		/// Adds a part/attachment to the MultipartSource.
-		///
-		/// The part name, and the filename specified in the part source
-		/// must not contain any non-ASCII characters.
-		/// To include non-ASCII characters in the part name or filename,
-		/// use RFC 2047 word encoding (see encodeWord()).
-
-	// PartSource
-	std::istream& stream();
-
-protected:
-	static std::string contentTypeWithBoundary(const std::string& contentType);
-
-private:
-	std::vector<MailMessage::Part> _parts;
-	std::stringstream _content;
 };
 
 

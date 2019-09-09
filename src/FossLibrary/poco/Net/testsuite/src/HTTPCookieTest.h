@@ -16,7 +16,7 @@
 
 #include "Poco/Net/Net.h"
 #include "Poco/DateTime.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class HTTPCookieTest: public CppUnit::TestCase

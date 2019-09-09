@@ -9,8 +9,8 @@
 
 
 #include "RawSocketTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Net/RawSocket.h"
 #include "Poco/Net/RawSocketImpl.h"
 #include "Poco/Net/SocketAddress.h"
@@ -48,7 +48,7 @@ void RawSocketTest::testEchoIPv4()
 	rs.connect(sa);
 
 	int n = rs.sendBytes("hello", 5);
-	assertTrue (5 == n);
+	assert (5 == n);
 
 	char buffer[256] = "";
 	unsigned char* ptr = (unsigned char*) buffer;
@@ -57,10 +57,10 @@ void RawSocketTest::testEchoIPv4()
 	int shift = ((buffer[0] & 0x0F) * 4);
 	ptr += shift;
 
-	assertTrue (5 == (n - shift));
-	assertTrue ("hello" == std::string((char*)ptr, 5));
+	assert (5 == (n - shift));
+	assert ("hello" == std::string((char*)ptr, 5));
 
-	rs.close();
+	rs.close(); 
 }
 
 
@@ -69,7 +69,7 @@ void RawSocketTest::testSendToReceiveFromIPv4()
 	RawSocket rs(IPAddress::IPv4);
 	
 	int n = rs.sendTo("hello", 5, SocketAddress("127.0.0.1", 0));
-	assertTrue (n == 5);
+	assert (n == 5);
 
 	char buffer[256] = "";
 	unsigned char* ptr = (unsigned char*) buffer;
@@ -78,8 +78,8 @@ void RawSocketTest::testSendToReceiveFromIPv4()
 	int shift = ((buffer[0] & 0x0F) * 4);
 	ptr += shift;
 
-	assertTrue ((n - shift) == 5);
-	assertTrue ("hello" == std::string((char*)ptr, 5));
+	assert ((n - shift) == 5);
+	assert ("hello" == std::string((char*)ptr, 5));
 	rs.close();
 }
 

@@ -35,9 +35,8 @@ protected:
 	void unlockImpl();
 	
 private:
-	std::string  _name;
-	std::wstring _uname;
-	HANDLE       _mutex;
+	std::string _name;
+	HANDLE      _mutex;
 };
 
 

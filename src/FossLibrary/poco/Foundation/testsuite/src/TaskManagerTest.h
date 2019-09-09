@@ -15,7 +15,7 @@
 
 
 #include "Poco/Foundation.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class TaskManagerTest: public CppUnit::TestCase
@@ -35,8 +35,6 @@ public:
 	void testError();
 	void testCustom();
 	void testMultiTasks();
-	void testTaskInclusion();
-	void testTaskQueue();
 	void testCustomThreadPool();
 
 	void setUp();

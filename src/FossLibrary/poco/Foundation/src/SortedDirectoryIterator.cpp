@@ -24,8 +24,8 @@ SortedDirectoryIterator::SortedDirectoryIterator()
 }
 
 
-SortedDirectoryIterator::SortedDirectoryIterator(const std::string& rPath)
-	: DirectoryIterator(rPath), _is_finished(false)
+SortedDirectoryIterator::SortedDirectoryIterator(const std::string& path)
+	: DirectoryIterator(path), _is_finished(false)
 {
 	scan();
 	next();
@@ -48,8 +48,8 @@ SortedDirectoryIterator::SortedDirectoryIterator(const File& file)
 }
 
 
-SortedDirectoryIterator::SortedDirectoryIterator(const Path& rPath)
-	: DirectoryIterator(rPath), _is_finished(false)
+SortedDirectoryIterator::SortedDirectoryIterator(const Path& path)
+	: DirectoryIterator(path), _is_finished(false)
 {
 	scan();
 	next();
@@ -81,7 +81,7 @@ void SortedDirectoryIterator::scan()
 		{
 			isDir = (*this)->isDirectory();
 		}
-		catch (...) { }
+		catch (...) {}
 		if (isDir)
 			_directories.push_back(_path.toString());
 		else

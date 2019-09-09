@@ -9,8 +9,8 @@
 
 
 #include "NotificationCenterTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/NotificationCenter.h"
 #include "Poco/Observer.h"
 #include "Poco/NObserver.h"
@@ -29,7 +29,7 @@ class TestNotification: public Notification
 };
 
 
-NotificationCenterTest::NotificationCenterTest(const std::string& rName): CppUnit::TestCase(rName)
+NotificationCenterTest::NotificationCenterTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -51,16 +51,16 @@ void NotificationCenterTest::test2()
 	NotificationCenter nc;
 	Observer<NotificationCenterTest, Notification> o(*this, &NotificationCenterTest::handle1);
 	nc.addObserver(o);
-	assertTrue (nc.hasObserver(o));
-	assertTrue (nc.hasObservers());
-	assertTrue (nc.countObservers() == 1);
+	assert (nc.hasObserver(o));
+	assert (nc.hasObservers());
+	assert (nc.countObservers() == 1);
 	nc.postNotification(new Notification);
-	assertTrue (_set.size() == 1);
-	assertTrue (_set.find("handle1") != _set.end());
+	assert (_set.size() == 1);
+	assert (_set.find("handle1") != _set.end());
 	nc.removeObserver(Observer<NotificationCenterTest, Notification>(*this, &NotificationCenterTest::handle1));
-	assertTrue (!nc.hasObserver(o));
-	assertTrue (!nc.hasObservers());
-	assertTrue (nc.countObservers() == 0);
+	assert (!nc.hasObserver(o));
+	assert (!nc.hasObservers());
+	assert (nc.countObservers() == 0);
 }
 
 
@@ -70,21 +70,21 @@ void NotificationCenterTest::test3()
 	Observer<NotificationCenterTest, Notification> o1(*this, &NotificationCenterTest::handle1);
 	Observer<NotificationCenterTest, Notification> o2(*this, &NotificationCenterTest::handle2);
 	nc.addObserver(o1);
-	assertTrue (nc.hasObserver(o1));
+	assert (nc.hasObserver(o1));
 	nc.addObserver(o2);
-	assertTrue (nc.hasObserver(o2));
-	assertTrue (nc.hasObservers());
-	assertTrue (nc.countObservers() == 2);
+	assert (nc.hasObserver(o2));
+	assert (nc.hasObservers());
+	assert (nc.countObservers() == 2);
 	nc.postNotification(new Notification);
-	assertTrue (_set.size() == 2);
-	assertTrue (_set.find("handle1") != _set.end());
-	assertTrue (_set.find("handle2") != _set.end());
+	assert (_set.size() == 2);
+	assert (_set.find("handle1") != _set.end());
+	assert (_set.find("handle2") != _set.end());
 	nc.removeObserver(Observer<NotificationCenterTest, Notification>(*this, &NotificationCenterTest::handle1));
-	assertTrue (!nc.hasObserver(o1));
+	assert (!nc.hasObserver(o1));
 	nc.removeObserver(Observer<NotificationCenterTest, Notification>(*this, &NotificationCenterTest::handle2));
-	assertTrue (!nc.hasObserver(o2));
-	assertTrue (!nc.hasObservers());
-	assertTrue (nc.countObservers() == 0);
+	assert (!nc.hasObserver(o2));
+	assert (!nc.hasObservers());
+	assert (nc.countObservers() == 0);
 }
 
 
@@ -94,28 +94,28 @@ void NotificationCenterTest::test4()
 	Observer<NotificationCenterTest, Notification> o1(*this, &NotificationCenterTest::handle1);
 	Observer<NotificationCenterTest, Notification> o2(*this, &NotificationCenterTest::handle2);
 	nc.addObserver(o1);
-	assertTrue (nc.hasObserver(o1));
+	assert (nc.hasObserver(o1));
 	nc.addObserver(o2);
-	assertTrue (nc.hasObserver(o2));
+	assert (nc.hasObserver(o2));
 	nc.postNotification(new Notification);
-	assertTrue (_set.size() == 2);
-	assertTrue (_set.find("handle1") != _set.end());
-	assertTrue (_set.find("handle2") != _set.end());
+	assert (_set.size() == 2);
+	assert (_set.find("handle1") != _set.end());
+	assert (_set.find("handle2") != _set.end());
 	nc.removeObserver(Observer<NotificationCenterTest, Notification>(*this, &NotificationCenterTest::handle1));
-	assertTrue (!nc.hasObserver(o1));
+	assert (!nc.hasObserver(o1));
 	nc.removeObserver(Observer<NotificationCenterTest, Notification>(*this, &NotificationCenterTest::handle2));
-	assertTrue (!nc.hasObserver(o2));
+	assert (!nc.hasObserver(o2));
 	_set.clear();
 	nc.postNotification(new Notification);
-	assertTrue (_set.empty());
+	assert (_set.empty());
 	Observer<NotificationCenterTest, Notification> o3(*this, &NotificationCenterTest::handle3);
 	nc.addObserver(o3);
-	assertTrue (nc.hasObserver(o3));
+	assert (nc.hasObserver(o3));
 	nc.postNotification(new Notification);
-	assertTrue (_set.size() == 1);
-	assertTrue (_set.find("handle3") != _set.end());
+	assert (_set.size() == 1);
+	assert (_set.find("handle3") != _set.end());
 	nc.removeObserver(Observer<NotificationCenterTest, Notification>(*this, &NotificationCenterTest::handle3));
-	assertTrue (!nc.hasObserver(o3));
+	assert (!nc.hasObserver(o3));
 }
 
 
@@ -125,13 +125,13 @@ void NotificationCenterTest::test5()
 	nc.addObserver(Observer<NotificationCenterTest, Notification>(*this, &NotificationCenterTest::handle1));
 	nc.addObserver(Observer<NotificationCenterTest, TestNotification>(*this, &NotificationCenterTest::handleTest));
 	nc.postNotification(new Notification);
-	assertTrue (_set.size() == 1);
-	assertTrue (_set.find("handle1") != _set.end());
+	assert (_set.size() == 1);
+	assert (_set.find("handle1") != _set.end());
 	_set.clear();
 	nc.postNotification(new TestNotification);
-	assertTrue (_set.size() == 2);
-	assertTrue (_set.find("handle1") != _set.end());
-	assertTrue (_set.find("handleTest") != _set.end());
+	assert (_set.size() == 2);
+	assert (_set.find("handle1") != _set.end());
+	assert (_set.find("handleTest") != _set.end());
 	nc.removeObserver(Observer<NotificationCenterTest, Notification>(*this, &NotificationCenterTest::handle1));
 	nc.removeObserver(Observer<NotificationCenterTest, TestNotification>(*this, &NotificationCenterTest::handleTest));
 }
@@ -142,8 +142,8 @@ void NotificationCenterTest::testAuto()
 	NotificationCenter nc;
 	nc.addObserver(NObserver<NotificationCenterTest, Notification>(*this, &NotificationCenterTest::handleAuto));
 	nc.postNotification(new Notification);
-	assertTrue (_set.size() == 1);
-	assertTrue (_set.find("handleAuto") != _set.end());
+	assert (_set.size() == 1);
+	assert (_set.find("handleAuto") != _set.end());
 	nc.removeObserver(NObserver<NotificationCenterTest, Notification>(*this, &NotificationCenterTest::handleAuto));
 }
 
@@ -153,8 +153,8 @@ void NotificationCenterTest::testDefaultCenter()
 	NotificationCenter& nc = NotificationCenter::defaultCenter();
 	nc.addObserver(Observer<NotificationCenterTest, Notification>(*this, &NotificationCenterTest::handle1));
 	nc.postNotification(new Notification);
-	assertTrue (_set.size() == 1);
-	assertTrue (_set.find("handle1") != _set.end());
+	assert (_set.size() == 1);
+	assert (_set.find("handle1") != _set.end());
 	nc.removeObserver(Observer<NotificationCenterTest, Notification>(*this, &NotificationCenterTest::handle1));
 }
 

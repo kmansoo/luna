@@ -14,7 +14,7 @@
 #define HTMLTestSuite_INCLUDED
 
 
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestSuite.h"
 
 
 class HTMLTestSuite

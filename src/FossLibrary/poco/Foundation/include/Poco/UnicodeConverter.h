@@ -19,9 +19,6 @@
 
 
 #include "Poco/Foundation.h"
-
-#if !defined(POCO_NO_WSTRING)
-
 #include "Poco/UTFString.h"
 
 
@@ -139,9 +136,6 @@ public:
 
 
 } // namespace Poco
-
-
-#endif // POCO_OS_FAMILY_WINDOWS && !POCO_NO_WSTRING
 
 
 #endif // Foundation_UnicodeConverter_INCLUDED

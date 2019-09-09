@@ -15,7 +15,7 @@
 
 
 #include "Poco/Foundation.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class DynamicFactoryTest: public CppUnit::TestCase
@@ -24,8 +24,7 @@ public:
 	DynamicFactoryTest(const std::string& name);
 	~DynamicFactoryTest();
 
-	void testDynamicFactoryPtr();
-	void testDynamicFactoryAutoPtr();
+	void testDynamicFactory();
 
 	void setUp();
 	void tearDown();

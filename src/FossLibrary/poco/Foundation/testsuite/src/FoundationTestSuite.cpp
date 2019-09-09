@@ -28,7 +28,6 @@
 #include "EventTestSuite.h"
 #include "CacheTestSuite.h"
 #include "HashingTestSuite.h"
-#include "FIFOBufferTestSuite.h"
 
 
 CppUnit::Test* FoundationTestSuite::suite()
@@ -38,7 +37,6 @@ CppUnit::Test* FoundationTestSuite::suite()
 	pSuite->addTest(CoreTestSuite::suite());
 	pSuite->addTest(DateTimeTestSuite::suite());
 	pSuite->addTest(StreamsTestSuite::suite());
-	pSuite->addTest(FIFOBufferTestSuite::suite());
 	pSuite->addTest(CryptTestSuite::suite());
 	pSuite->addTest(NotificationsTestSuite::suite());
 	pSuite->addTest(ThreadingTestSuite::suite());

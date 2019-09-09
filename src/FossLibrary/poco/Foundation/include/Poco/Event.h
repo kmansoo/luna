@@ -20,15 +20,21 @@
 
 #include "Poco/Foundation.h"
 #include "Poco/Exception.h"
-#include <condition_variable>
-#include <mutex>
-#include <atomic>
+
+
+#if defined(POCO_OS_FAMILY_WINDOWS)
+#include "Poco/Event_WIN32.h"
+#elif defined(POCO_VXWORKS)
+#include "Poco/Event_VX.h"
+#else
+#include "Poco/Event_POSIX.h"
+#endif
 
 
 namespace Poco {
 
 
-class Foundation_API Event
+class Foundation_API Event: private EventImpl
 	/// An Event is a synchronization object that
 	/// allows one thread to signal one or more
 	/// other threads that a certain event
@@ -38,27 +44,17 @@ class Foundation_API Event
 	/// for an event to become signalled.
 {
 public:
-	enum EventType
-	{
-		EVENT_MANUALRESET, /// Manual reset event
-		EVENT_AUTORESET    /// Auto-reset event
-	};
-
-	explicit Event(EventType type = EVENT_AUTORESET);
-		/// Creates the event. If type is EVENT_AUTORESET,
+	Event(bool autoReset = true);
+		/// Creates the event. If autoReset is true,
 		/// the event is automatically reset after
 		/// a wait() successfully returns.
-
-	//@ deprecated
-	explicit Event(bool autoReset);
-		/// Please use Event::Event(EventType) instead.
-
+		
 	~Event();
 		/// Destroys the event.
 
 	void set();
 		/// Signals the event. If autoReset is true,
-		/// only one thread waiting for the event
+		/// only one thread waiting for the event 
 		/// can resume execution.
 		/// If autoReset is false, all waiting threads
 		/// can resume execution.
@@ -80,34 +76,44 @@ public:
 
 	void reset();
 		/// Resets the event to unsignalled state.
-
+	
 private:
 	Event(const Event&);
 	Event& operator = (const Event&);
-
-	bool waitImpl(long milliseconds);
-
-	std::atomic<bool>       _state;
-	bool                    _autoreset;
-	mutable std::mutex      _mutex;
-	std::condition_variable _cond;
 };
 
 
 //
 // inlines
 //
+inline void Event::set()
+{
+	setImpl();
+}
+
+
+inline void Event::wait()
+{
+	waitImpl();
+}
 
 
 inline void Event::wait(long milliseconds)
 {
-	if (!waitImpl(milliseconds)) throw TimeoutException();
+	if (!waitImpl(milliseconds))
+		throw TimeoutException();
 }
 
 
 inline bool Event::tryWait(long milliseconds)
 {
 	return waitImpl(milliseconds);
+}
+
+
+inline void Event::reset()
+{
+	resetImpl();
 }
 
 

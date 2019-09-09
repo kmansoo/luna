@@ -120,13 +120,13 @@ class TaskCustomNotification: public TaskNotification
 	/// This is a template for "custom" notification.
 	/// Unlike other notifications, this notification
 	/// is instantiated and posted by the task itself.
-	/// The purpose is to provide generic notification
+	/// The purpose is to provide generic notifiation
 	/// mechanism between the task and its observer(s).
 {
 public:
-	TaskCustomNotification(Task* pTask, const C& rCustom):
+	TaskCustomNotification(Task* pTask, const C& custom):
 		TaskNotification(pTask),
-		_custom(rCustom)
+		_custom(custom)
 	{
 	}
 

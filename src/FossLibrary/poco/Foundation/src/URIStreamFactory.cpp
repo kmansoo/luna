@@ -29,8 +29,8 @@ URIStreamFactory::~URIStreamFactory()
 }
 
 
-URIRedirection::URIRedirection(const std::string& rUri):
-	_uri(rUri)
+URIRedirection::URIRedirection(const std::string& uri):
+	_uri(uri)
 {
 }
 

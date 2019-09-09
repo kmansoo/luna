@@ -9,10 +9,9 @@
 
 
 #include "SharedLibraryTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/SharedLibrary.h"
-#include "Poco/Path.h"
 #include "Poco/Exception.h"
 
 
@@ -20,13 +19,12 @@ using Poco::SharedLibrary;
 using Poco::NotFoundException;
 using Poco::LibraryLoadException;
 using Poco::LibraryAlreadyLoadedException;
-using Poco::Path;
 
 
 typedef int (*GimmeFiveFunc)();
 
 
-SharedLibraryTest::SharedLibraryTest(const std::string& rName): CppUnit::TestCase(rName)
+SharedLibraryTest::SharedLibraryTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -38,19 +36,18 @@ SharedLibraryTest::~SharedLibraryTest()
 
 void SharedLibraryTest::testSharedLibrary1()
 {
-	std::string self = Path(Path::self()).makeParent().toString();
-	std::string path = self + "TestLibrary";
+	std::string path = "TestLibrary";
 	path.append(SharedLibrary::suffix());
 	SharedLibrary sl;
-	assertTrue (!sl.isLoaded());
+	assert (!sl.isLoaded());
 	sl.load(path);
-	assertTrue (sl.getPath() == path);
-	assertTrue (sl.isLoaded());
-	assertTrue (sl.hasSymbol("pocoBuildManifest"));
-	assertTrue (sl.hasSymbol("pocoInitializeLibrary"));
-	assertTrue (sl.hasSymbol("pocoUninitializeLibrary"));
-	assertTrue (sl.hasSymbol("gimmeFive"));
-	assertTrue (!sl.hasSymbol("fooBar123"));
+	assert (sl.getPath() == path);
+	assert (sl.isLoaded());
+	assert (sl.hasSymbol("pocoBuildManifest"));
+	assert (sl.hasSymbol("pocoInitializeLibrary"));
+	assert (sl.hasSymbol("pocoUninitializeLibrary"));
+	assert (sl.hasSymbol("gimmeFive"));
+	assert (!sl.hasSymbol("fooBar123"));
 	
 	void* p1 = sl.getSymbol("pocoBuildManifest");
 	assertNotNullPtr(p1);
@@ -67,30 +64,30 @@ void SharedLibraryTest::testSharedLibrary1()
 		failmsg("wrong exception");
 	}
 	sl.unload();
-	assertTrue (!sl.isLoaded());
+	assert (!sl.isLoaded());
 }
 
 
 void SharedLibraryTest::testSharedLibrary2()
 {
-	std::string self = Path(Path::self()).makeParent().toString();
-	std::string path = self + "TestLibrary";
+	std::string path = "TestLibrary";
 	path.append(SharedLibrary::suffix());
 	SharedLibrary sl(path);
-	assertTrue (sl.getPath() == path);
-	assertTrue (sl.isLoaded());
+	assert (sl.getPath() == path);
+	assert (sl.isLoaded());
 
 	GimmeFiveFunc gimmeFive = (GimmeFiveFunc) sl.getSymbol("gimmeFive");
-	assertTrue (gimmeFive() == 5);
+	assert (gimmeFive() == 5);
 	
 	sl.unload();
-	assertTrue (!sl.isLoaded());
+	assert (!sl.isLoaded());
 }
 
 
 void SharedLibraryTest::testSharedLibrary3()
 {
 	std::string path = "NonexistentLibrary";
+	path.append(SharedLibrary::suffix());
 	SharedLibrary sl;
 	try
 	{
@@ -104,13 +101,12 @@ void SharedLibraryTest::testSharedLibrary3()
 	{
 		failmsg("wrong exception");
 	}
-	assertTrue (!sl.isLoaded());
+	assert (!sl.isLoaded());
 
-	std::string self = Path(Path::self()).makeParent().toString();
-	path = self + "TestLibrary";
+	path = "TestLibrary";
 	path.append(SharedLibrary::suffix());
 	sl.load(path);
-	assertTrue (sl.isLoaded());
+	assert (sl.isLoaded());
 	
 	try
 	{
@@ -124,10 +120,10 @@ void SharedLibraryTest::testSharedLibrary3()
 	{
 		failmsg("wrong exception");
 	}
-	assertTrue (sl.isLoaded());
+	assert (sl.isLoaded());
 
 	sl.unload();
-	assertTrue (!sl.isLoaded());
+	assert (!sl.isLoaded());
 }
 
 
@@ -145,11 +141,9 @@ CppUnit::Test* SharedLibraryTest::suite()
 {
 	CppUnit::TestSuite* pSuite = new CppUnit::TestSuite("SharedLibraryTest");
 
-#ifndef _DEBUG // FIXME excluded from the Debug build temporarily for AppVeyor stability
 	CppUnit_addTest(pSuite, SharedLibraryTest, testSharedLibrary1);
 	CppUnit_addTest(pSuite, SharedLibraryTest, testSharedLibrary2);
 	CppUnit_addTest(pSuite, SharedLibraryTest, testSharedLibrary3);
-#endif
 
 	return pSuite;
 }

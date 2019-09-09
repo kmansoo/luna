@@ -12,9 +12,6 @@
 //
 
 
-#if defined(_WIN32) 
-#include "Poco/Platform_WIN32_OSVER.h"
-#endif
 #include "Poco/Net/PollSet.h"
 #include "Poco/Net/SocketImpl.h"
 #include "Poco/Mutex.h"
@@ -25,7 +22,7 @@
 #ifndef POCO_HAVE_FD_POLL
 #define POCO_HAVE_FD_POLL 1
 #endif
-#elif defined(POCO_OS_FAMILY_BSD) 
+#elif defined(POCO_OS_FAMILY_BSD)
 #ifndef POCO_HAVE_FD_POLL
 #define POCO_HAVE_FD_POLL 1
 #endif
@@ -112,20 +109,6 @@ public:
 		_socketMap.erase(socket.impl());
 	}
 
-	bool has(const Socket& socket) const
-	{
-		Poco::FastMutex::ScopedLock lock(_mutex);
-		SocketImpl* sockImpl = socket.impl();
-		return sockImpl &&
-			(_socketMap.find(sockImpl) != _socketMap.end());
-	}
-
-	bool empty() const
-	{
-		Poco::FastMutex::ScopedLock lock(_mutex);
-		return _socketMap.empty();
-	}
-
 	void update(const Socket& socket, int mode)
 	{
 		poco_socket_t fd = socket.impl()->sockfd();
@@ -162,10 +145,7 @@ public:
 	{
 		PollSet::SocketModeMap result;
 
-		{
-			Poco::FastMutex::ScopedLock lock(_mutex);
-			if(_socketMap.empty()) return result;
-		}
+		if (_socketMap.empty()) return result;
 
 		Poco::Timespan remainingTime(timeout);
 		int rc;
@@ -206,9 +186,9 @@ public:
 	}
 
 private:
-	mutable Poco::FastMutex         _mutex;
-	int                             _epollfd;
-	std::map<void*, Socket>         _socketMap;
+	Poco::FastMutex _mutex;
+	int _epollfd;
+	std::map<void*, Socket> _socketMap;
 	std::vector<struct epoll_event> _events;
 };
 
@@ -217,7 +197,7 @@ private:
 
 
 //
-// BSD/Windows implementation using poll/WSAPoll
+// BSD implementation using poll
 //
 class PollSetImpl
 {
@@ -240,20 +220,6 @@ public:
 		_removeSet.insert(fd);
 		_addMap.erase(fd);
 		_socketMap.erase(fd);
-	}
-
-	bool has(const Socket& socket) const
-	{
-		Poco::FastMutex::ScopedLock lock(_mutex);
-		SocketImpl* sockImpl = socket.impl();
-		return sockImpl &&
-			(_socketMap.find(sockImpl->sockfd()) != _socketMap.end());
-	}
-
-	bool empty() const
-	{
-		Poco::FastMutex::ScopedLock lock(_mutex);
-		return _socketMap.empty();
 	}
 
 	void update(const Socket& socket, int mode)
@@ -328,7 +294,7 @@ public:
 		{
 			Poco::Timestamp start;
 #ifdef _WIN32
-			rc = WSAPoll(&_pollfds[0], static_cast<ULONG>(_pollfds.size()), static_cast<INT>(timeout.totalMilliseconds()));
+			rc = WSAPoll(&_pollfds[0], _pollfds.size(), static_cast<INT>(timeout.totalMilliseconds()));
 #else
 			rc = ::poll(&_pollfds[0], _pollfds.size(), timeout.totalMilliseconds());
 #endif
@@ -375,11 +341,11 @@ public:
 	}
 
 private:
-	mutable Poco::FastMutex         _mutex;
+	Poco::FastMutex _mutex;
 	std::map<poco_socket_t, Socket> _socketMap;
-	std::map<poco_socket_t, int>    _addMap;
-	std::set<poco_socket_t>         _removeSet;
-	std::vector<pollfd>             _pollfds;
+	std::map<poco_socket_t, int> _addMap;
+	std::set<poco_socket_t> _removeSet;
+	std::vector<pollfd> _pollfds;
 };
 
 
@@ -395,36 +361,28 @@ public:
 	void add(const Socket& socket, int mode)
 	{
 		Poco::FastMutex::ScopedLock lock(_mutex);
+
 		_map[socket] = mode;
 	}
 
 	void remove(const Socket& socket)
 	{
 		Poco::FastMutex::ScopedLock lock(_mutex);
+
 		_map.erase(socket);
-	}
-
-	bool has(const Socket& socket) const
-	{
-		Poco::FastMutex::ScopedLock lock(_mutex);
-		return _map.find(socket) != _map.end();
-	}
-
-	bool empty() const
-	{
-		Poco::FastMutex::ScopedLock lock(_mutex);
-		return _map.empty();
 	}
 
 	void update(const Socket& socket, int mode)
 	{
 		Poco::FastMutex::ScopedLock lock(_mutex);
+
 		_map[socket] = mode;
 	}
 
 	void clear()
 	{
 		Poco::FastMutex::ScopedLock lock(_mutex);
+
 		_map.clear();
 	}
 
@@ -518,8 +476,8 @@ public:
 	}
 
 private:
-	mutable Poco::FastMutex _mutex;
-	PollSet::SocketModeMap  _map;
+	Poco::FastMutex _mutex;
+	PollSet::SocketModeMap _map;
 };
 
 
@@ -553,18 +511,6 @@ void PollSet::remove(const Socket& socket)
 void PollSet::update(const Socket& socket, int mode)
 {
 	_pImpl->update(socket, mode);
-}
-
-
-bool PollSet::has(const Socket& socket) const
-{
-	return _pImpl->has(socket);
-}
-
-
-bool PollSet::empty() const
-{
-	return _pImpl->empty();
 }
 
 

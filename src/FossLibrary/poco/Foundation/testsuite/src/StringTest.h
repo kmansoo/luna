@@ -15,7 +15,7 @@
 
 
 #include "Poco/Foundation.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 #include "Poco/NumericString.h"
 #include "Poco/MemoryStream.h"
 
@@ -42,14 +42,10 @@ public:
 	void testReplace();
 	void testReplaceInPlace();
 	void testCat();
-	void testStartsWith();
-	void testEndsWith();
 
 	void testStringToInt();
 	void testStringToFloat();
 	void testStringToDouble();
-	void testNumericStringPadding();
-	void testNumericStringLimit();
 	void testStringToFloatError();
 	void testNumericLocale();
 	void benchmarkStrToFloat();
@@ -73,73 +69,26 @@ private:
 	{
 		T result = 0;
 		if (123 <= std::numeric_limits<T>::max())
-			assertTrue (Poco::strToInt("123", result, 10)); assertTrue (result == 123);
+			assert(Poco::strToInt("123", result, 10)); assert(result == 123);
 		
-		assertTrue (Poco::strToInt("0", result, 10)); assertTrue (result == 0);
-		assertTrue (Poco::strToInt("000", result, 10)); assertTrue (result == 0);
+		assert(Poco::strToInt("0", result, 10)); assert(result == 0);
+		assert(Poco::strToInt("000", result, 10)); assert(result == 0);
 		
 		if (std::numeric_limits<T>::is_signed && (-123 > std::numeric_limits<T>::min()))
-			{ assertTrue (Poco::strToInt("-123", result, 10)); assertTrue (result == -123); }
+			{ assert(Poco::strToInt("-123", result, 10)); assert(result == -123); }
 		if (0x123 < std::numeric_limits<T>::max())
-			{ assertTrue (Poco::strToInt("123", result, 0x10)); assertTrue (result == 0x123); }
+			{ assert(Poco::strToInt("123", result, 0x10)); assert(result == 0x123); }
 		if (0x12ab < std::numeric_limits<T>::max())
-			{ assertTrue (Poco::strToInt("12AB", result, 0x10)); assertTrue (result == 0x12ab); }
+			{ assert(Poco::strToInt("12AB", result, 0x10)); assert(result == 0x12ab); }
 		if (123 < std::numeric_limits<T>::max())
-			{ assertTrue (Poco::strToInt("00", result, 0x10)); assertTrue (result == 0); }
+			{ assert(Poco::strToInt("00", result, 0x10)); assert(result == 0); }
 		if (0123 < std::numeric_limits<T>::max())
-			{ assertTrue (Poco::strToInt("123", result, 010));  assertTrue (result == 0123); }
+			{ assert(Poco::strToInt("123", result, 010));  assert(result == 0123); }
 		if (0123 < std::numeric_limits<T>::max())
-			{ assertTrue (Poco::strToInt("0123", result, 010)); assertTrue (result == 0123); }
+			{ assert(Poco::strToInt("0123", result, 010)); assert(result == 0123); }
 		
-		assertTrue (Poco::strToInt("0", result, 010)); assertTrue (result == 0);
-		assertTrue (Poco::strToInt("000", result, 010)); assertTrue (result == 0);
-	}
-
-	template <typename Larger, typename Smaller>
-	void numericStringLimitSameSign()
-	{
-		Larger l = std::numeric_limits<Smaller>::max();
-		std::string str = std::to_string(l);
-
-		Smaller s;
-		assertTrue(Poco::strToInt<Smaller>(str, s, 10));
-		assertTrue(s == std::numeric_limits<Smaller>::max());
-		++l; str = std::to_string(l);
-		assertFalse(Poco::strToInt<Smaller>(str, s, 10));
-		++l; str = std::to_string(l);
-		assertFalse(Poco::strToInt<Smaller>(str, s, 10));
-		++l; str = std::to_string(l);
-		assertFalse(Poco::strToInt<Smaller>(str, s, 10));
-		++l; str = std::to_string(l);
-		assertFalse(Poco::strToInt<Smaller>(str, s, 10));
-		++l; str = std::to_string(l);
-		assertFalse(Poco::strToInt<Smaller>(str, s, 10));
-		++l; str = std::to_string(l);
-		assertFalse(Poco::strToInt<Smaller>(str, s, 10));
-	}
-
-	template <typename Larger, typename Smaller>
-	void numericStringLowerLimit()
-	{
-		Larger l = std::numeric_limits<Smaller>::min();
-		std::string val = std::to_string(l);
-		Smaller s = -1;
-		assertFalse(s == std::numeric_limits<Smaller>::min());
-		assertTrue(Poco::strToInt<Smaller>(val, s, 10));
-		assertTrue (s == std::numeric_limits<Smaller>::min());
-		assertTrue(s == std::numeric_limits<Smaller>::min());
-		--l; val = std::to_string(l);
-		assertFalse(Poco::strToInt<Smaller>(val, s, 10));
-		--l; val = std::to_string(l);
-		assertFalse(Poco::strToInt<Smaller>(val, s, 10));
-		--l; val = std::to_string(l);
-		assertFalse(Poco::strToInt<Smaller>(val, s, 10));
-		--l; val = std::to_string(l);
-		assertFalse(Poco::strToInt<Smaller>(val, s, 10));
-		--l; val = std::to_string(l);
-		assertFalse(Poco::strToInt<Smaller>(val, s, 10));
-		--l; val = std::to_string(l);
-		assertFalse(Poco::strToInt<Smaller>(val, s, 10));
+		assert(Poco::strToInt("0", result, 010)); assert(result == 0);
+		assert(Poco::strToInt("000", result, 010)); assert(result == 0);
 	}
 
 	template <typename T>

@@ -45,18 +45,18 @@ TextBufferIterator::TextBufferIterator(const char* begin, std::size_t size, cons
 }
 
 
-TextBufferIterator::TextBufferIterator(const char* begin, const char* pEnd, const TextEncoding& encoding):
+TextBufferIterator::TextBufferIterator(const char* begin, const char* end, const TextEncoding& encoding):
 	_pEncoding(&encoding),
 	_it(begin),
-	_end(pEnd)
+	_end(end)
 {
 }
 
 
-TextBufferIterator::TextBufferIterator(const char* pEnd):
+TextBufferIterator::TextBufferIterator(const char* end):
 	_pEncoding(0),
-	_it(pEnd),
-	_end(pEnd)
+	_it(end),
+	_end(end)
 {
 }
 
@@ -114,9 +114,9 @@ int TextBufferIterator::operator * () const
 	while (-1 > n && (_end - it) >= -n - read)
 	{
 		while (read < -n && it != _end)
-		{
-			*p++ = *it++;
-			read++;
+		{ 
+			*p++ = *it++; 
+			read++; 
 		}
 		n = _pEncoding->queryConvert(buffer, read);
 	}
@@ -151,16 +151,16 @@ TextBufferIterator& TextBufferIterator::operator ++ ()
 	while (-1 > n && (_end - _it) >= -n - read)
 	{
 		while (read < -n && _it != _end)
-		{
-			*p++ = *_it++;
-			read++;
+		{ 
+			*p++ = *_it++; 
+			read++; 
 		}
 		n = _pEncoding->sequenceLength(buffer, read);
 	}
 	while (read < n && _it != _end)
-	{
-		_it++;
-		read++;
+	{ 
+		_it++; 
+		read++; 
 	}
 
 	return *this;

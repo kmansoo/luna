@@ -145,7 +145,7 @@ SocketAddress::SocketAddress(const SocketAddress& socketAddress)
 #endif
 #if defined(POCO_OS_FAMILY_UNIX)
 	else if (socketAddress.family() == UNIX_LOCAL)
-		newLocal(reinterpret_cast<const sockaddr_un*>(socketAddress.addr()), socketAddress.length());
+		newLocal(reinterpret_cast<const sockaddr_un*>(socketAddress.addr()));
 #endif
 }
 
@@ -160,7 +160,7 @@ SocketAddress::SocketAddress(const struct sockaddr* sockAddr, poco_socklen_t len
 #endif
 #if defined(POCO_OS_FAMILY_UNIX)
 	else if (length > 0 && length <= sizeof(struct sockaddr_un) && sockAddr->sa_family == AF_UNIX)
-		newLocal(reinterpret_cast<const sockaddr_un*>(sockAddr), length);
+		newLocal(reinterpret_cast<const sockaddr_un*>(sockAddr));
 #endif
 	else throw Poco::InvalidArgumentException("Invalid address length or family passed to SocketAddress()");
 }
@@ -168,7 +168,6 @@ SocketAddress::SocketAddress(const struct sockaddr* sockAddr, poco_socklen_t len
 
 SocketAddress::~SocketAddress()
 {
-	destruct();
 }
 
 
@@ -189,7 +188,6 @@ SocketAddress& SocketAddress::operator = (const SocketAddress& socketAddress)
 {
 	if (&socketAddress != this)
 	{
-		destruct();
 		if (socketAddress.family() == IPv4)
 			newIPv4(reinterpret_cast<const sockaddr_in*>(socketAddress.addr()));
 #if defined(POCO_HAVE_IPv6)
@@ -198,7 +196,7 @@ SocketAddress& SocketAddress::operator = (const SocketAddress& socketAddress)
 #endif
 #if defined(POCO_OS_FAMILY_UNIX)
 		else if (socketAddress.family() == UNIX_LOCAL)
-			newLocal(reinterpret_cast<const sockaddr_un*>(socketAddress.addr()), socketAddress.length());
+			newLocal(reinterpret_cast<const sockaddr_un*>(socketAddress.addr()));
 #endif
 	}
 	return *this;
@@ -359,7 +357,7 @@ void SocketAddress::init(const std::string& hostAndPort)
 	std::string::const_iterator end = hostAndPort.end();
 
 #if defined(POCO_OS_FAMILY_UNIX)
-	if (*it == '/' || *it == '\0')
+	if (*it == '/')
 	{
 		newLocal(hostAndPort);
 		return;
@@ -405,87 +403,6 @@ Poco::UInt16 SocketAddress::resolveService(const std::string& service)
 			throw ServiceNotFoundException(service);
 #endif
 	}
-}
-
-
-void SocketAddress::destruct()
-{
-	pImpl()->~SocketAddressImpl();
-}
-
-
-SocketAddress::Ptr SocketAddress::pImpl() const
-{
-	return reinterpret_cast<Ptr>(const_cast<char *>(_memory.buffer));
-}
-
-
-void SocketAddress::newIPv4()
-{
-	new (storage()) Poco::Net::Impl::IPv4SocketAddressImpl;
-}
-
-
-void SocketAddress::newIPv4(const sockaddr_in* sockAddr)
-{
-	new (storage()) Poco::Net::Impl::IPv4SocketAddressImpl(sockAddr);
-}
-
-
-void SocketAddress::newIPv4(const IPAddress& hostAddress, Poco::UInt16 portNumber)
-{
-	new (storage()) Poco::Net::Impl::IPv4SocketAddressImpl(hostAddress.addr(), htons(portNumber));
-}
-
-
-#if defined(POCO_HAVE_IPv6)
-void SocketAddress::newIPv6(const sockaddr_in6* sockAddr)
-{
-	new (storage()) Poco::Net::Impl::IPv6SocketAddressImpl(sockAddr);
-}
-
-
-void SocketAddress::newIPv6(const IPAddress& hostAddress, Poco::UInt16 portNumber)
-{
-	new (storage()) Poco::Net::Impl::IPv6SocketAddressImpl(hostAddress.addr(), htons(portNumber), hostAddress.scope());
-}
-#endif // POCO_HAVE_IPv6
-
-
-#if defined(POCO_OS_FAMILY_UNIX)
-void SocketAddress::newLocal(const sockaddr_un* sockAddr, poco_socklen_t length)
-{
-	new (storage()) Poco::Net::Impl::LocalSocketAddressImpl(sockAddr, length);
-}
-
-
-void SocketAddress::newLocal(const std::string& path)
-{
-	new (storage()) Poco::Net::Impl::LocalSocketAddressImpl(path);
-}
-#endif // POCO_OS_FAMILY_UNIX
-
-
-char* SocketAddress::storage()
-{
-	return _memory.buffer;
-}
-
-
-bool SocketAddress::operator == (const SocketAddress& socketAddress) const
-{
-#if defined(POCO_OS_FAMILY_UNIX)
-	if (family() == UNIX_LOCAL)
-		return toString() == socketAddress.toString();
-	else
-#endif
-		return host() == socketAddress.host() && port() == socketAddress.port();
-}
-
-
-bool SocketAddress::operator != (const SocketAddress& socketAddress) const
-{
-	return !(operator == (socketAddress));
 }
 
 

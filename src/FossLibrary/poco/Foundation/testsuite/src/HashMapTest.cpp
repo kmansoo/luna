@@ -9,8 +9,8 @@
 
 
 #include "HashMapTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/HashMap.h"
 #include "Poco/Exception.h"
 #include <map>
@@ -19,7 +19,7 @@
 using Poco::HashMap;
 
 
-HashMapTest::HashMapTest(const std::string& rName): CppUnit::TestCase(rName)
+HashMapTest::HashMapTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -36,38 +36,38 @@ void HashMapTest::testInsert()
 	typedef HashMap<int, int> IntMap;
 	IntMap hm;
 	
-	assertTrue (hm.empty());
+	assert (hm.empty());
 	
 	for (int i = 0; i < N; ++i)
 	{
 		std::pair<IntMap::Iterator, bool> res = hm.insert(IntMap::ValueType(i, i*2));
-		assertTrue (res.first->first == i);
-		assertTrue (res.first->second == i*2);
-		assertTrue (res.second);
+		assert (res.first->first == i);
+		assert (res.first->second == i*2);
+		assert (res.second);
 		IntMap::Iterator it = hm.find(i);
-		assertTrue (it != hm.end());
-		assertTrue (it->first == i);
-		assertTrue (it->second == i*2);
-		assertTrue (hm.count(i) == 1);
-		assertTrue (hm.size() == i + 1);
+		assert (it != hm.end());
+		assert (it->first == i);
+		assert (it->second == i*2);
+		assert (hm.count(i) == 1);
+		assert (hm.size() == i + 1);
 	}		
 	
-	assertTrue (!hm.empty());
+	assert (!hm.empty());
 	
 	for (int i = 0; i < N; ++i)
 	{
 		IntMap::Iterator it = hm.find(i);
-		assertTrue (it != hm.end());
-		assertTrue (it->first == i);
-		assertTrue (it->second == i*2);
+		assert (it != hm.end());
+		assert (it->first == i);
+		assert (it->second == i*2);
 	}
 	
 	for (int i = 0; i < N; ++i)
 	{
 		std::pair<IntMap::Iterator, bool> res = hm.insert(IntMap::ValueType(i, 0));
-		assertTrue (res.first->first == i);
-		assertTrue (res.first->second == i*2);
-		assertTrue (!res.second);
+		assert (res.first->first == i);
+		assert (res.first->second == i*2);
+		assert (!res.second);
 	}		
 }
 
@@ -83,27 +83,27 @@ void HashMapTest::testErase()
 	{
 		hm.insert(IntMap::ValueType(i, i*2));
 	}
-	assertTrue (hm.size() == N);
+	assert (hm.size() == N);
 	
 	for (int i = 0; i < N; i += 2)
 	{
 		hm.erase(i);
 		IntMap::Iterator it = hm.find(i);
-		assertTrue (it == hm.end());
+		assert (it == hm.end());
 	}
-	assertTrue (hm.size() == N/2);
+	assert (hm.size() == N/2);
 	
 	for (int i = 0; i < N; i += 2)
 	{
 		IntMap::Iterator it = hm.find(i);
-		assertTrue (it == hm.end());
+		assert (it == hm.end());
 	}
 	
 	for (int i = 1; i < N; i += 2)
 	{
 		IntMap::Iterator it = hm.find(i);
-		assertTrue (it != hm.end());
-		assertTrue (*it == i);
+		assert (it != hm.end());
+		assert (*it == i);
 	}
 
 	for (int i = 0; i < N; i += 2)
@@ -114,9 +114,9 @@ void HashMapTest::testErase()
 	for (int i = 0; i < N; ++i)
 	{
 		IntMap::Iterator it = hm.find(i);
-		assertTrue (it != hm.end());
-		assertTrue (it->first == i);
-		assertTrue (it->second == i*2);		
+		assert (it != hm.end());
+		assert (it->first == i);
+		assert (it->second == i*2);		
 	}
 }
 
@@ -138,12 +138,12 @@ void HashMapTest::testIterator()
 	it = hm.begin();
 	while (it != hm.end())
 	{
-		assertTrue (values.find(it->first) == values.end());
+		assert (values.find(it->first) == values.end());
 		values[it->first] = it->second;
 		++it;
 	}
 	
-	assertTrue (values.size() == N);
+	assert (values.size() == N);
 }
 
 
@@ -163,12 +163,12 @@ void HashMapTest::testConstIterator()
 	IntMap::ConstIterator it = hm.begin();
 	while (it != hm.end())
 	{
-		assertTrue (values.find(it->first) == values.end());
+		assert (values.find(it->first) == values.end());
 		values[it->first] = it->second;
 		++it;
 	}
 	
-	assertTrue (values.size() == N);
+	assert (values.size() == N);
 }
 
 
@@ -181,15 +181,15 @@ void HashMapTest::testIndex()
 	hm[2] = 4;
 	hm[3] = 6;
 	
-	assertTrue (hm.size() == 3);
-	assertTrue (hm[1] == 2);
-	assertTrue (hm[2] == 4);
-	assertTrue (hm[3] == 6);
+	assert (hm.size() == 3);
+	assert (hm[1] == 2);
+	assert (hm[2] == 4);
+	assert (hm[3] == 6);
 	
 	try
 	{
 		const IntMap& im = hm;
-		int x = im[4];
+		int POCO_UNUSED x = im[4];
 		fail("no such key - must throw");
 	}
 	catch (Poco::NotFoundException&)

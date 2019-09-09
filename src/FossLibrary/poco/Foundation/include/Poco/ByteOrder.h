@@ -22,6 +22,7 @@
 #include <stdlib.h> // builtins
 #endif
 
+
 namespace Poco {
 
 
@@ -35,8 +36,6 @@ public:
 	static UInt16 flipBytes(UInt16 value);
 	static Int32 flipBytes(Int32 value);
 	static UInt32 flipBytes(UInt32 value);
-	static float flipBytes(float value);
-	static double flipBytes(double value);
 #if defined(POCO_HAVE_INT64)
 	static Int64 flipBytes(Int64 value);
 	static UInt64 flipBytes(UInt64 value);
@@ -95,21 +94,6 @@ public:
 	static Int64 fromNetwork(Int64 value);
 	static UInt64 fromNetwork (UInt64 value);
 #endif
-
-private:
-	template<typename T>
-	static T flip(T value)
-	{
-		T           flip     = value;
-		std::size_t halfSize = sizeof(T) / 2;
-		char*       flipP    = reinterpret_cast<char*>(&flip);
-
-		for (std::size_t i = 0; i < halfSize; i++)
-		{
-			std::swap(flipP[i], flipP[sizeof(T) - i - 1]);
-		}
-		return flip;
-	}
 };
 
 
@@ -118,7 +102,7 @@ private:
 		#if (POCO_MSVC_VERSION > 71)
 			#define POCO_HAVE_MSC_BYTESWAP 1
 		#endif
-	#elif defined(__clang__)
+	#elif defined(__clang__) 
 		#if __has_builtin(__builtin_bswap32)
 			#define POCO_HAVE_GCC_BYTESWAP 1
 		#endif
@@ -163,18 +147,6 @@ inline UInt32 ByteOrder::flipBytes(UInt32 value)
 inline Int32 ByteOrder::flipBytes(Int32 value)
 {
 	return Int32(flipBytes(UInt32(value)));
-}
-
-
-inline float ByteOrder::flipBytes(float value)
-{
-	return flip(value);
-}
-
-
-inline double ByteOrder::flipBytes(double value)
-{
-	return flip(value);
 }
 
 

@@ -9,8 +9,8 @@
 
 
 #include "ClockTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Clock.h"
 #include "Poco/Thread.h"
 #include <iostream>
@@ -20,7 +20,7 @@ using Poco::Clock;
 using Poco::Thread;
 
 
-ClockTest::ClockTest(const std::string& rName): CppUnit::TestCase(rName)
+ClockTest::ClockTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -36,32 +36,32 @@ void ClockTest::testClock()
 	Thread::sleep(200);
 	Clock t2;
 	Clock t3 = t2;
-	assertTrue (t1 != t2);
-	assertTrue (!(t1 == t2));
-	assertTrue (t2 > t1);
-	assertTrue (t2 >= t1);
-	assertTrue (!(t1 > t2));
-	assertTrue (!(t1 >= t2));
-	assertTrue (t2 == t3);
-	assertTrue (!(t2 != t3));
-	assertTrue (t2 >= t3);
-	assertTrue (t2 <= t3);
+	assert (t1 != t2);
+	assert (!(t1 == t2));
+	assert (t2 > t1);
+	assert (t2 >= t1);
+	assert (!(t1 > t2));
+	assert (!(t1 >= t2));
+	assert (t2 == t3);
+	assert (!(t2 != t3));
+	assert (t2 >= t3);
+	assert (t2 <= t3);
 	Clock::ClockDiff d = (t2 - t1);
-	assertTrue (d >= 180000 && d <= 300000);
+	assert (d >= 180000 && d <= 300000);
 	
 	Clock::ClockDiff acc = Clock::accuracy();
-	assertTrue (acc > 0 && acc < Clock::resolution());
+	assert (acc > 0 && acc < Clock::resolution());
 	std::cout << "Clock accuracy: " << acc << std::endl;
 	
 	t1.swap(t2);
-	assertTrue (t1 > t2);
+	assert (t1 > t2);
 	t2.swap(t1);
 	
 	Clock now;
 	Thread::sleep(201);
-	assertTrue (now.elapsed() >= 200000);
-	assertTrue (now.isElapsed(200000));
-	assertTrue (!now.isElapsed(2000000));
+	assert (now.elapsed() >= 200000);
+	assert (now.isElapsed(200000));
+	assert (!now.isElapsed(2000000));
 }
 
 

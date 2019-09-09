@@ -45,7 +45,7 @@ class Foundation_API DirectoryWatcher: protected Runnable
 	///
 	/// A thread will be created that watches the specified
 	/// directory for changes. Events are reported in the context
-	/// of this thread.
+	/// of this thread. 
 	///
 	/// Note that changes to files in subdirectories of the watched
 	/// directory are not reported. Separate DirectoryWatcher objects
@@ -61,8 +61,6 @@ class Foundation_API DirectoryWatcher: protected Runnable
 	/// Therefore, the interval in which scans are done can be specified in
 	/// the constructor. Note that periodic scanning will also be done on FreeBSD
 	/// and Darwin if events for changes to files (DW_ITEM_MODIFIED) are enabled.
-	/// To avoid problems (e.g. with network shares notifications), scanning
-	/// can be forced as the only mechanism, regardless of platform default.
 	///
 	/// DW_ITEM_MOVED_FROM and DW_ITEM_MOVED_TO events will only be reported
 	/// on Linux. On other platforms, a file rename or move operation
@@ -134,29 +132,21 @@ public:
 	BasicEvent<const Exception> scanError;
 		/// Fired when an error occurs while scanning for changes.
 	
-	DirectoryWatcher(const std::string& path,
-		int eventMask = DW_FILTER_ENABLE_ALL,
-		int scanInterval = DW_DEFAULT_SCAN_INTERVAL,
-		bool forceScan = false);
+	DirectoryWatcher(const std::string& path, int eventMask = DW_FILTER_ENABLE_ALL, int scanInterval = DW_DEFAULT_SCAN_INTERVAL);
 		/// Creates a DirectoryWatcher for the directory given in path.
 		/// To enable only specific events, an eventMask can be specified by
 		/// OR-ing the desired event IDs (e.g., DW_ITEM_ADDED | DW_ITEM_MODIFIED).
 		/// On platforms where no native filesystem notifications are available,
 		/// scanInterval specifies the interval in seconds between scans
-		/// of the directory. Native notification mechanism can also be disabled
-		/// (i.e. replaced with scanning) by setting forceScan to true.
+		/// of the directory.
 		
-	DirectoryWatcher(const File& directory,
-		int eventMask = DW_FILTER_ENABLE_ALL,
-		int scanInterval = DW_DEFAULT_SCAN_INTERVAL,
-		bool forceScan = false);
+	DirectoryWatcher(const File& directory, int eventMask = DW_FILTER_ENABLE_ALL, int scanInterval = DW_DEFAULT_SCAN_INTERVAL);
 		/// Creates a DirectoryWatcher for the specified directory
 		/// To enable only specific events, an eventMask can be specified by
 		/// OR-ing the desired event IDs (e.g., DW_ITEM_ADDED | DW_ITEM_MODIFIED).
 		/// On platforms where no native filesystem notifications are available,
 		/// scanInterval specifies the interval in seconds between scans
-		/// of the directory. Native notification mechanism can also be disabled
-		/// (i.e. replaced with scanning) by setting forceScan to true.
+		/// of the directory.
 
 	~DirectoryWatcher();
 		/// Destroys the DirectoryWatcher.
@@ -194,12 +184,11 @@ private:
 	DirectoryWatcher(const DirectoryWatcher&);
 	DirectoryWatcher& operator = (const DirectoryWatcher&);
 
-	Thread                    _thread;
-	File                      _directory;
-	int                       _eventMask;
-	AtomicCounter             _eventsSuspended;
-	int                       _scanInterval;
-	bool                      _forceScan;
+	Thread _thread;
+	File _directory;
+	int _eventMask;
+	AtomicCounter _eventsSuspended;
+	int _scanInterval;
 	DirectoryWatcherStrategy* _pStrategy;
 };
 

@@ -30,7 +30,7 @@ const std::string SimpleFileChannel::PROP_ROTATION      = "rotation";
 const std::string SimpleFileChannel::PROP_FLUSH         = "flush";
 
 
-SimpleFileChannel::SimpleFileChannel():
+SimpleFileChannel::SimpleFileChannel(): 
 	_limit(0),
 	_flush(true),
 	_pFile(0)
@@ -38,9 +38,9 @@ SimpleFileChannel::SimpleFileChannel():
 }
 
 
-SimpleFileChannel::SimpleFileChannel(const std::string& rPath):
-	_path(rPath),
-	_secondaryPath(rPath + ".0"),
+SimpleFileChannel::SimpleFileChannel(const std::string& path):
+	_path(path),
+	_secondaryPath(path + ".0"),
 	_limit(0),
 	_flush(true),
 	_pFile(0)
@@ -71,12 +71,12 @@ void SimpleFileChannel::open()
 		File secondary(_secondaryPath);
 		Timestamp pt = primary.exists() ? primary.getLastModified() : 0;
 		Timestamp st = secondary.exists() ? secondary.getLastModified() : 0;
-		std::string pathString;
+		std::string path;
 		if (pt >= st)
-			pathString = _path;
+			path = _path;
 		else
-			pathString = _secondaryPath;
-		_pFile = new LogFile(pathString);
+			path = _secondaryPath;
+		_pFile = new LogFile(path);
 	}
 }
 

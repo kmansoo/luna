@@ -15,7 +15,7 @@
 
 
 #include "Poco/Foundation.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class NumberFormatterTest: public CppUnit::TestCase
@@ -30,7 +30,6 @@ public:
 	void testFormatHex();
 	void testFormatFloat();
 	void testAppend();
-	void testInfNaN();
 
 	void setUp();
 	void tearDown();

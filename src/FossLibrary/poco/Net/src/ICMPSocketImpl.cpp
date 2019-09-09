@@ -13,9 +13,10 @@
 
 
 #include "Poco/Net/ICMPSocketImpl.h"
-#include "Poco/Net/ICMPv4PacketImpl.h"
 #include "Poco/Net/NetException.h"
-#include "Poco/Format.h"
+#include "Poco/Timespan.h"
+#include "Poco/Timestamp.h"
+#include "Poco/Exception.h"
 #include "Poco/Buffer.h"
 
 
@@ -35,7 +36,6 @@ ICMPSocketImpl::ICMPSocketImpl(IPAddress::Family family, int dataSize, int ttl, 
 	_timeout(timeout)
 {
 	setOption(IPPROTO_IP, IP_TTL, ttl);
-	setBlocking(true);
 	setReceiveTimeout(Timespan(timeout));
 }
 
@@ -60,40 +60,17 @@ int ICMPSocketImpl::receiveFrom(void*, int, SocketAddress& address, int flags)
 	try
 	{
 		Poco::Timestamp ts;
-		int rc;
-		int expected = _icmpPacket.packetSize();
 		do
 		{
-			// guard against a DoS attack
-			if (ts.isElapsed(_timeout)) throw TimeoutException();
-			buffer.clear();
-			SocketAddress respAddr;
-			rc = SocketImpl::receiveFrom(buffer.begin(), maxPacketSize, respAddr, flags);
-			if (rc == 0) break;
-			if (respAddr == address)
+			if (ts.isElapsed(_timeout))
 			{
-				expected -= rc;
-				if (expected <= 0)
-				{
-					if (_icmpPacket.validReplyID(buffer.begin(), maxPacketSize)) break;
-					int type = 0, code = 0;
-					std::string err = _icmpPacket.errorDescription(buffer.begin(), maxPacketSize, type, code);
-					if (!err.empty()) throw ICMPException(err);
-					throw ICMPException("Invalid ICMP reply");
-				}
+				// This guards against a possible DoS attack, where sending
+				// fake ping responses will cause an endless loop.
+				throw TimeoutException();
 			}
-			else
-			{
-				throw ICMPException(Poco::format("Reply from an unknown IP address "
-												 "(requested %s, received %s).",
-												 address.host().toString(), respAddr.host().toString()));
-			}
+			SocketImpl::receiveFrom(buffer.begin(), maxPacketSize, address, flags);
 		}
-		while (expected && !_icmpPacket.validReplyID(buffer.begin(), maxPacketSize));
-	}
-	catch (ICMPException&)
-	{
-		throw;
+		while (!_icmpPacket.validReplyID(buffer.begin(), maxPacketSize));
 	}
 	catch (TimeoutException&)
 	{
@@ -101,18 +78,9 @@ int ICMPSocketImpl::receiveFrom(void*, int, SocketAddress& address, int flags)
 	}
 	catch (Exception&)
 	{
-		int type = 0, code = 0;
-		std::string err = _icmpPacket.errorDescription(buffer.begin(), maxPacketSize, type, code);
+		std::string err = _icmpPacket.errorDescription(buffer.begin(), maxPacketSize);
 		if (!err.empty())
-		{
-			if (address.family() == IPAddress::IPv4 &&
-				type == ICMPv4PacketImpl::DESTINATION_UNREACHABLE &&
-				code == ICMPv4PacketImpl::FRAGMENTATION_NEEDED_AND_DF_SET)
-			{
-				throw ICMPFragmentationException(err);
-			}
-			else throw ICMPException(err);
-		}
+			throw ICMPException(err);
 		else
 			throw;
 	}

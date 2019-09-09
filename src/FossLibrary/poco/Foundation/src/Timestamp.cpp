@@ -15,17 +15,25 @@
 #include "Poco/Timestamp.h"
 #include "Poco/Timespan.h"
 #include "Poco/Exception.h"
-#if defined(POCO_OS_FAMILY_WINDOWS)
+#include <algorithm>
+#undef min
+#undef max
+#include <limits>
+#if defined(POCO_OS_FAMILY_UNIX)
+#include <time.h>
+#include <unistd.h>
+#if defined(POCO_VXWORKS)
+#include <timers.h>
+#else
+#include <sys/time.h>
+#include <sys/times.h>
+#endif
+#elif defined(POCO_OS_FAMILY_WINDOWS)
 #include "Poco/UnWindows.h"
 #if defined(_WIN32_WCE)
 #include <cmath>
 #endif
 #endif
-#include <algorithm>
-#undef min
-#undef max
-#include <limits>
-#include <chrono>
 
 
 #ifndef POCO_HAVE_CLOCK_GETTIME
@@ -106,18 +114,18 @@ public:
 	void systemTime(SYSTEMTIME* pST)
 	{
 		std::memset(pST, 0, sizeof(SYSTEMTIME));
-		
+
 		WORD tick = GetTickCount() % 1000;
 		GetSystemTime(pST);
 		WORD ms = (tick >= _offset) ? (tick - _offset) : (1000 - (_offset - tick));
-		pST->wMilliseconds = ms;	
+		pST->wMilliseconds = ms;
 	}
 
 	void systemTimeAsFileTime(FILETIME* pFT)
 	{
 		SYSTEMTIME st;
 		systemTime(&st);
-		SystemTimeToFileTime(&st, pFT);	
+		SystemTimeToFileTime(&st, pFT);
 	}
 
 private:
@@ -130,7 +138,7 @@ static TickOffset offset;
 
 void GetSystemTimeAsFileTimeWithMillisecondResolution(FILETIME* pFT)
 {
-	offset.systemTimeAsFileTime(pFT);	
+	offset.systemTimeAsFileTime(pFT);
 }
 
 
@@ -206,8 +214,40 @@ Timestamp Timestamp::fromUtcTime(UtcTimeVal val)
 
 void Timestamp::update()
 {
-	_ts = std::chrono::duration_cast<std::chrono::microseconds>
-		(std::chrono::system_clock::now().time_since_epoch()).count();
+#if defined(POCO_OS_FAMILY_WINDOWS)
+
+	FILETIME ft;
+#if defined(_WIN32_WCE) && defined(POCO_WINCE_TIMESTAMP_HACK)
+	GetSystemTimeAsFileTimeWithMillisecondResolution(&ft);
+#else
+	GetSystemTimeAsFileTime(&ft);
+#endif
+
+	ULARGE_INTEGER epoch; // UNIX epoch (1970-01-01 00:00:00) expressed in Windows NT FILETIME
+	epoch.LowPart  = 0xD53E8000;
+	epoch.HighPart = 0x019DB1DE;
+
+	ULARGE_INTEGER ts;
+	ts.LowPart  = ft.dwLowDateTime;
+	ts.HighPart = ft.dwHighDateTime;
+	ts.QuadPart -= epoch.QuadPart;
+	_ts = ts.QuadPart/10;
+
+#elif defined(POCO_HAVE_CLOCK_GETTIME)
+
+	struct timespec ts;
+	if (clock_gettime(CLOCK_REALTIME, &ts))
+		throw SystemException("cannot get time of day");
+	_ts = TimeVal(ts.tv_sec)*resolution() + ts.tv_nsec/1000;
+
+#else
+
+	struct timeval tv;
+	if (gettimeofday(&tv, NULL))
+		throw SystemException("cannot get time of day");
+	_ts = TimeVal(tv.tv_sec)*resolution() + tv.tv_usec;
+
+#endif
 }
 
 
@@ -243,7 +283,7 @@ Timestamp Timestamp::fromFileTimeNP(UInt32 fileTimeLow, UInt32 fileTimeHigh)
 	ULARGE_INTEGER epoch; // UNIX epoch (1970-01-01 00:00:00) expressed in Windows NT FILETIME
 	epoch.LowPart  = 0xD53E8000;
 	epoch.HighPart = 0x019DB1DE;
-	
+
 	ULARGE_INTEGER ts;
 	ts.LowPart  = fileTimeLow;
 	ts.HighPart = fileTimeHigh;

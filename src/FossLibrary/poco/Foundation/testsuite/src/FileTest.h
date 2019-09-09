@@ -15,7 +15,7 @@
 
 
 #include "Poco/Foundation.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class FileTest: public CppUnit::TestCase
@@ -31,7 +31,6 @@ public:
 	void testCompare();
 	void testSwap();
 	void testSize();
-	void testSpace();
 	void testDirectory();
 	void testCopy();
 	void testMove();

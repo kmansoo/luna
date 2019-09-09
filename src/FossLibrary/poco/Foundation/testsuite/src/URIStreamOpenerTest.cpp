@@ -9,8 +9,8 @@
 
 
 #include "URIStreamOpenerTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/URIStreamOpener.h"
 #include "Poco/URIStreamFactory.h"
 #include "Poco/URI.h"
@@ -44,7 +44,7 @@ namespace
 }
 
 
-URIStreamOpenerTest::URIStreamOpenerTest(const std::string& rName): CppUnit::TestCase(rName)
+URIStreamOpenerTest::URIStreamOpenerTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -59,7 +59,7 @@ void URIStreamOpenerTest::testStreamOpenerFile()
 	TemporaryFile tempFile;
 	std::string path = tempFile.path();
 	std::ofstream ostr(path.c_str());
-	assertTrue (ostr.good());
+	assert (ostr.good());
 	ostr << "Hello, world!" << std::endl;
 	ostr.close();
 	
@@ -70,8 +70,8 @@ void URIStreamOpenerTest::testStreamOpenerFile()
 	
 	URIStreamOpener opener;
 	std::istream* istr = opener.open(uri);
-	assertTrue (istr != 0);
-	assertTrue (istr->good());
+	assert (istr != 0);
+	assert (istr->good());
 	delete istr;
 }
 
@@ -81,7 +81,7 @@ void URIStreamOpenerTest::testStreamOpenerRelative()
 	TemporaryFile tempFile;
 	std::string path = tempFile.path();
 	std::ofstream ostr(path.c_str());
-	assertTrue (ostr.good());
+	assert (ostr.good());
 	ostr << "Hello, world!" << std::endl;
 	ostr.close();
 	
@@ -90,8 +90,8 @@ void URIStreamOpenerTest::testStreamOpenerRelative()
 	
 	URIStreamOpener opener;
 	std::istream* istr = opener.open(uri);
-	assertTrue (istr != 0);
-	assertTrue (istr->good());
+	assert (istr != 0);
+	assert (istr->good());
 	delete istr;
 }
 
@@ -101,7 +101,7 @@ void URIStreamOpenerTest::testStreamOpenerURI()
 	TemporaryFile tempFile;
 	std::string path = tempFile.path();
 	std::ofstream ostr(path.c_str());
-	assertTrue (ostr.good());
+	assert (ostr.good());
 	ostr << "Hello, world!" << std::endl;
 	ostr.close();
 	
@@ -112,8 +112,8 @@ void URIStreamOpenerTest::testStreamOpenerURI()
 	
 	URIStreamOpener opener;
 	std::istream* istr = opener.open(uriString);
-	assertTrue (istr != 0);
-	assertTrue (istr->good());
+	assert (istr != 0);
+	assert (istr->good());
 	delete istr;
 }
 
@@ -123,7 +123,7 @@ void URIStreamOpenerTest::testStreamOpenerURIResolve()
 	TemporaryFile tempFile;
 	std::string path = tempFile.path();
 	std::ofstream ostr(path.c_str());
-	assertTrue (ostr.good());
+	assert (ostr.good());
 	ostr << "Hello, world!" << std::endl;
 	ostr.close();
 	
@@ -138,8 +138,8 @@ void URIStreamOpenerTest::testStreamOpenerURIResolve()
 	
 	URIStreamOpener opener;
 	std::istream* istr = opener.open(uriString, p.getFileName());
-	assertTrue (istr != 0);
-	assertTrue (istr->good());
+	assert (istr != 0);
+	assert (istr->good());
 	delete istr;
 }
 
@@ -149,14 +149,14 @@ void URIStreamOpenerTest::testStreamOpenerPath()
 	TemporaryFile tempFile;
 	std::string path = tempFile.path();
 	std::ofstream ostr(path.c_str());
-	assertTrue (ostr.good());
+	assert (ostr.good());
 	ostr << "Hello, world!" << std::endl;
 	ostr.close();
 		
 	URIStreamOpener opener;
 	std::istream* istr = opener.open(path);
-	assertTrue (istr != 0);
-	assertTrue (istr->good());
+	assert (istr != 0);
+	assert (istr->good());
 	delete istr;
 }
 
@@ -166,7 +166,7 @@ void URIStreamOpenerTest::testStreamOpenerPathResolve()
 	TemporaryFile tempFile;
 	std::string path = tempFile.path();
 	std::ofstream ostr(path.c_str());
-	assertTrue (ostr.good());
+	assert (ostr.good());
 	ostr << "Hello, world!" << std::endl;
 	ostr.close();
 	
@@ -176,8 +176,8 @@ void URIStreamOpenerTest::testStreamOpenerPathResolve()
 		
 	URIStreamOpener opener;
 	std::istream* istr = opener.open(base, p.getFileName());
-	assertTrue (istr != 0);
-	assertTrue (istr->good());
+	assert (istr != 0);
+	assert (istr->good());
 	delete istr;
 }
 
@@ -185,16 +185,16 @@ void URIStreamOpenerTest::testStreamOpenerPathResolve()
 void URIStreamOpenerTest::testRegisterUnregister()
 {
 	URIStreamOpener opener;
-	assertTrue (!opener.supportsScheme("string"));
+	assert (!opener.supportsScheme("string"));
 	opener.registerStreamFactory("string", new StringStreamFactory);
-	assertTrue (opener.supportsScheme("string"));
+	assert (opener.supportsScheme("string"));
 	URI uri("string:foobar");
 	std::istream* istr = opener.open(uri);
-	assertTrue (istr != 0);
-	assertTrue (istr->good());
+	assert (istr != 0);
+	assert (istr->good());
 	delete istr;
 	opener.unregisterStreamFactory("string");
-	assertTrue (!opener.supportsScheme("string"));
+	assert (!opener.supportsScheme("string"));
 }
 
 

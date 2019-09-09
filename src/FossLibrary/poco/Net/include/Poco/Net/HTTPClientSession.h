@@ -100,9 +100,6 @@ public:
 
 	HTTPClientSession(const std::string& host, Poco::UInt16 port, const ProxyConfig& proxyConfig);
 		/// Creates a HTTPClientSession using the given host, port and proxy configuration.
-			
-	HTTPClientSession(const StreamSocket& socket, const ProxyConfig& proxyConfig);
-		/// Creates a HTTPClientSession using the given socket and proxy configuration.
 
 	virtual ~HTTPClientSession();
 		/// Destroys the HTTPClientSession and closes
@@ -113,74 +110,47 @@ public:
 		///
 		/// The host must not be changed once there is an
 		/// open connection to the server.
-		
+
 	const std::string& getHost() const;
 		/// Returns the host name of the target HTTP server.
-		
+
 	void setPort(Poco::UInt16 port);
 		/// Sets the port number of the target HTTP server.
 		///
 		/// The port number must not be changed once there is an
 		/// open connection to the server.
-	
+
 	Poco::UInt16 getPort() const;
 		/// Returns the port number of the target HTTP server.
 
-        void setSourceAddress(const SocketAddress& address);
-		/// Sets the source IP address and source port for the HTTPClientSession
-		/// socket.
-		///
-		/// Function can be called repeatedly to set one source address value for
-		/// IPv4 and one for IPv6, in the case where it is not known ahead of time
-		/// which type of address family the target host is part of.
-		///
-		/// The source address must not be changed once there
-		/// is an open connection to the server.
-		///
-		/// Note: Both the source IP address and source port can be set
-		/// using this function, but the typical client use is to set
-		/// the source IP address only and the source port portion
-		/// would normally be passed as 0 meaning that any port value
-		/// can be used on the source side of the socket.
-		///
-
-        const SocketAddress& getSourceAddress();
-		/// Returns the last source address set with setSourceAddress
-
-        const SocketAddress& getSourceAddress4();
-		/// Returns the last IPv4 source address set with setSourceAddress
-
-        const SocketAddress& getSourceAddress6();
-		/// Returns the last IPV6 source address set with setSourceAddress
-
 	void setProxy(const std::string& host, Poco::UInt16 port = HTTPSession::HTTP_PORT);
 		/// Sets the proxy host name and port number.
-		
+
 	void setProxyHost(const std::string& host);
 		/// Sets the host name of the proxy server.
-		
+
 	void setProxyPort(Poco::UInt16 port);
 		/// Sets the port number of the proxy server.
-		
+
 	const std::string& getProxyHost() const;
 		/// Returns the proxy host name.
-		
+
 	Poco::UInt16 getProxyPort() const;
 		/// Returns the proxy port number.
-		
+
 	void setProxyCredentials(const std::string& username, const std::string& password);
 		/// Sets the username and password for proxy authentication.
 		/// Only Basic authentication is supported.
-		
+
 	void setProxyUsername(const std::string& username);
 		/// Sets the username for proxy authentication.
 		/// Only Basic authentication is supported.
 
 	const std::string& getProxyUsername() const;
 		/// Returns the username for proxy authentication.
-		
+
 	void setProxyPassword(const std::string& password);
-		/// Sets the password for proxy authentication.	
+		/// Sets the password for proxy authentication.
 		/// Only Basic authentication is supported.
 
 	const std::string& getProxyPassword() const;
@@ -207,10 +177,10 @@ public:
 
 	void setKeepAliveTimeout(const Poco::Timespan& timeout);
 		/// Sets the connection timeout for HTTP connections.
-		
+
 	const Poco::Timespan& getKeepAliveTimeout() const;
 		/// Returns the connection timeout for HTTP connections.
-		
+
 	virtual std::ostream& sendRequest(HTTPRequest& request);
 		/// Sends the header for the given HTTP request to
 		/// the server.
@@ -230,7 +200,7 @@ public:
 		/// be reused and persistent connections are enabled
 		/// to ensure a new connection will be set up
 		/// for the next request.
-		
+
 	virtual std::istream& receiveResponse(HTTPResponse& response);
 		/// Receives the header for the response to the previous
 		/// HTTP request.
@@ -254,7 +224,7 @@ public:
 		/// be reused and persistent connections are enabled
 		/// to ensure a new connection will be set up
 		/// for the next request.
-		
+
 	virtual bool peekResponse(HTTPResponse& response);
 		/// If the request contains a "Expect: 100-continue" header,
 		/// (see HTTPRequest::setExpectContinue()) this method can be
@@ -273,6 +243,14 @@ public:
 		/// This method should only be called if the request contains
 		/// a "Expect: 100-continue" header.
 
+	void flushRequest();
+		/// Flushes the request stream.
+		///
+		/// Normally this method does not need to be called.
+		/// It can be used to ensure the request has been
+		/// fully sent if receiveResponse() is not called, e.g.,
+		/// because the underlying socket will be detached.
+
 	void reset();
 		/// Resets the session and closes the socket.
 		///
@@ -284,11 +262,11 @@ public:
 		/// or receiveResponse() throws an exception, or
 		/// the request or response stream changes into
 		/// fail or bad state, but not eof state).
-		
+
 	virtual bool secure() const;
 		/// Return true iff the session uses SSL or TLS,
 		/// or false otherwise.
-		
+
 	bool bypassProxy() const;
 		/// Returns true if the proxy should be bypassed
 		/// for the current host.
@@ -298,20 +276,20 @@ protected:
 	{
 		DEFAULT_KEEP_ALIVE_TIMEOUT = 8
 	};
-	
+
 	void reconnect();
 		/// Connects the underlying socket to the HTTP server.
 
 	int write(const char* buffer, std::streamsize length);
 		/// Tries to re-connect if keep-alive is on.
-	
+
 	virtual std::string proxyRequestPrefix() const;
 		/// Returns the prefix prepended to the URI for proxy requests
 		/// (e.g., "http://myhost.com").
 
 	virtual bool mustReconnect() const;
 		/// Checks if we can reuse a persistent connection.
-		
+
 	virtual void proxyAuthenticate(HTTPRequest& request);
 		/// Sets the proxy credentials (Proxy-Authorization header), if
 		/// proxy username and password have been set.
@@ -319,11 +297,11 @@ protected:
 	void proxyAuthenticateImpl(HTTPRequest& request);
 		/// Sets the proxy credentials (Proxy-Authorization header), if
 		/// proxy username and password have been set.
-		
+
 	StreamSocket proxyConnect();
 		/// Sends a CONNECT request to the proxy server and returns
 		/// a StreamSocket for the resulting connection.
-		
+
 	void proxyTunnel();
 		/// Calls proxyConnect() and attaches the resulting StreamSocket
 		/// to the HTTPClientSession.
@@ -331,9 +309,6 @@ protected:
 private:
 	std::string     _host;
 	Poco::UInt16    _port;
-	Poco::Net::SocketAddress _sourceAddress;
-	Poco::Net::SocketAddress _sourceAddress4;
-	Poco::Net::SocketAddress _sourceAddress6;
 	ProxyConfig     _proxyConfig;
 	Poco::Timespan  _keepAliveTimeout;
 	Poco::Timestamp _lastRequest;
@@ -345,7 +320,7 @@ private:
 	Poco::SharedPtr<std::istream> _pResponseStream;
 
 	static ProxyConfig _globalProxyConfig;
-	
+
 	HTTPClientSession(const HTTPClientSession&);
 	HTTPClientSession& operator = (const HTTPClientSession&);
 

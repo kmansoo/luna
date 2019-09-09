@@ -1,2 +1,7 @@
-add_executable(dir src/dir.cpp)
-target_link_libraries(dir PUBLIC Poco::Foundation )
+set(SAMPLE_NAME "dir")
+
+set(LOCAL_SRCS "")
+aux_source_directory(src LOCAL_SRCS)
+
+add_executable( ${SAMPLE_NAME} ${LOCAL_SRCS} )
+target_link_libraries( ${SAMPLE_NAME} PocoFoundation )

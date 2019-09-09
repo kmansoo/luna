@@ -9,8 +9,8 @@
 
 
 #include "MD4EngineTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/MD4Engine.h"
 
 
@@ -18,7 +18,7 @@ using Poco::MD4Engine;
 using Poco::DigestEngine;
 
 
-MD4EngineTest::MD4EngineTest(const std::string& rName): CppUnit::TestCase(rName)
+MD4EngineTest::MD4EngineTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -35,26 +35,26 @@ void MD4EngineTest::testMD4()
 	// test vectors from RFC 1320
 
 	engine.update("");
-	assertTrue (DigestEngine::digestToHex(engine.digest()) == "31d6cfe0d16ae931b73c59d7e0c089c0");
+	assert (DigestEngine::digestToHex(engine.digest()) == "31d6cfe0d16ae931b73c59d7e0c089c0");
 
 	engine.update("a");
-	assertTrue (DigestEngine::digestToHex(engine.digest()) == "bde52cb31de33e46245e05fbdbd6fb24");
+	assert (DigestEngine::digestToHex(engine.digest()) == "bde52cb31de33e46245e05fbdbd6fb24");
 
 	engine.update("abc");
-	assertTrue (DigestEngine::digestToHex(engine.digest()) == "a448017aaf21d8525fc10ae87aa6729d");
+	assert (DigestEngine::digestToHex(engine.digest()) == "a448017aaf21d8525fc10ae87aa6729d");
 
 	engine.update("message digest");
-	assertTrue (DigestEngine::digestToHex(engine.digest()) == "d9130a8164549fe818874806e1c7014b");
+	assert (DigestEngine::digestToHex(engine.digest()) == "d9130a8164549fe818874806e1c7014b");
 
 	engine.update("abcdefghijklmnopqrstuvwxyz");
-	assertTrue (DigestEngine::digestToHex(engine.digest()) == "d79e1c308aa5bbcdeea8ed63df412da9");
+	assert (DigestEngine::digestToHex(engine.digest()) == "d79e1c308aa5bbcdeea8ed63df412da9");
 	
 	engine.update("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 	engine.update("abcdefghijklmnopqrstuvwxyz0123456789");
-	assertTrue (DigestEngine::digestToHex(engine.digest()) == "043f8582f241db351ce627e153e7f0e4");
+	assert (DigestEngine::digestToHex(engine.digest()) == "043f8582f241db351ce627e153e7f0e4");
 
 	engine.update("12345678901234567890123456789012345678901234567890123456789012345678901234567890");
-	assertTrue (DigestEngine::digestToHex(engine.digest()) == "e33b4ddc9c38f2199c3e7b164fcc0536");
+	assert (DigestEngine::digestToHex(engine.digest()) == "e33b4ddc9c38f2199c3e7b164fcc0536");
 }
 
 

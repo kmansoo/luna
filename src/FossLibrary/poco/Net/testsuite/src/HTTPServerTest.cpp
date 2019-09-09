@@ -9,8 +9,8 @@
 
 
 #include "HTTPServerTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Net/HTTPServer.h"
 #include "Poco/Net/HTTPServerParams.h"
 #include "Poco/Net/AbstractHTTPRequestHandler.h"
@@ -153,9 +153,9 @@ void HTTPServerTest::testIdentityRequest()
 	HTTPResponse response;
 	std::string rbody;
 	cs.receiveResponse(response) >> rbody;
-	assertTrue (response.getContentLength() == body.size());
-	assertTrue (response.getContentType() == "text/plain");
-	assertTrue (rbody == body);
+	assert (response.getContentLength() == body.size());
+	assert (response.getContentType() == "text/plain");
+	assert (rbody == body);
 }
 
 
@@ -176,9 +176,9 @@ void HTTPServerTest::testPutIdentityRequest()
 	HTTPResponse response;
 	std::string rbody;
 	cs.receiveResponse(response) >> rbody;
-	assertTrue (response.getContentLength() == body.size());
-	assertTrue (response.getContentType() == "text/plain");
-	assertTrue (rbody == body);
+	assert (response.getContentLength() == body.size());
+	assert (response.getContentType() == "text/plain");
+	assert (rbody == body);
 }
 
 
@@ -199,10 +199,10 @@ void HTTPServerTest::testChunkedRequest()
 	HTTPResponse response;
 	std::string rbody;
 	cs.receiveResponse(response) >> rbody;
-	assertTrue (response.getContentLength() == HTTPMessage::UNKNOWN_CONTENT_LENGTH);
-	assertTrue (response.getContentType() == "text/plain");
-	assertTrue (response.getChunkedTransferEncoding());
-	assertTrue (rbody == body);
+	assert (response.getContentLength() == HTTPMessage::UNKNOWN_CONTENT_LENGTH);
+	assert (response.getContentType() == "text/plain");
+	assert (response.getChunkedTransferEncoding());
+	assert (rbody == body);
 }
 
 
@@ -222,10 +222,10 @@ void HTTPServerTest::testClosedRequest()
 	HTTPResponse response;
 	std::string rbody;
 	cs.receiveResponse(response) >> rbody;
-	assertTrue (response.getContentLength() == HTTPMessage::UNKNOWN_CONTENT_LENGTH);
-	assertTrue (response.getContentType() == "text/plain");
-	assertTrue (!response.getChunkedTransferEncoding());
-	assertTrue (rbody == body);
+	assert (response.getContentLength() == HTTPMessage::UNKNOWN_CONTENT_LENGTH);
+	assert (response.getContentType() == "text/plain");
+	assert (!response.getChunkedTransferEncoding());
+	assert (rbody == body);
 }
 
 
@@ -244,20 +244,20 @@ void HTTPServerTest::testIdentityRequestKeepAlive()
 	HTTPResponse response;
 	std::string rbody;
 	cs.receiveResponse(response) >> rbody;
-	assertTrue (response.getContentLength() == body.size());
-	assertTrue (response.getContentType() == "text/plain");
-	assertTrue (response.getKeepAlive());
-	assertTrue (rbody == body);
+	assert (response.getContentLength() == body.size());
+	assert (response.getContentType() == "text/plain");
+	assert (response.getKeepAlive());
+	assert (rbody == body);
 	
 	body.assign(1000, 'y');
 	request.setContentLength((int) body.length());
 	request.setKeepAlive(false);
 	cs.sendRequest(request) << body;
 	cs.receiveResponse(response) >> rbody;
-	assertTrue (response.getContentLength() == body.size());
-	assertTrue (response.getContentType() == "text/plain");
-	assertTrue (!response.getKeepAlive());
-	assertTrue (rbody == body);}
+	assert (response.getContentLength() == body.size());
+	assert (response.getContentType() == "text/plain");
+	assert (!response.getKeepAlive());
+	assert (rbody == body);}
 
 
 void HTTPServerTest::testChunkedRequestKeepAlive()
@@ -275,20 +275,20 @@ void HTTPServerTest::testChunkedRequestKeepAlive()
 	HTTPResponse response;
 	std::string rbody;
 	cs.receiveResponse(response) >> rbody;
-	assertTrue (response.getContentLength() == HTTPMessage::UNKNOWN_CONTENT_LENGTH);
-	assertTrue (response.getContentType() == "text/plain");
-	assertTrue (response.getChunkedTransferEncoding());
-	assertTrue (rbody == body);
+	assert (response.getContentLength() == HTTPMessage::UNKNOWN_CONTENT_LENGTH);
+	assert (response.getContentType() == "text/plain");
+	assert (response.getChunkedTransferEncoding());
+	assert (rbody == body);
 
 	body.assign(1000, 'y');
 	request.setKeepAlive(false);
 	cs.sendRequest(request) << body;
 	cs.receiveResponse(response) >> rbody;
-	assertTrue (response.getContentLength() == HTTPMessage::UNKNOWN_CONTENT_LENGTH);
-	assertTrue (response.getContentType() == "text/plain");
-	assertTrue (response.getChunkedTransferEncoding());
-	assertTrue (!response.getKeepAlive());
-	assertTrue (rbody == body);
+	assert (response.getContentLength() == HTTPMessage::UNKNOWN_CONTENT_LENGTH);
+	assert (response.getContentType() == "text/plain");
+	assert (response.getChunkedTransferEncoding());
+	assert (!response.getKeepAlive());
+	assert (rbody == body);
 }
 
 
@@ -305,11 +305,11 @@ void HTTPServerTest::testClosedRequestKeepAlive()
 	HTTPResponse response;
 	std::string rbody;
 	cs.receiveResponse(response) >> rbody;
-	assertTrue (response.getContentLength() == HTTPMessage::UNKNOWN_CONTENT_LENGTH);
-	assertTrue (response.getContentType() == "text/plain");
-	assertTrue (!response.getChunkedTransferEncoding());
-	assertTrue (!response.getKeepAlive());
-	assertTrue (rbody == body);
+	assert (response.getContentLength() == HTTPMessage::UNKNOWN_CONTENT_LENGTH);
+	assert (response.getContentType() == "text/plain");
+	assert (!response.getChunkedTransferEncoding());
+	assert (!response.getKeepAlive());
+	assert (rbody == body);
 }
 
 
@@ -334,11 +334,11 @@ void HTTPServerTest::testMaxKeepAlive()
 		HTTPResponse response;
 		std::string rbody;
 		cs.receiveResponse(response) >> rbody;
-		assertTrue (response.getContentLength() == HTTPMessage::UNKNOWN_CONTENT_LENGTH);
-		assertTrue (response.getContentType() == "text/plain");
-		assertTrue (response.getChunkedTransferEncoding());
-		assertTrue (response.getKeepAlive());
-		assertTrue (rbody == body);
+		assert (response.getContentLength() == HTTPMessage::UNKNOWN_CONTENT_LENGTH);
+		assert (response.getContentType() == "text/plain");
+		assert (response.getChunkedTransferEncoding());
+		assert (response.getKeepAlive());
+		assert (rbody == body);
 	}
 
 	{
@@ -346,11 +346,11 @@ void HTTPServerTest::testMaxKeepAlive()
 		HTTPResponse response;
 		std::string rbody;
 		cs.receiveResponse(response) >> rbody;
-		assertTrue (response.getContentLength() == HTTPMessage::UNKNOWN_CONTENT_LENGTH);
-		assertTrue (response.getContentType() == "text/plain");
-		assertTrue (response.getChunkedTransferEncoding());
-		assertTrue (!response.getKeepAlive());
-		assertTrue (rbody == body);
+		assert (response.getContentLength() == HTTPMessage::UNKNOWN_CONTENT_LENGTH);
+		assert (response.getContentType() == "text/plain");
+		assert (response.getChunkedTransferEncoding());
+		assert (!response.getKeepAlive());
+		assert (rbody == body);
 	}
 
 	{
@@ -359,11 +359,11 @@ void HTTPServerTest::testMaxKeepAlive()
 		HTTPResponse response;
 		std::string rbody;
 		cs.receiveResponse(response) >> rbody;
-		assertTrue (response.getContentLength() == HTTPMessage::UNKNOWN_CONTENT_LENGTH);
-		assertTrue (response.getContentType() == "text/plain");
-		assertTrue (response.getChunkedTransferEncoding());
-		assertTrue (!response.getKeepAlive());
-		assertTrue (rbody == body);
+		assert (response.getContentLength() == HTTPMessage::UNKNOWN_CONTENT_LENGTH);
+		assert (response.getContentType() == "text/plain");
+		assert (response.getChunkedTransferEncoding());
+		assert (!response.getKeepAlive());
+		assert (rbody == body);
 	}
 }
 
@@ -391,11 +391,11 @@ void HTTPServerTest::testKeepAliveTimeout()
 		HTTPResponse response;
 		std::string rbody;
 		cs.receiveResponse(response) >> rbody;
-		assertTrue (response.getContentLength() == HTTPMessage::UNKNOWN_CONTENT_LENGTH);
-		assertTrue (response.getContentType() == "text/plain");
-		assertTrue (response.getChunkedTransferEncoding());
-		assertTrue (response.getKeepAlive());
-		assertTrue (rbody == body);
+		assert (response.getContentLength() == HTTPMessage::UNKNOWN_CONTENT_LENGTH);
+		assert (response.getContentType() == "text/plain");
+		assert (response.getChunkedTransferEncoding());
+		assert (response.getKeepAlive());
+		assert (rbody == body);
 	}
 
 	Poco::Thread::sleep(4000);
@@ -405,11 +405,11 @@ void HTTPServerTest::testKeepAliveTimeout()
 		HTTPResponse response;
 		std::string rbody;
 		cs.receiveResponse(response) >> rbody;
-		assertTrue (response.getContentLength() == HTTPMessage::UNKNOWN_CONTENT_LENGTH);
-		assertTrue (response.getContentType() == "text/plain");
-		assertTrue (response.getChunkedTransferEncoding());
-		assertTrue (response.getKeepAlive());
-		assertTrue (rbody == body);
+		assert (response.getContentLength() == HTTPMessage::UNKNOWN_CONTENT_LENGTH);
+		assert (response.getContentType() == "text/plain");
+		assert (response.getChunkedTransferEncoding());
+		assert (response.getKeepAlive());
+		assert (rbody == body);
 	}
 }
 
@@ -432,9 +432,9 @@ void HTTPServerTest::test100Continue()
 	HTTPResponse response;
 	std::string rbody;
 	cs.receiveResponse(response) >> rbody;
-	assertTrue (response.getContentLength() == body.size());
-	assertTrue (response.getContentType() == "text/plain");
-	assertTrue (rbody == body);
+	assert (response.getContentLength() == body.size());
+	assert (response.getContentType() == "text/plain");
+	assert (rbody == body);
 }
 
 
@@ -452,9 +452,9 @@ void HTTPServerTest::testRedirect()
 	HTTPResponse response;
 	std::string rbody;
 	cs.receiveResponse(response) >> rbody;
-	assertTrue (response.getStatus() == HTTPResponse::HTTP_FOUND);
-	assertTrue (response.get("Location") == "http://www.appinf.com/");
-	assertTrue (rbody.empty());
+	assert (response.getStatus() == HTTPResponse::HTTP_FOUND);
+	assert (response.get("Location") == "http://www.appinf.com/");
+	assert (rbody.empty());
 }
 
 
@@ -472,9 +472,9 @@ void HTTPServerTest::testAuth()
 	HTTPResponse response;
 	std::string rbody;
 	cs.receiveResponse(response) >> rbody;
-	assertTrue (response.getStatus() == HTTPResponse::HTTP_UNAUTHORIZED);
-	assertTrue (response.get("WWW-Authenticate") == "Basic realm=\"/auth\"");
-	assertTrue (rbody.empty());
+	assert (response.getStatus() == HTTPResponse::HTTP_UNAUTHORIZED);
+	assert (response.get("WWW-Authenticate") == "Basic realm=\"/auth\"");
+	assert (rbody.empty());
 }
 
 
@@ -492,8 +492,8 @@ void HTTPServerTest::testNotImpl()
 	HTTPResponse response;
 	std::string rbody;
 	cs.receiveResponse(response) >> rbody;
-	assertTrue (response.getStatus() == HTTPResponse::HTTP_NOT_IMPLEMENTED);
-	assertTrue (rbody.empty());
+	assert (response.getStatus() == HTTPResponse::HTTP_NOT_IMPLEMENTED);
+	assert (rbody.empty());
 }
 
 
@@ -511,8 +511,8 @@ void HTTPServerTest::testBuffer()
 	HTTPResponse response;
 	std::string rbody;
 	cs.receiveResponse(response) >> rbody;
-	assertTrue (response.getStatus() == HTTPResponse::HTTP_OK);
-	assertTrue (rbody == "xxxxxxxxxx");
+	assert (response.getStatus() == HTTPResponse::HTTP_OK);
+	assert (rbody == "xxxxxxxxxx");
 }
 
 

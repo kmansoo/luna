@@ -27,7 +27,6 @@ HTTPServerSession::HTTPServerSession(const StreamSocket& socket, HTTPServerParam
 {
 	setTimeout(pParams->getTimeout());
 	this->socket().setReceiveTimeout(pParams->getTimeout());
-	this->socket().setSendTimeout(pParams->getTimeout());
 }
 
 
@@ -48,7 +47,7 @@ bool HTTPServerSession::hasMoreRequests()
 	}
 	else if (_maxKeepAliveRequests != 0 && getKeepAlive())
 	{
-		if (_maxKeepAliveRequests > 0)
+		if (_maxKeepAliveRequests > 0) 
 			--_maxKeepAliveRequests;
 		return buffered() > 0 || socket().poll(_keepAliveTimeout, Socket::SELECT_READ);
 	}

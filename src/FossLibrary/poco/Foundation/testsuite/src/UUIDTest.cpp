@@ -9,8 +9,8 @@
 
 
 #include "UUIDTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/UUID.h"
 #include "Poco/Exception.h"
 
@@ -18,7 +18,7 @@
 using Poco::UUID;
 
 
-UUIDTest::UUIDTest(const std::string& rName): CppUnit::TestCase(rName)
+UUIDTest::UUIDTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -31,13 +31,13 @@ UUIDTest::~UUIDTest()
 void UUIDTest::testParse()
 {
 	UUID uuid("6ba7b810-9dad-11d1-80b4-00c04fd430c8");
-	assertTrue (uuid.toString() == "6ba7b810-9dad-11d1-80b4-00c04fd430c8");
+	assert (uuid.toString() == "6ba7b810-9dad-11d1-80b4-00c04fd430c8");
 	
 	uuid.parse("6BA7B810-9DAD-11D1-80B4-00C04FD430C8");
-	assertTrue (uuid.toString() == "6ba7b810-9dad-11d1-80b4-00c04fd430c8");	
+	assert (uuid.toString() == "6ba7b810-9dad-11d1-80b4-00c04fd430c8");	
 
 	uuid.parse("6BA7B8109DAD11D180B400C04FD430C8");
-	assertTrue (uuid.toString() == "6ba7b810-9dad-11d1-80b4-00c04fd430c8");	
+	assert (uuid.toString() == "6ba7b810-9dad-11d1-80b4-00c04fd430c8");	
 
 	try
 	{
@@ -92,24 +92,6 @@ void UUIDTest::testParse()
 	catch (Poco::SyntaxException&)
 	{
 	}
-
-	try
-	{
-		uuid.parse("6ba7b8109dad11d180b400c04fd430c81234");
-		fail("invalid UUID - must throw");
-	}
-	catch (Poco::SyntaxException&)
-	{
-	}
-
-	try
-	{
-		uuid.parse("6ba7b810-9dad-11d1-80b4-00c04fd430c81234");
-		fail("invalid UUID - must throw");
-	}
-	catch (Poco::SyntaxException&)
-	{
-	}
 }
 
 
@@ -120,51 +102,51 @@ void UUIDTest::testBuffer()
 	uuid.copyTo(buffer);
 	UUID uuid2;
 	uuid2.copyFrom(buffer);
-	assertTrue (uuid2.toString() == "6ba7b810-9dad-11d1-80b4-00c04fd430c8");	
+	assert (uuid2.toString() == "6ba7b810-9dad-11d1-80b4-00c04fd430c8");	
 }
 
 
 void UUIDTest::testCompare()
 {
 	UUID null;
-	assertTrue (null.isNull());
-	assertTrue (UUID::null().isNull());
+	assert (null.isNull());
+	assert (UUID::null().isNull());
 	
 	UUID uuid1 = null;
 	UUID uuid2;
-	assertTrue (uuid1.isNull());
-	assertTrue (uuid1 == null);
-	assertTrue (!(uuid1 != null));
-	assertTrue (uuid1 >= null);
-	assertTrue (uuid1 <= null);
-	assertTrue (!(uuid1 > null));
-	assertTrue (!(uuid1 < null));
-	assertTrue (uuid1.toString() == "00000000-0000-0000-0000-000000000000");
+	assert (uuid1.isNull());
+	assert (uuid1 == null);
+	assert (!(uuid1 != null));
+	assert (uuid1 >= null);
+	assert (uuid1 <= null);
+	assert (!(uuid1 > null));
+	assert (!(uuid1 < null));
+	assert (uuid1.toString() == "00000000-0000-0000-0000-000000000000");
 	
 	uuid1 = UUID::dns();
-	assertTrue (!uuid1.isNull());
-	assertTrue (uuid1 != null);
-	assertTrue (!(uuid1 == null));
-	assertTrue (uuid1 >= null);
-	assertTrue (!(uuid1 <= null));
-	assertTrue (uuid1 > null);
-	assertTrue (!(uuid1 < null));
-	assertTrue (uuid1.toString() == "6ba7b810-9dad-11d1-80b4-00c04fd430c8");
+	assert (!uuid1.isNull());
+	assert (uuid1 != null);
+	assert (!(uuid1 == null));
+	assert (uuid1 >= null);
+	assert (!(uuid1 <= null));
+	assert (uuid1 > null);
+	assert (!(uuid1 < null));
+	assert (uuid1.toString() == "6ba7b810-9dad-11d1-80b4-00c04fd430c8");
 
-	assertTrue (null != uuid1);
-	assertTrue (!(null == uuid1));
-	assertTrue (!(null >= uuid1));
-	assertTrue (null <= uuid1);
-	assertTrue (!(null > uuid1));
-	assertTrue (null < uuid1);
+	assert (null != uuid1);
+	assert (!(null == uuid1));
+	assert (!(null >= uuid1));
+	assert (null <= uuid1);
+	assert (!(null > uuid1));
+	assert (null < uuid1);
 	
 	uuid2 = uuid1;
-	assertTrue (uuid2 == uuid1);
-	assertTrue (!(uuid2 != uuid1));
-	assertTrue (uuid2 >= uuid1);
-	assertTrue (uuid2 <= uuid1);
-	assertTrue (!(uuid2 > uuid1));
-	assertTrue (!(uuid2 < uuid1));
+	assert (uuid2 == uuid1);
+	assert (!(uuid2 != uuid1));
+	assert (uuid2 >= uuid1);
+	assert (uuid2 <= uuid1);
+	assert (!(uuid2 > uuid1));
+	assert (!(uuid2 < uuid1));
 }
 
 
@@ -172,19 +154,19 @@ void UUIDTest::testVersion()
 {
 	UUID uuid("db4fa7e9-9e62-4597-99e0-b1ec0b59800e");
 	UUID::Version v = uuid.version();
-	assertTrue (v == UUID::UUID_RANDOM);
+	assert (v == UUID::UUID_RANDOM);
 	
 	uuid.parse("6ba7b810-9dad-11d1-80b4-00c04fd430c8");
 	v = uuid.version();
-	assertTrue (v == UUID::UUID_TIME_BASED);
+	assert (v == UUID::UUID_TIME_BASED);
 
 	uuid.parse("d2ee4220-3625-11d9-9669-0800200c9a66");
 	v = uuid.version();
-	assertTrue (v == UUID::UUID_TIME_BASED);
+	assert (v == UUID::UUID_TIME_BASED);
 
 	uuid.parse("360d3652-4411-4786-bbe6-b9675b548559");
 	v = uuid.version();
-	assertTrue (v == UUID::UUID_RANDOM);
+	assert (v == UUID::UUID_RANDOM);
 }
 
 
@@ -192,19 +174,19 @@ void UUIDTest::testVariant()
 {
 	UUID uuid("db4fa7e9-9e62-4597-99e0-b1ec0b59800e");
 	int v = uuid.variant();
-	assertTrue (v == 2);
+	assert (v == 2);
 	
 	uuid.parse("6ba7b810-9dad-11d1-80b4-00c04fd430c8");
 	v = uuid.variant();
-	assertTrue (v == 2);
+	assert (v == 2);
 
 	uuid.parse("d2ee4220-3625-11d9-9669-0800200c9a66");
 	v = uuid.variant();
-	assertTrue (v == 2);
+	assert (v == 2);
 
 	uuid.parse("360d3652-4411-4786-bbe6-b9675b548559");
 	v = uuid.variant();
-	assertTrue (v == 2);
+	assert (v == 2);
 }
 
 
@@ -213,19 +195,19 @@ void UUIDTest::testSwap()
 	UUID uuid1("db4fa7e9-9e62-4597-99e0-b1ec0b59800e");
 	UUID uuid2("d2ee4220-3625-11d9-9669-0800200c9a66");
 	uuid1.swap(uuid2);
-	assertTrue (uuid1.toString() == "d2ee4220-3625-11d9-9669-0800200c9a66");
-	assertTrue (uuid2.toString() == "db4fa7e9-9e62-4597-99e0-b1ec0b59800e");
+	assert (uuid1.toString() == "d2ee4220-3625-11d9-9669-0800200c9a66");
+	assert (uuid2.toString() == "db4fa7e9-9e62-4597-99e0-b1ec0b59800e");
 }
 
 void UUIDTest::testTryParse()
 {
 	UUID uuid;
-	assertTrue (uuid.tryParse("6BA7B810-9DAD-11D1-80B4-00C04FD430C8"));
-	assertTrue (uuid.toString() == "6ba7b810-9dad-11d1-80b4-00c04fd430c8");
+	assert (uuid.tryParse("6BA7B810-9DAD-11D1-80B4-00C04FD430C8"));
+	assert (uuid.toString() == "6ba7b810-9dad-11d1-80b4-00c04fd430c8");
 
 	UUID notUuid;
-	assertTrue (!notUuid.tryParse("not a uuid"));
-	assertTrue (notUuid.isNull());
+	assert (!notUuid.tryParse("not a uuid"));
+	assert (notUuid.isNull());
 }
 
 void UUIDTest::setUp()

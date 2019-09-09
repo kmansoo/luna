@@ -45,7 +45,7 @@
 namespace Poco {
 
 
-MutexImpl::MutexImpl(MutexTypeImpl type)
+MutexImpl::MutexImpl()
 {
 #if defined(POCO_VXWORKS)
 	// This workaround is for VxWorks 5.x where
@@ -57,9 +57,34 @@ MutexImpl::MutexImpl(MutexTypeImpl type)
 	pthread_mutexattr_t attr;
 	pthread_mutexattr_init(&attr);
 #if defined(PTHREAD_MUTEX_RECURSIVE_NP)
-	pthread_mutexattr_settype_np(&attr, type == MUTEX_RECURSIVE_IMPL ? PTHREAD_MUTEX_RECURSIVE_NP : PTHREAD_MUTEX_NORMAL_NP);
+	pthread_mutexattr_settype_np(&attr, PTHREAD_MUTEX_RECURSIVE_NP);
 #elif !defined(POCO_VXWORKS)
-	pthread_mutexattr_settype(&attr, type == MUTEX_RECURSIVE_IMPL ? PTHREAD_MUTEX_RECURSIVE : PTHREAD_MUTEX_NORMAL);
+	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+#endif
+	if (pthread_mutex_init(&_mutex, &attr))
+	{
+		pthread_mutexattr_destroy(&attr);
+		throw SystemException("cannot create mutex");
+	}
+	pthread_mutexattr_destroy(&attr);
+}
+
+
+MutexImpl::MutexImpl(bool fast)
+{
+#if defined(POCO_VXWORKS)
+	// This workaround is for VxWorks 5.x where
+	// pthread_mutex_init() won't properly initialize the mutex
+	// resulting in a subsequent freeze in pthread_mutex_destroy()
+	// if the mutex has never been used.
+	std::memset(&_mutex, 0, sizeof(_mutex));
+#endif
+	pthread_mutexattr_t attr;
+	pthread_mutexattr_init(&attr);
+#if defined(PTHREAD_MUTEX_RECURSIVE_NP)
+	pthread_mutexattr_settype_np(&attr, fast ? PTHREAD_MUTEX_NORMAL_NP : PTHREAD_MUTEX_RECURSIVE_NP);
+#elif !defined(POCO_VXWORKS)
+	pthread_mutexattr_settype(&attr, fast ? PTHREAD_MUTEX_NORMAL : PTHREAD_MUTEX_RECURSIVE);
 #endif
 	if (pthread_mutex_init(&_mutex, &attr))
 	{
@@ -123,7 +148,7 @@ bool MutexImpl::tryLockImpl(long milliseconds)
 		ts.tv_sec = 0;
 		ts.tv_nsec = sleepMillis*1000000;
 		nanosleep(&ts, NULL);
-		
+
 #else
 		struct timeval tv;
 		tv.tv_sec  = 0;
@@ -137,7 +162,7 @@ bool MutexImpl::tryLockImpl(long milliseconds)
 }
 
 
-FastMutexImpl::FastMutexImpl(): MutexImpl(MUTEX_NONRECURSIVE_IMPL)
+FastMutexImpl::FastMutexImpl(): MutexImpl(true)
 {
 }
 

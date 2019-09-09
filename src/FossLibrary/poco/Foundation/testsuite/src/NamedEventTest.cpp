@@ -9,8 +9,8 @@
 
 
 #include "NamedEventTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/NamedEvent.h"
 #include "Poco/Thread.h"
 #include "Poco/Runnable.h"
@@ -49,7 +49,7 @@ namespace
 }
 
 
-NamedEventTest::NamedEventTest(const std::string& rName): CppUnit::TestCase(rName)
+NamedEventTest::NamedEventTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -66,7 +66,8 @@ void NamedEventTest::testNamedEvent()
 	thr1.start(te);
 	Timestamp now;
 	Thread::sleep(2000);
-	try {
+	try 
+	{
 		testEvent.set();
 	}
 	catch(Poco::NotImplementedException e)
@@ -77,13 +78,14 @@ void NamedEventTest::testNamedEvent()
 	}
 	thr1.join();
 #if POCO_OS != POCO_OS_ANDROID
-	assertTrue (te.timestamp() > now);
+	assert (te.timestamp() > now);
 #endif
 	Thread thr2;
 	thr2.start(te);
 	now.update();
 	Thread::sleep(2000);
-	try {
+	try 
+	{
 		testEvent.set();
 	}
 	catch(Poco::NotImplementedException e)
@@ -94,7 +96,7 @@ void NamedEventTest::testNamedEvent()
 	}
 	thr2.join();
 #if POCO_OS != POCO_OS_ANDROID
-	assertTrue (te.timestamp() > now);
+	assert (te.timestamp() > now);
 #endif
 }
 

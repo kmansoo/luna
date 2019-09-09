@@ -307,7 +307,7 @@ void FileImpl::removeImpl()
 bool FileImpl::createFileImpl()
 {
 	poco_assert (!_path.empty());
-	
+
 	int n = open(_path.c_str(), O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
 	if (n != -1)
 	{

@@ -82,7 +82,7 @@ public:
 
 	void close();
 		/// Stops the listener.
-		
+
 	void processMessage(const std::string& messageText);
 		/// Parses a single line of text containing a syslog message
 		/// and sends it down the filter chain.

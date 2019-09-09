@@ -14,7 +14,7 @@
 
 
 #include "Poco/Foundation.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class ExpireLRUCacheTest: public CppUnit::TestCase
@@ -32,7 +32,8 @@ public:
 	void testCacheSize2();
 	void testCacheSizeN();
 	void testDuplicateAdd();
-	
+	void testAccessExpireGet();
+
 	void setUp();
 	void tearDown();
 	static CppUnit::Test* suite();

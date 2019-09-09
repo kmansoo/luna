@@ -62,12 +62,9 @@
     defined(__sparc__) || defined(__sparc) || defined(__s390__) || \
     defined(__SH4__) || defined(__alpha__) || \
     defined(_MIPS_ARCH_MIPS32R2) || \
-    defined(__AARCH64EL__) || defined(__aarch64__) || \
-    defined(__riscv) || \
-    defined(nios2) || defined(__nios2) || defined(__nios2__) || defined(__EMSCRIPTEN__)
+    defined(__AARCH64EL__) || \
+    defined(nios2) || defined(__nios2) || defined(__nios2__)
 #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
-#elif defined(__mc68000__)
-#undef DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS
 #elif defined(_M_IX86) || defined(__i386__) || defined(__i386)
 #if defined(_WIN32)
 // Windows uses a 64bit wide floating point stack.
@@ -168,8 +165,8 @@ template <typename T>
 class Vector {
  public:
   Vector() : start_(NULL), length_(0) {}
-  Vector(T* data, int size) : start_(data), length_(size) {
-    ASSERT(size == 0 || (size > 0 && data != NULL));
+  Vector(T* data, int length) : start_(data), length_(length) {
+    ASSERT(length == 0 || (length > 0 && data != NULL));
   }
 
   // Returns a vector using the same backing storage as this one,
@@ -211,8 +208,8 @@ class Vector {
 // buffer bounds on all operations in debug mode.
 class StringBuilder {
  public:
-  StringBuilder(char* buffer, int length)
-      : buffer_(buffer, length), position_(0) { }
+  StringBuilder(char* buffer, int size)
+      : buffer_(buffer, size), position_(0) { }
 
   ~StringBuilder() { if (!is_finalized()) Finalize(); }
 

@@ -52,7 +52,7 @@ ServerSocket::ServerSocket(Poco::UInt16 port, int backlog): Socket(new ServerSoc
 }
 
 
-ServerSocket::ServerSocket(SocketImpl* pImpl, bool /*ignore*/): Socket(pImpl)
+ServerSocket::ServerSocket(SocketImpl* pImpl, bool ignore): Socket(pImpl)
 {
 }
 
@@ -135,7 +135,7 @@ void ServerSocket::bind6(Poco::UInt16 port, bool reuseAddress, bool reusePort, b
 #endif // POCO_HAVE_IPv6
 }
 
-
+	
 void ServerSocket::listen(int backlog)
 {
 	impl()->listen(backlog);

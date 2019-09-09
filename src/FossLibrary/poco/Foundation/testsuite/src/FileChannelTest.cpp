@@ -9,8 +9,8 @@
 
 
 #include "FileChannelTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/FileChannel.h"
 #include "Poco/Message.h"
 #include "Poco/AutoPtr.h"
@@ -46,7 +46,7 @@ using Poco::DirectoryIterator;
 using Poco::InvalidArgumentException;
 
 
-FileChannelTest::FileChannelTest(const std::string& rName): CppUnit::TestCase(rName)
+FileChannelTest::FileChannelTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -70,11 +70,11 @@ void FileChannelTest::testRotateBySize()
 			pChannel->log(msg);
 		}
 		File f(name + ".0");
-		assertTrue (f.exists());
+		assert (f.exists());
 		f = name + ".1";
-		assertTrue (f.exists());
+		assert (f.exists());
 		f = name + ".2";
-		assertTrue (!f.exists());
+		assert (!f.exists());
 	}
 	catch (...)
 	{
@@ -100,9 +100,9 @@ void FileChannelTest::testRotateByAge()
 			Thread::sleep(300);
 		}
 		File f(name + ".0");
-		assertTrue (f.exists());
+		assert (f.exists());
 		f = name + ".1";
-		assertTrue (f.exists());
+		assert (f.exists());
 	}
 	catch (...)
 	{
@@ -131,7 +131,7 @@ void FileChannelTest::testRotateAtTimeDayUTC()
 		}
 		pChannel->log(msg);
 		File f(name + ".0");
-		assertTrue (f.exists());
+		assert (f.exists());
 	}
 	catch (...)
 	{
@@ -160,7 +160,7 @@ void FileChannelTest::testRotateAtTimeDayLocal()
 		}
 		pChannel->log(msg);
 		File f(name + ".0");
-		assertTrue (f.exists());
+		assert (f.exists());
 	}
 	catch (...)
 	{
@@ -189,7 +189,7 @@ void FileChannelTest::testRotateAtTimeHourUTC()
 		}
 		pChannel->log(msg);
 		File f(name + ".0");
-		assertTrue (f.exists());
+		assert (f.exists());
 	}
 	catch (...)
 	{
@@ -218,7 +218,7 @@ void FileChannelTest::testRotateAtTimeHourLocal()
 		}
 		pChannel->log(msg);
 		File f(name + ".0");
-		assertTrue (f.exists());
+		assert (f.exists());
 	}
 	catch (...)
 	{
@@ -247,7 +247,7 @@ void FileChannelTest::testRotateAtTimeMinUTC()
 		}
 		pChannel->log(msg);
 		File f(name + ".0");
-		assertTrue (f.exists());
+		assert (f.exists());
 	}
 	catch (...)
 	{
@@ -276,7 +276,7 @@ void FileChannelTest::testRotateAtTimeMinLocal()
 		}
 		pChannel->log(msg);
 		File f(name + ".0");
-		assertTrue (f.exists());
+		assert (f.exists());
 	}
 	catch (...)
 	{
@@ -302,7 +302,7 @@ void FileChannelTest::testArchive()
 			pChannel->log(msg);
 		}
 		File f(name + ".0");
-		assertTrue (f.exists());
+		assert (f.exists());
 	}
 	catch (...)
 	{
@@ -330,9 +330,9 @@ void FileChannelTest::testCompress()
 		}
 		Thread::sleep(3000); // allow time for background compression
 		File f0(name + ".0.gz");
-		assertTrue (f0.exists());
+		assert (f0.exists());
 		File f1(name + ".1.gz");
-		assertTrue (f1.exists());
+		assert (f1.exists());
 	}
 	catch (...)
 	{
@@ -359,11 +359,11 @@ void FileChannelTest::purgeAge(const std::string& pa)
 			pChannel->log(msg);
 		}
 		File f0(name + ".0");
-		assertTrue (f0.exists());
+		assert(f0.exists());
 		File f1(name + ".1");
-		assertTrue (f1.exists());
+		assert(f1.exists());
 		File f2(name + ".2");
-		assertTrue (f2.exists());
+		assert(f2.exists());
 		
 		Thread::sleep(5000);
 		for (int i = 0; i < 50; ++i)
@@ -371,7 +371,7 @@ void FileChannelTest::purgeAge(const std::string& pa)
 			pChannel->log(msg);
 		}
 		
-		assertTrue (!f2.exists());
+		assert(!f2.exists());
 	}
 	catch (...)
 	{
@@ -399,11 +399,11 @@ void FileChannelTest::noPurgeAge(const std::string& npa)
 			pChannel->log(msg);
 		}
 		File f0(name + ".0");
-		assertTrue (f0.exists());
+		assert(f0.exists());
 		File f1(name + ".1");
-		assertTrue (f1.exists());
+		assert(f1.exists());
 		File f2(name + ".2");
-		assertTrue (f2.exists());
+		assert(f2.exists());
 
 		Thread::sleep(5000);
 		for (int i = 0; i < 50; ++i)
@@ -411,7 +411,7 @@ void FileChannelTest::noPurgeAge(const std::string& npa)
 			pChannel->log(msg);
 		}
 
-		assertTrue (f2.exists());
+		assert(f2.exists());
 	}
 	catch (...)
 	{
@@ -455,11 +455,11 @@ void FileChannelTest::purgeCount(const std::string& pc)
 			Thread::sleep(50);
 		}
 		File f0(name + ".0");
-		assertTrue (f0.exists());
+		assert(f0.exists());
 		File f1(name + ".1");
-		assertTrue (f1.exists());
+		assert(f1.exists());
 		File f2(name + ".2");
-		assertTrue (!f2.exists());
+		assert(!f2.exists());
 	} catch (...)
 	{
 		remove(name);
@@ -486,11 +486,11 @@ void FileChannelTest::noPurgeCount(const std::string& npc)
 			Thread::sleep(50);
 		}
 		File f0(name + ".0");
-		assertTrue (f0.exists());
+		assert(f0.exists());
 		File f1(name + ".1");
-		assertTrue (f1.exists());
+		assert(f1.exists());
 		File f2(name + ".2");
-		assertTrue (f2.exists());
+		assert(f2.exists());
 	} catch (...)
 	{
 		remove(name);
@@ -528,7 +528,7 @@ void FileChannelTest::testWrongPurgeOption()
 		fail("must fail");
 	} catch (InvalidArgumentException)
 	{
-		assertTrue (pChannel->getProperty(FileChannel::PROP_PURGEAGE) == "5 seconds");
+		assert(pChannel->getProperty(FileChannel::PROP_PURGEAGE) == "5 seconds");
 	}
 
 	try
@@ -537,7 +537,7 @@ void FileChannelTest::testWrongPurgeOption()
 		fail("must fail");
 	} catch (InvalidArgumentException)
 	{
-		assertTrue (pChannel->getProperty(FileChannel::PROP_PURGEAGE) == "5 seconds");
+		assert(pChannel->getProperty(FileChannel::PROP_PURGEAGE) == "5 seconds");
 	}
 
 	remove(name);

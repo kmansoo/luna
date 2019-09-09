@@ -13,7 +13,6 @@
 
 
 #include "Poco/StreamTokenizer.h"
-#include "Poco/Token.h"
 
 
 namespace Poco {
@@ -35,7 +34,7 @@ StreamTokenizer::~StreamTokenizer()
 {
 	for (TokenVec::iterator it = _tokens.begin(); it != _tokens.end(); ++it)
 	{
-		delete *it;
+		delete it->pToken;
 	}
 }
 
@@ -50,8 +49,10 @@ void StreamTokenizer::addToken(Token* pToken)
 {
 	poco_check_ptr (pToken);
 
-	pToken->ignore(pToken->tokenClass() == Token::COMMENT_TOKEN || pToken->tokenClass() == Token::WHITESPACE_TOKEN);
-	_tokens.push_back(pToken);
+	TokenInfo ti;
+	ti.pToken = pToken;
+	ti.ignore = (pToken->tokenClass() == Token::COMMENT_TOKEN || pToken->tokenClass() == Token::WHITESPACE_TOKEN);
+	_tokens.push_back(ti);
 }
 
 
@@ -59,8 +60,10 @@ void StreamTokenizer::addToken(Token* pToken, bool ignore)
 {
 	poco_check_ptr (pToken);
 
-	pToken->ignore(ignore);
-	_tokens.push_back(pToken);
+	TokenInfo ti;
+	ti.pToken = pToken;
+	ti.ignore = ignore;
+	_tokens.push_back(ti);
 }
 
 	
@@ -74,16 +77,16 @@ const Token* StreamTokenizer::next()
 	TokenVec::const_iterator it = _tokens.begin();
 	while (first != eof && it != _tokens.end())
 	{
-		Token* ti = *it;
-		if (ti->start((char) first, *_pIstr))
+		const TokenInfo& ti = *it;
+		if (ti.pToken->start((char) first, *_pIstr))
 		{
-			ti->finish(*_pIstr);
-			if (ti->ignored())
+			ti.pToken->finish(*_pIstr);
+			if (ti.ignore) 
 			{
 				first = _pIstr->get();
 				it = _tokens.begin();
 			}
-			else return *it;
+			else return ti.pToken;
 		}
 		else ++it;
 	}

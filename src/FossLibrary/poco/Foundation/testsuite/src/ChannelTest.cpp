@@ -9,8 +9,8 @@
 
 
 #include "ChannelTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/SplitterChannel.h"
 #include "Poco/AsyncChannel.h"
 #include "Poco/AutoPtr.h"
@@ -45,7 +45,7 @@ public:
 };
 
 
-ChannelTest::ChannelTest(const std::string& rName): CppUnit::TestCase(rName)
+ChannelTest::ChannelTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -59,26 +59,24 @@ void ChannelTest::testSplitter()
 {
 	AutoPtr<TestChannel> pChannel = new TestChannel;
 	AutoPtr<SplitterChannel> pSplitter = new SplitterChannel;
-	pSplitter->addChannel(pChannel);
-	pSplitter->addChannel(pChannel);
+	pSplitter->addChannel(pChannel.get());
+	pSplitter->addChannel(pChannel.get());
 	Message msg;
 	pSplitter->log(msg);
-	assertTrue (pChannel->list().size() == 2);
+	assert (pChannel->list().size() == 2);
 }
 
 
 void ChannelTest::testAsync()
 {
 	AutoPtr<TestChannel> pChannel = new TestChannel;
-#ifndef POCO_OS_FAMILY_WINDOWS
-	AutoPtr<AsyncChannel> pAsync = new AsyncChannel(pChannel); // FIXME It is crashing here on Windows!
+	AutoPtr<AsyncChannel> pAsync = new AsyncChannel(pChannel.get());
 	pAsync->open();
 	Message msg;
 	pAsync->log(msg);
 	pAsync->log(msg);
 	pAsync->close();
-	assertTrue (pChannel->list().size() == 2);
-#endif
+	assert (pChannel->list().size() == 2);
 }
 
 
@@ -86,11 +84,11 @@ void ChannelTest::testFormatting()
 {
 	AutoPtr<TestChannel> pChannel = new TestChannel;
 	AutoPtr<Formatter> pFormatter = new SimpleFormatter;
-	AutoPtr<FormattingChannel> pFormatterChannel = new FormattingChannel(pFormatter, pChannel);
+	AutoPtr<FormattingChannel> pFormatterChannel = new FormattingChannel(pFormatter, pChannel.get());
 	Message msg("Source", "Text", Message::PRIO_INFORMATION);
 	pFormatterChannel->log(msg);
-	assertTrue (pChannel->list().size() == 1);
-	assertTrue (pChannel->list().begin()->getText() == "Source: Text");
+	assert (pChannel->list().size() == 1);
+	assert (pChannel->list().begin()->getText() == "Source: Text");
 }
 
 
@@ -98,7 +96,7 @@ void ChannelTest::testConsole()
 {
 	AutoPtr<ConsoleChannel> pChannel = new ConsoleChannel;
 	AutoPtr<Formatter> pFormatter = new SimpleFormatter;
-	AutoPtr<FormattingChannel> pFormatterChannel = new FormattingChannel(pFormatter, pChannel);
+	AutoPtr<FormattingChannel> pFormatterChannel = new FormattingChannel(pFormatter, pChannel.get());
 	Message msg("Source", "Text", Message::PRIO_INFORMATION);
 	pFormatterChannel->log(msg);
 }
@@ -109,10 +107,10 @@ void ChannelTest::testStream()
 	std::ostringstream str;
 	AutoPtr<StreamChannel> pChannel = new StreamChannel(str);
 	AutoPtr<Formatter> pFormatter = new SimpleFormatter;
-	AutoPtr<FormattingChannel> pFormatterChannel = new FormattingChannel(pFormatter, pChannel);
+	AutoPtr<FormattingChannel> pFormatterChannel = new FormattingChannel(pFormatter, pChannel.get());
 	Message msg("Source", "Text", Message::PRIO_INFORMATION);
 	pFormatterChannel->log(msg);
-	assertTrue (str.str().find("Source: Text") == 0);
+	assert (str.str().find("Source: Text") == 0);
 }
 
 

@@ -14,8 +14,8 @@
 #ifdef POCO_NET_HAS_INTERFACE
 
 
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "MulticastEchoServer.h"
 #include "Poco/Net/MulticastSocket.h"
 #include "Poco/Net/SocketAddress.h"
@@ -47,21 +47,22 @@ MulticastSocketTest::~MulticastSocketTest()
 
 void MulticastSocketTest::testMulticast()
 {
-	try {
+	try 
+	{
 		MulticastEchoServer echoServer;
 		MulticastSocket ms(SocketAddress::IPv4);
 		int n = ms.sendTo("hello", 5, echoServer.group());
-		assertTrue (n == 5);
+		assert (n == 5);
 		char buffer[256];
 		n = ms.receiveBytes(buffer, sizeof(buffer));
-		assertTrue (n == 5);
-		assertTrue (std::string(buffer, n) == "hello");
+		assert (n == 5);
+		assert (std::string(buffer, n) == "hello");
 		ms.close();
 	}
-	catch(Poco::NotImplementedException e)
+	catch (Poco::NotImplementedException e)
 	{
 #if POCO_OS != POCO_OS_ANDROID
-		throw e;
+		throw;
 #endif
 	}
 }

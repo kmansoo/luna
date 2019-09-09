@@ -15,7 +15,7 @@
 
 
 #include "Poco/Foundation.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 #include "Poco/FIFOEvent.h"
 #include "Poco/EventArgs.h"
 
@@ -63,7 +63,7 @@ protected:
 
 	int getCount() const;
 private:
-	int _count;
+	int		_count;
 };
 
 

@@ -9,14 +9,14 @@
 
 
 #include "ArrayTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Array.h"
 #include <vector>
 #include <algorithm>
 #include <functional>
 
-ArrayTest::ArrayTest(const std::string& rName): CppUnit::TestCase(rName)
+ArrayTest::ArrayTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -35,7 +35,7 @@ void ArrayTest::testConstruction()
 
 	// fundamental type
 	typedef Poco::Array<float,6> FloatArray;
-	FloatArray a = { 42.f };
+	FloatArray a = { { 42.f } };
 
 	for (unsigned i=1; i<a.size(); ++i) {
 		a[i] = a[i-1]+1.f;
@@ -45,7 +45,7 @@ void ArrayTest::testConstruction()
 	FloatArray b(a);
 	FloatArray c;
 	c = a;
-	assertTrue (a==b && a==c);
+	assert (a==b && a==c);
 
 	typedef Poco::Array<double,6> DArray;
 	typedef Poco::Array<int,6> IArray;
@@ -63,7 +63,7 @@ void ArrayTest::testConstruction()
 	}
 
 	for (unsigned i=0; i<g.size(); ++i) {
-		assertTrue (g[i]._data == i);
+		assert(g[i]._data == i);
 	}
 
 
@@ -73,33 +73,33 @@ void ArrayTest::testOperations()
 {
 	const int SIZE = 6;
 	typedef Poco::Array<int,SIZE> Array;
-	Array a = { 1 };
+	Array a = { { 1 } };
 
 	// use some common STL container operations
-	assertTrue (a.size() == SIZE);
-	assertTrue (a.max_size() == SIZE);
-	assertTrue (a.empty() == false);
-	assertTrue (a.front() == a[0]);
-	assertTrue (a.back() == a[a.size()-1]);
-	//assertTrue (a.data() == &a[0]);
+	assert(a.size() == SIZE);
+	assert(a.max_size() == SIZE);
+	assert(a.empty() == false);
+	assert(a.front() == a[0]);
+	assert(a.back() == a[a.size()-1]);
+	//assert(a.data() == &a[0]);
 
 	// assign
 	a.assign(100);
 	for(int i = 0; i<a.size(); i++){
-		assertTrue (a[i] == 100);
+		assert(a[i] == 100);
 	}
 
 	// swap
-	Array b;
+	Array b; 
 	b.assign(10);
 	for(int i=0; i<SIZE; i++){
-		assertTrue (a[i] == 100);
-		assertTrue (b[i] == 10);
+		assert(a[i] == 100);
+		assert(b[i] == 10);
 	}
 	a.swap(b);
 	for(int i=0; i<SIZE; i++){
-		assertTrue (a[i] == 10);
-		assertTrue (b[i] == 100);
+		assert(a[i] == 10);
+		assert(b[i] == 100);
 	}
 
 }
@@ -109,18 +109,18 @@ void ArrayTest::testContainer()
 	const int SIZE = 2;
 	typedef Poco::Array<int,SIZE> Array;
 	Array a = {{1, 2}};
-	assertTrue (a[0] == 1);
-	assertTrue (a[1] == 2);
+	assert(a[0] == 1);
+	assert(a[1] == 2);
 
 	typedef std::vector<Array> ArrayVec;
 	ArrayVec container;
 	container.push_back(a);
 	container.push_back(a);
 
-	assertTrue (container[0][0] == 1);
-	assertTrue (container[0][1] == 2);
-	assertTrue (container[1][0] == 1);
-	assertTrue (container[1][1] == 2);
+	assert(container[0][0] == 1);
+	assert(container[0][1] == 2);
+	assert(container[1][0] == 1);
+	assert(container[1][1] == 2);
 }
 
 void ArrayTest::testIterator()
@@ -164,14 +164,14 @@ void ArrayTest::testAlgorithm()
     }
 
     for (unsigned i=0; i<a.size(); ++i) {
-		assertTrue (a[i] == b[i]);
+		assert(a[i] == b[i]);
     }
 
     // change order using an STL algorithm
 	std::reverse(a.begin(),a.end());
 
     for (unsigned i=0; i<a.size(); ++i) {
-		assertTrue (a[SIZE-i-1] == b[i]);
+		assert(a[SIZE-i-1] == b[i]);
     }
 
 	std::reverse(a.begin(),a.end());
@@ -182,7 +182,7 @@ void ArrayTest::testAlgorithm()
 					std::negate<int>());  // operation
 
     for (unsigned i=0; i<a.size(); ++i) {
-		assertTrue (a[i] == -b[i]);
+		assert(a[i] == -b[i]);
     }
 
 }
@@ -200,10 +200,10 @@ void ArrayTest::testMultiLevelArray()
 	a[1][1] = 4;
 
 	MultiArray b = a;
-	assertTrue (b[0][0] == 1);
-	assertTrue (b[0][1] == 2);
-	assertTrue (b[1][0] == 3);
-	assertTrue (b[1][1] == 4);
+	assert(b[0][0] == 1);
+	assert(b[0][1] == 2);
+	assert(b[1][0] == 3);
+	assert(b[1][1] == 4);
 }
 
 void ArrayTest::setUp()

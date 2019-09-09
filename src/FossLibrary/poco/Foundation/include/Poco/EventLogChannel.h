@@ -35,8 +35,6 @@ class Foundation_API EventLogChannel: public Channel
 	/// containing the message definition resources can be found in $PATH.
 {
 public:
-	typedef AutoPtr<EventLogChannel> Ptr;
-
 	EventLogChannel();
 		/// Creates the EventLogChannel.
 		/// The name of the current application (or more correctly,
@@ -64,7 +62,7 @@ public:
 		/// appropriate values for Event Log type and category.
 		
 	void setProperty(const std::string& name, const std::string& value);
-		/// Sets or changes a configuration property.
+		/// Sets or changes a configuration property. 
 		///
 		/// The following properties are supported:
 		///
@@ -87,7 +85,11 @@ protected:
 	static int getType(const Message& msg);
 	static int getCategory(const Message& msg);
 	void setUpRegistry() const;
+#if defined(POCO_WIN32_UTF8)
 	static std::wstring findLibrary(const wchar_t* name);
+#else
+	static std::string findLibrary(const char* name);
+#endif
 
 private:
 	std::string _name;

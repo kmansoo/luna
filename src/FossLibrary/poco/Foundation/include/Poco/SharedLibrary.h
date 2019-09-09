@@ -27,6 +27,8 @@
 #include "Poco/SharedLibrary_VX.h"
 #elif defined(POCO_OS_FAMILY_UNIX)
 #include "Poco/SharedLibrary_UNIX.h"
+#elif defined(POCO_OS_FAMILY_WINDOWS) && defined(POCO_WIN32_UTF8)
+#include "Poco/SharedLibrary_WIN32U.h"
 #elif defined(POCO_OS_FAMILY_WINDOWS)
 #include "Poco/SharedLibrary_WIN32.h"
 #endif
@@ -112,22 +114,23 @@ public:
 		/// specified in a call to load() or the
 		/// constructor.
 
-	static std::string prefix();
-		/// Returns the platform-specific filename prefix
-		/// for shared libraries.
-		/// Most platforms would return "lib" as prefix, while
-	    /// on Cygwin, the "cyg" prefix will be returned.
-
 	static std::string suffix();
 		/// Returns the platform-specific filename suffix
 		/// for shared libraries (including the period).
 		/// In debug mode, the suffix also includes a
-		/// "d" to specify the debug version of a library.
+		/// "d" to specify the debug version of a library
+		/// (e.g., "d.so", "d.dll") unless the library has
+		/// been compiled with -DPOCO_NO_SHARED_LIBRARY_DEBUG_SUFFIX.
 
-	static std::string getOSName(const std::string& name);
-		/// Returns the platform-specific filename
-		/// for shared libraries by prefixing and suffixing name
-		/// with prefix() and suffix()
+	static bool setSearchPath(const std::string& path);
+		/// Adds the given path to the list of paths shared libraries
+		/// are searched in.
+		///
+		/// Returns true if the path was set, otherwise false.
+		///
+		/// Currently only supported on Windows, where it calls
+		/// SetDllDirectory(). On all other platforms, does not
+		/// do anything and returns false.
 
 private:
 	SharedLibrary(const SharedLibrary&);

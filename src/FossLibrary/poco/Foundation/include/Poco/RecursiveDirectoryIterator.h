@@ -51,7 +51,7 @@ class RecursiveDirectoryIterator
 	/// The class can follow different traversal strategies:
 	///     * depth-first strategy;
 	///     * siblings-first strategy.
-	/// The strategies are set by template parameter.
+	/// The stategies are set by template parameter.
 	/// There are two corresponding typedefs:
 	///     * SimpleRecursiveDirectoryIterator;
 	///     * SiblingsFirstRecursiveDirectoryIterator.
@@ -135,18 +135,6 @@ public:
 		return _pImpl->maxDepth();
 	}
 
-	template <typename T>
-	void onError(T& obj, void (T::*pCB)(const void*, const std::string&))
-		/// Binds the event to the given method.
-		///
-		/// The callback method will be called if the Traverse class fails
-		/// to read a directory. 
-		///
-		/// Usage:
-		///     onError(*this, &MyClass::myCallback);
-	{
-		_pImpl->template onError<T>(obj, pCB);
-	}
 
 	MyType& operator = (const MyType& it)
 	{

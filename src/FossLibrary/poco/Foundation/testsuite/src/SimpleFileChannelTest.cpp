@@ -17,8 +17,8 @@
 #include "Poco/DateTimeFormatter.h"
 #include "Poco/AutoPtr.h"
 #include "SimpleFileChannelTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 
 
 using Poco::SimpleFileChannel;
@@ -31,7 +31,7 @@ using Poco::DateTimeFormatter;
 using Poco::AutoPtr;
 
 
-SimpleFileChannelTest::SimpleFileChannelTest(const std::string& rName): CppUnit::TestCase(rName)
+SimpleFileChannelTest::SimpleFileChannelTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -55,10 +55,10 @@ void SimpleFileChannelTest::testRotate()
 			pChannel->log(msg);
 		}
 		File f(name);
-		assertTrue (f.exists());
+		assert (f.exists());
 		f = name + ".0";
-		assertTrue (f.exists());
-		assertTrue (f.getSize() >= 2048);
+		assert (f.exists());
+		assert (f.getSize() >= 2048);
 	}
 	catch (...)
 	{

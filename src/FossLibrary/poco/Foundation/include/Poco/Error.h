@@ -31,10 +31,10 @@ class Foundation_API Error
 public:
 
 #ifdef POCO_OS_FAMILY_WINDOWS
-	static Poco::UInt32 last();
+	static DWORD last();
 		/// Utility function returning the last error.
 
-	static std::string getMessage(Poco::UInt32 errorCode);
+	static std::string getMessage(DWORD errorCode);
 		/// Utility function translating numeric error code to string.
 #else
 	static int last();
@@ -42,11 +42,6 @@ public:
 
 	static std::string getMessage(int errorCode);
 		/// Utility function translating numeric error code to string.
-
-private:
-	// Helper function to adapt the result from glibc's variant of strerror_r.
-	static const char* strerror_result(int, const char* s) { return s; }
-	static const char* strerror_result(const char* s, const char*) { return s; }
 #endif
 };
 

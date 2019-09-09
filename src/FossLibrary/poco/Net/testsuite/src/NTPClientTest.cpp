@@ -9,13 +9,13 @@
 
 
 #include "NTPClientTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Net/NTPClient.h"
 #include "Poco/Net/NTPEventArgs.h"
 #include "Poco/Net/SocketAddress.h"
-#include "Poco/Net/ICMPClient.h"
 #include "Poco/Net/NetException.h"
+#include "Poco/Net/ICMPClient.h"
 #include "Poco/AutoPtr.h"
 #include "Poco/Delegate.h"
 #include "Poco/DateTimeFormatter.h"
@@ -34,7 +34,7 @@ using Poco::Delegate;
 using Poco::AutoPtr;
 
 
-NTPClientTest::NTPClientTest(const std::string& name):
+NTPClientTest::NTPClientTest(const std::string& name): 
 	CppUnit::TestCase(name),
 	_ntpClient(IPAddress::IPv4)
 {
@@ -56,7 +56,7 @@ void NTPClientTest::testTimeSync()
 	}
 #endif
 
-	assertTrue (_ntpClient.request("pool.ntp.org") > 0);
+	assert(_ntpClient.request("pool.ntp.org") > 0);
 }
 
 
@@ -75,9 +75,9 @@ void NTPClientTest::tearDown()
 void NTPClientTest::onResponse(const void* pSender, NTPEventArgs& args)
 {
 	std::ostringstream os;
-	os << std::endl << "Received from " << args.hostName() << " [" << args.hostAddress() << "] with "
-		<< Poco::DateTimeFormatter::format(args.packet().referenceTime(), Poco::DateTimeFormat::ISO8601_FORMAT)
-		<< " reference typestamp" << std::endl;
+	os << std::endl << "Received from " << args.hostName() << " [" << args.hostAddress() << "] with " 
+		<< Poco::DateTimeFormatter::format(args.packet().referenceTime(), Poco::DateTimeFormat::ISO8601_FORMAT) << " reference typestamp" 
+		<< std::endl;
 	std::cout << os.str() << std::endl;
 }
 

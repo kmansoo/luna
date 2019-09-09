@@ -9,8 +9,8 @@
 
 
 #include "OAuth20CredentialsTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Net/HTTPRequest.h"
 #include "Poco/Net/OAuth20Credentials.h"
 #include "Poco/Net/NetException.h"
@@ -37,7 +37,7 @@ void OAuth20CredentialsTest::testAuthorize()
 	HTTPRequest request(HTTPRequest::HTTP_GET, "/");
 	creds.authenticate(request);
 	std::string auth = request.get("Authorization");	
-	assertTrue (auth == "Bearer s3cr3tt0k3n");
+	assert (auth == "Bearer s3cr3tt0k3n");
 }
 
 
@@ -47,7 +47,7 @@ void OAuth20CredentialsTest::testAuthorizeCustomScheme()
 	HTTPRequest request(HTTPRequest::HTTP_GET, "/");
 	creds.authenticate(request);
 	std::string auth = request.get("Authorization");	
-	assertTrue (auth == "token s3cr3tt0k3n");
+	assert (auth == "token s3cr3tt0k3n");
 }
 
 
@@ -56,7 +56,7 @@ void OAuth20CredentialsTest::testExtract()
 	HTTPRequest request(HTTPRequest::HTTP_GET, "/");
 	request.set("Authorization", "Bearer s3cr3tt0k3n");
 	OAuth20Credentials creds(request);
-	assertTrue (creds.getBearerToken() == "s3cr3tt0k3n");
+	assert (creds.getBearerToken() == "s3cr3tt0k3n");
 }
 
 
@@ -65,7 +65,7 @@ void OAuth20CredentialsTest::testExtractCustomScheme()
 	HTTPRequest request(HTTPRequest::HTTP_GET, "/");
 	request.set("Authorization", "token s3cr3tt0k3n");
 	OAuth20Credentials creds(request, "token");
-	assertTrue (creds.getBearerToken() == "s3cr3tt0k3n");
+	assert (creds.getBearerToken() == "s3cr3tt0k3n");
 }
 
 

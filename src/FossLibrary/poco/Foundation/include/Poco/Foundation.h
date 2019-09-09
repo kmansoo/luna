@@ -27,12 +27,6 @@
 
 
 //
-// Include platform-specific definitions
-//
-#include "Poco/Platform.h"
-
-
-//
 // Ensure that POCO_DLL is default unless POCO_STATIC is defined
 //
 #if defined(_WIN32) && defined(_DLL)
@@ -47,10 +41,10 @@
 // from a DLL simpler. All files within this DLL are compiled with the Foundation_EXPORTS
 // symbol defined on the command line. this symbol should not be defined on any project
 // that uses this DLL. This way any other project whose source files include this file see
-// Foundation_API functions as being imported from a DLL, whereas this DLL sees symbols
+// Foundation_API functions as being imported from a DLL, wheras this DLL sees symbols
 // defined with this macro as being exported.
 //
-#if defined(POCO_COMPILER_MSVC) && defined(POCO_DLL)
+#if (defined(_WIN32) || defined(_WIN32_WCE)) && defined(POCO_DLL)
 	#if defined(Foundation_EXPORTS)
 		#define Foundation_API __declspec(dllexport)
 	#else
@@ -71,7 +65,7 @@
 //
 // Automatically link Foundation library.
 //
-#ifdef POCO_COMPILER_MSVC
+#if defined(_MSC_VER)
 	#if defined(POCO_DLL)
 		#if defined(_DEBUG)
 			#define POCO_LIB_SUFFIX "d.lib"
@@ -98,6 +92,10 @@
 #endif
 
 
+//
+// Include platform-specific definitions
+//
+#include "Poco/Platform.h"
 #if defined(_WIN32)
 	#include "Poco/Platform_WIN32.h"
 #elif defined(POCO_VXWORKS)
@@ -111,6 +109,19 @@
 // Include alignment settings early
 //
 #include "Poco/Alignment.h"
+
+//
+// Cleanup inconsistencies
+//
+#ifdef POCO_OS_FAMILY_WINDOWS
+	#if defined(POCO_WIN32_UTF8) && defined(POCO_NO_WSTRING)
+		#error POCO_WIN32_UTF8 and POCO_NO_WSTRING are mutually exclusive.
+	#endif
+#else
+	#ifdef POCO_WIN32_UTF8
+		#undef POCO_WIN32_UTF8
+	#endif
+#endif
 
 
 //
@@ -135,11 +146,11 @@
 //
 #if defined(POCO_NO_DEPRECATED)
 #define POCO_DEPRECATED
-#elif defined(POCO_COMPILER_GCC)
+#elif defined(_GNUC_)
 #define POCO_DEPRECATED __attribute__((deprecated))
-#elif defined(POCO_COMPILER_CLANG)
+#elif defined(__clang__)
 #define POCO_DEPRECATED __attribute__((deprecated))
-#elif defined(POCO_COMPILER_MSVC)
+#elif defined(_MSC_VER)
 #define POCO_DEPRECATED __declspec(deprecated)
 #else
 #define POCO_DEPRECATED

@@ -25,16 +25,14 @@ public:
 	typedef std::list<Poco::Message> MsgList;
 
 	TestChannel();
-
+	~TestChannel();
+	
 	void log(const Poco::Message& msg);
 	MsgList& list();
 	void clear();
 	const Poco::Message& getLastMessage() const { return _lastMessage; }
-
-protected:
-	~TestChannel();
-
-private:
+	
+private:	
 	MsgList _msgList;
 	Poco::Message _lastMessage;
 };
