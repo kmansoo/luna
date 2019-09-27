@@ -4,7 +4,8 @@ build/
 **/Release/
 **/.vs/
 **/x64/LIB*
-**/msvc/LIB *
+**/msvc/LIB*
+**/obj64
 extlibs/lib/*
 src/.cproject
 .project
