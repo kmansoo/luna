@@ -10,7 +10,7 @@
 namespace Luna {
 
 void    sleep(int milliseconds);
-void    usleep(int milliseconds);
+void    usleep(int microseconds);
 
 unsigned long long get_tick_count();     //  tick count(ms)
 
