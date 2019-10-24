@@ -29,7 +29,7 @@ public:
         std::shared_ptr<ccWebServerResponse> response);
 
 public:
-    bool addAPI(const std::string& uri,
+    bool add_api(const std::string& uri,
                 std::function<bool(
                     std::shared_ptr<ccWebServerRequest> request,
                     std::shared_ptr<ccWebServerResponse> response)> f);

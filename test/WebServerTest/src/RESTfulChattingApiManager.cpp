@@ -209,11 +209,11 @@ bool  RESTfulChattingSessionManager::broadcast_message(const std::string& sessio
 /////
 RESTfulChattingApiManager::RESTfulChattingApiManager() {
     // TODO Auto-generated constructor stub
-    addAPI(std::string("/user"), std::bind(&RESTfulChattingApiManager::user, this, std::placeholders::_1, std::placeholders::_2));
-    addAPI(std::string("/session"), std::bind(&RESTfulChattingApiManager::session, this, std::placeholders::_1, std::placeholders::_2));
-    addAPI(std::string("/session/member"), std::bind(&RESTfulChattingApiManager::session_member, this, std::placeholders::_1, std::placeholders::_2));
-    addAPI(std::string("/session/member/*"), std::bind(&RESTfulChattingApiManager::session_member_id, this, std::placeholders::_1, std::placeholders::_2));
-    //  AddAPI(std::string("/session/message"), std::bind(&RESTfulChattingApiManager::session_message, this, std::placeholders::_1, std::placeholders::_2));
+    add_api(std::string("/user"), std::bind(&RESTfulChattingApiManager::user, this, std::placeholders::_1, std::placeholders::_2));
+    add_api(std::string("/session"), std::bind(&RESTfulChattingApiManager::session, this, std::placeholders::_1, std::placeholders::_2));
+    add_api(std::string("/session/member"), std::bind(&RESTfulChattingApiManager::session_member, this, std::placeholders::_1, std::placeholders::_2));
+    add_api(std::string("/session/member/*"), std::bind(&RESTfulChattingApiManager::session_member_id, this, std::placeholders::_1, std::placeholders::_2));
+    //  add_api(std::string("/session/message"), std::bind(&RESTfulChattingApiManager::session_message, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 RESTfulChattingApiManager::~RESTfulChattingApiManager() {
