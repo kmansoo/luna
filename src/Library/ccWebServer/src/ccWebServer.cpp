@@ -38,7 +38,7 @@ void ccWebServer::init_server() {
         webpage_directory_->init(*this);
 }
 
-const std::string& ccWebServer::getName() {
+const std::string& ccWebServer::get_name() {
     return name_;
 }
 
@@ -50,8 +50,8 @@ bool ccWebServer::set_option(std::string const& name,
     return true;
 }
 
-void ccWebServer::set_listener(ccWebServerEventListener* pListener) {
-    eventListener_ = pListener;
+void ccWebServer::set_listener(ccWebServerEventListener* listener) {
+    eventListener_ = listener;
 }
 
 std::shared_ptr<ccWebServerPage> ccWebServer::find_page(const std::string& uri) {

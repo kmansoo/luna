@@ -35,7 +35,7 @@ namespace Luna {
         con_ = NULL;
     }
 
-    void ccMongooseWebServer::setUploadEvent(const std::string& path) {
+    void ccMongooseWebServer::set_upload_event(const std::string& path) {
         if (con_ == NULL)
             return;
 
@@ -63,7 +63,7 @@ namespace Luna {
 
         isStopThread_ = false;
 
-        pollThread_ = new std::thread(std::bind(&ccMongooseWebServer::doRunThread, this));
+        pollThread_ = new std::thread(std::bind(&ccMongooseWebServer::do_run_thread, this));
 
         init_server();
 
@@ -92,7 +92,7 @@ namespace Luna {
         return true;
     }
 
-    void ccMongooseWebServer::doRunThread() {
+    void ccMongooseWebServer::do_run_thread() {
         while (isStopThread_ == false)
             mg_mgr_poll(mgr_, 200);
     }

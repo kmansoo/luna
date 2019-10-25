@@ -5,8 +5,7 @@
  *      Author: kmansoo
  */
 
-#ifndef THIRDPARTYLIBRARY_CCMONGOOSESERVERAPI_CCMONGOOSEWEBSERVER_H_
-#define THIRDPARTYLIBRARY_CCMONGOOSESERVERAPI_CCMONGOOSEWEBSERVER_H_
+#pragma once
 
 #include <thread>
 
@@ -25,14 +24,14 @@ public:
 public:
     virtual bool start();
     virtual bool stop();
-    virtual void setUploadEvent(const std::string& path);
+    virtual void set_upload_event(const std::string& path);
 
 private:
     static void ev_handler(struct mg_connection *nc, int ev, void *p);
     static void ev_handler_upload(struct mg_connection *nc, int ev, void *p);
 
 private:
-    void    doRunThread();
+    void    do_run_thread();
 
 private:
     bool                    isStopThread_;
@@ -44,5 +43,3 @@ private:
 };
 
 }
-
-#endif /* THIRDPARTYLIBRARY_CCMONGOOSESERVERAPI_CCMONGOOSEWEBSERVER_H_ */

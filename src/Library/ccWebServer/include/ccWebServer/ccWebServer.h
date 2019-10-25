@@ -28,10 +28,10 @@ public:
     virtual void set_upload_event(const std::string& path) {}
 
 public:
-    const std::string&  getName();
+    const std::string&  get_name();
 
     bool    set_option(std::string const& name, std::string const& value);
-    void    set_listener(ccWebServerEventListener* pListener);
+    void    set_listener(ccWebServerEventListener* listener);
 
 protected:
     //  this function performs like a initiation of web page or features for web server.
