@@ -55,7 +55,7 @@ bool ccWebServerManager::create_web_server(
 
 std::shared_ptr<ccWebServer> ccWebServerManager::get_web_server(const char* strName) {
     for (auto server : web_server_list_) {
-        if (server->getName().compare(strName) == 0)
+        if (server->get_name().compare(strName) == 0)
             return server;
     }
 
