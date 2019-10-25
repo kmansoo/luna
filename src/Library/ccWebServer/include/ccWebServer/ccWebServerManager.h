@@ -31,7 +31,7 @@ public:
     friend class ccSingleton<ccWebServerManager>;
 
 public:
-    void attach_factory(std::shared_ptr<ccWebServerObjectFactory> pFactory);
+    void attach_factory(std::shared_ptr<ccWebServerObjectFactory> factory);
 
     bool create_web_server(
         const std::string& name,
@@ -70,7 +70,7 @@ protected:
     virtual int  on_websocket_check_instance(void* connection_info);
 
 protected:
-    void doPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent event,
+    void do_perform_websocket_event(ccWebsocket::ccWebSocketEvent event,
                                  std::int32_t socket_id,
                                  const std::string& data);
 

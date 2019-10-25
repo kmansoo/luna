@@ -24,6 +24,8 @@ ccWebServerFileUploadAgent::~ccWebServerFileUploadAgent() {
 }
 
 bool ccWebServerFileUploadAgent::on_file_info(const std::string& file_name, size_t file_size) {
+     std::cout << "ccWebServerFileUploadAgent::on_file_info(), file_name:" << file_name << std::endl;
+
     std::string open_file_name = file_name;
 
     if (open_file_name.length() == 0) {
@@ -52,6 +54,8 @@ bool ccWebServerFileUploadAgent::on_finish_upload() {
         return false;
 
     upload_file_.close();
+
+    std::cout << "ccWebServerFileUploadAgent::on_finish_upload(), done" << std::endl;
 
     return true;
 }

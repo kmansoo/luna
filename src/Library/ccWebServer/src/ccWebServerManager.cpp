@@ -20,8 +20,8 @@ ccWebServerManager::~ccWebServerManager() {
     // TODO Auto-generated destructor stub
 }
 
-void  ccWebServerManager::attach_factory(std::shared_ptr<ccWebServerObjectFactory> pFactory) {
-    obj_factory_ = pFactory;
+void  ccWebServerManager::attach_factory(std::shared_ptr<ccWebServerObjectFactory> factory) {
+    obj_factory_ = factory;
 }
 
 bool ccWebServerManager::create_web_server(
@@ -166,11 +166,11 @@ void ccWebServerManager::on_websocket_created(std::shared_ptr<ccWebsocket> new_w
 }
 
 void ccWebServerManager::on_websocket_connected(std::int32_t socket_id) {
-    doPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent_Connected, socket_id, blank_string_);
+    do_perform_websocket_event(ccWebsocket::ccWebSocketEvent_Connected, socket_id, blank_string_);
 }
 
 void ccWebServerManager::on_websocket_disconnected(std::int32_t socket_id) {
-    doPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent_Disconnected, socket_id, blank_string_);
+    do_perform_websocket_event(ccWebsocket::ccWebSocketEvent_Disconnected, socket_id, blank_string_);
 }
 
 int  ccWebServerManager::on_websocket_check_instance(void* connection_info) {
@@ -186,10 +186,10 @@ int  ccWebServerManager::on_websocket_check_instance(void* connection_info) {
 }
 
 void ccWebServerManager::on_websocket_received_data(std::int32_t socket_id, const std::string& data) {
-    doPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent_ReceivedData, socket_id, data);
+    do_perform_websocket_event(ccWebsocket::ccWebSocketEvent_ReceivedData, socket_id, data);
 }
 
-void ccWebServerManager::doPerformWebsocketEvent(ccWebsocket::ccWebSocketEvent event, std::int32_t socket_id, const std::string& data) {
+void ccWebServerManager::do_perform_websocket_event(ccWebsocket::ccWebSocketEvent event, std::int32_t socket_id, const std::string& data) {
     std::shared_ptr<ccWebsocket> websocket;
 
     for (const auto& item : websocket_manager_list_) {
