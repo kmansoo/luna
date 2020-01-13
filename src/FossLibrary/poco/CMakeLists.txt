@@ -116,7 +116,7 @@ option(ENABLE_TESTS
   "Set to OFF|ON (default is OFF) to control build of POCO tests & samples" OFF)
 
 option(POCO_STATIC
-  "Set to OFF|ON (default is OFF) to control build of POCO as STATIC library" OFF)
+  "Set to OFF|ON (default is OFF) to control build of POCO as STATIC library" ON)
 
 option(POCO_UNBUNDLED
   "Set to OFF|ON (default is OFF) to control linking dependencies as external" OFF)
