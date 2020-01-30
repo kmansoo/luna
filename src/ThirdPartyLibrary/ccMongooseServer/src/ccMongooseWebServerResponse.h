@@ -16,16 +16,15 @@ namespace Luna {
 
 class ccMongooseWebServerResponse : public ccWebServerResponse {
 public:
-    ccMongooseWebServerResponse(struct mg_connection* connection);
-    virtual ~ccMongooseWebServerResponse();
+  ccMongooseWebServerResponse(struct mg_connection* connection);
+  virtual ~ccMongooseWebServerResponse();
 
 protected:
-    virtual size_t write_content_to_connector(const char* strBuf, size_t size);
+  virtual size_t write_content_to_connector(const char* strBuf, size_t size);
 
 private:
-    struct mg_connection*   mg_connection_;
+  struct mg_connection* mg_connection_;
 };
-
 }
 
 #endif /* THIRDPARTYLIBRARY_CCMONGOOSESERVERAPI_CCMONGOOSEWEBSERVERRESPONSE_H_ */

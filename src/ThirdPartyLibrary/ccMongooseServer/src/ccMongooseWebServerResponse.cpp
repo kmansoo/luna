@@ -9,18 +9,20 @@
 
 namespace Luna {
 
-ccMongooseWebServerResponse::ccMongooseWebServerResponse(struct mg_connection* con) :
-    mg_connection_(con) {
+ccMongooseWebServerResponse::ccMongooseWebServerResponse(struct mg_connection* con)
+    : mg_connection_(con)
+{
 }
 
-ccMongooseWebServerResponse::~ccMongooseWebServerResponse() {
-    // TODO Auto-generated destructor stub
+ccMongooseWebServerResponse::~ccMongooseWebServerResponse()
+{
+  // TODO Auto-generated destructor stub
 }
 
-size_t ccMongooseWebServerResponse::write_content_to_connector(const char* strBuf, size_t size) {
-    mg_send(mg_connection_, strBuf, size);
+size_t ccMongooseWebServerResponse::write_content_to_connector(const char* strBuf, size_t size)
+{
+  mg_send(mg_connection_, strBuf, size);
 
-    return size;
+  return size;
 }
-
 }
