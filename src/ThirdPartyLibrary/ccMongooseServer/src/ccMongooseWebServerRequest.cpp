@@ -161,7 +161,7 @@ bool ccMongooseWebServerRequest::has_variable_connection(const std::string& name
 
   char outbuf[CV_MAXGETSIZE];
 
-  return mg_get_http_var(&mg_http_message_->body, name.c_str(), &outbuf[0], CV_MAXGETSIZE) > 0;
+  return mg_get_http_var(&mg_http_message_->query_string, name.c_str(), &outbuf[0], CV_MAXGETSIZE) > 0;
 }
 
 std::string ccMongooseWebServerRequest::get_variable_connection(const std::string& name)
