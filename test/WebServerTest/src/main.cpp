@@ -8,7 +8,7 @@
 
 #include "ccWebServer/ccWebServerManager.h"
 
-#include "ccMongooseServer/ccMongooseWebServerObjectFactory.h"
+#include "ccMongooseWebServer/ccMongooseWebServerObjectFactory.h"
 #include "ccWebServer/ccWebsocketManager.h"
 
 #include "ccWebsocketClient/ccEasyWebsocketClient.h"
