@@ -7,7 +7,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccCore", "..\src\Library\cc
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccWebServer", "..\src\Library\ccWebServer\msvc\ccWebServer.vcxproj", "{4B237A6F-F4D9-4BBF-9D63-6460DDF8B984}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccMongooseServer", "..\src\ThirdPartyLibrary\ccMongooseServer\msvc\ccMongooseServer.vcxproj", "{E3FCC667-3505-4635-A78B-EA15E73D4755}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccMongooseWebServer", "..\src\ThirdPartyLibrary\ccMongooseWebServer\msvc\ccMongooseWebServer.vcxproj", "{E3FCC667-3505-4635-A78B-EA15E73D4755}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccJsonParser", "..\src\FossLibrary\ccJsonParser\msvc\ccJsonParser.vcxproj", "{E7BFC6A3-98B0-4103-A3BA-DE08105F2DB3}"
 EndProject

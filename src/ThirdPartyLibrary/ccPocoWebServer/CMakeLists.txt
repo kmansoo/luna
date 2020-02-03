@@ -2,27 +2,23 @@
 CMAKE_MINIMUM_REQUIRED (VERSION 3.0.0)
 
 #
-PROJECT(ccMongooseServer)
+PROJECT(ccPocoWebServer)
 
 # Configuration
 #
-
-add_definitions(
-	-DMG_DISABLE_CGI
-	-DMG_ENABLE_HTTP_STREAMING_MULTIPART
-)
 
 include_directories( 
 	./include 
 	../../Library/ccCore/include
 	../../Library/ccWebServer/include
+	../../FossLibrary/poco/Foundation/include
+	../../FossLibrary/poco/Net/include
 )
 
 file(GLOB SRC_FILES 
 	src/*.cpp
-	src/mongoose/*.c
 )
 
-add_library (ccMongooseServer STATIC
+add_library (ccPocoWebServer STATIC
 	${SRC_FILES}
 )

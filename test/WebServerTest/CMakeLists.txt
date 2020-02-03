@@ -16,7 +16,8 @@ include_directories(
 	${LUNA_SW_PLATFORM}/src/Library/ccWebServer/include
 	${LUNA_SW_PLATFORM}/src/FossLibrary/ccJsonParser/include
 	${LUNA_SW_PLATFORM}/src/FossLibrary/ccWebsocketClient/include
-	${LUNA_SW_PLATFORM}/src/ThirdPartyLibrary/ccMongooseServer/include
+	${LUNA_SW_PLATFORM}/src/ThirdPartyLibrary/ccMongooseWebServer/include
+	${LUNA_SW_PLATFORM}/src/ThirdPartyLibrary/ccPocoWebServer/include
 )
 
 link_directories(
@@ -30,7 +31,10 @@ add_executable (WebServerTest
 )
 
 TARGET_LINK_LIBRARIES(WebServerTest
-	ccMongooseServer
+	ccPocoWebServer
+	PocoNet
+	PocoFoundation
+	ccMongooseWebServer
 	ccWebsocketClient
 	ccJsonParser
 	ccWebServer

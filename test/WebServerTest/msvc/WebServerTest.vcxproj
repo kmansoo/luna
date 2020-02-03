@@ -86,7 +86,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>LUNA_PLATFORM_WIN32;WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../include;../../../Library/ccCore/include;../../../Library/ccNetwork/include;../../../Library/ccWebServer/include;../../../FossLibrary/ccJsonParser/include;../../../FossLibrary/ccWebsocketClient/include;../../../ThirdPartyLibrary/ccMongooseServer/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;../../../Library/ccCore/include;../../../Library/ccNetwork/include;../../../Library/ccWebServer/include;../../../FossLibrary/ccJsonParser/include;../../../FossLibrary/ccWebsocketClient/include;../../../ThirdPartyLibrary/ccMongooseWebServer/include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -102,7 +102,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../include;../../../src/Library/ccCore/include;../../../src/Library/ccNetwork/include;../../../src/Library/ccWebServer/include;../../../src/FossLibrary/ccJsonParser/include;../../../src/FossLibrary/ccWebsocketClient/include;../../../src/ThirdPartyLibrary/ccMongooseServer/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;../../../src/Library/ccCore/include;../../../src/Library/ccNetwork/include;../../../src/Library/ccWebServer/include;../../../src/FossLibrary/ccJsonParser/include;../../../src/FossLibrary/ccWebsocketClient/include;../../../src/ThirdPartyLibrary/ccMongooseWebServer/include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -120,7 +120,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>LUNA_PLATFORM_WIN32;WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../include;../../../Library/ccCore/include;../../../Library/ccNetwork/include;../../../Library/ccWebServer/include;../../../FossLibrary/ccJsonParser/include;../../../FossLibrary/ccWebsocketClient/include;../../../ThirdPartyLibrary/ccMongooseServer/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;../../../Library/ccCore/include;../../../Library/ccNetwork/include;../../../Library/ccWebServer/include;../../../FossLibrary/ccJsonParser/include;../../../FossLibrary/ccWebsocketClient/include;../../../ThirdPartyLibrary/ccMongooseWebServer/include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -135,7 +135,7 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../include;../../../Library/ccCore/include;../../../Library/ccNetwork/include;../../../Library/ccWebServer/include;../../../FossLibrary/ccJsonParser/include;../../../FossLibrary/ccWebsocketClient/include;../../../ThirdPartyLibrary/ccMongooseServer/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;../../../Library/ccCore/include;../../../Library/ccNetwork/include;../../../Library/ccWebServer/include;../../../FossLibrary/ccJsonParser/include;../../../FossLibrary/ccWebsocketClient/include;../../../ThirdPartyLibrary/ccMongooseWebServer/include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -211,16 +211,16 @@
     <ProjectReference Include="..\..\..\src\Library\ccWebServer\msvc\ccWebServer.VS2017.vcxproj">
       <Project>{4b237a6f-f4d9-4bbf-9d63-6460ddf8b984}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\src\ThirdPartyLibrary\ccMongooseServer\msvc\ccMongooseServer.vcxproj">
+    <ProjectReference Include="..\..\..\src\ThirdPartyLibrary\ccMongooseWebServer\msvc\ccMongooseWebServer.vcxproj">
       <Project>{e3fcc667-3505-4635-a78b-ea15e73d4755}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\src\ThirdPartyLibrary\ccMongooseServer\msvc\ccMongooseServer.VS2017.vcxproj">
+    <ProjectReference Include="..\..\..\src\ThirdPartyLibrary\ccMongooseWebServer\msvc\ccMongooseWebServer.VS2017.vcxproj">
       <Project>{e3fcc667-3505-4635-a78b-ea15e73d4755}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\ThirdPartyLibrary\ccMongooseServer\build\ccMongooseServer.vcxproj">
+    <ProjectReference Include="..\..\..\ThirdPartyLibrary\ccMongooseWebServer\build\ccMongooseWebServer.vcxproj">
       <Project>{e3fcc667-3505-4635-a78b-ea15e73d4755}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\ThirdPartyLibrary\ccMongooseServer\msvc\ccMongooseServer.vcxproj">
+    <ProjectReference Include="..\..\..\ThirdPartyLibrary\ccMongooseWebServer\msvc\ccMongooseWebServer.vcxproj">
       <Project>{e3fcc667-3505-4635-a78b-ea15e73d4755}</Project>
     </ProjectReference>
   </ItemGroup>

@@ -97,4 +97,5 @@ endif()
 
 ADD_SUBDIRECTORY(src/FossLibrary/ccMqttClient)
 ADD_SUBDIRECTORY(src/FossLibrary/poco)
-ADD_SUBDIRECTORY(src/ThirdPartyLibrary/ccMongooseServer)
+ADD_SUBDIRECTORY(src/ThirdPartyLibrary/ccMongooseWebServer)
+ADD_SUBDIRECTORY(src/ThirdPartyLibrary/ccPocoWebServer)
