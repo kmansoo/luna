@@ -3,8 +3,10 @@
 #include "ccPocoWebServerRequest.h"
 
 #include "Poco/URI.h"
+#include "Poco/StreamCopier.h"
 
 using Poco::URI;
+using Poco::StreamCopier;
 
 namespace Luna {
 
@@ -108,7 +110,7 @@ long ccPocoWebServerRequest::get_remote_ip() const
 
 long ccPocoWebServerRequest::get_content_body(std::string& body)
 {
-  ((HTTPServerRequest*)&server_request_)->stream() >> body;
+  StreamCopier::copyToString(((HTTPServerRequest*)&server_request_)->stream(), body);
 
   return body.length();
 }

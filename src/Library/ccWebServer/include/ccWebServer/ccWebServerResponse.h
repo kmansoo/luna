@@ -24,31 +24,31 @@ public:
         kMaxBufferSize = 8192
     };
 
+public:
+    virtual void    send_status(unsigned int code, const std::string& strStatusText, bool bNoContent = false);
+    virtual void    send_status(unsigned int code, const std::string& strStatusText, const std::string& strExtInfo);
+
+    virtual void    send_content_type(const std::string& type, bool bInsertSeparator = true);
+    virtual void    send_content_type(const std::string& type, size_t size, bool bInsertSeparator = true);
+
+    virtual void    header_info(const std::string& type, size_t size, std::string& strExtInfo, bool bInsertSeparator = true);
+
+    virtual size_t  send_formatted_content(const char *fmt, ...);   // printf
+    virtual size_t  send_formatted_content_ex(const char *fmt, va_list ap); //  vprintf
+    virtual size_t  send_content(const std::string& buf);
+    virtual size_t  send_content(const char* strBuf, size_t size);
+    virtual size_t  send_content(std::istream& is);
+
+    virtual void    close_without_content();
+
+    virtual bool    not_found_file(const std::string& strURI);
+
 protected:
     virtual size_t write_content_to_connector(const char* strBuf, size_t size) { return 0; }
+    virtual void   check_header_sent();
 
 protected:
-    void    check_header_sent();
     size_t  send_formatted_content_impl(const char *fmt, ...);
-
-public:
-    void    send_status(unsigned int code, const std::string& strStatusText, bool bNoContent = false);
-    void    send_status(unsigned int code, const std::string& strStatusText, const std::string& strExtInfo);
-
-    void    send_content_type(const std::string& type, bool bInsertSeparator = true);
-    void    send_content_type(const std::string& type, size_t size, bool bInsertSeparator = true);
-
-    void    header_info(const std::string& type, size_t size, std::string& strExtInfo, bool bInsertSeparator = true);
-
-    size_t  send_formatted_content(const char *fmt, ...);   // printf
-    size_t  send_formatted_content_ex(const char *fmt, va_list ap); //  vprintf
-    size_t  send_content(const std::string& buf);
-    size_t  send_content(const char* strBuf, size_t size);
-    size_t  send_content(std::istream& is);
-
-    void    close_without_content();
-
-    bool    not_found_file(const std::string& strURI);
 
 protected:
     unsigned int    status_code_;

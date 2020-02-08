@@ -34,6 +34,8 @@ class ccPocoRequestHandler: public HTTPRequestHandler
 {
 public:
   ccPocoRequestHandler(ccWebServerEventListener* server_event_listener) : server_event_listener_(server_event_listener) {}
+  virtual ~ccPocoRequestHandler() {
+  }
 
 public:
   virtual void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response)
@@ -54,19 +56,20 @@ private:
 class ccPocoRequestHandlerFactory : public HTTPRequestHandlerFactory
 {
 public:
-  ccPocoRequestHandlerFactory(ccWebServerEventListener* server_event_listener)
+  ccPocoRequestHandlerFactory(ccWebServerEventListener* server_event_listener) : server_event_listener_(server_event_listener)
   {
-    main_request_handler_ = std::make_shared<ccPocoRequestHandler>(server_event_listener);
+    //  main_request_handler_ = std::make_shared<ccPocoRequestHandler>(server_event_listener);
   }
 
 public:
   HTTPRequestHandler* createRequestHandler(const HTTPServerRequest& request)
   {
-    return main_request_handler_.get();
+    return new ccPocoRequestHandler(server_event_listener_);
   }
 
 private:
-  std::shared_ptr<HTTPRequestHandler> main_request_handler_;
+  //  std::shared_ptr<HTTPRequestHandler> main_request_handler_;
+  ccWebServerEventListener* server_event_listener_;
 };
 
 ccPocoWebServer::ccPocoWebServer(const std::string& name, const std::string& ports, const std::string& root_path, std::shared_ptr<ccWebServerPageDirectory> page_directory)

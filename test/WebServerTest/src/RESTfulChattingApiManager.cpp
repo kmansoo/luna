@@ -251,7 +251,7 @@ bool RESTfulChattingApiManager::user(std::shared_ptr<Luna::ccWebServerRequest> r
         else
             response->send_status(500, std::string("Server Error!"));
 
-        response->send_content_type("Content-Type: application/x-www-form-urlencoded", (size_t)0);
+        response->send_content_type("application/x-www-form-urlencoded", (size_t)0);
     }
     break;
 
@@ -292,13 +292,13 @@ bool RESTfulChattingApiManager::user(std::shared_ptr<Luna::ccWebServerRequest> r
         else
             response->send_status(500, std::string("Server Error!"));
 
-        response->send_content_type("Content-Type: application/x-www-form-urlencoded", (size_t)0);
+        response->send_content_type("application/x-www-form-urlencoded", (size_t)0);
     }
     break;
 
     default:
         response->send_status(500, std::string("Server Error!"));
-        response->send_content_type("Content-Type: application/x-www-form-urlencoded", (size_t)0);
+        response->send_content_type("application/x-www-form-urlencoded", (size_t)0);
         break;
 
     }
@@ -371,7 +371,7 @@ bool RESTfulChattingApiManager::session(std::shared_ptr<Luna::ccWebServerRequest
         } else
             response->send_status(500, std::string("Server Error!"));
 
-        response->send_content_type("Content-Type: application/x-www-form-urlencoded", (size_t)0);
+        response->send_content_type("application/x-www-form-urlencoded", (size_t)0);
     }
     break;
 
@@ -410,13 +410,13 @@ bool RESTfulChattingApiManager::session(std::shared_ptr<Luna::ccWebServerRequest
         } else
             response->send_status(500, std::string("Server Error!"));
 
-        response->send_content_type("Content-Type: application/x-www-form-urlencoded", (size_t)0);
+        response->send_content_type("application/x-www-form-urlencoded", (size_t)0);
     }
     break;
 
     default:
         response->send_status(500, std::string("Server Error!"));
-        response->send_content_type("Content-Type: application/x-www-form-urlencoded", (size_t)0);
+        response->send_content_type("application/x-www-form-urlencoded", (size_t)0);
         break;
 
     }
@@ -464,7 +464,7 @@ bool RESTfulChattingApiManager::session_member(std::shared_ptr<Luna::ccWebServer
         else
             response->send_status(500, std::string("Server Error!"));
 
-        response->send_content_type("Content-Type: application/x-www-form-urlencoded", (size_t)0);
+        response->send_content_type("application/x-www-form-urlencoded", (size_t)0);
     }
     break;
 
@@ -478,13 +478,13 @@ bool RESTfulChattingApiManager::session_member(std::shared_ptr<Luna::ccWebServer
         else
             response->send_status(500, std::string("Server Error!"));
 
-        response->send_content_type("Content-Type: application/x-www-form-urlencoded", (size_t)0);
+        response->send_content_type("application/x-www-form-urlencoded", (size_t)0);
     }
     break;
 
     default:
         response->send_status(500, std::string("Server Error!"));
-        response->send_content_type("Content-Type: application/x-www-form-urlencoded", (size_t)0);
+        response->send_content_type("application/x-www-form-urlencoded", (size_t)0);
         break;
     }
 
@@ -496,7 +496,7 @@ bool RESTfulChattingApiManager::session_member_id(std::shared_ptr<Luna::ccWebSer
     std::string user_id = request->get_resource();
 
     response->send_status(500, std::string("Server Error!"));
-    response->send_content_type("Content-Type: application/x-www-form-urlencoded", (size_t)0);
+    response->send_content_type("application/x-www-form-urlencoded", (size_t)0);
 
     return true;
 }

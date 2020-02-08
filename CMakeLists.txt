@@ -33,17 +33,14 @@ endif()
 
 # cmake -DCMAKE_TOOLCHAIN_FILE=toolchain.arm.cmake
 
-# BUILD TYPE
-if ("${build}" MATCHES "debug")
- SET (CMAKE_BUILD_TYPE "debug")
-else ("${build}" MATCHES "debug")
- SET (CMAKE_BUILD_TYPE "release")
-endif ("${build}" MATCHES "debug")
+#
+# To build with a release mode, cmake -DCMAKE_BUILD_TYPE=Release ..
+#
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Debug)
+endif(NOT CMAKE_BUILD_TYPE)
 
-#
-# Add Compiler Option and Macro
-#
-ADD_DEFINITIONS(-DCALIB_CFG_BUILD_MODE="${CMAKE_BUILD_TYPE}")
+message(STATUS "Setting Luna build type - ${CMAKE_BUILD_TYPE}")
 
 SET(CMAKE_CXX_STANDARD 14)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON)
