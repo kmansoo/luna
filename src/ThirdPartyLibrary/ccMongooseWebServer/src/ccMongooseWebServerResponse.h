@@ -19,6 +19,9 @@ public:
   ccMongooseWebServerResponse(struct mg_connection* connection);
   virtual ~ccMongooseWebServerResponse();
 
+public:
+  virtual size_t send_file(const std::string& path, const std::string& media_type);
+
 protected:
   virtual size_t write_content_to_connector(const char* strBuf, size_t size);
 

@@ -46,9 +46,16 @@ void ccPocoWebServerResponse::send_content_type(const std::string& type, size_t 
   server_response_.setContentType(type);
 }
 
+size_t ccPocoWebServerResponse::send_file(const std::string& path, const std::string& media_type)
+{
+  server_response_.sendFile(path, media_type);
+
+  return 1;
+}
+
 size_t ccPocoWebServerResponse::write_content_to_connector(const char* body_buffer, size_t size)
 {
-  if (ostr_ == nullptr) {
+  if (server_response_.sent() == false && ostr_ == nullptr) {
     ostr_ = &server_response_.send();
   }
 
@@ -63,8 +70,8 @@ size_t ccPocoWebServerResponse::write_content_to_connector(const char* body_buff
 
 void ccPocoWebServerResponse::close_without_content()
 {
-  if (ostr_ == nullptr) {
-    ostr_ = &server_response_.send();
+  if (server_response_.sent() == false) {
+    server_response_.send();
   }
 }
 

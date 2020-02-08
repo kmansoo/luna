@@ -22,6 +22,8 @@ public:
   virtual void send_content_type(const std::string& type, bool has_separator = true);
   virtual void send_content_type(const std::string& type, size_t size, bool has_separator = true);
   virtual void close_without_content();
+
+  virtual size_t send_file(const std::string& path, const std::string& media_type);
   
 protected:
   virtual size_t write_content_to_connector(const char* body_buffer, size_t size);

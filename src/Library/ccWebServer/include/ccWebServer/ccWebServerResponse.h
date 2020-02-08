@@ -38,6 +38,7 @@ public:
     virtual size_t  send_content(const std::string& buf);
     virtual size_t  send_content(const char* strBuf, size_t size);
     virtual size_t  send_content(std::istream& is);
+    virtual size_t  send_file(const std::string& path, const std::string& media_type) { return 0; }
 
     virtual void    close_without_content();
 

@@ -29,6 +29,9 @@
 #include "Poco/DateTimeFormatter.h"
 #include "Poco/DateTimeFormat.h"
 
+//#{ Mansoo
+#include "Poco/Path.h"
+//#}
 
 using Poco::File;
 using Poco::Timestamp;
@@ -38,6 +41,9 @@ using Poco::OpenFileException;
 using Poco::DateTimeFormatter;
 using Poco::DateTimeFormat;
 
+//#{ Mansoo
+using Poco::Path;
+//#}
 
 namespace Poco {
 namespace Net {
@@ -112,7 +118,19 @@ void HTTPServerResponseImpl::sendFile(const std::string& path, const std::string
 	File f(path);
 	Timestamp dateTime    = f.getLastModified();
 	File::FileSize length = f.getSize();
+
+	//#{ Mansoo
+	Path attached_file_path(path);
+
+	std::string attached_file_info = "attachment; filename=\"";
+	attached_file_info += attached_file_path.getFileName();
+	attached_file_info += "\"";
+
+	set("Content-Disposition", attached_file_info);
+	//#}
+
 	set("Last-Modified", DateTimeFormatter::format(dateTime, DateTimeFormat::HTTP_FORMAT));
+
 #if defined(POCO_HAVE_INT64)	
 	setContentLength64(length);
 #else
