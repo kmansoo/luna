@@ -1,14 +1,26 @@
 #pragma once
 
+#include <memory>
+#include <thread>
+
 #include "ccWebServer/ccWebsocket.h"
+#include "ccWebServer/ccWebServerEventListener.h"
+
+#include "Poco/Net/HTTPServerRequest.h"
+#include "Poco/Net/HTTPServerResponse.h"
+#include "Poco/Net/WebSocket.h"
+#include "Poco/Net/NetException.h"
+
+using Poco::Net::HTTPServerRequest;
+using Poco::Net::HTTPServerResponse;
+using Poco::Net::WebSocket;
+using Poco::Net::WebSocketException;
 
 namespace Luna {
 
 class ccPocoWebsocket : public ccWebsocket {
 public:
-  ccPocoWebsocket(const std::string& uri);
-  ccPocoWebsocket(const char* uri, std::size_t size);
-
+  ccPocoWebsocket(ccWebServerEventListener* server_event_listener, HTTPServerRequest& request, HTTPServerResponse& response);
   virtual ~ccPocoWebsocket();
 
 public:
@@ -22,6 +34,13 @@ public:
   virtual bool send_binary(const void* buffer, std::size_t size);
 
 private:
-  int socket_id_;
+  std::thread ws_thread_;
+
+  bool is_ws_thread_stoped_ = false;
+  bool is_ws_thread_terminated_ = true;
+  
+  ccWebServerEventListener* server_event_listener_;
+
+  std::unique_ptr<Poco::Net::WebSocket> web_socket_;
 };
 }

@@ -37,10 +37,41 @@ public:
   virtual ~ccPocoRequestHandler() {
   }
 
+private:
+  void respond(HTTPServerResponse& response, uint32_t code, const std::string& reason = "") 
+  {
+    response.setStatus((HTTPResponse::HTTPStatus)code);
+
+    if (reason.length() > 0) {
+      response.setReason(reason);
+    }
+
+    response.setContentLength(0);
+    response.send();
+  }
+
 public:
   virtual void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response)
   {
-    if (server_event_listener_ != nullptr) {
+    if (server_event_listener_ == nullptr) {
+      respond(response, 404);
+      return;
+    }
+
+    // Check whether this reqeust is WebSocket or not.
+    if (request.hasToken("Connection", "upgrade") && Poco::icompare(request.get("Upgrade", ""), "websocket") == 0) {
+      if (server_event_listener_->on_new_websocket_request(request.getURI()) == false) {
+        respond(response, 404);
+        return;
+      }
+
+      auto new_websocket = std::make_shared<ccPocoWebsocket>(server_event_listener_, request, response);
+
+      server_event_listener_->on_websocket_created(new_websocket);
+      server_event_listener_->on_websocket_connected(new_websocket->get_instance());
+    }
+    else
+    {
       auto new_request = std::make_shared<ccPocoWebServerRequest>(request);
       auto new_response = std::make_shared<ccPocoWebServerResponse>(response);
 
