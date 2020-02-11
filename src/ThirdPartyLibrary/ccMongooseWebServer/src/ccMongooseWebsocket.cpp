@@ -73,12 +73,12 @@ bool ccMongooseWebsocket::send(const std::string& message)
   return true;
 }
 
-bool ccMongooseWebsocket::send_binary(const void* buffer, std::size_t size)
+bool ccMongooseWebsocket::send_binary(const void* data, std::size_t size)
 {
   if (mg_connection_ == NULL)
     return false;
 
-  mg_send_websocket_frame(mg_connection_, WEBSOCKET_OP_BINARY, buffer, size);
+  mg_send_websocket_frame(mg_connection_, WEBSOCKET_OP_BINARY, data, size);
 
   return true;
 }

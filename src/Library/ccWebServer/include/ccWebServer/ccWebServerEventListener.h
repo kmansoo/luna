@@ -20,9 +20,9 @@ struct ccWebServerEventListener {
     //      true    :   accept
     //      false   :   reject
     virtual bool on_new_websocket_request(const std::string& websocketuri_) { return false; }
-    virtual void on_websocket_created(std::shared_ptr<ccWebsocket> new_websocket) {};
+    virtual void on_websocket_created(std::shared_ptr<ccWebsocket> new_websocket) {}
     virtual void on_websocket_connected(std::int32_t socket_id) {}
-    virtual void on_websocket_received_data(std::int32_t socket_id, const std::string& data) {}
+    virtual void on_websocket_received_data(std::int32_t socket_id, const char* data, uint32_t size, bool is_text) {}
     virtual void on_websocket_disconnected(std::int32_t socket_id) {}
 
     virtual int  on_websocket_check_instance(void* connection_info) {return -1; }

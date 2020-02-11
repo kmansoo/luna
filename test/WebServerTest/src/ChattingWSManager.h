@@ -10,7 +10,7 @@ public:
     ChattingWSManager();
 
 public:
-    bool ws_chat(Luna::ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<Luna::ccWebsocket> pWS, const std::string strData);
+    bool ws_chat(Luna::ccWebsocket::ccWebSocketEvent eEvent, std::shared_ptr<Luna::ccWebsocket> pWS, const char* data, uint32_t size, bool is_text);
 };
 
 #endif

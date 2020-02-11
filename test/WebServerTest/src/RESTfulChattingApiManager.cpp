@@ -367,7 +367,7 @@ bool RESTfulChattingApiManager::session(std::shared_ptr<Luna::ccWebServerRequest
 
             Luna::ccString::format(websocket_uri, "/session/chat/%s", session_name.c_str());
 
-            add_function(websocket_uri, std::bind(&RESTfulChattingApiManager::ws_chat, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+            add_function(websocket_uri, std::bind(&RESTfulChattingApiManager::ws_chat, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
         } else
             response->send_status(500, std::string("Server Error!"));
 
@@ -502,7 +502,7 @@ bool RESTfulChattingApiManager::session_member_id(std::shared_ptr<Luna::ccWebSer
 }
 
 //  
-bool RESTfulChattingApiManager::ws_chat(Luna::ccWebsocket::ccWebSocketEvent ws_event, std::shared_ptr<Luna::ccWebsocket> websocket, const std::string& data) {
+bool RESTfulChattingApiManager::ws_chat(Luna::ccWebsocket::ccWebSocketEvent ws_event, std::shared_ptr<Luna::ccWebsocket> websocket, const char* data, uint32_t size, bool is_text) {
     switch ((int)ws_event) {
     case Luna::ccWebsocket::ccWebSocketEvent_Connected:
     {
@@ -518,7 +518,9 @@ bool RESTfulChattingApiManager::ws_chat(Luna::ccWebsocket::ccWebSocketEvent ws_e
     {
         std::string broadcast_message;
 
-        Luna::ccString::format(broadcast_message, "%08x: %s", websocket->get_instance(), data.c_str());
+        std::string recv_text(data, size);
+
+        Luna::ccString::format(broadcast_message, "%08x: %s", websocket->get_instance(), recv_text.c_str());
 
         websocket->get_group()->broadcast(broadcast_message);
         break;

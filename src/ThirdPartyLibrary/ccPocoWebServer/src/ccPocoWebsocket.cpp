@@ -3,56 +3,18 @@
 using Poco::Net::HTTPRequest;
 using Poco::Net::HTTPResponse;
 
+#include "ccCore/ccSingleton.h"
+
 namespace Luna {
 
-ccPocoWebsocket::ccPocoWebsocket(ccWebServerEventListener* server_event_listener, HTTPServerRequest& request, HTTPServerResponse& response)
-    : ccWebsocket(request.getURI()), server_event_listener_(server_event_listener)
+ccPocoWebsocket::ccPocoWebsocket(const std::string& uri) : ccWebsocket(uri)
+{
+}
+
+bool ccPocoWebsocket::init(HTTPServerRequest& request, HTTPServerResponse& response)
 {
   try {
-    web_socket_ = std::make_unique<Poco::Net::WebSocket>(request, response);
-
-    is_ws_thread_stoped_ = false;
-
-    ws_thread_ = std::thread([&]() {
-      is_ws_thread_terminated_ = false;
-
-      Poco::Buffer<char> buffer(4096);
-      int flags = 0;
-      int read_size = 0;;
-      
-      while (is_ws_thread_stoped_ != true)
-      {
-        try {
-          std::cout << "call receiveFrame" << std::endl;
-
-          read_size = web_socket_->receiveFrame(buffer.begin(), static_cast<int>(buffer.size()), flags);
-        }
-        catch (WebSocketException& exc)
-        {
-          std::cerr << "ccPocoWebsocket::ccPocoWebsocket, thread: " << exc.displayText() << std::endl;
-          is_ws_thread_stoped_ = true;
-          continue;
-        }
-
-        if (read_size <= 0 || (flags & WebSocket::FRAME_OP_BITMASK) == WebSocket::FRAME_OP_CLOSE) {
-          break;
-        }
-
-        // if (read_size > 0) {
-        //   server_event_listener_->on_websocket_received_data(get_instance(), std::string(buffer.begin(), read_size));
-        // }
-
-        std::cout << "get next data.." << std::endl;
-      }
-
-      is_ws_thread_terminated_ = true;
-
-      if (server_event_listener_ != nullptr) {
-        server_event_listener_->on_websocket_disconnected(get_instance());
-      }
-
-      std::cout << "End of thread" << std::endl;
-    });
+    web_socket_ = std::make_shared<Poco::Net::WebSocket>(request, response);
   }
   catch (WebSocketException& exc)
   {
@@ -69,13 +31,71 @@ ccPocoWebsocket::ccPocoWebsocket(ccWebServerEventListener* server_event_listener
       response.send();
       break;
     }
+
+    return false;
   }
+
+
+  return true;
+}
+
+bool ccPocoWebsocket::run(ccWebServerEventListener* server_event_listener)
+{
+  if (web_socket_ == nullptr) {
+    return false;
+  }
+
+  std::thread thread = std::thread([](ccWebServerEventListener* server_event_listener, ccPocoWebsocket* ws, std::shared_ptr<Poco::Net::WebSocket> web_socket){
+    bool is_ws_thread_stoped = false;
+
+    Poco::Buffer<char> buffer(4096);
+    int flags = 0;
+    int read_size = 0;;
+    
+    while (is_ws_thread_stoped != true)
+    {
+      try {
+        std::cout << "call receiveFrame" << std::endl;
+
+        read_size = web_socket->receiveFrame(buffer.begin(), static_cast<int>(buffer.size()), flags);
+      }
+      catch (WebSocketException& exc)
+      {
+        std::cerr << "ccPocoWebsocket::ccPocoWebsocket, thread: " << exc.displayText() << std::endl;
+        is_ws_thread_stoped = true;
+        continue;
+      }
+
+      if (read_size <= 0 || (flags & WebSocket::FRAME_OP_BITMASK) == WebSocket::FRAME_OP_CLOSE) {
+        break;
+      }
+
+      if (read_size > 0) {
+        server_event_listener->on_websocket_received_data(ws->get_instance(), buffer.begin(), read_size, flags == WebSocket::FRAME_TEXT);
+      }
+
+      std::cout << "get next data.." << std::endl;
+    }
+
+    is_ws_thread_stoped = true;
+
+    if (server_event_listener != nullptr) {
+      server_event_listener->on_websocket_disconnected(ws->get_instance());
+    }
+
+    std::cout << "End of thread" << std::endl;
+
+    ccPocoWebsocketManager::instance().remove_web_socket(ws);
+    
+  }, server_event_listener, this, web_socket_);
+
+  thread.detach();
+
+  return true;
 }
 
 ccPocoWebsocket::~ccPocoWebsocket()
 {
-  is_ws_thread_stoped_ = true;
-
   if (web_socket_) {
     web_socket_->close();
   }

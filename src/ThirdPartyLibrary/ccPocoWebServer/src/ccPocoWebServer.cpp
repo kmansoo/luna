@@ -65,10 +65,16 @@ public:
         return;
       }
 
-      auto new_websocket = std::make_shared<ccPocoWebsocket>(server_event_listener_, request, response);
+      auto new_websocket = std::make_shared<ccPocoWebsocket>(request.getURI());
 
-      server_event_listener_->on_websocket_created(new_websocket);
-      server_event_listener_->on_websocket_connected(new_websocket->get_instance());
+      if (new_websocket->init(request, response) == true) {
+        ccPocoWebsocketManager::instance().add_web_socket(new_websocket);
+
+        server_event_listener_->on_websocket_created(new_websocket);
+        server_event_listener_->on_websocket_connected(new_websocket->get_instance());
+
+        new_websocket->run(server_event_listener_);
+      }
     }
     else
     {

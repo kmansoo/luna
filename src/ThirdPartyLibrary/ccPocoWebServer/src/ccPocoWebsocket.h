@@ -3,6 +3,8 @@
 #include <memory>
 #include <thread>
 
+#include "ccCore/ccSingleton.h"
+
 #include "ccWebServer/ccWebsocket.h"
 #include "ccWebServer/ccWebServerEventListener.h"
 
@@ -20,8 +22,12 @@ namespace Luna {
 
 class ccPocoWebsocket : public ccWebsocket {
 public:
-  ccPocoWebsocket(ccWebServerEventListener* server_event_listener, HTTPServerRequest& request, HTTPServerResponse& response);
+  ccPocoWebsocket(const std::string& uri);
   virtual ~ccPocoWebsocket();
+
+public:
+  bool init(HTTPServerRequest& request, HTTPServerResponse& response);
+  bool run(ccWebServerEventListener* server_event_listener);
 
 public:
   virtual bool open(const std::string& uri);
@@ -34,13 +40,46 @@ public:
   virtual bool send_binary(const void* buffer, std::size_t size);
 
 private:
-  std::thread ws_thread_;
-
-  bool is_ws_thread_stoped_ = false;
-  bool is_ws_thread_terminated_ = true;
-  
   ccWebServerEventListener* server_event_listener_;
 
-  std::unique_ptr<Poco::Net::WebSocket> web_socket_;
+  std::shared_ptr<Poco::Net::WebSocket> web_socket_;
+};
+
+class ccPocoWebsocketManager : public Luna::ccSingleton<ccPocoWebsocketManager>
+{
+public:
+  ccPocoWebsocketManager() {}
+
+public:
+  void add_web_socket(std::shared_ptr<ccPocoWebsocket> web_socket) {
+    mtx_.lock();
+    web_sockets_.push_back(web_socket);
+    mtx_.unlock();
+  }
+
+  void remove_web_socket(std::shared_ptr<ccPocoWebsocket> web_socket) {
+    mtx_.lock();
+  
+    web_sockets_.erase(std::remove(web_sockets_.begin(), web_sockets_.end(), web_socket));
+
+    mtx_.unlock();
+  }
+
+  void remove_web_socket(ccPocoWebsocket* web_socket) {
+    mtx_.lock();
+
+    for (auto it = web_sockets_.begin(); it != web_sockets_.end(); ++it) {
+      if ((*it).get() == web_socket) {
+        web_sockets_.erase(it);
+        break;
+      }
+    }
+
+    mtx_.unlock();
+  }
+
+private:
+  std::vector<std::shared_ptr<ccPocoWebsocket>> web_sockets_;
+  std::mutex mtx_;
 };
 }

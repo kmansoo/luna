@@ -34,16 +34,16 @@ public:
 
 public:
     virtual bool    has_uri(const std::string& uri);
-    virtual bool    add_function(const std::string& uri, std::function<bool(ccWebsocket::ccWebSocketEvent ws_event, std::shared_ptr<ccWebsocket> websocket, const std::string& data)> f);
+    virtual bool    add_function(const std::string& uri, std::function<bool(ccWebsocket::ccWebSocketEvent ws_event, std::shared_ptr<ccWebsocket> websocket, const char* data, uint32_t size, bool is_text)> f);
     virtual bool    remove_function(const std::string& uri);
-    virtual bool    perform_websocket_event(ccWebsocket::ccWebSocketEvent ws_event, std::shared_ptr<ccWebsocket> websocket, const std::string& data);
+    virtual bool    perform_websocket_event(ccWebsocket::ccWebSocketEvent ws_event, std::shared_ptr<ccWebsocket> websocket, const char* data, uint32_t size, bool is_text);
 
 protected:
     std::mutex      mtx_;
     std::mutex      mtx_Function;
 
     std::map<std::string, std::shared_ptr<ccWebsocketGroup>>    websocket_group_map_;
-    std::map<std::string, std::function<bool(ccWebsocket::ccWebSocketEvent ws_event, std::shared_ptr<ccWebsocket> websocket, const std::string& data)>> function_map_;
+    std::map<std::string, std::function<bool(ccWebsocket::ccWebSocketEvent ws_event, std::shared_ptr<ccWebsocket> websocket, const char* data, uint32_t size, bool is_text)>> function_map_;
 };
 
 }
