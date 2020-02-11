@@ -1,15 +1,14 @@
 # CMake Version 
-CMAKE_MINIMUM_REQUIRED (VERSION 3.0.0)
+CMAKE_MINIMUM_REQUIRED (VERSION 3.2.0)
 
 # Project Name
-PROJECT(LUNA-SW-PLATFORM)
+PROJECT(LUNA_SW_PLATFORM)
 
 #
 # Configuration
 #
 # SET(CMAKE_VERBOSE_MAKEFILE ON)
 #
-
 option(GIT_SUBMODULE      "Check submodules during build"               OFF)
 option(USE_MBEDTLS        "Use Mbedtls library"                         OFF)
 option(USE_CURL           "Use Curl library"                            OFF)
@@ -25,19 +24,14 @@ if (GIT_SUBMODULE)
   endif()
 endif()
 
-#
-# Configuration
-#
-# SET(CMAKE_VERBOSE_MAKEFILE ON)
-#
-
 # cmake -DCMAKE_TOOLCHAIN_FILE=toolchain.arm.cmake
 
 #
 # To build with a release mode, cmake -DCMAKE_BUILD_TYPE=Release ..
 #
 if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Debug)
+  SET(CMAKE_BUILD_TYPE Debug)
+  SET(CMAKE_DEBUG_POSTFIX "d")
 endif(NOT CMAKE_BUILD_TYPE)
 
 message(STATUS "Setting Luna build type - ${CMAKE_BUILD_TYPE}")

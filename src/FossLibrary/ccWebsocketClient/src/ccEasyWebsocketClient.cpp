@@ -90,7 +90,7 @@ void ccEasyWebsocketClient::receive(const std::string& message) {
     if (!event_listener_)
         std::cout << "RECV: " << message << std::endl;
     else
-        event_listener_(ccWebSocketEvent_ReceivedData, message);
+        event_listener_(ccWebSocketEvent_ReceivedData, message.c_str(), message.size(), true);
 }
 
 void ccEasyWebsocketClient::poll() {
@@ -109,7 +109,7 @@ void ccEasyWebsocketClient::poll() {
                 if (!event_listener_)
                     std::cout << "easywsclient::WebSocket::OPEN " << std::endl;
                 else
-                    event_listener_(ccWebSocketEvent_Connected, blank_string_data_);
+                    event_listener_(ccWebSocketEvent_Connected, blank_string_data_.c_str(), 0, false);
                 break;
 
             case easywsclient::WebSocket::CLOSED:
@@ -118,7 +118,7 @@ void ccEasyWebsocketClient::poll() {
                 if (!event_listener_)
                     std::cout << "easywsclient::WebSocket::CLOSED " << std::endl;
                 else
-                    event_listener_(ccWebSocketEvent_Disconnected, blank_string_data_);
+                    event_listener_(ccWebSocketEvent_Disconnected, blank_string_data_.c_str(), 0, false);
                 break;
 
             default:

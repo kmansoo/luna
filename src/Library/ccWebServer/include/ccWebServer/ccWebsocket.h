@@ -28,7 +28,7 @@ public:
     };
 
 public:
-    typedef std::function<void(ccWebSocketEvent event, const std::string& message)> WebSocketEventFunction;
+    typedef std::function<void(ccWebSocketEvent event, const char* data, uint32_t size, bool is_text)> WebSocketEventFunction;
 
 public:
     virtual bool            open(const std::string& uri) = 0;
@@ -39,7 +39,7 @@ public:
     virtual const std::string get_peer_ip() = 0;
 
     virtual bool            send(const std::string& message) = 0;
-    virtual bool            send_binary(const void* pBuffer, std::size_t size) = 0;
+    virtual bool            send_binary(const void* data, std::size_t size) = 0;
 
 public:
     void                    set_event_listener(WebSocketEventFunction f);

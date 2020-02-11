@@ -153,9 +153,7 @@ void ccMongooseWebServer::ev_handler(struct mg_connection* nc, int ev, void* p)
   case MG_EV_WEBSOCKET_FRAME: { /* struct websocket_message * */
     struct websocket_message* wm = (struct websocket_message*)p;
 
-    std::string data((const char*)wm->data, wm->size);
-
-    pServer->eventListener_->on_websocket_received_data(nc->sock, data);
+    pServer->eventListener_->on_websocket_received_data(nc->sock, (const char*)wm->data, wm->size, (wm->flags & WEBSOCKET_OP_TEXT) == WEBSOCKET_OP_TEXT);
   } break;
 
   case MG_EV_WEBSOCKET_CONTROL_FRAME: /* struct websocket_message * */

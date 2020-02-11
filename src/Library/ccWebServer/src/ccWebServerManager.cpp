@@ -166,11 +166,11 @@ void ccWebServerManager::on_websocket_created(std::shared_ptr<ccWebsocket> new_w
 }
 
 void ccWebServerManager::on_websocket_connected(std::int32_t socket_id) {
-    do_perform_websocket_event(ccWebsocket::ccWebSocketEvent_Connected, socket_id, blank_string_);
+    do_perform_websocket_event(ccWebsocket::ccWebSocketEvent_Connected, socket_id, blank_string_.c_str(), 0, false);
 }
 
 void ccWebServerManager::on_websocket_disconnected(std::int32_t socket_id) {
-    do_perform_websocket_event(ccWebsocket::ccWebSocketEvent_Disconnected, socket_id, blank_string_);
+    do_perform_websocket_event(ccWebsocket::ccWebSocketEvent_Disconnected, socket_id, blank_string_.c_str(), 0, false);
 }
 
 int  ccWebServerManager::on_websocket_check_instance(void* connection_info) {
@@ -185,21 +185,22 @@ int  ccWebServerManager::on_websocket_check_instance(void* connection_info) {
     return -1;
 }
 
-void ccWebServerManager::on_websocket_received_data(std::int32_t socket_id, const std::string& data) {
-    do_perform_websocket_event(ccWebsocket::ccWebSocketEvent_ReceivedData, socket_id, data);
+void ccWebServerManager::on_websocket_received_data(std::int32_t socket_id, const char* data, uint32_t size, bool is_text) {
+    do_perform_websocket_event(ccWebsocket::ccWebSocketEvent_ReceivedData, socket_id, data, size, is_text);
 }
 
-void ccWebServerManager::do_perform_websocket_event(ccWebsocket::ccWebSocketEvent event, std::int32_t socket_id, const std::string& data) {
+void ccWebServerManager::do_perform_websocket_event(ccWebsocket::ccWebSocketEvent event, std::int32_t socket_id, const char* data, uint32_t size, bool is_text) {
     std::shared_ptr<ccWebsocket> websocket;
 
     for (const auto& item : websocket_manager_list_) {
         if (item->get_websocket(socket_id, websocket)) {
-            if (websocket != NULL)
-                item->perform_websocket_event(event, websocket, data);
+            if (websocket != NULL) {
+                item->perform_websocket_event(event, websocket, data, size, is_text);
 
             return;
         }
     }
+}
 }
 
 }

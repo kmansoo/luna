@@ -108,7 +108,7 @@ bool ccWebsocketManager::has_uri(const std::string& uri) {
     return true;
 }
 
-bool ccWebsocketManager::add_function(const std::string& uri, std::function<bool(ccWebsocket::ccWebSocketEvent event, std::shared_ptr<ccWebsocket> websocket, const std::string& data)> f) {
+bool ccWebsocketManager::add_function(const std::string& uri, std::function<bool(ccWebsocket::ccWebSocketEvent event, std::shared_ptr<ccWebsocket> websocket, const char* data, uint32_t size, bool is_text)> f) {
     function_map_[uri] = f;
 
     return true;
@@ -127,13 +127,13 @@ bool ccWebsocketManager::remove_function(const std::string& uri) {
     return true;
 }
 
-bool ccWebsocketManager::perform_websocket_event(ccWebsocket::ccWebSocketEvent event, std::shared_ptr<ccWebsocket> websocket, const std::string& data) {
+bool ccWebsocketManager::perform_websocket_event(ccWebsocket::ccWebSocketEvent event, std::shared_ptr<ccWebsocket> websocket, const char* data, uint32_t size, bool is_text) {
     std::lock_guard<std::mutex> lock(mtx_Function);
 
     if (has_uri(websocket->get_uri()) == false)
         return false;
 
-    function_map_[websocket->get_uri()](event, websocket, data);
+    function_map_[websocket->get_uri()](event, websocket, data, size, is_text);
 
     if (event == ccWebsocket::ccWebSocketEvent_Disconnected)
         remove_websocket(websocket);

@@ -1,5 +1,5 @@
 # CMake Version
-CMAKE_MINIMUM_REQUIRED (VERSION 3.0.0)
+CMAKE_MINIMUM_REQUIRED (VERSION 3.2.0)
 
 # Project Name
 PROJECT(ccRestClient)
@@ -9,7 +9,7 @@ PROJECT(ccRestClient)
 include_directories(
 	./include
 	../../Library/ccCore/include
-        ../../../dependency/curl/include
+  ../../../dependency/curl/include
 )
 
 file(GLOB SRC_FILES 

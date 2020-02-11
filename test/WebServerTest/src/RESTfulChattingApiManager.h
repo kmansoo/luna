@@ -91,7 +91,7 @@ protected:
     bool    session_message(std::shared_ptr<Luna::ccWebServerRequest> request, std::shared_ptr<Luna::ccWebServerResponse> response);
 
 protected:
-    bool    ws_chat(Luna::ccWebsocket::ccWebSocketEvent ws_event, std::shared_ptr<Luna::ccWebsocket> websocket, const std::string& data);
+    bool    ws_chat(Luna::ccWebsocket::ccWebSocketEvent ws_event, std::shared_ptr<Luna::ccWebsocket> websocket, const char* data, uint32_t size, bool is_text);
 
 private:
     RESTfulChattingSessionManager chat_session_manager_;
