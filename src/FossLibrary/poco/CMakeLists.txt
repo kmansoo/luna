@@ -130,6 +130,8 @@ if(MSVC)
 endif()
 
 # Uncomment from next two lines to force static or dynamic library, default is autodetection
+set(POCO_STATIC ON)
+
 if(POCO_STATIC)
     set(LIB_MODE_DEFINITIONS -DPOCO_STATIC -DPOCO_NO_AUTOMATIC_LIBS)
     set(LIB_MODE STATIC)
