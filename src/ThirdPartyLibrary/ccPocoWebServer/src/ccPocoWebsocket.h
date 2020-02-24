@@ -40,8 +40,7 @@ public:
   virtual bool send_binary(const void* buffer, std::size_t size);
 
 private:
-  ccWebServerEventListener* server_event_listener_;
-
+  //  ccWebServerEventListener* server_event_listener_;
   std::shared_ptr<Poco::Net::WebSocket> web_socket_;
 };
 
