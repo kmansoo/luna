@@ -105,6 +105,11 @@ bool ccWebServerManager::remove_all_restful_api() {
     return true;
 }
 
+bool ccWebServerManager::enable_cors(bool enable)
+{
+    enable_cors_ = enable;
+}
+
 bool ccWebServerManager::add_websocket_manager(std::shared_ptr<ccWebsocketManager> new_websocket_manager) {
     for (const auto& item : websocket_manager_list_) {
         if (item == new_websocket_manager)

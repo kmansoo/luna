@@ -48,27 +48,34 @@ bool ccPocoWebsocket::run(ccWebServerEventListener* server_event_listener)
   std::thread thread = std::thread([](ccWebServerEventListener* server_event_listener, ccPocoWebsocket* ws, std::shared_ptr<Poco::Net::WebSocket> web_socket){
     bool is_ws_thread_stoped = false;
 
-    Poco::Buffer<char> buffer(4096);
+    Poco::Buffer<char> buffer(1028 * 8);
     int flags = 0;
-    int read_size = 0;;
+    int read_size = 0;
+
+    Poco::Timespan timeout(0, 500 * 1000);
+    web_socket->setReceiveTimeout(timeout);
     
     while (is_ws_thread_stoped != true)
     {
-      try {
-        read_size = web_socket->receiveFrame(buffer.begin(), static_cast<int>(buffer.size()), flags);
-      }
-      catch (WebSocketException& exc)
-      {
-        is_ws_thread_stoped = true;
-        continue;
-      }
+      if (web_socket->poll(timeout, Poco::Net::Socket::SELECT_READ)) {
+        try
+        {
+          read_size = web_socket->receiveFrame(buffer.begin(), static_cast<int>(buffer.size()), flags);
+        }
+        catch (Poco::Exception& exc)
+        {
+          std::cerr << __PRETTY_FUNCTION__ << ": " << exc.displayText() << std::endl;
+          is_ws_thread_stoped = true;
+          continue;
+        }
 
-      if (read_size <= 0 || (flags & WebSocket::FRAME_OP_BITMASK) == WebSocket::FRAME_OP_CLOSE) {
-        break;
-      }
+        if (read_size <= 0 || (flags & WebSocket::FRAME_OP_BITMASK) == WebSocket::FRAME_OP_CLOSE) {
+          break;
+        }
 
-      if (read_size > 0) {
-        server_event_listener->on_websocket_received_data(ws->get_instance(), buffer.begin(), read_size, flags == WebSocket::FRAME_TEXT);
+        if (read_size > 0) {
+          server_event_listener->on_websocket_received_data(ws->get_instance(), buffer.begin(), read_size, flags == WebSocket::FRAME_TEXT);
+        }
       }
     }
 

@@ -65,6 +65,22 @@ public:
         return;
       }
 
+      // CORS
+      {
+        if (request.has("Origin") == true) {
+          response.set("Access-Control-Allow-Origin", request.get("Origin"));
+        }
+        else {
+          if (request.has("origin") == true) {
+            response.set("Access-Control-Allow-Origin", request.get("origin"));
+          }
+          // else  {
+          //   response.set("Access-Control-Allow-Origin", "*");
+          // }
+        }
+      }
+      
+
       auto new_websocket = std::make_shared<ccPocoWebsocket>(request.getURI());
 
       if (new_websocket->init(request, response) == true) {

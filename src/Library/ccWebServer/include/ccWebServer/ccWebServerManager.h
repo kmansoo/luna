@@ -57,6 +57,8 @@ public:
     bool remove_websocket_manager(std::shared_ptr<ccWebsocketManager> new_websocket_manager);
     bool remove_all_websocket_manager();
 
+    bool enable_cors(bool enable = true);
+
 protected:
     virtual bool on_web_request(
         std::shared_ptr<ccWebServerRequest> request,
@@ -84,6 +86,7 @@ private:
     std::vector<std::shared_ptr<ccWebsocketManager> > websocket_manager_list_;
 
     const std::string blank_string_;
+    bool enable_cors_ = false;
 };
 
 }
