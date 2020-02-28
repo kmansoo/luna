@@ -33,7 +33,12 @@ namespace Luna {
 class ccPocoRequestHandler: public HTTPRequestHandler
 {
 public:
-  ccPocoRequestHandler(ccWebServerEventListener* server_event_listener) : server_event_listener_(server_event_listener) {}
+  ccPocoRequestHandler(ccWebServerEventListener* server_event_listener, bool enable_cors = false) 
+    : server_event_listener_(server_event_listener),
+      enable_cors_(enable_cors)
+  {
+  }
+
   virtual ~ccPocoRequestHandler() {
   }
 
@@ -58,28 +63,34 @@ public:
       return;
     }
 
+    // CORS
+    if (enable_cors_ == true) {
+      if (request.has("Origin") == true) {
+        response.set("Access-Control-Allow-Origin", request.get("Origin"));
+      }
+      else {
+        if (request.has("origin") == true) {
+          response.set("Access-Control-Allow-Origin", request.get("origin"));
+        }
+        // else  {
+        //   response.set("Access-Control-Allow-Origin", "*");
+        // }
+      }
+
+      //  response.set("Access-Control-Allow-Origin", "*");
+      response.set("Access-Control-Allow-Credentials", "true");
+      response.set("Access-Control-Allow-Methods", "GET, PUT, POST, UPDATE, DELETE, OPTIONS");
+      response.set("Access-Control-Max-Age", "3600");
+      response.set("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
+    }
+    
+    
     // Check whether this reqeust is WebSocket or not.
     if (request.hasToken("Connection", "upgrade") && Poco::icompare(request.get("Upgrade", ""), "websocket") == 0) {
       if (server_event_listener_->on_new_websocket_request(request.getURI()) == false) {
         respond(response, 404);
         return;
       }
-
-      // CORS
-      {
-        if (request.has("Origin") == true) {
-          response.set("Access-Control-Allow-Origin", request.get("Origin"));
-        }
-        else {
-          if (request.has("origin") == true) {
-            response.set("Access-Control-Allow-Origin", request.get("origin"));
-          }
-          // else  {
-          //   response.set("Access-Control-Allow-Origin", "*");
-          // }
-        }
-      }
-      
 
       auto new_websocket = std::make_shared<ccPocoWebsocket>(request.getURI());
 
@@ -103,13 +114,16 @@ public:
 
 private:
   ccWebServerEventListener* server_event_listener_ = nullptr;
+  bool enable_cors_ = false;
 };
 
 
 class ccPocoRequestHandlerFactory : public HTTPRequestHandlerFactory
 {
 public:
-  ccPocoRequestHandlerFactory(ccWebServerEventListener* server_event_listener) : server_event_listener_(server_event_listener)
+  ccPocoRequestHandlerFactory(ccWebServerEventListener* server_event_listener, bool enable_cors = false) 
+    : server_event_listener_(server_event_listener), 
+      enable_cors_(enable_cors)
   {
     //  main_request_handler_ = std::make_shared<ccPocoRequestHandler>(server_event_listener);
   }
@@ -117,12 +131,13 @@ public:
 public:
   HTTPRequestHandler* createRequestHandler(const HTTPServerRequest& request)
   {
-    return new ccPocoRequestHandler(server_event_listener_);
+    return new ccPocoRequestHandler(server_event_listener_, enable_cors_);
   }
 
 private:
   //  std::shared_ptr<HTTPRequestHandler> main_request_handler_;
   ccWebServerEventListener* server_event_listener_;
+  bool enable_cors_ = false;
 };
 
 ccPocoWebServer::ccPocoWebServer(const std::string& name, const std::string& ports, const std::string& root_path, std::shared_ptr<ccWebServerPageDirectory> page_directory)
@@ -150,7 +165,7 @@ bool ccPocoWebServer::start()
   server_params->setKeepAlive(false);
 
   web_server_ = std::make_shared<HTTPServer>(
-                  new ccPocoRequestHandlerFactory(this->eventListener_), 
+                  new ccPocoRequestHandlerFactory(this->eventListener_, enable_cors_), 
                   std::stoi(httpPorts_), 
                   server_params);
 

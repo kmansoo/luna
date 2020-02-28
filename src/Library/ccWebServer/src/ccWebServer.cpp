@@ -54,6 +54,13 @@ void ccWebServer::set_listener(ccWebServerEventListener* listener) {
     eventListener_ = listener;
 }
 
+bool ccWebServer::enable_cors(bool enable )
+{
+    enable_cors_ = enable;
+
+    return true;
+}
+
 std::shared_ptr<ccWebServerPage> ccWebServer::find_page(const std::string& uri) {
     if (!webpage_directory_)
         return nullptr;

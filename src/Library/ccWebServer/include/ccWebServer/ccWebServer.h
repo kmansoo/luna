@@ -33,6 +33,8 @@ public:
     bool    set_option(std::string const& name, std::string const& value);
     void    set_listener(ccWebServerEventListener* listener);
 
+    bool    enable_cors(bool enable = true);
+
 protected:
     //  this function performs like a initiation of web page or features for web server.
     virtual void init_server();
@@ -51,6 +53,7 @@ protected:
     std::string                 webRootPath_;
     ccWebServerEventListener*   eventListener_;
     std::vector<std::string>    options_;
+    bool                        enable_cors_ = false;
 
     std::shared_ptr<ccWebServerPageDirectory> webpage_directory_;
 };

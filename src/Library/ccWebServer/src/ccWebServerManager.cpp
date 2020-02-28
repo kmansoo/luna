@@ -27,13 +27,16 @@ void  ccWebServerManager::attach_factory(std::shared_ptr<ccWebServerObjectFactor
 bool ccWebServerManager::create_web_server(
     const std::string& name,
     const std::string& ports,
+    bool enable_cors,
     std::shared_ptr<ccWebServerPageDirectory> page_directory) {
 
     if (obj_factory_ == nullptr)
         return false;
 
-    web_server_list_.push_back(
-        obj_factory_->create_web_server(name, ports, ".", page_directory));
+    auto new_webserver = obj_factory_->create_web_server(name, ports, ".", page_directory);
+    new_webserver->enable_cors(enable_cors);
+
+    web_server_list_.push_back(new_webserver);
 
     return true;
 }
@@ -42,13 +45,16 @@ bool ccWebServerManager::create_web_server(
     const std::string& name,
     const std::string& ports,
     const std::string& root_path,
+    bool enable_cors,
     std::shared_ptr<ccWebServerPageDirectory> page_directory) {
 
     if (obj_factory_ == nullptr)
         return false;
 
-    web_server_list_.push_back(
-        obj_factory_->create_web_server(name, ports, root_path, page_directory));
+    auto new_webserver = obj_factory_->create_web_server(name, ports, root_path, page_directory);
+    new_webserver->enable_cors(enable_cors);
+
+    web_server_list_.push_back(new_webserver);
 
     return true;
 }
@@ -103,11 +109,6 @@ bool ccWebServerManager::remove_all_restful_api() {
     web_api_list_.clear();
 
     return true;
-}
-
-bool ccWebServerManager::enable_cors(bool enable)
-{
-    enable_cors_ = enable;
 }
 
 bool ccWebServerManager::add_websocket_manager(std::shared_ptr<ccWebsocketManager> new_websocket_manager) {

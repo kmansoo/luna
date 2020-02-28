@@ -18,6 +18,13 @@ ccWebServerRequest::~ccWebServerRequest() {
     // TODO Auto-generated destructor stub
 }
 
+bool ccWebServerRequest::enable_cors(bool enable)
+{
+    enable_cors_ = enable;
+
+    return true;  
+}
+
 ccWebServerRequest::HttpMethod  ccWebServerRequest::get_method() const {
     if (method_ == "GET")        return HttpMethod_Get;
     if (method_ == "HEAD")       return HttpMethod_Head;

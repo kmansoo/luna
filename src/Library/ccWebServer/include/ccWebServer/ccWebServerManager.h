@@ -36,12 +36,14 @@ public:
     bool create_web_server(
         const std::string& name,
         const std::string& ports,
+        bool enable_cors = false,
         std::shared_ptr<ccWebServerPageDirectory> page_directory = nullptr);
 
     bool create_web_server(
         const std::string& name,
         const std::string& ports,
         const std::string& root_path,
+        bool enable_cors = false,
         std::shared_ptr<ccWebServerPageDirectory> page_directory = nullptr);
 
     std::shared_ptr<ccWebServer> get_web_server(const char* strName);
@@ -56,8 +58,6 @@ public:
     bool add_websocket_manager(std::shared_ptr<ccWebsocketManager> new_websocket_manager);
     bool remove_websocket_manager(std::shared_ptr<ccWebsocketManager> new_websocket_manager);
     bool remove_all_websocket_manager();
-
-    bool enable_cors(bool enable = true);
 
 protected:
     virtual bool on_web_request(

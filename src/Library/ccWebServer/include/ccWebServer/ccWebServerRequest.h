@@ -58,11 +58,16 @@ public:
     virtual unsigned short      get_server_port() const;
     virtual long                get_remote_ip() const;
 
+public:
+    bool  enable_cors(bool enable = true);
+
 protected:
     std::string blank_string_data_;
 
     std::string method_;
     std::string uri_;
+
+    bool enable_cors_ = false;
 };
 
 }
