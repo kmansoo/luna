@@ -58,36 +58,49 @@ private:
 public:
   virtual void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response)
   {
+    // CORS
+    if (enable_cors_ == true) {
+        try {
+        if (request.has("Origin") == true) {
+          response.set("Access-Control-Allow-Origin", request.get("Origin"));
+        }
+        else {
+          if (request.has("origin") == true) {
+            response.set("Access-Control-Allow-Origin", request.get("origin"));
+          }
+        }
+
+        //  response.set("Access-Control-Allow-Origin", "*");
+        response.set("Access-Control-Allow-Credentials", "true");
+        response.set("Access-Control-Allow-Methods", "GET, PUT, POST, UPDATE, OPTIONS, DELETE");
+        response.set("Access-Control-Max-Age", "3600");
+      }
+			catch (Poco::Exception& exc)
+			{
+        std::cout << __FUNCTION__ << ": ERROR: " << exc.displayText() << std::endl;
+        respond(response, 400);
+        return;
+			}
+    }
+    
+    if (request.getMethod() == "OPTIONS") {
+      respond(response, 200);
+      return;
+    }
+
     if (server_event_listener_ == nullptr) {
       respond(response, 404);
       return;
     }
 
-    // CORS
-    if (enable_cors_ == true) {
-      if (request.has("Origin") == true) {
-        response.set("Access-Control-Allow-Origin", request.get("Origin"));
-      }
-      else {
-        if (request.has("origin") == true) {
-          response.set("Access-Control-Allow-Origin", request.get("origin"));
-        }
-        // else  {
-        //   response.set("Access-Control-Allow-Origin", "*");
-        // }
-      }
-
-      //  response.set("Access-Control-Allow-Origin", "*");
-      response.set("Access-Control-Allow-Credentials", "true");
-      response.set("Access-Control-Allow-Methods", "GET, PUT, POST, UPDATE, DELETE, OPTIONS");
-      response.set("Access-Control-Max-Age", "3600");
-      response.set("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
-    }
-    
-    
     // Check whether this reqeust is WebSocket or not.
     if (request.hasToken("Connection", "upgrade") && Poco::icompare(request.get("Upgrade", ""), "websocket") == 0) {
+      std::cout << __FUNCTION__ << ": Request for WebSocket..." << std::endl;
+
       if (server_event_listener_->on_new_websocket_request(request.getURI()) == false) {
+        std::cout << __FUNCTION__ << ": Doesn't support Websocket for " << request.getURI() << std::endl;
+        std::cout << __FUNCTION__ << ": Repond with 404." << std::endl;
+
         respond(response, 404);
         return;
       }
@@ -101,6 +114,13 @@ public:
         server_event_listener_->on_websocket_connected(new_websocket->get_instance());
 
         new_websocket->run(server_event_listener_);
+      }
+      else {
+        std::cout << __FUNCTION__ << ": Coudln't init Websocket" << std::endl;
+        std::cout << __FUNCTION__ << ": Repond with 404." << std::endl;
+
+        respond(response, 404);
+        return;
       }
     }
     else
