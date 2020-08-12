@@ -64,7 +64,7 @@ bool ccPocoWebsocket::run(ccWebServerEventListener* server_event_listener)
         }
         catch (Poco::Exception& exc)
         {
-          std::cerr << __PRETTY_FUNCTION__ << ": " << exc.displayText() << std::endl;
+          std::cerr << __FUNCTION__ << ": " << exc.displayText() << std::endl;
           is_ws_thread_stoped = true;
           continue;
         }
