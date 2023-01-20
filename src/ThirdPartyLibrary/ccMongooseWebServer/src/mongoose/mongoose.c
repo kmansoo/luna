@@ -6137,6 +6137,7 @@ static const struct {
     MIME_ENTRY("mpeg", "video/mpeg"),
     MIME_ENTRY("mov", "video/quicktime"),
     MIME_ENTRY("mp4", "video/mp4"),
+    MIME_ENTRY("mkv", "video/mkv"),
     MIME_ENTRY("m4v", "video/x-m4v"),
     MIME_ENTRY("asf", "video/x-ms-asf"),
     MIME_ENTRY("avi", "video/x-msvideo"),
